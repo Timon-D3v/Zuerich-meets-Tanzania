@@ -291,6 +291,14 @@ header {
     aspect-ratio: 1/1;
 }
 
+.h-t-b-link {
+    height: 60px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 @media screen and (min-width: 1200px) {
     .h-t-b-m {
         display: none;
