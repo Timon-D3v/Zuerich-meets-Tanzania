@@ -148,12 +148,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
     display: flex;
     align-items: center;
     background-color: var(--background-50);
     -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
     box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
     gap: 5vw;
+    width: 100%;
 }
 
 img[src$=".svg"] {
@@ -301,12 +305,24 @@ img[src$=".svg"] {
     justify-content: center;
 }
 
+.hero-img {
+    width: 100%;
+    max-height: calc(95vh - 80px);
+    object-fit: cover;
+}
+
+main::before {
+    display: block;
+    content: "";
+}
+
 @media screen and (min-width: 1200px) {
     .h-t-b-m {
         display: none;
     }
 
-    header {
+    header,
+    main::before {
         height: 140px;
     }
 
@@ -328,10 +344,15 @@ img[src$=".svg"] {
     .h-n-b {
         display: flex;
     }
+
+    .hero-img {
+        max-height: calc(95vh - 140px);
+    }
 }
 
 @media screen and (min-width: 1000px) and (max-width: 1199px) {
-    header {
+    header,
+    main::before {
         height: 80px;
     }
 
@@ -357,7 +378,8 @@ img[src$=".svg"] {
         display: none;
     }
 
-    header {
+    header,
+    main::before {
         height: 80px;
     }
 
@@ -377,7 +399,8 @@ img[src$=".svg"] {
 }
 
 @media screen and (min-width: 575px) and (max-width: 749px) {
-    header {
+    header,
+    main::before {
         height: 80px;
     }
 
@@ -395,7 +418,8 @@ img[src$=".svg"] {
 }
 
 @media screen and (max-width: 575px) {
-    header {
+    header,
+    main::before {
         height: 80px;
     }
 
