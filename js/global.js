@@ -16,3 +16,5 @@ function changeTheme() {
 	root.attr("data-theme", "light") :
 	root.attr("data-theme", "dark");
 };
+
+$("#darkmode").on("click", changeTheme);
