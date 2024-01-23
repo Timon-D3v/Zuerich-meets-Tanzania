@@ -130,6 +130,9 @@
     --darkmode: 1;
 }
 
+*, *::before, *::after {
+    transition: color 0.2s, background-color 0.2s;
+}
 
 body {
     margin: 0;
@@ -309,6 +312,19 @@ img[src$=".svg"] {
     width: 100%;
     max-height: calc(95vh - 80px);
     object-fit: cover;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.hero {
+    position: relative;
+}
+
+.hero-title,
+.hero-cta {
+    transition: all 0.2s;
+    color: var(--text-50);
 }
 
 main::before {
@@ -348,6 +364,65 @@ main::before {
     .hero-img {
         max-height: calc(95vh - 140px);
     }
+
+    .hero-title {
+        position: absolute;
+        top: 25%;
+        left: 80px;
+        font-size: 100px;
+        font-weight: 700;
+        line-height: 125px;
+        letter-spacing: 2px;
+        margin: 0;
+        transform: translateY(-50%);
+        max-width: 90vw;
+        &::after {
+            display: block;
+            content: "";
+            position: absolute;
+            top: 100%;
+            width: 7.5vw;
+            height: 10px;
+            background-color: var(--text-50);
+        }
+    }
+
+    .hero-subtitle {
+        position: absolute;
+        top: 50%;
+        left: 80px;
+        transform: translateY(-50%);
+        color: var(--text-50);
+        font-size: calc(100px / (3 * var(--font-ratio)));
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        box-sizing: border-box;
+        margin: 0;
+        margin-top: 17.5px;
+        max-width: 500px;
+    }
+
+    .hero-cta {
+        position: absolute;
+        top: 75%;
+        transform: translateY(-50%);
+        left: 80px;
+        color: var(--text-50);
+        margin: 0;
+        border: none;
+        background-color: var(--secondary-500);
+        box-sizing: border-box;
+        width: 400px;
+        height: 80px;
+        font-size: 40px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-align: center;
+        text-transform: uppercase;
+        &:hover {
+            background-color: var(--secondary-400);
+        }
+    }
 }
 
 @media screen and (min-width: 1000px) and (max-width: 1199px) {
@@ -369,6 +444,18 @@ main::before {
     .t-kontakt-btn,
     .t-shop-btn {
         display: flex;
+    }
+
+    .hero-title {
+        position: absolute;
+        top: 50%;
+        left: 80px;
+        font-size: 100px;
+        font-weight: 600;
+        line-height: 125px;
+        letter-spacing: 1px;
+        margin: 0;
+        transform: translateY(-50%);
     }
 }
 
