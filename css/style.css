@@ -324,12 +324,65 @@ img[src$=".svg"] {
 .hero-title,
 .hero-cta {
     transition: all 0.2s;
-    color: var(--text-50);
 }
 
 main::before {
     display: block;
     content: "";
+}
+
+.hero-title {
+    font-size: 90px;
+    font-weight: 600;
+    line-height: 115px;
+    letter-spacing: 1px;
+    margin: 40px 5vw;
+    text-align: center;
+    &::after {
+        display: block;
+        content: "";
+        width: 15vw;
+        height: 10px;
+        margin-left: 37.5vw;
+        background-color: var(--text-950);
+    }
+}
+
+.hero-subtitle_A {
+    position: absolute;
+    top: 50%;
+    left: 80px;
+    transform: translateY(-50%);
+    color: var(--text-950);
+    font-size: calc(100px / (3 * var(--font-ratio)));
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    box-sizing: border-box;
+    margin: 0;
+    margin-top: 17.5px;
+    max-width: 500px;
+}
+
+.hero-cta_A {
+    position: absolute;
+    top: 75%;
+    transform: translateY(-50%);
+    left: 80px;
+    color: var(--text-50);
+    margin: 0;
+    border: none;
+    background-color: var(--secondary-500);
+    box-sizing: border-box;
+    width: 400px;
+    height: 80px;
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-align: center;
+    text-transform: uppercase;
+    &:hover {
+        background-color: var(--secondary-400);
+    }
 }
 
 @media screen and (min-width: 1200px) {
@@ -376,6 +429,7 @@ main::before {
         margin: 0;
         transform: translateY(-50%);
         max-width: 90vw;
+        color: var(--text-50);
         &::after {
             display: block;
             content: "";
@@ -448,14 +502,62 @@ main::before {
 
     .hero-title {
         position: absolute;
-        top: 50%;
+        top: 25%;
         left: 80px;
-        font-size: 100px;
+        font-size: 90px;
         font-weight: 600;
-        line-height: 125px;
+        line-height: 115px;
         letter-spacing: 1px;
         margin: 0;
         transform: translateY(-50%);
+        max-width: 90vw;
+        color: var(--text-50);
+        &::after {
+            display: block;
+            content: "";
+            position: absolute;
+            top: 100%;
+            width: 7.5vw;
+            height: 10px;
+            background-color: var(--text-50);
+        }
+    }
+
+    .hero-subtitle {
+        position: absolute;
+        top: 50%;
+        left: 80px;
+        transform: translateY(-50%);
+        color: var(--text-50);
+        font-size: calc(100px / (3 * var(--font-ratio)));
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        box-sizing: border-box;
+        margin: 0;
+        margin-top: 17.5px;
+        max-width: 500px;
+    }
+
+    .hero-cta {
+        position: absolute;
+        top: 75%;
+        transform: translateY(-50%);
+        left: 80px;
+        color: var(--text-50);
+        margin: 0;
+        border: none;
+        background-color: var(--secondary-500);
+        box-sizing: border-box;
+        width: 400px;
+        height: 80px;
+        font-size: 40px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-align: center;
+        text-transform: uppercase;
+        &:hover {
+            background-color: var(--secondary-400);
+        }
     }
 }
 
@@ -502,6 +604,11 @@ main::before {
     .h-t-b-ico {
         display: flex;
     }
+
+    .hero-title {
+        font-size: 75px;
+        line-height: 100px;
+    }
 }
 
 @media screen and (max-width: 575px) {
@@ -516,6 +623,22 @@ main::before {
 
     .logo-span .line {
         font-size: 19.2px;
+    }
+
+    .hero-title {
+        font-size: 50px;
+        line-height: 50px;
+    }
+}
+
+@media screen and (max-width: 260px) {
+    /* 
+    Tihs is very small. 
+    Only small fixes
+    */
+
+    h1, h2, h3, h4, h5, h6, p, a, span {
+        word-wrap: break-word;
     }
 }
 
