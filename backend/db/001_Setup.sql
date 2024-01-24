@@ -1,0 +1,14 @@
+CREATE SCHEMA `zmt` ;
+
+CREATE TABLE `zmt`.`blog` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(100) NULL,
+  `author` VARCHAR(100) NULL,
+  `preview` VARCHAR(1000) NULL,
+  `content` LONGTEXT NULL,
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `tag` VARCHAR(100) NULL DEFAULT 'Blogpost',
+  `img` JSON NULL,
+  `comment` VARCHAR(2000) NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `idblog_UNIQUE` (`id` ASC) VISIBLE);
