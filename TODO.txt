@@ -1,1 +1,34 @@
 NAV
+FOOTER
+
+1 BLOG Site
+
+=>>> DENN UMBEDINGT EN BLOG BUILDER
+        + Backend
+        => De denn au style
+
+(Man söll chöne fotis ufelade, und zwar so viel wie man will, die werdet denn als base64 in enere json datei gspeichert unter img i de db)
+
+
+
+
+IDEA:
+
+
+Ich will, dass uf deren Server nur statisches HTML lauft, aber jedi Site (standartsite nur wenig, neui blog post eigentlich komplett)
+durch post und get über frontend fetch afrage a mini site schickt.
+Uf mim Server lauft den das Backend sozege.
+Ich werd also e Datebank für die ha.
+Uf dere Datebank werdet erstens mal alli Blogpost gspeichert.
+Es söll aber au en pfad geh wo immer die neuste 5 oder so verschickt werdet.
+Allgemein bechumt die Site de unterordner https://timondev.vip/zmt/*
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+Wenn das denn alles gschafft isch, chan man ja no witer gah und bilderalbum builder oder so erstelle
