@@ -143,11 +143,15 @@ body {
 p, a {
     font-family: "Titillium Web", sans-serif;
     color: var(--text-950);
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: "Teko", monospace;
     color: var(--text-950);
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
 
 header {
@@ -161,6 +165,7 @@ header {
     box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
     gap: 5vw;
     width: 100%;
+    z-index: 100;
 }
 
 img[src$=".svg"] {
@@ -348,26 +353,16 @@ main::before {
     }
 }
 
-.hero-subtitle_A {
-    position: absolute;
-    top: 50%;
-    left: 80px;
-    transform: translateY(-50%);
+.hero-subtitle {
     color: var(--text-950);
     font-size: calc(100px / (3 * var(--font-ratio)));
     font-weight: 700;
     letter-spacing: 1.5px;
     box-sizing: border-box;
-    margin: 0;
-    margin-top: 17.5px;
-    max-width: 500px;
+    margin: 17.5px 15vw;
 }
 
-.hero-cta_A {
-    position: absolute;
-    top: 75%;
-    transform: translateY(-50%);
-    left: 80px;
+.hero-cta {
     color: var(--text-50);
     margin: 0;
     border: none;
@@ -380,6 +375,7 @@ main::before {
     letter-spacing: 1px;
     text-align: center;
     text-transform: uppercase;
+    margin: 20px calc(50% - 200px);
     &:hover {
         background-color: var(--secondary-400);
     }
@@ -430,6 +426,7 @@ main::before {
         transform: translateY(-50%);
         max-width: 90vw;
         color: var(--text-50);
+        text-align: left;
         &::after {
             display: block;
             content: "";
@@ -437,6 +434,7 @@ main::before {
             top: 100%;
             width: 7.5vw;
             height: 10px;
+            margin: 0;
             background-color: var(--text-50);
         }
     }
@@ -512,6 +510,7 @@ main::before {
         transform: translateY(-50%);
         max-width: 90vw;
         color: var(--text-50);
+        text-align: left;
         &::after {
             display: block;
             content: "";
@@ -519,6 +518,7 @@ main::before {
             top: 100%;
             width: 7.5vw;
             height: 10px;
+            margin: 0;
             background-color: var(--text-50);
         }
     }
@@ -629,6 +629,12 @@ main::before {
         font-size: 50px;
         line-height: 50px;
     }
+
+    .hero-cta {
+        width: 90%;
+        margin: 20px 5%;
+        font-size: 30px;
+    }
 }
 
 @media screen and (max-width: 260px) {
@@ -637,9 +643,14 @@ main::before {
     Only small fixes
     */
 
-    h1, h2, h3, h4, h5, h6, p, a, span {
+    h1, h2, h3, h4, h5, h6, p, a, span, button {
         word-wrap: break-word;
     }
+
+    .hero-cta {
+        height: auto;
+        padding: 10px;
+    } 
 }
 
 .ui-switch {
