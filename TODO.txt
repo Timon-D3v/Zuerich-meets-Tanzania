@@ -32,3 +32,69 @@ Allgemein bechumt die Site de unterordner https://timondev.vip/zmt/*
 
 
 Wenn das denn alles gschafft isch, chan man ja no witer gah und bilderalbum builder oder so erstelle
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SHOP 
+
+ - Link zu "Unikat"
+ - Buch direkt bei Tanja oder wo es das gibt
+
+
+VEREIN
+
+ - Vorstand
+ - Wie alles begann
+ - Erfoglsrechnung
+ - GV Daten
+
+
+FOOTER
+
+ - Just for us
+ - Statuten
+
+
+PROJEKTE
+
+ - 20for40
+ - mbuzi
+ - zürich meets tanzania
+ - tanzania meets zürich
+ - meducation
+ - bajaji
+
+
+NAV
+
+ - Teams weglassen
+ - "Weiteres" Box hinzufügen für seltene/nicht so wichtige sachen 
+
+
+HOME
+
+ - Letze 4 Blogs
+ - Alles wichtige aufgelistet
+
+
+KONTAKT
+
+vereb@gmx.net
+
+
+DEATHLINE
+
+Bis Ende Februar ein Gerüst
+=> Das heisst eine DB, ein basic blog builder (ohne gross gestyled), einige Sachen übernehmen (zb. Blog post als vorschau).
