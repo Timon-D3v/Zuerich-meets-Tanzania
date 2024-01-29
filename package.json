@@ -1,10 +1,25 @@
 {
+  "name": "zuerich-meets-tanzania-website",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "index.js",
+    "dev": "npx nodemon index.js"
+  },
+  "keywords": [],
+  "author": "Timon Fiedler",
+  "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "mysql2": "^3.8.0"
+    "mysql2": "^3.8.0",
+    "nodemon": "^3.0.3"
   }
 }
