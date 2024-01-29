@@ -1,0 +1,11 @@
+THIS IS MY PERSONAL LOG FILE FOR HOW MUCH I WORKED
+
+I will only count time I actually made progress, not the time I just thought.
+
+
+
+29.1.24
+Habe angefangen die Navigationsleiste zu programmieren. Bei der Desktop Version bin ich recht weit gekommen.
+Ausserdem habe ich am backend gearbeitet (index.js mit "/" route, db connection). Und ich habe meine Dateien zu 
+wiederverwendbaren Snippets zerbrochen.
+Time spent: 4:30h ; Time worked: 3:15h

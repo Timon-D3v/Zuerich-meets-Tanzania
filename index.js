@@ -4,6 +4,7 @@ import express from "express";
 import dotenv from "dotenv";
 import https from "https";
 import cors from "cors";
+import * as db from "./backend/db/db.zmt.js";
 
 
 
@@ -47,9 +48,11 @@ app.use(cors());
 
 
 app.get("/", (req, res) => {
-    typeof req.session.user != "undefined" ?
-    res.render("index", {user: user}) :
-    res.render("index");
+    res.render("index.ejs", {
+        user: req.session.user,
+        url: req.url,
+        date: "Sun Jan 21 2024 22:43:11 GMT+0100 (Mitteleuropäische Normalzeit)"
+    });
 });
 
 

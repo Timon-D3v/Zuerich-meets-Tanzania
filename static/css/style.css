@@ -1,5 +1,6 @@
 :root {
     --font-ratio: 1.414;
+    --nav_desktop_margin: 5vw;
 }
 
 :root[data-theme="light"] {
@@ -140,7 +141,7 @@ body {
     background-color: var(--background-50);
 }
 
-p, a {
+p, a, li, ul, ol {
     font-family: "Titillium Web", sans-serif;
     color: var(--text-950);
     -webkit-hyphens: auto;
@@ -381,14 +382,97 @@ main::before {
     }
 }
 
+.w-260,
+.w-575,
+.w575,
+.w750,
+.w1000,
+.w1200 {
+    display: none;
+}
+
+nav {
+    position: fixed;
+    z-index: 95;
+    & > div {
+        width: 100%;
+        height: 100%;
+        background-color: var(--background-50);
+    }
+    & #nav_desktop {
+        background-color: initial;
+        margin-left: calc(5vw + var(--nav_desktop_margin));
+        display: flex;
+    }
+}
+
+.n-d {
+    background-color: var(--background-50);
+    padding: 1.5vw;
+    box-sizing: border-box;
+    position: absolute;
+    transform: translateX(-50%);
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+    --short: / 2 + 5vw + var(--nav_desktop_margin);
+    &:nth-child(1) {
+        left: calc(var(--h_d_l_1) var(--short));
+    }
+    &:nth-child(2) {
+        left: calc(var(--h_d_l_2) var(--short) + var(--h_d_l_1) + 3vw);
+    }
+    &:nth-child(3) {
+        left: calc(var(--h_d_l_3) var(--short) + var(--h_d_l_1) + 6vw + var(--h_d_l_2));
+    }
+    &:nth-child(4) {
+        left: calc(var(--h_d_l_4) var(--short) + var(--h_d_l_1) + 9vw + var(--h_d_l_2) + var(--h_d_l_3));
+    }
+    &:nth-child(5) {
+        left: calc(var(--h_d_l_5) var(--short) + var(--h_d_l_1) + 12vw + var(--h_d_l_2) + var(--h_d_l_3) + var(--h_d_l_4));
+    }
+}
+
+.n-f-ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    & li {
+        font-size: 18px;
+        letter-spacing: 1px;
+        line-height: 2;
+        font-weight: 600;
+    }
+    & .mit-bild {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        & > img {
+            aspect-ratio: 1/1;
+            height: 20px;
+            margin-right: 0.5vw;
+        }
+    }
+}
+
 @media screen and (min-width: 1200px) {
     .h-t-b-m {
         display: none;
     }
 
+    .w1200 {
+        display: block;
+    }
+
     header,
     main::before {
         height: 140px;
+    }
+
+    nav {
+        top: 140px;
+        height: calc(100% - 140px);
+        left: 0;
+        width: 100%;
     }
 
     .h-n-b {
@@ -408,6 +492,11 @@ main::before {
     .h-n-b-e,
     .h-n-b {
         display: flex;
+    }
+
+    .hero,
+    .hero-img {
+        min-height: 800px;
     }
 
     .hero-img {
@@ -483,8 +572,19 @@ main::before {
         height: 80px;
     }
 
+    nav {
+        top: 80px;
+        height: calc(100% - 80px);
+        left: 100%;
+        width: 60%;
+    }
+
     .h-t-b {
         height: 100%;
+    }
+    
+    .w1000 {
+        display: block;
     }
     
     .logo-span .line {
@@ -496,6 +596,11 @@ main::before {
     .t-kontakt-btn,
     .t-shop-btn {
         display: flex;
+    }
+
+    .hero,
+    .hero-img {
+        min-height: 700px;
     }
 
     .hero-title {
@@ -572,8 +677,19 @@ main::before {
         height: 80px;
     }
 
+    nav {
+        top: 80px;
+        height: calc(100% - 80px);
+        left: 100%;
+        width: 60%;
+    }
+
     .h-t-b {
         height: 100%;
+    }
+    
+    .w750 {
+        display: block;
     }
     
     .logo-span .line {
@@ -593,8 +709,19 @@ main::before {
         height: 80px;
     }
 
+    nav {
+        top: calc(-100% + 160px);
+        height: calc(100% - 80px);
+        left: 0;
+        width: 100%;
+    }
+
     .h-t-b {
         height: 100%;
+    }
+
+    .w575 {
+        display: block;
     }
 
     .logo-span .line {
@@ -617,8 +744,19 @@ main::before {
         height: 80px;
     }
 
+    nav {
+        top: calc(-100% + 160px);
+        height: calc(100% - 80px);
+        left: 0;
+        width: 100%;
+    }
+
     .h-t-b {
         height: 100%;
+    }
+
+    .w-575 {
+        display: block;
     }
 
     .logo-span .line {
@@ -650,7 +788,11 @@ main::before {
     .hero-cta {
         height: auto;
         padding: 10px;
-    } 
+    }
+
+    .w-260 {
+        display: block;
+    }
 }
 
 .ui-switch {
