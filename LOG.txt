@@ -6,6 +6,9 @@ I will only count time I actually made progress, not the time I just thought.
 
 29.1.24
 Habe angefangen die Navigationsleiste zu programmieren. Bei der Desktop Version bin ich recht weit gekommen.
-Ausserdem habe ich am backend gearbeitet (index.js mit "/" route, db connection). Und ich habe meine Dateien zu 
-wiederverwendbaren Snippets zerbrochen.
 Time spent: 4:30h ; Time worked: 3:15h
+
+
+20.1.24
+Navigationsleiste Desktop ist fertig. Für Tab ist das layout da, aber noch nicht konkretes.
+Time spent: 2:30 ; TIme worked: 2h;
