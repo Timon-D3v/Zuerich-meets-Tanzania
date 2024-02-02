@@ -35,6 +35,13 @@ b1.on("click", () => {
 	b1.attr("data-tooltip-content", "Lightmode");
 });
 
+$(".n-t li > details > summary").each((i, elm) => {
+	$(elm).on("click", () => {
+		$(".n-t li > details > ul")[i];
+		// Change height from 0 to initial oder so
+	});
+});
+
 nav_desktop_l.forEach((elm, i) => {
 	gsap.set(nav_desktop_elm[i], {x: "-50%"})
 	elm.on("click", () => {
