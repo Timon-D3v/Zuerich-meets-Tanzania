@@ -35,10 +35,9 @@ b1.on("click", () => {
 	b1.attr("data-tooltip-content", "Lightmode");
 });
 
-$(".n-t li > details > summary").each((i, elm) => {
+document.querySelectorAll(".n-t-summary").forEach((elm, i) => {
 	$(elm).on("click", () => {
-		$(".n-t li > details > ul")[i];
-		// Change height from 0 to initial oder so
+		$(document.querySelectorAll(".n-t-details")[i]).toggleClass("open");
 	});
 });
 
