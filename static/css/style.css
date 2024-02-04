@@ -157,6 +157,10 @@ h1, h2, h3, h4, h5, h6 {
     hyphens: auto;
 }
 
+main {
+    min-height: 100vh;
+}
+
 header {
     position: fixed;
     top: 0;
@@ -639,6 +643,11 @@ nav {
     align-items: center;
 }
 
+footer {
+    min-height: calc(100vh - 80px);
+    background-image: url(../img/svg/footer.svg);
+}
+
 @media screen and (min-width: 1200px) {
     .h-t-b-m {
         display: none;
@@ -659,6 +668,10 @@ nav {
         left: 0;
         width: 100%;
         pointer-events: none;
+    }
+
+    footer {
+        min-height: calc(100vh - 140px);
     }
 
     .h-n-b {
