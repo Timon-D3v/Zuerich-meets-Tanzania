@@ -17,3 +17,7 @@ Time spent: 2:30 ; Time worked: 2h;
 2.2.24
 Minimal Navigationsleiste weiter gemacht.
 Time spent: 30min; Time worked: 30min;
+
+7.2.24
+Den Footer gemacht und etwas Content hinzugefügt.
+Time spent: 1h; Time worked: 1h;

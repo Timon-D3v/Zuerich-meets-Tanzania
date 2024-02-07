@@ -101,7 +101,3 @@ $(window).resize(setCssVariables);
 
 
 setInterval(setCssVariables, 1000);
-
-
-/// TEMPPPPPP
-$("#menu").click();
