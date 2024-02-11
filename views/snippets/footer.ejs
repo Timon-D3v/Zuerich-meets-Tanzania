@@ -1,9 +1,23 @@
 <footer>
-            <div style="display: none;">
-                
-                newsletter
-            </div>
-            <div class="f-news"></div>
+            <form class="f-news">
+                <div>
+                    <h2>Newsletter</h2>
+                    <p>Bleiben Sie über Zürich Meets Tanzania und ähnliche Projekte informiert.</p>
+                    <div class="news-a">
+                        <p class="news-a-t">Anrede:</p>
+                        <input type="checkbox" id="newsletter-anrede-herr" checked="true">
+                        <label for="newsletter-anrede-herr">Herr</label>
+                        <input type="checkbox" id="newsletter-anrede-frau">
+                        <label for="newsletter-anrede-frau">Frau</label>
+                    </div>
+                </div>
+                <div class="news-n">
+                    <input type="text" id="newsletter-vorname" autocomplete="given-name" placeholder="Vorname" class="f-input">
+                    <input type="text" id="newsletter-nachname" autocomplete="family-name" placeholder="Nachname" class="f-input">
+                </div>
+                <input type="email" id="newsletter-email" autocomplete="email" placeholder="E-Mail-Adresse" class="f-input">
+                <button type="submit" class="f-submit">Anmelden</button>
+            </form>
             <div class="f-links">
                 <div class="f-l-social">
                     <h2>Folge uns!</h2>

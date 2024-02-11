@@ -15,7 +15,9 @@ const root = $(":root"),
 		".n-foldable4",
 		".n-foldable5",
 	],
-	b1 = $("#darkmode2");
+	b1 = $("#darkmode2"),
+	f_a_h = $("#newsletter-anrede-herr"),
+	f_a_f = $("#newsletter-anrede-frau");
 
 $("#menu").on("click", () => {
 	$("#menu").toggleClass("is-active");
@@ -41,8 +43,20 @@ document.querySelectorAll(".n-t-summary").forEach((elm, i) => {
 	});
 });
 
+$("img").on("dragstart", () => {return false});
+$("svg").on("dragstart", () => {return false});
+
+f_a_h.on("click", () => {
+	f_a_f.prop("checked") ? f_a_f.prop("checked", false) : undefined;
+});
+
+f_a_f.on("click", () => {
+	f_a_h.prop("checked") ? f_a_h.prop("checked", false) : undefined;
+});
+
+
 nav_desktop_l.forEach((elm, i) => {
-	gsap.set(nav_desktop_elm[i], {x: "-50%"})
+	gsap.set(nav_desktop_elm[i], {x: "-50%"});
 	elm.on("click", () => {
 		navCloseOthers(i);
 		elm.toggleClass("active");
