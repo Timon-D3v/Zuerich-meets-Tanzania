@@ -12,11 +12,12 @@
                     </div>
                 </div>
                 <div class="news-n">
-                    <input type="text" id="newsletter-vorname" autocomplete="given-name" placeholder="Vorname" class="f-input">
-                    <input type="text" id="newsletter-nachname" autocomplete="family-name" placeholder="Nachname" class="f-input">
+                    <input type="text" id="newsletter-vorname" autocomplete="given-name" placeholder="Vorname" class="f-input" required>
+                    <input type="text" id="newsletter-nachname" autocomplete="family-name" placeholder="Nachname" class="f-input" required>
                 </div>
-                <input type="email" id="newsletter-email" autocomplete="email" placeholder="E-Mail-Adresse" class="f-input">
-                <button type="submit" class="f-submit">Anmelden</button>
+                <input type="email" id="newsletter-email" autocomplete="email" placeholder="E-Mail-Adresse" class="f-input" required>
+                    <p id="newsletter-form-error">Du hast einen Fehler gemacht</p>
+                <button type="submit" class="f-submit" id="newsletter-submit">Anmelden</button>
             </form>
             <div class="f-links">
                 <div class="f-l-social">

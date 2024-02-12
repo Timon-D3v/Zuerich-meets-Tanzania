@@ -63,6 +63,19 @@ app.get("/", (req, res) => {
 
 
 
+app.post("/post/newsletter/signUp", async (req, res) => {
+    let result = db.newsletterSignUp(req.body)
+        .catch(error => {
+            console.error("An Error occured:", error);
+            return "No connection to database";
+        });
+    res.send({status: result});
+});
+
+
+
+
+
 app.listen(8080, () => {
     console.log("Server listens on localhost:8080");
 });

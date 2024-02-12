@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import exp from "constants";
 
 
 
@@ -40,4 +41,12 @@ export async function createPost (title, author, preview, content, tag = "Blog",
 export async function getPost () {
     let [result] = await pool.query("SELECT * FROM `zmt`.`blog`;");
     return result;
+};
+
+export async function newsletterSignUp (data) {
+    let status = "Alles in Ordnung",
+        query = "INSERT INTO `zmt`.`newsletter` (`gender`, `vorname`, `nachname`, `email`) VALUES (?, ?, ?, ?);";
+    await pool.query(query, [data.gender, data.vorname, data.nachname, data.email])
+        .catch(error => status = error);
+    return status;
 };

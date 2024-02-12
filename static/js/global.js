@@ -19,7 +19,7 @@ const root = $(":root"),
 	f_a_h = $("#newsletter-anrede-herr"),
 	f_a_f = $("#newsletter-anrede-frau");
 
-$("#menu").on("click", () => {
+$("#menu").click(() => {
 	$("#menu").toggleClass("is-active");
 	$(document).trigger("open-navigation");
 });
@@ -30,7 +30,7 @@ $(document).on("open-navigation", () => {
 	closeNav();
 });
 
-b1.on("click", () => {
+b1.click(() => {
 	$("#darkmode").click();
 	root.attr("data-theme") === "light" ?
 	b1.attr("data-tooltip-content", "Darkmode") :
@@ -38,7 +38,7 @@ b1.on("click", () => {
 });
 
 document.querySelectorAll(".n-t-summary").forEach((elm, i) => {
-	$(elm).on("click", () => {
+	$(elm).click(() => {
 		$(document.querySelectorAll(".n-t-details")[i]).toggleClass("open");
 	});
 });
@@ -46,18 +46,18 @@ document.querySelectorAll(".n-t-summary").forEach((elm, i) => {
 $("img").on("dragstart", () => {return false});
 $("svg").on("dragstart", () => {return false});
 
-f_a_h.on("click", () => {
+f_a_h.click(() => {
 	f_a_f.prop("checked") ? f_a_f.prop("checked", false) : undefined;
 });
 
-f_a_f.on("click", () => {
+f_a_f.click(() => {
 	f_a_h.prop("checked") ? f_a_h.prop("checked", false) : undefined;
 });
 
 
 nav_desktop_l.forEach((elm, i) => {
 	gsap.set(nav_desktop_elm[i], {x: "-50%"});
-	elm.on("click", () => {
+	elm.click(() => {
 		navCloseOthers(i);
 		elm.toggleClass("active");
 		$(nav_desktop_elm[i]).toggleClass("active");
@@ -108,7 +108,75 @@ function setCssVariables () {
 	});
 };
 
-$("#darkmode").on("click", changeTheme);
+function validateNewsletterForm () {
+	const ah = $("#newsletter-anrede-herr"),
+		  af = $("#newsletter-anrede-frau"),
+		  vn = $("#newsletter-vorname"),
+		  nn = $("#newsletter-nachname"),
+		  em = $("#newsletter-email"),
+		  sb = $("#newsletter-submit");
+	let obj = {gender: "Divers"}, 
+		err = 0;
+	ah.prop("checked") ? obj.gender = "Herr" : undefined;
+	af.prop("checked") ? obj.gender = "Frau" : undefined;
+	vn.val() === "" ? err = 1 : obj.vorname = vn.val();
+	nn.val() === "" ? err = 2 : obj.nachname = nn.val();
+	em.val() === "" ? err = 3 : obj.email = em.val();
+	return {
+		error: err,
+		data: obj
+	};
+};
+
+function newsletterSignUp (e) {
+	e.preventDefault();
+	const errField = $("#newsletter-form-error");
+	let res = validateNewsletterForm();
+	if (res.error === 0) {
+		sendNewsetter(res.data);
+		errField.html("Deine Anmeldung war erfolgreich!")
+			.css({
+				display: "block",
+				color: "var(--c-accent-500)"
+			});
+		setTimeout(() => errField.css({
+			display: "none",
+			color: "var(--c-secondary-600)"
+		}), 5000);
+	} else if (res.error === 1) {
+		errField.html("Du musst deinen Vornamen angeben.")
+			.css("display", "block");
+	} else if (res.error === 2) {
+		errField.html("Du musst deinen Nachnamen angeben.")
+			.css("display", "block");
+	} else if (res.error === 3) {
+		errField.html("Du musst deine E-Mail angeben.")
+			.css("display", "block");
+	};
+};
+
+async function sendNewsetter (data) {
+	let res = await fetch(window.location.origin + "/post/newsletter/signUp", {
+		method: "POST",
+		headers: {'Content-Type': 'application/json'},
+        mode: 'cors',
+        cache: 'default',
+		body: JSON.stringify(data)
+	})
+	.catch(() => $("#newsletter-form-error").css("display", "block")
+		.html("Es ist ein unerwarteter Fehler aufgetreten, bitte versuche es in einigen Sekunden erneut...")
+	);
+	res = await res.json();
+	res.status !== "Alles in Ordnung" ? () => {
+		$("#newsletter-form-error").css("display", "block")
+			.html("Es ist ein unerwarteter Fehler aufgetreten, bitte versuche es in einigen Sekunden erneut...");
+		console.error("An Error occured:", res.status);
+	} :
+	undefined;
+};
+
+$("#darkmode").click(changeTheme);
+$("#newsletter-submit").click(newsletterSignUp);
 $(document).ready(setCssVariables);
 $(window).resize(setCssVariables);
 

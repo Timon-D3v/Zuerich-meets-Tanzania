@@ -1,7 +1,7 @@
 THIS IS MY PERSONAL LOG FILE FOR HOW MUCH I WORKED
 
 I will only count time I actually made progress, not the time I just thought.
-I suggest a loan of 5 CHF
+I suggest a loan of 5 CHF / h, but would preffer a offer for a fixed price.
 
 
 
@@ -21,3 +21,11 @@ Time spent: 30min; Time worked: 30min;
 7.2.24
 Den Footer gemacht und etwas Content hinzugefügt.
 Time spent: 1h; Time worked: 1h;
+
+11.2.24
+Etwas weitergearbeitet, war aber nicht sehr konzentriert und habe mehr probiert als geschafft. Habe aber 20min gebraucht um Accounts etc aufzusetzen.
+Time spent: 2h; Time worked: 1:10h
+
+12.2.24
+Habe den Footer fertig gemacht und dem Newsletter Feld ein Backend gemacht.
+Time spent: 2:30h; Time worked: 2:10h;

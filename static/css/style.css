@@ -203,7 +203,7 @@ body {
     background-color: var(--background-50);
 }
 
-p, a, li, ul, ol {
+p, a, li, ul, ol, label, input, input::placeholder {
     font-family: "Titillium Web", sans-serif;
     color: var(--text-950);
     -webkit-hyphens: auto;
@@ -839,6 +839,33 @@ footer {
 
 p.news-a-t {
     margin: 10px 0;
+}
+
+#newsletter-anrede-herr,
+#newsletter-anrede-frau {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 0.75lh;
+    aspect-ratio: 1/1;
+    background-color: transparent;
+    border: 3px solid var(--c-text-50);
+    border-radius: 50%;
+    margin: 0;
+    position: relative;
+    top: 2px;
+    &:checked {
+        background-color: var(--primary-400);
+    }
+}
+
+#newsletter-anrede-frau {
+    margin-left: 2lh;
+}
+
+#newsletter-form-error {
+    color: var(--c-secondary-600);
+    font-size: 15px;
+    display: none;
 }
 
 @media screen and (min-width: 1200px) {
