@@ -1,27 +1,55 @@
-<%
-var title = "Home",
-    desc = "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren. Eine bunt zusammengemischte Truppe engagierter, hilfsbereiter Leute. Erfahre auf dieser Seite mehr über unser Team, unsere Freunde in Mbalizi und unsere Partner.";
-%><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de-ch" data-theme="light">
     <head>
         <%- include("./snippets/head.ejs", {
-            title: title,
+            title: "Home",
             date: date,
-            desc: desc,
+            desc: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren. Eine bunt zusammengemischte Truppe engagierter, hilfsbereiter Leute. Erfahre auf dieser Seite mehr über unser Team, unsere Freunde in Mbalizi und unsere Partner.",
             url: url,
-            env: env
+            env: env,
+            sitetype: sitetype
         }) %>
     </head>
     <body>
         <%- include("./snippets/header.ejs") %>
         <%- include("./snippets/nav.ejs") %>
         <main>
-            <div class="hero">
-                <img class="hero-img" alt="Echse auf einem Stein" src="./img/stock/echse.jpg">
-                <h1 class="hero-title">Medizinische Hilfe<br>in Tanzania</h1>
-                <p class="hero-subtitle">Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren.</p>
-                <button class="hero-cta">Mehr erfahren</button>
-            </div>
+            <%- include("./snippets/hero.ejs", {
+                img_alt: "Echse auf einem Stein",
+                img_path: "./img/stock/echse.jpg",
+                title: "Medizinische Hilfe<br>in Tanzania",
+                subtitle: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren.",
+                cta_text: "Mehr erfahren"
+            }) %>
+            <%- include("./snippets/blogCards.ejs", {
+                title: undefined,
+                rows: 2,
+                img: [
+                    last4blogs[0].img.img.preview, 
+                    last4blogs[1].img.img.preview, 
+                    last4blogs[2].img.img.preview, 
+                    last4blogs[3].img.img.preview
+                ],
+                img_alt: [
+                    last4blogs[0].img.alt.preview, 
+                    last4blogs[1].img.alt.preview, 
+                    last4blogs[2].img.alt.preview, 
+                    last4blogs[3].img.alt.preview
+                ],
+                subtitle: [
+                    last4blogs[0].title, 
+                    last4blogs[1].title, 
+                    last4blogs[2].title, 
+                    last4blogs[3].title
+                ],
+                desc: [
+                    last4blogs[0].preview, 
+                    last4blogs[1].preview, 
+                    last4blogs[2].preview, 
+                    last4blogs[3].preview
+                ],
+                origin_url: origin_url
+            }) %>
         </main>
         <%- include("./snippets/footer.ejs") %>
     </body>

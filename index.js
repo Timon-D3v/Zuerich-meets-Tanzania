@@ -5,9 +5,34 @@ import dotenv from "dotenv";
 import https from "https";
 import cors from "cors";
 import * as db from "./backend/db/db.zmt.js";
+import { copyFileSync } from "fs";
 
 
-const LOAD_LEVEL = "dev"; // Auf Produktions zu prod umstellen
+const LOAD_LEVEL = "dev", // Auf Produktions zu prod umstellen
+    BACKUP = {
+        BLOGS: [
+            {
+                title: "Fehler",
+                preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
+                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "./img/backup/blogerror (1).jpg"}},
+            },
+            {
+                title: "Fehler",
+                preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
+                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "./img/backup/blogerror (2).jpg"}},
+            },
+            {
+                title: "Fehler",
+                preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
+                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "./img/backup/blogerror (3).jpg"}},
+            },
+            {
+                title: "Fehler",
+                preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
+                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "./img/backup/blogerror (4).jpg"}}
+            }
+        ]
+    };
 
 
 
@@ -50,12 +75,38 @@ app.use(cors());
 
 
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+    let result = await db.getLastXPosts(4)
+        .catch(() => {return BACKUP.BLOGS});
+    let url = req.protocol + '://' + req.get('host');
     res.render("index.ejs", {
-        user: req.session.user,
+        env: LOAD_LEVEL,
         url: req.url,
+        origin_url: url,
         date: "Sun Jan 21 2024 22:43:11 GMT+0100 (Mitteleuropäische Normalzeit)",
-        env: LOAD_LEVEL
+        title: "Home",
+        desc: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren. Eine bunt zusammengemischte Truppe engagierter, hilfsbereiter Leute. Erfahre auf dieser Seite mehr über unser Team, unsere Freunde in Mbalizi und unsere Partner.",
+        sitetype: "home",
+        user: req.session.user,
+        last4blogs: result
+    });
+});
+
+app.get("/blog/:id", async (req, res) => {
+    let result = await db.getPostWhereTitle(req.params.id)
+        .catch(() => res.redirect("/"));
+    result = result[0];
+    let url = req.protocol + '://' + req.get('host');
+    res.render("blog.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: url,
+        date: "Mon Feb 12 2024 16:40:44 GMT+0100 (Mitteleuropäische Normalzeit)",
+        title: result.title,
+        desc: result.preview + " | Written by " + result.author,
+        sitetype: "blog",
+        user: req.session.user,
+        blog: result
     });
 });
 

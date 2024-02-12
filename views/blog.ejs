@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main>
+            <%- include("./snippets/hero.ejs", {
+                img_alt: "Echse auf einem Stein",
+                img_path: "./img/stock/echse.jpg",
+                title: "Medizinische Hilfe<br>in Tanzania",
+                subtitle: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren.",
+                cta_text: "Mehr erfahren"
+            }) %>
+        </main>
+        <%- include("./snippets/footer.ejs") %>
+    </body>
+</html>

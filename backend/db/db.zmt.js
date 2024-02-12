@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import exp from "constants";
 
 
 
@@ -43,10 +42,26 @@ export async function getPost () {
     return result;
 };
 
+export async function getPostWhereTitle (title) {
+    let query = "SELECT * FROM `zmt`.`blog` WHERE title = ?;";
+    let [result] = pool.query(query, [title])
+        .catch(() => {throw new Error("Fehler")});
+    if (result == []) throw new Error("Seite nicht vorhanden (404)");
+    return result;
+};
+
 export async function newsletterSignUp (data) {
     let status = "Alles in Ordnung",
         query = "INSERT INTO `zmt`.`newsletter` (`gender`, `vorname`, `nachname`, `email`) VALUES (?, ?, ?, ?);";
     await pool.query(query, [data.gender, data.vorname, data.nachname, data.email])
         .catch(error => status = error);
     return status;
+};
+
+export async function getLastXPosts (x) {
+    let query = "SELECT * from `zmt`.`blog` ORDER BY `id` DESC LIMIT " + x + ";";
+    let [result] = await pool.query(query)
+        .catch(() => {throw new Error("Fehler")});
+    if (result.length !== x) throw new Error("Nicht die gewünschte Antahl Elemente");
+    return result;
 };
