@@ -1,5 +1,6 @@
 import session from "express-session";
 import bodyParser from "body-parser";
+import ImageKit from "imagekit";
 import express from "express";
 import dotenv from "dotenv";
 import https from "https";
@@ -36,6 +37,11 @@ const LOAD_LEVEL = "dev", // Auf Produktions zu prod umstellen
 
 
 
+const imagekit = new ImageKit({
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+    privateKey: process.env.IMAGEKIT_SECRET_KEY,
+    urlEndpoint: "https://ik.imagekit.io/zmt"
+})
 const app = express();/*
 const https_options = {
     key: fs.readFileSync("./cert/private.key.pem"),
