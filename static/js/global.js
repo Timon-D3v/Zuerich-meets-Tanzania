@@ -158,9 +158,9 @@ function newsletterSignUp (e) {
 async function sendNewsetter (data) {
 	let res = await fetch(window.location.origin + "/post/newsletter/signUp", {
 		method: "POST",
-		headers: {'Content-Type': 'application/json'},
-        mode: 'cors',
-        cache: 'default',
+		headers: {"Content-Type": "application/json"},
+        mode: "cors",
+        cache: "default",
 		body: JSON.stringify(data)
 	})
 	.catch(() => $("#newsletter-form-error").css("display", "block")

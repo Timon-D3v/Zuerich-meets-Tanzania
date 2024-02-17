@@ -1080,6 +1080,24 @@ p.news-a-t {
     background-color: var(--text-900);
 }
 
+.blog_title {
+    text-align: center;
+}
+
+.blog_subtitle {
+    padding: 0 5%;
+}
+
+.blog_text {
+    padding: 0 10%;
+}
+
+.blog_img {
+    margin: 2.5vh 10%;
+    width: 80%;
+    height: auto;
+}
+
 @media screen and (min-width: 1200px) {
     .h-t-b-m {
         display: none;

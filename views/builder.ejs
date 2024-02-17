@@ -17,6 +17,21 @@
             <h1>Blog Builder</h1>
             <p>Herzlich Willkommen zum Blog Builder. Benutze das Menu unten, um zu beginnen. Wähle dazu einfach das gewünschte Element aus und leg los. Viel Erfolg!</p>
             <div class="blog_line"></div>
+            <h1>Erstmal ein paar allgemeine Daten:</h1>
+            <input type="text" id="basic_title" placeholder="Titel für den Blogpost">
+            <input type="text" id="basic_preview" placeholder="Kurze Zusammenfassung">
+            <input type="text" id="basic_comment" placeholder="Privater Kommentar (Nur für Verwalter sichtbar, optional)">
+            <input type="text" id="basic_author" placeholder="Autor">
+            <label for="basic_img">Titelbild aussuchen</label>
+            <input type="file" id="basic_img">
+            <input type="text" id="basic_alt" placeholder="Beschreibe das Titelbild kurz (3-5 Wörter)">
+            <div class="blog_line"></div>
+            <h1>Deine Auswahl</h1>
+            <div id="baustelle"></div>
+            <div class="blog_line"></div>
+            <h1>Das ist die Vorschau:</h1>
+            <div class="blog_line"></div>
+            <div id="preview"></div>
             <div id="auswahl">
                 <button type="button" id="add_title">Titel hinzufügen</button>
                 <button type="button" id="add_subtitle">Untertitel hinzufügen</button>
@@ -26,10 +41,6 @@
                 <button type="button" id="add_line">Trennlinie hinzufügen</button>
                 <button type="button" id="done">Abschliessen</button>
             </div>
-            <div id="baustelle"></div>
-            <h1>Das ist die Vorschau:</h1>
-            <div class="blog_line"></div>
-            <div id="preview"></div>
             <script>
                 $("#add_title").click(addTitle);
                 $("#add_subtitle").click(addSubtitle);
@@ -42,7 +53,11 @@
 
                 const bau = $("#baustelle"),
                     pre = $("#preview"),
-                    ids = [];
+                    ids = [],
+                    img_arr = [],
+                    alt_arr = [],
+                    img_suffix_arr = [],
+                    img_names = [];
 
 
                 function addTitle () {
@@ -61,6 +76,7 @@
                     preview.id = id + "_2";
                     pre.append(preview);
                 };
+
                 function addSubtitle () {
                     let input = document.createElement("input");
                     input.setAttribute("type", "text");
@@ -77,6 +93,7 @@
                     preview.id = id + "_2";
                     pre.append(preview);
                 };
+
                 function addText () {
                     let input = document.createElement("textarea");
                     input.innerText = "Paragraf";
@@ -92,6 +109,7 @@
                     preview.id = id + "_2";
                     pre.append(preview);
                 };
+
                 function addImg () {
                     let input = document.createElement("input");
                     input.setAttribute("type", "file");
@@ -100,7 +118,9 @@
                     ids.push(id);
                     input.id = id;
                     bau.append(input);
-                    let preview = document.createElement("img")
+                    let preview = document.createElement("img");
+                    preview.id = id + "_2";
+                    preview.classList.add("blog_img");
                     input.addEventListener("change", (e) => {
                         const file = e.target.files[0];
                         if (file) {
@@ -114,7 +134,16 @@
                         };
                     });
                     pre.append(preview);
+                    let alt = document.createElement("input");
+                    alt.setAttribute("type", "text");
+                    alt.placeholder = "Kurze Beschriebung des Bildes (ca. 3-5 Wörter)";
+                    alt.id = id + "_3";
+                    bau.append(alt);
+                    alt.addEventListener("input", () => {
+                        preview.alt = alt.value;
+                    });
                 };
+
                 function addMultipleImg () {
                     let input = document.createElement("input");
                     input.setAttribute("mupltiple", "true");
@@ -122,9 +151,10 @@
                     input.placeholder = "Bild";
                     let id = randomId();
                     ids.push(id);
-                    input.id = id + "_2";
+                    input.id = id;
                     bau.append(input);
                 };
+
                 function addLine () {
                     let input = document.createElement("div");
                     input.classList.add("blog_line");
@@ -137,7 +167,33 @@
                     input2.id = id;
                     pre.append(input2);
                 };
-                function done () {};
+
+                function done () {
+                    let content = document.getElementById("preview");
+                    let pics = content.querySelectorAll("img");
+                    pics.forEach(elm => {
+                        img_arr.push(elm.src);
+                        alt_arr.push(elm.alt);
+                        img_suffix_arr.push(elm.id);
+                        let name = elm.alt;
+                        elm.src = "https://ik.imagekit.io/zmt/blog/" + name.replaceAll(" ", "-") + "___" + elm.id;
+                        img_names.push(elm.src);
+                    });
+                    fetch(window.location.origin + "/post/upload/imagekit", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        mode: "cors",
+                        cache: "default",
+                        body: JSON.stringify({
+                            img: img_arr,
+                            alt: alt_arr,
+                            suffix: img_suffix_arr
+                        })
+                    });
+                    content = document.getElementById("preview").innerHTML;
+                    createBlogPost(content);
+                };
+
                 function randomId () {
                     let result = 'auto_';
                     const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -146,8 +202,55 @@
                     };
                     return result;
                 };
+
+                function createBlogPost (content) {
+                    const t = $("#basic_title"),
+                        p = $("#basic_preview"),
+                        c = $("#basic_comment"),
+                        a = $("#basic_author");
+                    if (
+                        content === "" || content === undefined || content === null ||
+                        t.val() === "" || t.val() === undefined || t.val() === null ||
+                        p.val() === "" || p.val() === undefined || p.val() === null ||
+                        a.val() === "" || a.val() === undefined || a.val() === null
+                    ) {
+                        console.error("Something is empty...");
+                        return;
+                    } else {
+                        if (c.val() === "" || c.val() === undefined || c.val() === null) c.val("Kein Kommentar");
+                        let data = {
+                            img: {},
+                            alt: {}
+                        };
+                        let file = document.getElementById("basic_img").files[0];
+                        if (!file) {return};
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            img_names.unshift(e.target.result);
+                            alt_arr.unshift($("#basic_alt").val());
+                        };
+                        reader.readAsDataURL(file);
+                        fetch(window.location.origin + "/post/blog", {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            mode: "cors",
+                            cache: "default",
+                            body: JSON.stringify({
+                                title: t.val(),
+                                preview: p.val(),
+                                author: a.val(),
+                                comment: c.val(),
+                                content: content,
+                                img: {
+                                    img: img_arr,
+                                    alt: alt_arr
+                                }
+                            })
+                        });
+                    };
+                };
             </script>
         </main>
-        <%- include("./snippets/footer.ejs") %>
+        <div style="height: 120px;"></div>
     </body>
 </html>

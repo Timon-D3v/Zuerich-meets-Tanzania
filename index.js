@@ -15,22 +15,22 @@ const LOAD_LEVEL = "dev", // Auf Produktions zu prod umstellen
             {
                 title: "Fehler",
                 preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "/img/backup/blogerror (1).jpg"}},
+                img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (1).jpg"]},
             },
             {
                 title: "Fehler",
                 preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "/img/backup/blogerror (2).jpg"}},
+                img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (2).jpg"]},
             },
             {
                 title: "Fehler",
                 preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "/img/backup/blogerror (3).jpg"}},
+                img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (3).jpg"]},
             },
             {
                 title: "Fehler",
                 preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "/img/backup/blogerror (4).jpg"}}
+                img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (4).jpg"]},
             }
         ]
     };
@@ -54,8 +54,8 @@ dotenv.config();
 const imagekit = new ImageKit({
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
     privateKey: process.env.IMAGEKIT_SECRET_KEY,
-    urlEndpoint: "https://ik.imagekit.io/zmt"
-})
+    urlEndpoint: "https://ik.imagekit.io/zmt/"
+});
 
 
 
@@ -150,12 +150,37 @@ app.get("/private/:id", async (req, res) => {
 
 
 app.post("/post/newsletter/signUp", async (req, res) => {
-    let result = db.newsletterSignUp(req.body)
+    let result = await db.newsletterSignUp(req.body)
         .catch(error => {
             console.error("An Error occured:", error);
             return "No connection to database";
         });
     res.send({status: result});
+});
+
+app.post("/post/blog", async (req, res) => {
+    let b = req.body;
+    let result = await db.createPost(b.title, b.author, b.preview, b.content, "Blog", b.img, b.comment)
+        .catch(error => {
+            console.error("An Error occured:", error);
+            return "No connection to database";
+        });
+    res.send({status: result});
+});
+
+app.post("/post/upload/imagekit", async (req, res) => {
+    let response;
+    req.body.img.forEach((element, i) => {
+        imagekit.upload({
+            file: element,
+            fileName: req.body.alt[i].replaceAll(" ", "-") + "___" + req.body.suffix[i],
+            folder: "/blog/",
+            useUniqueFileName: false
+        }, (err, result) => {
+            err ? response = err : response = result;
+        });
+    });
+    res.send({res: response});
 });
 
 

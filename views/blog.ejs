@@ -15,8 +15,8 @@
         <%- include("./snippets/nav.ejs") %>
         <main>
             <%- include("./snippets/hero.ejs", {
-                img_alt: blog.img.alt.preview,
-                img_path: blog.img.img.preview,
+                img_alt: blog.img.alt[0],
+                img_path: blog.img.img[0],
                 title: title,
                 subtitle: blog.preview,
                 cta_text: ""

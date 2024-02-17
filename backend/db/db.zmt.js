@@ -27,12 +27,10 @@ export async function getChat (user1, user2) {
     return result;
 };
 
-export async function createPost (title, author, preview, content, tag = "Blog", img = [], comment = "Kein Kommentar") {
+export async function createPost (title, author, preview, content, tag = "Blog", img = {}, comment = "Kein Kommentar") {
     let query = "INSERT INTO `zmt`.`blog` (`title`, `author`, `preview`, `content`, `tag`, `img`, `comment`) VALUES (?, ?, ?, ?, ?, ?, ?);",
-        json_img = {}, error;
-    img.forEach((elm, i) => {json_img[i.toString()] = elm;});
-    json_img = JSON.stringify(json_img);
-    await pool.query(query, [title, author, preview, content, tag, json_img, comment])
+        error;
+    await pool.query(query, [title, author, preview, content, tag, JSON.stringify(img), comment])
     .catch(err => {error = err});
     return error; 
 };
