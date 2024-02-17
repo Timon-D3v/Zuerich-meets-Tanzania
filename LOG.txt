@@ -37,3 +37,7 @@ Time spent: 4:15h; Time worked: 3h;
 17.2.24
 Habe angefangen den Blog zu designen, habe aber gemerkt, dass das ohne builder schwer geht, weil ich keine ahnung habe was wo hinkommt und dann den builder angefangen.
 Time spent: 3h; Time worked: 2:30h;
+
+17.2.24
+Blog Backend fertig.
+Time spent: 4h; Time worked: 3h;

@@ -1,19 +1,8 @@
-Build the blog builder
-        all uploaded imgs have to be named, stores in a array, there has to be a 2. array with the alts
-        after that the images should be uploaded to imagekit (in the backend)
-        and the uploaded base64 text should be replaced with the url with which the file is accassable after the upload
-
-
-
-
-
 1 BLOG Site
-
-=>>> DENN UMBEDINGT EN BLOG BUILDER
-        + Backend
-        => De denn au style
-
-(Man söll chöne fotis ufelade, und zwar so viel wie man will, die werdet denn als base64 in enere json datei gspeichert unter img i de db)
+        => Style: Make a carousel and some collages, that can be coosen.
+        => Also give a part where half of the blog is text and the other half is a img
+        Lastly Make a bottom section for the author
+        Take inspiration from migros site
 
 
 
