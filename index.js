@@ -15,33 +15,28 @@ const LOAD_LEVEL = "dev", // Auf Produktions zu prod umstellen
             {
                 title: "Fehler",
                 preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "./img/backup/blogerror (1).jpg"}},
+                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "/img/backup/blogerror (1).jpg"}},
             },
             {
                 title: "Fehler",
                 preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "./img/backup/blogerror (2).jpg"}},
+                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "/img/backup/blogerror (2).jpg"}},
             },
             {
                 title: "Fehler",
                 preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "./img/backup/blogerror (3).jpg"}},
+                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "/img/backup/blogerror (3).jpg"}},
             },
             {
                 title: "Fehler",
                 preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "./img/backup/blogerror (4).jpg"}}
+                img: {alt: {preview: "Das Bild zeigt ein Fehlersymbol"}, img: {preview: "/img/backup/blogerror (4).jpg"}}
             }
         ]
     };
 
 
 
-const imagekit = new ImageKit({
-    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
-    privateKey: process.env.IMAGEKIT_SECRET_KEY,
-    urlEndpoint: "https://ik.imagekit.io/zmt"
-})
 const app = express();/*
 const https_options = {
     key: fs.readFileSync("./cert/private.key.pem"),
@@ -53,6 +48,14 @@ const https_options = {
 
 app.set("view engine", "ejs");
 dotenv.config();
+
+
+
+const imagekit = new ImageKit({
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+    privateKey: process.env.IMAGEKIT_SECRET_KEY,
+    urlEndpoint: "https://ik.imagekit.io/zmt"
+})
 
 
 
@@ -101,9 +104,9 @@ app.get("/", async (req, res) => {
 app.get("/blog/:id", async (req, res) => {
     let result = await db.getPostWhereTitle(req.params.id)
         .catch(() => res.redirect("/"));
-    result = result[0];
+    result = result?.[0];
     let url = req.protocol + '://' + req.get('host');
-    res.render("blog.ejs", {
+    result ? res.render("blog.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
         origin_url: url,
@@ -113,7 +116,33 @@ app.get("/blog/:id", async (req, res) => {
         sitetype: "blog",
         user: req.session.user,
         blog: result
-    });
+    }) : undefined;
+});
+
+app.get("/private/:id", async (req, res) => {
+    /*
+
+    NEEDS AUTHENTICATION WITH ADMIN RIGHTS
+
+    */
+    let url = req.protocol + '://' + req.get('host');
+    switch (req.params.id) {
+        case "writeBlog":
+            res.render("builder.ejs", {
+                env: LOAD_LEVEL,
+                url: req.url,
+                origin_url: url,
+                date: "Sat Feb 17 2024 11:53:24 GMT+0100 (Mitteleuropäische Normalzeit)",
+                title: "Blog Verfassen",
+                desc: "Hier können die Mitglieder des Vereins Blogposts erstellen.",
+                sitetype: "private",
+                user: req.session.user
+            });
+            break;
+        default:
+            res.redirect("/");
+            break;
+    };
 });
 
 

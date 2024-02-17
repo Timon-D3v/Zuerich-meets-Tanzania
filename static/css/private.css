@@ -1,0 +1,43 @@
+h1 {
+    padding: 0 10vw;
+    font-size: 25px;
+}
+
+p {
+    padding: 0 5vw;
+    font-size: calc(25px / var(--font-ratio));
+}
+
+input, textarea {
+    display: block;
+    width: 90%;
+    margin: 10px 5%;
+}
+
+textarea {
+    resize: vertical;
+}
+
+#auswahl {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 120px;
+    background-color: var(--background-200);
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-items: center;
+    z-index: 50;
+    & button {
+        border: none;
+        background-color: var(--secondary-500);
+        padding: 15px;
+        margin: 5px;
+        color: var(--text-950);
+        font-size: calc(25px / var(--font-ratio));
+        &:hover {
+            background-color: var(--secondary-300);
+        }
+    }
+}

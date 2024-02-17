@@ -1,3 +1,12 @@
+Build the blog builder
+        all uploaded imgs have to be named, stores in a array, there has to be a 2. array with the alts
+        after that the images should be uploaded to imagekit (in the backend)
+        and the uploaded base64 text should be replaced with the url with which the file is accassable after the upload
+
+
+
+
+
 1 BLOG Site
 
 =>>> DENN UMBEDINGT EN BLOG BUILDER

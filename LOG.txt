@@ -29,3 +29,7 @@ Time spent: 2h; Time worked: 1:10h
 12.2.24
 Habe den Footer fertig gemacht und dem Newsletter Feld ein Backend gemacht.
 Time spent: 2:30h; Time worked: 2:10h;
+
+17.2.24
+Habe angefangen den Blog zu designen, habe aber gemerkt, dass das ohne builder schwer geht, weil ich keine ahnung habe was wo hinkommt und dann den builder angefangen.
+Time spent: 3h; Time worked: 2:30h;

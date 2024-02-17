@@ -1073,6 +1073,13 @@ p.news-a-t {
     background-color: var(--accent-600);
 }
 
+.blog_line {
+    height: 2px;
+    width: 90%;
+    margin: 10px 5%;
+    background-color: var(--text-900);
+}
+
 @media screen and (min-width: 1200px) {
     .h-t-b-m {
         display: none;

@@ -15,12 +15,13 @@
         <%- include("./snippets/nav.ejs") %>
         <main>
             <%- include("./snippets/hero.ejs", {
-                img_alt: "Echse auf einem Stein",
-                img_path: "./img/stock/echse.jpg",
-                title: "Medizinische Hilfe<br>in Tanzania",
-                subtitle: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren.",
-                cta_text: "Mehr erfahren"
+                img_alt: blog.img.alt.preview,
+                img_path: blog.img.img.preview,
+                title: title,
+                subtitle: blog.preview,
+                cta_text: ""
             }) %>
+            <%- blog.content %>
         </main>
         <%- include("./snippets/footer.ejs") %>
     </body>

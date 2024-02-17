@@ -44,7 +44,7 @@ export async function getPost () {
 
 export async function getPostWhereTitle (title) {
     let query = "SELECT * FROM `zmt`.`blog` WHERE title = ?;";
-    let [result] = pool.query(query, [title])
+    let [result] = await pool.query(query, [title])
         .catch(() => {throw new Error("Fehler")});
     if (result == []) throw new Error("Seite nicht vorhanden (404)");
     return result;

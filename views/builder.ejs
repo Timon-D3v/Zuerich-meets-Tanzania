@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main>
+            <h1>Blog Builder</h1>
+            <p>Herzlich Willkommen zum Blog Builder. Benutze das Menu unten, um zu beginnen. Wähle dazu einfach das gewünschte Element aus und leg los. Viel Erfolg!</p>
+            <div class="blog_line"></div>
+            <div id="auswahl">
+                <button type="button" id="add_title">Titel hinzufügen</button>
+                <button type="button" id="add_subtitle">Untertitel hinzufügen</button>
+                <button type="button" id="add_text">Paragraf hinzufügen</button>
+                <button type="button" id="add_img">Einzelnes Bild hinzufügen</button>
+                <button type="button" id="add_imgs">Mehrere Bilder hinzufügen</button>
+                <button type="button" id="add_line">Trennlinie hinzufügen</button>
+                <button type="button" id="done">Abschliessen</button>
+            </div>
+            <div id="baustelle"></div>
+            <h1>Das ist die Vorschau:</h1>
+            <div class="blog_line"></div>
+            <div id="preview"></div>
+            <script>
+                $("#add_title").click(addTitle);
+                $("#add_subtitle").click(addSubtitle);
+                $("#add_text").click(addText);
+                $("#add_img").click(addImg);
+                $("#add_imgs").click(addMultipleImg);
+                $("#add_line").click(addLine);
+                $("#done").click(done);
+
+
+                const bau = $("#baustelle"),
+                    pre = $("#preview"),
+                    ids = [];
+
+
+                function addTitle () {
+                    let input = document.createElement("input");
+                    input.setAttribute("type", "text");
+                    input.placeholder = "Titel";
+                    let id = randomId();
+                    ids.push(id);
+                    input.id = id;
+                    bau.append(input);
+                    let preview = document.createElement("h1");
+                    input.addEventListener("input", () => {
+                        preview.innerText = input.value;
+                    });
+                    preview.classList.add("blog_title");
+                    preview.id = id + "_2";
+                    pre.append(preview);
+                };
+                function addSubtitle () {
+                    let input = document.createElement("input");
+                    input.setAttribute("type", "text");
+                    input.placeholder = "Untertitel";
+                    let id = randomId();
+                    ids.push(id);
+                    input.id = id;
+                    bau.append(input);
+                    let preview = document.createElement("h2");
+                    input.addEventListener("input", () => {
+                        preview.innerText = input.value;
+                    });
+                    preview.classList.add("blog_subtitle");
+                    preview.id = id + "_2";
+                    pre.append(preview);
+                };
+                function addText () {
+                    let input = document.createElement("textarea");
+                    input.innerText = "Paragraf";
+                    let id = randomId();
+                    ids.push(id);
+                    input.id = id;
+                    bau.append(input);
+                    let preview = document.createElement("p");
+                    input.addEventListener("keydown", () => {
+                        preview.innerText = input.value;
+                    });
+                    preview.classList.add("blog_text");
+                    preview.id = id + "_2";
+                    pre.append(preview);
+                };
+                function addImg () {
+                    let input = document.createElement("input");
+                    input.setAttribute("type", "file");
+                    input.placeholder = "Bild";
+                    let id = randomId();
+                    ids.push(id);
+                    input.id = id;
+                    bau.append(input);
+                    let preview = document.createElement("img")
+                    input.addEventListener("change", (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(event) {
+                                preview.src = event.target.result;
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            preview.src = '';
+                        };
+                    });
+                    pre.append(preview);
+                };
+                function addMultipleImg () {
+                    let input = document.createElement("input");
+                    input.setAttribute("mupltiple", "true");
+                    input.setAttribute("type", "file");
+                    input.placeholder = "Bild";
+                    let id = randomId();
+                    ids.push(id);
+                    input.id = id + "_2";
+                    bau.append(input);
+                };
+                function addLine () {
+                    let input = document.createElement("div");
+                    input.classList.add("blog_line");
+                    let id = randomId();
+                    ids.push(id);
+                    input.id = id;
+                    bau.append(input);
+                    let input2 = document.createElement("div");
+                    input2.classList.add("blog_line");
+                    input2.id = id;
+                    pre.append(input2);
+                };
+                function done () {};
+                function randomId () {
+                    let result = 'auto_';
+                    const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    for (let i = 0; i < 27; i++) {
+                        result += char.charAt(Math.floor(Math.random() * char.length));
+                    };
+                    return result;
+                };
+            </script>
+        </main>
+        <%- include("./snippets/footer.ejs") %>
+    </body>
+</html>
