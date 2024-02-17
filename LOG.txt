@@ -24,11 +24,15 @@ Time spent: 1h; Time worked: 1h;
 
 11.2.24
 Etwas weitergearbeitet, war aber nicht sehr konzentriert und habe mehr probiert als geschafft. Habe aber 20min gebraucht um Accounts etc aufzusetzen.
-Time spent: 2h; Time worked: 1:10h
+Time spent: 2h; Time worked: 1:10h;
 
 12.2.24
 Habe den Footer fertig gemacht und dem Newsletter Feld ein Backend gemacht.
 Time spent: 2:30h; Time worked: 2:10h;
+
+12.2.24
+Google Ad, Imagekit und weitere aufgesetzt. Ausserdem die Links zu den Blogs auf der Homeseite
+Time spent: 4:15h; Time worked: 3h;
 
 17.2.24
 Habe angefangen den Blog zu designen, habe aber gemerkt, dass das ohne builder schwer geht, weil ich keine ahnung habe was wo hinkommt und dann den builder angefangen.
