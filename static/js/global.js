@@ -19,6 +19,8 @@ const root = $(":root"),
 	f_a_h = $("#newsletter-anrede-herr"),
 	f_a_f = $("#newsletter-anrede-frau");
 
+let	num_of_title = 5;
+
 $("#menu").click(() => {
 	$("#menu").toggleClass("is-active");
 	$(document).trigger("open-navigation");
@@ -57,7 +59,8 @@ f_a_f.click(() => {
 
 nav_desktop_l.forEach((elm, i) => {
 	gsap.set(nav_desktop_elm[i], {x: "-50%"});
-	elm.click(() => {
+	elm.click((e) => {
+		e.preventDefault();
 		navCloseOthers(i);
 		elm.toggleClass("active");
 		$(nav_desktop_elm[i]).toggleClass("active");
@@ -113,8 +116,7 @@ function validateNewsletterForm () {
 		  af = $("#newsletter-anrede-frau"),
 		  vn = $("#newsletter-vorname"),
 		  nn = $("#newsletter-nachname"),
-		  em = $("#newsletter-email"),
-		  sb = $("#newsletter-submit");
+		  em = $("#newsletter-email");
 	let obj = {gender: "Divers"}, 
 		err = 0;
 	ah.prop("checked") ? obj.gender = "Herr" : undefined;
@@ -174,6 +176,39 @@ async function sendNewsetter (data) {
 	} :
 	undefined;
 };
+
+async function getBlogTitle (num) {
+	let res = await fetch(window.location.origin + "/post/blog/getLinks/" + num.toString(), {
+		method: "POST",
+		headers: {"Content-Type": "application/json"},
+        mode: "cors",
+        cache: "default"
+	});
+	res = await res.json();
+	$(".n-foldable3 ul").html("");
+	res.title.forEach(elm => {
+		let li = document.createElement("li");
+		let a = document.createElement("a");
+		a.href = window.location.origin + "/blog/" + elm.title;
+		a.innerText = elm.title;
+		$(".n-foldable3 ul").append(li);
+		$(li).append(a);
+	});
+	if (res.title.length === num) {
+		let a = document.createElement("a");
+		let li = document.createElement("li");
+		a.href = "#";
+		a.innerText = "Weitere";
+		a.onclick = (e) => {
+			e.preventDefault();
+			num_of_title += 5;
+			getBlogTitle(num_of_title);
+		};
+		$(".n-foldable3 ul").append(li);
+		$(li).append(a);
+	};
+};
+getBlogTitle(num_of_title);
 
 $("#darkmode").click(changeTheme);
 $("#newsletter-submit").click(newsletterSignUp);

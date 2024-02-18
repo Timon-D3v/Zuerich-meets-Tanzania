@@ -63,3 +63,10 @@ export async function getLastXPosts (x) {
     if (result.length !== x) throw new Error("Nicht die gewünschte Antahl Elemente");
     return result;
 };
+
+export async function getLastXPostLinks (x) {
+    let query = "SELECT title from `zmt`.`blog` ORDER BY `id` DESC LIMIT " + x.toString() + ";";
+    let [result] = await pool.query(query)
+        .catch(() => {throw new Error("Fehler")});
+    return result;
+};

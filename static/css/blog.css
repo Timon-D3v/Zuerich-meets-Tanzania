@@ -1,0 +1,25 @@
+.blog_line {
+    height: 2px;
+    width: 90%;
+    margin: 10px 5%;
+    background-color: var(--text-900);
+}
+
+.blog_title {
+    text-align: center;
+}
+
+.blog_subtitle {
+    padding: 0 5%;
+}
+
+.blog_text {
+    padding: 0 10%;
+}
+
+.blog_img {
+    margin: 2.5vh 10%;
+    width: 80%;
+    height: auto;
+}
+

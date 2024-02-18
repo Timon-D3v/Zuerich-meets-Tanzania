@@ -116,7 +116,7 @@ app.get("/blog/:id", async (req, res) => {
         sitetype: "blog",
         user: req.session.user,
         blog: result
-    }) : undefined;
+    }) : res.redirect("/");
 });
 
 app.get("/private/:id", async (req, res) => {
@@ -138,6 +138,10 @@ app.get("/private/:id", async (req, res) => {
                 sitetype: "private",
                 user: req.session.user
             });
+            break;
+        case "management":
+            // TEMP ---------------------- //
+            res.redirect(url + "/private/writeBlog");
             break;
         default:
             res.redirect("/");
@@ -166,6 +170,12 @@ app.post("/post/blog", async (req, res) => {
             return "No connection to database";
         });
     res.send({status: result});
+});
+
+app.post("/post/blog/getLinks/:num", async (req, res) => {
+    let response = await db.getLastXPostLinks(req.params.num)
+        .catch(() => {return "No connection to database"});
+    typeof response !== "string" ? res.send({title: response}) : res.end();
 });
 
 app.post("/post/upload/imagekit", async (req, res) => {

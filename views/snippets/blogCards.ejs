@@ -2,7 +2,7 @@
                 <% if (title) { %><h1 class="blog-cards-title"><%= title %></h1><% };
                 for (let i = 0; i < rows * 2; i++) { %>
                 <a href="<%= origin_url + "/blog/" + subtitle[i] %>" class="blog-cards-part">
-                    <img class="blog-cards-part-img" alt="<%= img_alt[i] %>" src="<%= img[i] %>">
+                    <img class="blog-cards-part-img" alt="<%= img_alt[i] %>" src="<%= img[i] %>" loading="lazy">
                     <div class="blog-cards-part-div">
                         <h2><%- subtitle[i] %></h2>
                         <p><%- desc[i] %></p>

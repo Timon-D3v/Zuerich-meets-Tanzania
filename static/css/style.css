@@ -1033,7 +1033,7 @@ p.news-a-t {
 
 .blog-cards-part-img {
     width: 100%;
-    height: 100%;
+    height: 37.5vh;
     object-fit: cover;
 }
 
@@ -1071,31 +1071,6 @@ p.news-a-t {
 
 .bg--accent-600 {
     background-color: var(--accent-600);
-}
-
-.blog_line {
-    height: 2px;
-    width: 90%;
-    margin: 10px 5%;
-    background-color: var(--text-900);
-}
-
-.blog_title {
-    text-align: center;
-}
-
-.blog_subtitle {
-    padding: 0 5%;
-}
-
-.blog_text {
-    padding: 0 10%;
-}
-
-.blog_img {
-    margin: 2.5vh 10%;
-    width: 80%;
-    height: auto;
 }
 
 @media screen and (min-width: 1200px) {

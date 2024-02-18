@@ -216,40 +216,64 @@
                     ) {
                         console.error("Something is empty...");
                         return;
-                    } else {
-                        if (c.val() === "" || c.val() === undefined || c.val() === null) c.val("Kein Kommentar");
-                        let data = {
-                            img: {},
-                            alt: {}
-                        };
-                        let file = document.getElementById("basic_img").files[0];
-                        if (!file) {return};
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            img_names.unshift(e.target.result);
-                            alt_arr.unshift($("#basic_alt").val());
-                        };
-                        reader.readAsDataURL(file);
-                        fetch(window.location.origin + "/post/blog", {
+                    };
+                    if (c.val() === "" || c.val() === undefined || c.val() === null) c.val("Kein Kommentar");
+                    let data = {
+                        img: {},
+                        alt: {}
+                    };
+                    let file = document.getElementById("basic_img").files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        let id = randomId(),
+                            name = $("#basic_alt").val();
+                        fetch(window.location.origin + "/post/upload/imagekit", {
                             method: "POST",
                             headers: {"Content-Type": "application/json"},
                             mode: "cors",
                             cache: "default",
                             body: JSON.stringify({
-                                title: t.val(),
-                                preview: p.val(),
-                                author: a.val(),
-                                comment: c.val(),
-                                content: content,
-                                img: {
-                                    img: img_arr,
-                                    alt: alt_arr
-                                }
+                                img: [e.target.result],
+                                alt: [name],
+                                suffix: [id]
                             })
                         });
+                        img_names.unshift("https://ik.imagekit.io/zmt/blog/" + name.replaceAll(" ", "-") + "___" + id);
+                        alt_arr.unshift(name);
                     };
+                    reader.readAsDataURL(file);
+                    fetch(window.location.origin + "/post/blog", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        mode: "cors",
+                        cache: "default",
+                        body: JSON.stringify({
+                            title: t.val(),
+                            preview: p.val(),
+                            author: a.val(),
+                            comment: c.val(),
+                            content: content,
+                            img: {
+                                img: img_arr,
+                                alt: alt_arr
+                            }
+                        })
+                    });
                 };
             </script>
+            <div style="height: 120px;"></div>
+            <div class="blog_carousel">
+                <div class="blog_c-main" id="abc">
+                    <img>
+                    <img>
+                    <img>
+                    <img>
+                </div>
+                <button type="button" id="blog_carousel_next" onclick="document.getElementById('abc').scrollTo({left: 100,behavior: 'smooth',});"></button>
+                <button type="button" id="blog_carousel_prev"></button>
+                <div class="blog_c-ruler"></div>
+            </div>
         </main>
         <div style="height: 120px;"></div>
     </body>
