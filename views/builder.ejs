@@ -16,7 +16,7 @@
         <%- include("./snippets/nav.ejs") %>
         <main>
             <h1>Blog Builder</h1>
-            <p>Herzlich Willkommen zum Blog Builder. Es gibt einige Sachen zu beachten, wenn du deinen Blog schreiben willst. Benutze das Menu unten, um zu beginnen. Wähle dazu einfach das gewünschte Element aus und leg los. Viel Erfolg!</p>
+            <p>Herzlich Willkommen zum Blog Builder. Benutze das Menu unten, um zu beginnen. Wähle dazu einfach das gewünschte Element aus und leg los. Viel Erfolg!</p>
             <div class="blog_line"></div>
             <h1>Erstmal ein paar allgemeine Daten:</h1>
             <input type="text" id="basic_title" placeholder="Titel für den Blogpost">
@@ -24,7 +24,7 @@
             <input type="text" id="basic_comment" placeholder="Privater Kommentar (Nur für Verwalter sichtbar, optional)">
             <input type="text" id="basic_author" placeholder="Autor">
             <label for="basic_img">Titelbild aussuchen</label>
-            <input type="file" id="basic_img">
+            <input type="file" id="basic_img" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
             <input type="text" id="basic_alt" placeholder="Beschreibe das Titelbild kurz (3-5 Wörter)">
             <div class="blog_line"></div>
             <h1>Deine Auswahl</h1>
@@ -114,7 +114,7 @@
                 function addImg () {
                     let input = document.createElement("input");
                     input.setAttribute("type", "file");
-                    input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw";
+                    input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr";
                     input.placeholder = "Bild";
                     let id = randomId();
                     ids.push(id);
@@ -150,7 +150,7 @@
                 function addMultipleImg () {
                     let input = document.createElement("input");
                     input.setAttribute("multiple", "true");
-                    input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw";
+                    input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr";
                     input.setAttribute("type", "file");
                     input.placeholder = "Bild";
                     let id = randomId();
@@ -346,19 +346,19 @@
                     container.append(ruler);
                     let script = document.createElement("script");
                     let scriptHTML = `$(".blog_c-ruler.${ids[4]}").html($(".blog_c-main.${ids[1]}").html());\n\n`;
-                    scriptHTML += `const arr_${ids[5]} = [`;
+                    scriptHTML += `const arr_${ids[5]} = [\n`;
                     img_arr.forEach((elm, i) => {
-                        scriptHTML += `$(".${ids[i + 10]}"),\n`;
+                        scriptHTML += `    $(".${ids[i + 10]}"),\n`;
                     });
                     scriptHTML += `];\n\nlet current_${ids[6]} = 1;\n\narr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n\n`;
-                    scriptHTML += `function next_${ids[7]} () {\ncurrent_${ids[6]} + 1 > arr_${ids[5]}.length ?\ncurrent_${ids[6]} = 1 :\ncurrent_${ids[6]}++;\n`;
-                    scriptHTML += `current_${ids[6]} === 1 ?\narr_${ids[5]}[arr_${ids[5]}.length - 1].toggleClass("active") :\n`;
-                    scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 2].toggleClass("active");\narr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\n`;
-                    scriptHTML += `function prev_${ids[8]} () {\ncurrent_${ids[6]} - 1 === 0 ?\ncurrent_${ids[6]} = arr_${ids[5]}.length :\n`
-                    scriptHTML += `current_${ids[6]}--;\ncurrent_${ids[6]} === arr_${ids[5]}.length ?\narr_${ids[5]}[0].toggleClass("active") :\narr_${ids[5]}[current_${ids[6]}].toggleClass("active");\n`
-                    scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\nfunction to_${ids[9]} (i) {\narr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n`
-                    scriptHTML += `arr_${ids[5]}[i - 1].toggleClass("active");\ncurrent_${ids[6]} = i;\n};\n\n$("#${b1id}").click(next_${ids[7]});\n`
-                    scriptHTML += `$("#${b2id}").click(prev_${ids[8]});\n\narr_${ids[5]}.forEach((elm, i) => {\nelm.eq(1).click(() => to_${ids[9]} (i + 1));\n});`;
+                    scriptHTML += `function next_${ids[7]} () {\n    current_${ids[6]} + 1 > arr_${ids[5]}.length ?\n    current_${ids[6]} = 1 :\n    current_${ids[6]}++;\n    `;
+                    scriptHTML += `current_${ids[6]} === 1 ?\n    arr_${ids[5]}[arr_${ids[5]}.length - 1].toggleClass("active") :\n    `;
+                    scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 2].toggleClass("active");\n    arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\n`;
+                    scriptHTML += `function prev_${ids[8]} () {\n    current_${ids[6]} - 1 === 0 ?\n    current_${ids[6]} = arr_${ids[5]}.length :\n    `
+                    scriptHTML += `current_${ids[6]}--;\n    current_${ids[6]} === arr_${ids[5]}.length ?\n    arr_${ids[5]}[0].toggleClass("active") :\n    arr_${ids[5]}[current_${ids[6]}].toggleClass("active");\n    `
+                    scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\nfunction to_${ids[9]} (i) {\n    arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n    `
+                    scriptHTML += `arr_${ids[5]}[i - 1].toggleClass("active");\n    current_${ids[6]} = i;\n};\n\n$("#${b1id}").click(next_${ids[7]});\n`
+                    scriptHTML += `$("#${b2id}").click(prev_${ids[8]});\n\narr_${ids[5]}.forEach((elm, i) => {\n    elm.eq(1).click(() => to_${ids[9]} (i + 1));\n});`;
                     script.innerHTML = scriptHTML;
                     container.append(script);
                     let dummy = document.createElement("div");

@@ -55,4 +55,5 @@ Ich hatte Probleme mit dem einfügen vom Carousel in den Builder.
 Time spent: 3h; Time worked: 1h;
 
 20.2.24
-Ein Paar Fehler im Builder behoben.
+Ein Paar Fehler im Builder und Allgemein behoben. Ausserdem einige quality of life Verbesserungen im Builder gemacht.
+Time spent: 2h; Time worked: 2h; 
