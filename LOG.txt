@@ -46,4 +46,13 @@ Time spent: 4h; Time worked: 3h;
 Sehr viel geschafft, gerade am Carousel designen;
 Time spent: 3:40h; Time worked: 3h;
 
-17:25
+19.2.24
+Carouseldesign abgeschlossen. Angefangen in den Builder einzubauen.
+Time spent: 2h; Time worked: 1:30h;
+
+20.2.24
+Ich hatte Probleme mit dem einfügen vom Carousel in den Builder.
+Time spent: 3h; Time worked: 1h;
+
+20.2.24
+Ein Paar Fehler im Builder behoben.

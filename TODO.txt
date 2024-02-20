@@ -1,5 +1,4 @@
 1 BLOG Site
-        => Style: Make a carousel and some collages, that can be coosen.
         => Also give a part where half of the blog is text and the other half is a img
         Lastly Make a bottom section for the author
         Take inspiration from migros site

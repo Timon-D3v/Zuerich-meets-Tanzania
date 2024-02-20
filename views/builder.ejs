@@ -9,6 +9,7 @@
             env: env,
             sitetype: sitetype
         }) %>
+        <link rel="stylesheet" href="/css/blog.css">
     </head>
     <body>
         <%- include("./snippets/header.ejs") %>
@@ -113,6 +114,7 @@
                 function addImg () {
                     let input = document.createElement("input");
                     input.setAttribute("type", "file");
+                    input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw";
                     input.placeholder = "Bild";
                     let id = randomId();
                     ids.push(id);
@@ -120,6 +122,7 @@
                     bau.append(input);
                     let preview = document.createElement("img");
                     preview.id = id + "_2";
+                    preview.loading = "lazy";
                     preview.classList.add("blog_img");
                     input.addEventListener("change", (e) => {
                         const file = e.target.files[0];
@@ -147,6 +150,7 @@
                 function addMultipleImg () {
                     let input = document.createElement("input");
                     input.setAttribute("multiple", "true");
+                    input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw";
                     input.setAttribute("type", "file");
                     input.placeholder = "Bild";
                     let id = randomId();
@@ -154,7 +158,6 @@
                     input.id = id;
                     bau.append(input);
                     let preview = document.createElement("div");
-                    preview.classList.add("test")
                     let id2 = randomId();
                     ids.push(id2);
                     preview.id = id2;
@@ -166,7 +169,6 @@
                                 let res = await toBase64(files[i]);
                                 arr.push(res);
                             };
-                            //setTimeout(async () => preview.innerHTML = await createCarouselHTML(arr), 5000);
                             carousel = await createCarouselHTML(arr);
                             preview.innerHTML = carousel[0];
                             eval(carousel[1]);
@@ -203,12 +205,18 @@
                     let content = document.getElementById("preview");
                     let pics = content.querySelectorAll("img");
                     pics.forEach(elm => {
+                        elm.classList.remove("active");
                         img_arr.push(elm.src);
                         alt_arr.push(elm.alt);
                         img_suffix_arr.push(elm.id);
                         let name = elm.alt;
                         elm.src = "https://ik.imagekit.io/zmt/blog/" + name.replaceAll(" ", "-") + "___" + elm.id;
                         img_names.push(elm.src);
+                    });
+                    content.querySelectorAll("p").forEach((elm, i) => {
+                        let b = document.getElementById("baustelle");
+                        let t = b.querySelectorAll("textarea");
+                        elm.innerText = $(t).eq(i).val();
                     });
                     fetch(window.location.origin + "/post/upload/imagekit", {
                         method: "POST",
@@ -234,7 +242,7 @@
                     return result;
                 };
 
-                function createBlogPost (content) {
+                async function createBlogPost (content) {
                     const t = $("#basic_title"),
                         p = $("#basic_preview"),
                         c = $("#basic_comment"),
@@ -254,26 +262,22 @@
                         alt: {}
                     };
                     let file = document.getElementById("basic_img").files[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        let id = randomId(),
-                            name = $("#basic_alt").val();
-                        fetch(window.location.origin + "/post/upload/imagekit", {
-                            method: "POST",
-                            headers: {"Content-Type": "application/json"},
-                            mode: "cors",
-                            cache: "default",
-                            body: JSON.stringify({
-                                img: [e.target.result],
-                                alt: [name],
-                                suffix: [id]
-                            })
-                        });
-                        img_names.unshift("https://ik.imagekit.io/zmt/blog/" + name.replaceAll(" ", "-") + "___" + id);
-                        alt_arr.unshift(name);
-                    };
-                    reader.readAsDataURL(file);
+                    let hero = await toBase64(file);
+                    let heroid = await randomId();
+                    let heroname = $("#basic_alt").val();
+                    fetch(window.location.origin + "/post/upload/imagekit", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        mode: "cors",
+                        cache: "default",
+                        body: JSON.stringify({
+                            img: [hero],
+                            alt: [heroname],
+                            suffix: [heroid]
+                        })
+                    });
+                    await img_names.unshift("https://ik.imagekit.io/zmt/blog/" + heroname.replaceAll(" ", "-") + "___" + heroid);
+                    await alt_arr.unshift(heroname);
                     fetch(window.location.origin + "/post/blog", {
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
@@ -286,7 +290,7 @@
                             comment: c.val(),
                             content: content,
                             img: {
-                                img: img_arr,
+                                img: img_names,
                                 alt: alt_arr
                             }
                         })
@@ -330,6 +334,7 @@
                         let img = document.createElement("img");
                         ids.push(randomId());
                         img.classList.add(ids[ids.length - 1]);
+                        img.loading = "lazy";
                         img.id = ids[ids.length - 1];
                         img.src = elm;
                         img.alt = "Keine Beschreibung für dieses Bild...";
@@ -362,7 +367,6 @@
                     return [dummy.html(), scriptHTML];
                 };
             </script>
-            <link rel="stylesheet" href="/css/blog.css">
         </main>
         <div style="height: 120px;"></div>
     </body>
