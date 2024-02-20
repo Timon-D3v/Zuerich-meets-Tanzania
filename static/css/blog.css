@@ -23,3 +23,120 @@
     height: auto;
 }
 
+.blog_carousel {
+    margin: 4vh 10%;
+    width: 80%;
+    height: 60vh;
+    position: relative;
+}
+
+.blog_c-main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60vh;
+    z-index: 1;
+    display: flex;
+    overflow: hidden;
+    background-color: var(--background-100);
+    & img {
+        transition: all 0.75s;
+        flex-shrink: 1;
+        width: 0;
+        height: 100%;
+        object-fit: contain;
+        &.active {
+            flex-shrink: 0;
+            width: 100%;
+        }
+    }
+}
+
+.blog_c-ruler {
+    position: absolute;
+    bottom: -2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 8vh;
+    max-width: 80%;
+    min-width: 10%;
+    z-index: 10;
+    display: flex;
+    gap: 1.25vh;
+    align-items: center;
+    overflow-y: hidden;
+    overflow-x: auto;
+    background-color: #22212170;
+    & img {
+        transition: all 0.75s;
+        height: 90%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        box-sizing: border-box;
+        border: transparent 5px solid;
+        &.active {
+            border: #41403f 5px solid;
+        }
+        &:first-child {
+            margin-left: 1.25vh;
+        }
+        &:last-child {
+            margin-right: 1.25vh;
+        }
+    }
+}
+
+.blog_carousel_next,
+.blog_carousel_prev {
+    position: absolute;
+    top: 50%;
+    width: clamp(40px, 5%, 1000px);
+    aspect-ratio: 1/1;
+    z-index: 10;
+    border: none;
+    border-radius: 50%;
+    background-position: center;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-color: #41403f;
+    &:hover {
+        background-color: #222121;
+    }
+    &:active {
+        background-color: #1a0f00;
+    }
+}
+
+.blog_carousel_prev {
+    left: 0;
+    transform: translate(-50%, -50%);
+    background-image: url(../img/svg/carousel_toleft.svg);
+}
+
+.blog_carousel_next {
+    right: 0;
+    transform: translate(50%, -50%);
+    background-image: url(../img/svg/carousel_toright.svg);
+}
+
+@media screen and (min-width: 575px) and (max-width: 749px) {
+    .blog_c-main,
+    .blog_carousel {
+        height: 50vh;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .blog_c-main,
+    .blog_carousel {
+        height: 40vh;
+    }
+}
+
+@media screen and (max-width: 260px) {
+    .blog_c-main,
+    .blog_carousel {
+        height: 30vh;
+    }
+}

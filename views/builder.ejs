@@ -15,7 +15,7 @@
         <%- include("./snippets/nav.ejs") %>
         <main>
             <h1>Blog Builder</h1>
-            <p>Herzlich Willkommen zum Blog Builder. Benutze das Menu unten, um zu beginnen. Wähle dazu einfach das gewünschte Element aus und leg los. Viel Erfolg!</p>
+            <p>Herzlich Willkommen zum Blog Builder. Es gibt einige Sachen zu beachten, wenn du deinen Blog schreiben willst. Benutze das Menu unten, um zu beginnen. Wähle dazu einfach das gewünschte Element aus und leg los. Viel Erfolg!</p>
             <div class="blog_line"></div>
             <h1>Erstmal ein paar allgemeine Daten:</h1>
             <input type="text" id="basic_title" placeholder="Titel für den Blogpost">
@@ -146,13 +146,44 @@
 
                 function addMultipleImg () {
                     let input = document.createElement("input");
-                    input.setAttribute("mupltiple", "true");
+                    input.setAttribute("multiple", "true");
                     input.setAttribute("type", "file");
                     input.placeholder = "Bild";
                     let id = randomId();
                     ids.push(id);
                     input.id = id;
                     bau.append(input);
+                    let preview = document.createElement("div");
+                    preview.classList.add("test")
+                    let id2 = randomId();
+                    ids.push(id2);
+                    preview.id = id2;
+                    input.addEventListener("change", async (e) => {
+                        const files = e.target.files;
+                        let arr = [];
+                        if (files != []) {
+                            for (let i = 0; i < files.length; i++) {
+                                let res = await toBase64(files[i]);
+                                arr.push(res);
+                            };
+                            //setTimeout(async () => preview.innerHTML = await createCarouselHTML(arr), 5000);
+                            carousel = await createCarouselHTML(arr);
+                            preview.innerHTML = carousel[0];
+                            eval(carousel[1]);
+                        } else {
+                            preview.innerHTML = "Fehler";
+                        };
+                    });
+                    pre.append(preview);
+                };
+
+                function toBase64 (file) {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(file);
+                    });
                 };
 
                 function addLine () {
@@ -261,19 +292,77 @@
                         })
                     });
                 };
+
+                function createCarouselHTML (img_arr) {
+                    let ids = [];
+                    let container = document.createElement("div");
+                    container.classList.add("blog_carousel");
+                    ids.push(randomId());
+                    container.classList.add(ids[0]);
+                    let main = document.createElement("div");
+                    main.classList.add("blog_c-main");
+                    ids.push(randomId());
+                    main.classList.add(ids[1]);
+                    main = $(main);
+                    container = $(container);
+                    let b1 = document.createElement("button");
+                    let b2 = document.createElement("button");
+                    b1.classList.add("blog_carousel_next");
+                    b2.classList.add("blog_carousel_prev");
+                    let b1id = "blog_carousel_next_" + randomId();
+                    let b2id = "blog_carousel_prev_" + randomId();
+                    ids.push(b1id);
+                    ids.push(b2id);
+                    b1.id = b1id;
+                    b2.id = b2id;
+                    b1.setAttribute("type", "button");
+                    b2.setAttribute("type", "button");
+                    let ruler = document.createElement("div");
+                    ruler.classList.add("blog_c-ruler");
+                    ids.push(randomId());
+                    ruler.classList.add(ids[4]);
+                    ids.push(randomId());
+                    ids.push(randomId());
+                    ids.push(randomId());
+                    ids.push(randomId());
+                    ids.push(randomId());
+                    img_arr.forEach(elm => {
+                        let img = document.createElement("img");
+                        ids.push(randomId());
+                        img.classList.add(ids[ids.length - 1]);
+                        img.id = ids[ids.length - 1];
+                        img.src = elm;
+                        img.alt = "Keine Beschreibung für dieses Bild...";
+                        main.append(img);
+                    });
+                    container.append(main);
+                    container.append(b1);
+                    container.append(b2);
+                    container.append(ruler);
+                    let script = document.createElement("script");
+                    let scriptHTML = `$(".blog_c-ruler.${ids[4]}").html($(".blog_c-main.${ids[1]}").html());\n\n`;
+                    scriptHTML += `const arr_${ids[5]} = [`;
+                    img_arr.forEach((elm, i) => {
+                        scriptHTML += `$(".${ids[i + 10]}"),\n`;
+                    });
+                    scriptHTML += `];\n\nlet current_${ids[6]} = 1;\n\narr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n\n`;
+                    scriptHTML += `function next_${ids[7]} () {\ncurrent_${ids[6]} + 1 > arr_${ids[5]}.length ?\ncurrent_${ids[6]} = 1 :\ncurrent_${ids[6]}++;\n`;
+                    scriptHTML += `current_${ids[6]} === 1 ?\narr_${ids[5]}[arr_${ids[5]}.length - 1].toggleClass("active") :\n`;
+                    scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 2].toggleClass("active");\narr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\n`;
+                    scriptHTML += `function prev_${ids[8]} () {\ncurrent_${ids[6]} - 1 === 0 ?\ncurrent_${ids[6]} = arr_${ids[5]}.length :\n`
+                    scriptHTML += `current_${ids[6]}--;\ncurrent_${ids[6]} === arr_${ids[5]}.length ?\narr_${ids[5]}[0].toggleClass("active") :\narr_${ids[5]}[current_${ids[6]}].toggleClass("active");\n`
+                    scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\nfunction to_${ids[9]} (i) {\narr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n`
+                    scriptHTML += `arr_${ids[5]}[i - 1].toggleClass("active");\ncurrent_${ids[6]} = i;\n};\n\n$("#${b1id}").click(next_${ids[7]});\n`
+                    scriptHTML += `$("#${b2id}").click(prev_${ids[8]});\n\narr_${ids[5]}.forEach((elm, i) => {\nelm.eq(1).click(() => to_${ids[9]} (i + 1));\n});`;
+                    script.innerHTML = scriptHTML;
+                    container.append(script);
+                    let dummy = document.createElement("div");
+                    dummy = $(dummy);
+                    dummy.append(container);
+                    return [dummy.html(), scriptHTML];
+                };
             </script>
-            <div style="height: 120px;"></div>
-            <div class="blog_carousel">
-                <div class="blog_c-main" id="abc">
-                    <img>
-                    <img>
-                    <img>
-                    <img>
-                </div>
-                <button type="button" id="blog_carousel_next" onclick="document.getElementById('abc').scrollTo({left: 100,behavior: 'smooth',});"></button>
-                <button type="button" id="blog_carousel_prev"></button>
-                <div class="blog_c-ruler"></div>
-            </div>
+            <link rel="stylesheet" href="/css/blog.css">
         </main>
         <div style="height: 120px;"></div>
     </body>
