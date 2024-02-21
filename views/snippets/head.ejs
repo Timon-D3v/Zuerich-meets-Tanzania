@@ -26,12 +26,16 @@
         <meta property="og:image:type" content="image/svg">
         <link rel="icon" type="image/svg" href="/img/logo.svg">
         <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><%
+        if (sitetype !== "error") { %>
         <link rel="stylesheet" href="/css/style.css">
-        <link rel="stylesheet" href="/css/hamburgers.min.css"><% if (sitetype === "private") { %>
-        <link rel="stylesheet" href="/css/private.css"><% } else if (sitetype === "blog") { %>
-        <link rel="stylesheet" href="/css/blog.css"><% }; %>
+        <link rel="stylesheet" href="/css/hamburgers.min.css"><% };
+        if (sitetype === "private") { %>
+        <link rel="stylesheet" href="/css/private.css"><% }
+        else if (sitetype === "blog") { %>
+        <link rel="stylesheet" href="/css/blog.css"><% };
+        if (sitetype !== "error") { %>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap">
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js"></script>
-        <script type="text/javascript" src="/js/global.js" defer></script>
+        <script type="text/javascript" src="/js/global.js" defer></script><% }; %>

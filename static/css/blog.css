@@ -20,7 +20,10 @@
 .blog_img {
     margin: 2.5vh 10%;
     width: 80%;
-    height: auto;
+    max-height: 50vh;
+    min-height: 20vh;
+    object-fit: contain;
+    object-position: center;
 }
 
 .blog_carousel {

@@ -149,6 +149,20 @@ app.get("/private/:id", async (req, res) => {
     };
 });
 
+app.get("/*", (req, res) => {
+    let url = req.protocol + '://' + req.get('host');
+    res.render("errors/error404.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: url,
+        date: "Wed Feb 21 2024 17:27:24 GMT+0100 (Mitteleuropäische Normalzeit)",
+        title: "Seite nicht gefunden",
+        desc: `Wir konnten die Seite ${url}${req.url} leider nicht finden...`,
+        sitetype: "error",
+        user: req.session.user
+    });
+});
+
 
 
 

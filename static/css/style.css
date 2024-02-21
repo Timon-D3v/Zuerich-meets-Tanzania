@@ -1486,6 +1486,12 @@ p.news-a-t {
         }
     }
 
+    @media screen and (max-width: 433px) {
+        .t-mitglied-btn {
+            height: 60px;
+        }
+    }; 
+
     @media screen and (min-width: 400px) {
         .blog-cards-part-div {
             & > h2 {
