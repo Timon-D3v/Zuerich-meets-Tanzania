@@ -18,8 +18,9 @@ form.sign-up {
     margin: 80px 25%;
     width: 50%;
     padding: 30px;
+    box-sizing: border-box;
     border-radius: 20px;
-    background-color: var(--text-200);
+    background-color: #40b959;
     & h1 {
         text-align: center;
         text-transform: uppercase;
@@ -29,7 +30,7 @@ form.sign-up {
 }
 
 label {
-    color: var(--text-800);
+    color: #015019;
     font-weight: 600;
     font-family: "Teko", monospace;
     font-size: x-large;
@@ -105,10 +106,10 @@ button {
     height: 50px;
     display: flex;
     align-items: center;
-    padding-left: 10px;
+    padding: 0 10px;
     transition: 0.2s ease-in-out;
     &:focus-within {
-        border: 1.5px solid #2d79f3;
+        border: 1.5px solid #673ab7;
     }
     & img {
         height: 1.2em;
@@ -125,8 +126,23 @@ button {
 .login_switch {
     background-color: transparent;
     border: none;
-    color: #2d79f3;
+    color: #673ab7;
     cursor: pointer;
     font-size: 1rem;
     text-decoration: underline;
+}
+
+.bg {
+    position: fixed;
+    left: 0;
+    top: 80px;
+    height: calc(100% - 80px);
+    width: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+main {
+    position: relative;
+    z-index: 2;
 }

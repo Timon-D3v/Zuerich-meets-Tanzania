@@ -2,8 +2,7 @@
         => Also give a part where half of the blog is text and the other half is a img
 
 
-ERROR 404 PAGE
-LOGIN FORM
+LOGIN FORM => BACKEND + DB
 
 
 

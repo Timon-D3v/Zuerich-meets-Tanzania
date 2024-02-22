@@ -61,3 +61,7 @@ Time spent: 2h; Time worked: 2h;
 21.2.24
 Habe eine Landepage erstellt, wo alle benutzer mit einer ungültigen URL ankommen.
 Time spent: 1h; Time worked: 1h;
+
+22.2.24
+Die Loginseite designed. Ein paar kleine Änderungen. Datenbank für Benutzer erstellt.
+Time spent: 4:30h; Time worked: 4:30h;
