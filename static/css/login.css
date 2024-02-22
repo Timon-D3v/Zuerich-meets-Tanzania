@@ -1,0 +1,132 @@
+header {
+    height: 80px !important;
+}
+
+.logo-span .line {
+    font-size: 19.2px !important;
+}
+
+.h-t-b {
+    height: 100% !important ;
+}
+
+form.login,
+form.sign-up {
+    display: none;
+    flex-direction: column;
+    gap: 1vh;
+    margin: 80px 25%;
+    width: 50%;
+    padding: 30px;
+    border-radius: 20px;
+    background-color: var(--text-200);
+    & h1 {
+        text-align: center;
+        text-transform: uppercase;
+        margin: 0;
+        font-size: 3em;
+    }
+}
+
+label {
+    color: var(--text-800);
+    font-weight: 600;
+    font-family: "Teko", monospace;
+    font-size: x-large;
+    margin-top: 10px;
+}
+
+#new_username,
+#name,
+#family_name,
+#email,
+#phone,
+#file, 
+#new_password,
+#password,
+#username {
+    margin-left: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 85%;
+    height: 100%;
+    background-color: transparent;
+    &::placeholder {
+        font-family: "Titillium Web", sans-serif;
+        font-size: 1rem;
+    }
+    &:focus {
+        outline: none;
+    }
+    &:autofill,
+    &:-webkit-autofill {
+        background-color: transparent !important;
+    }
+}
+
+#file {
+    display: none;
+}
+
+.file {
+    cursor: pointer;
+    font-family: "Titillium Web", sans-serif;
+    font-weight: normal;
+    font-size: 1em;
+    margin: 0;
+    padding-left: 1em;
+}
+
+button {
+    font-family: "Titillium Web", sans-serif;
+}
+
+#submit_login,
+#submit_sign_up {
+    align-self: flex-end;
+    margin: 20px 0 10px 0;
+    background-color: #151717;
+    border: none;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+    &:hover {
+        background-color: #252727;
+    }
+}
+
+.input {
+    border: 1.5px solid #ecedec;
+    border-radius: 10px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    transition: 0.2s ease-in-out;
+    &:focus-within {
+        border: 1.5px solid #2d79f3;
+    }
+    & img {
+        height: 1.2em;
+    }
+}
+
+.switch {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_switch {
+    background-color: transparent;
+    border: none;
+    color: #2d79f3;
+    cursor: pointer;
+    font-size: 1rem;
+    text-decoration: underline;
+}

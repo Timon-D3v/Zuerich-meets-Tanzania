@@ -1,7 +1,7 @@
 THIS IS MY PERSONAL LOG FILE FOR HOW MUCH I WORKED
 
 I will only count time I actually made progress, not the time I just thought.
-I suggest a loan of 5 CHF / h, but would preffer a offer for a fixed price.
+I suggest a loan of 15 CHF / h, but would preffer a offer for a fixed price.
 
 
 
@@ -56,4 +56,8 @@ Time spent: 3h; Time worked: 1h;
 
 20.2.24
 Ein Paar Fehler im Builder und Allgemein behoben. Ausserdem einige quality of life Verbesserungen im Builder gemacht.
-Time spent: 2h; Time worked: 2h; 
+Time spent: 2h; Time worked: 2h;
+
+21.2.24
+Habe eine Landepage erstellt, wo alle benutzer mit einer ungültigen URL ankommen.
+Time spent: 1h; Time worked: 1h;

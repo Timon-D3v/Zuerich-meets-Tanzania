@@ -123,6 +123,33 @@
     background-image: url(../img/svg/carousel_toright.svg);
 }
 
+.blog_footer {
+    width: 90%;
+    height: 150px;
+    margin: 15px 5%;
+    display: flex;
+    align-items: center;
+    gap: 5%;
+    & img {
+        height: 100%;
+        aspect-ratio: 1/1;
+        padding: 26.25px;
+        box-sizing: border-box;
+        border: none;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center;
+        background-color: var(--background-200);
+    }
+    & div {
+        height: 100%;
+        & p {
+            padding: 0;
+            font-size: 25px;
+        }
+    }
+}
+
 @media screen and (min-width: 575px) and (max-width: 749px) {
     .blog_c-main,
     .blog_carousel {

@@ -778,6 +778,9 @@ footer {
     & * {
         color: var(--c-text-50);
     }
+    & > div {
+        width: 100%;
+    }
     & h2 {
         text-decoration: underline;
         font-size: 32px;

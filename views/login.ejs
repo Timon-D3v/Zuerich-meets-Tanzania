@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <script type="text/javascript" src="/js/login.js" defer></script>
+        <link rel="stylesheet" href="/css/login.css">
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <main>
+            <form class="login flex">
+                <h1>Login</h1>
+                <label for="username">Benutzername</label>
+                <div class="input">
+                    <img alt="Eine Person" src="/img/svg/personal.svg">
+                    <input type="text" autocomplete="username" autofocus id="username" required placeholder="Benutzernamen eingeben">
+                </div>
+                <label for="password">Passwort</label>
+                <div class="input">
+                    <img alt="Ein Schloss" src="/img/svg/lock.svg">
+                    <input type="password" autocomplete="current-password" id="password" required placeholder="Passwort eingeben">
+                    <img alt="Ein Auge (Zu oder offen)" src="/img/svg/eye.svg" id="show_password">
+                </div>
+                <button type="submit" id="submit_login">Einloggen</button>
+                <div class="switch">
+                    <p>Noch kein Mitglied?</p>
+                    <button type="button" class="login_switch">Account erstellen</button>
+                </div>
+            </form>
+            <form class="sign-up">
+                <h1>Registrieren</h1>
+                <label for="username">Benutzername</label>
+                <div class="input">
+                    <img alt="Eine Person wird hinzugefügt" src="/img/svg/personal_plus.svg">
+                    <input type="text" autocomplete="username" autofocus id="new_username" required placeholder="Benutzernamen eingeben">
+                </div>
+                <label for="name">Vorname</label>
+                <div class="input">
+                    <img alt="Buchstaben" src="/img/svg/text.svg">
+                    <input type="text" autocomplete="given-name" id="name" required placeholder="Vornamen eingeben">
+                </div>
+                <label for="family_name">Nachname</label>
+                <div class="input">
+                    <img alt="Buchstaben" src="/img/svg/text.svg">
+                    <input type="text" autocomplete="family-name" id="family_name" required placeholder="Nachnamen eingeben">
+                </div>
+                <label for="email">E-Mail</label>
+                <div class="input">
+                    <img alt="Ein Brief" src="/img/svg/mail.svg">
+                    <input type="email" autocomplete="email" id="email" required placeholder="E-Mail eingeben">
+                </div>
+                <label for="phone">Telefon Nummer (optional)</label>
+                <div class="input">
+                    <img alt="Ein Telefon" src="/img/svg/phone.svg">
+                    <input type="tel" autocomplete="tel" id="phone" placeholder="Telefon Nummer eingeben">
+                </div>
+                <label for="file">Profilbild (optional)</label>
+                <div class="input">
+                    <img alt="Ein Bild" src="/img/svg/image.svg">
+                    <label for="file" class="file">Profilbild hinzufügen</label>
+                    <input type="file" id="file" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
+                </div>
+                <label for="password">Passwort</label>
+                <div class="input">
+                    <img alt="Ein Schloss" src="/img/svg/lock.svg">
+                    <input type="password" autocomplete="new-password" id="new_password" required placeholder="Passwort eingeben">
+                    <img alt="Ein Auge (Zu oder offen)" src="/img/svg/eye.svg" id="show_new_password">
+                </div>
+                <button type="submit" id="submit_sign_up">Account erstellen</button>
+                <div class="switch">
+                    <p>Bereits Mitglied?</p>
+                    <button type="button" class="login_switch">Einloggen</button>
+                </div>
+            </form>
+        </main>
+    </body>
+</html>

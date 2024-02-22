@@ -1,7 +1,5 @@
 1 BLOG Site
         => Also give a part where half of the blog is text and the other half is a img
-        Lastly Make a bottom section for the author
-        Take inspiration from migros site
 
 
 ERROR 404 PAGE

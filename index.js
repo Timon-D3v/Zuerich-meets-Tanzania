@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import https from "https";
 import cors from "cors";
 import * as db from "./backend/db/db.zmt.js";
-import { copyFileSync } from "fs";
 
 
 const LOAD_LEVEL = "dev", // Auf Produktions zu prod umstellen
@@ -87,11 +86,10 @@ app.use(cors());
 app.get("/", async (req, res) => {
     let result = await db.getLastXPosts(4)
         .catch(() => {return BACKUP.BLOGS});
-    let url = req.protocol + '://' + req.get('host');
     res.render("index.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: url,
+        origin_url: req.protocol + '://' + req.get('host'),
         date: "Sun Jan 21 2024 22:43:11 GMT+0100 (Mitteleuropäische Normalzeit)",
         title: "Home",
         desc: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren. Eine bunt zusammengemischte Truppe engagierter, hilfsbereiter Leute. Erfahre auf dieser Seite mehr über unser Team, unsere Freunde in Mbalizi und unsere Partner.",
@@ -101,15 +99,26 @@ app.get("/", async (req, res) => {
     });
 });
 
+app.get("/login", async (req, res) => {
+    res.render("login.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: "Thu Feb 22 2024 20:36:37 GMT+0100 (Mitteleuropäische Normalzeit)",
+        title: "Login",
+        desc: "Hier können sich Mitglieder und Verwalter einloggen oder neu registrieren.",
+        sitetype: "login"
+    });
+});
+
 app.get("/blog/:id", async (req, res) => {
     let result = await db.getPostWhereTitle(req.params.id)
         .catch(() => res.redirect("/"));
     result = result?.[0];
-    let url = req.protocol + '://' + req.get('host');
     result ? res.render("blog.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: url,
+        origin_url: req.protocol + '://' + req.get('host'),
         date: "Mon Feb 12 2024 16:40:44 GMT+0100 (Mitteleuropäische Normalzeit)",
         title: result.title,
         desc: result.preview + " | Written by " + result.author,
@@ -144,7 +153,7 @@ app.get("/private/:id", async (req, res) => {
             res.redirect(url + "/private/writeBlog");
             break;
         default:
-            res.redirect("/");
+            res.redirect("/error404");
             break;
     };
 });

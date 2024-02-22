@@ -223,4 +223,4 @@ $(window).resize(setCssVariables);
 
 
 
-setInterval(setCssVariables, 1000);
+var interval_setCssVariables = setInterval(setCssVariables, 1000);
