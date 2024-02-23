@@ -157,6 +157,44 @@ function newsletterSignUp (e) {
 	};
 };
 
+function toBase64 (file) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result);
+		reader.onerror = reject;
+		reader.readAsDataURL(file);
+	});
+};
+
+function toBase64Max1MB (file) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => {
+			const img = new Image();
+			img.src = reader.result;
+			img.onload = () => {
+				const canvas = document.createElement('canvas');
+				const ctx = canvas.getContext('2d');
+				let width = img.width;
+				let height = img.height;
+				const maxSize = 1048576;
+				if (file.size > maxSize) {
+					const scaleFactor = Math.min(1, maxSize / file.size);
+					width *= scaleFactor;
+					height *= scaleFactor;
+				};
+				canvas.width = width;
+				canvas.height = height;
+				ctx.drawImage(img, 0, 0, width, height);
+				const resizedImage = canvas.toDataURL('image/jpeg', 0.75);
+				resolve(resizedImage);
+            };
+		};
+		reader.onerror = reject;
+		reader.readAsDataURL(file);
+	});
+};
+
 async function sendNewsetter (data) {
 	let res = await fetch(window.location.origin + "/post/newsletter/signUp", {
 		method: "POST",

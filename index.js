@@ -1,7 +1,7 @@
 import session from "express-session";
 import bodyParser from "body-parser";
 import ImageKit from "imagekit";
-import express from "express";
+import express, { response } from "express";
 import dotenv from "dotenv";
 import https from "https";
 import cors from "cors";
@@ -107,7 +107,8 @@ app.get("/login", async (req, res) => {
         date: "Thu Feb 22 2024 20:36:37 GMT+0100 (Mitteleuropäische Normalzeit)",
         title: "Login",
         desc: "Hier können sich Mitglieder und Verwalter einloggen oder neu registrieren.",
-        sitetype: "login"
+        sitetype: "login",
+        error: undefined
     });
 });
 
@@ -129,11 +130,8 @@ app.get("/blog/:id", async (req, res) => {
 });
 
 app.get("/private/:id", async (req, res) => {
-    /*
-
-    NEEDS AUTHENTICATION WITH ADMIN RIGHTS
-
-    */
+    if (!req.session.user) return res.redirect("/login");
+    if (req.session.user.type !== "admin") return res.redirect("/");
     let url = req.protocol + '://' + req.get('host');
     switch (req.params.id) {
         case "writeBlog":
@@ -176,6 +174,36 @@ app.get("/*", (req, res) => {
 
 
 
+app.post("/post/login", async (req, res) => {
+    let username = req.body.username,
+        password = req.body.password,
+        error;
+    let result = await db.validateAccount(username, password)
+        .catch(err => {
+            error = err.message;
+            return {valid: false};
+        });
+    if (result.valid) {
+        req.session.user = result;
+        res.redirect("/");
+    } else res.send({message: error || "Dein Passwort ist falsch."});
+});
+
+app.post("/post/signUp", async (req, res) => {
+    let data = req.body;
+    if (await db.getAccount(data.username).length === 0) return res.send({message:"Dieser Benutzername ist schon vergeben."});
+    if (data.picture !== "/img/svg/personal.svg") {
+        data.picture = await imagekitUpload(data.picture, data.username + "_" + randomId(), "/users/");
+        data.picture = data.picture.path;
+    };
+    let result = await db.createAccount(data.username, data.password, data.name, data.family_name, data.email, data.picture, data.phone)
+        .catch(err => res.send({message: err}));
+    if (result.username) {
+        req.session.user = result;
+        res.redirect("/");
+    };
+});
+
 app.post("/post/newsletter/signUp", async (req, res) => {
     let result = await db.newsletterSignUp(req.body)
         .catch(error => {
@@ -202,18 +230,10 @@ app.post("/post/blog/getLinks/:num", async (req, res) => {
 });
 
 app.post("/post/upload/imagekit", async (req, res) => {
-    let response;
-    req.body.img.forEach((element, i) => {
-        imagekit.upload({
-            file: element,
-            fileName: req.body.alt[i].replaceAll(" ", "-") + "___" + req.body.suffix[i],
-            folder: "/blog/",
-            useUniqueFileName: false
-        }, (err, result) => {
-            err ? response = err : response = result;
-        });
+    req.body.img.forEach(async (element, i) => {
+        await imagekitUpload(element, req.body.alt[i].replaceAll(" ", "-") + "___" + req.body.suffix[i], "/blog/");
     });
-    res.send({res: response});
+    res.end();
 });
 
 
@@ -223,3 +243,35 @@ app.post("/post/upload/imagekit", async (req, res) => {
 app.listen(8080, () => {
     console.log("Server listens on localhost:8080");
 });
+
+
+
+
+
+
+
+async function imagekitUpload (base64, name, folder) {
+    let res;
+    imagekit.upload({
+        file: base64,
+        fileName: name,
+        folder: folder,
+        useUniqueFileName: false
+    },
+    (err, result) => {
+        err ? res = err : res = result;
+    });
+    return {
+        path: "https://ik.imagekit.io/zmt" + folder + name,
+        res: res
+    };
+};
+
+function randomId () {
+    let result = 'auto_';
+    const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 27; i++) {
+        result += char.charAt(Math.floor(Math.random() * char.length));
+    };
+    return result;
+};

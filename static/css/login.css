@@ -17,6 +17,7 @@ form.sign-up {
     gap: 1vh;
     margin: 80px 25%;
     width: 50%;
+    max-width: 45em;
     padding: 30px;
     box-sizing: border-box;
     border-radius: 20px;
@@ -145,4 +146,37 @@ button {
 main {
     position: relative;
     z-index: 2;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.t-mitglied-btn,
+.t-spenden-btn,
+.t-kontakt-btn,
+.t-shop-btn {
+    /*background-color: #40b959;*/
+    /*background-color: #673ab7;*/
+    background: linear-gradient(45deg, #40b959, #673ab7);
+}
+
+.error {
+    display: none;
+    position: fixed;
+    bottom: 5vh;
+    background-color: #d61c35;
+    margin: 0 15%;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    font-size: 20px;
+    line-height: 1.25;
+    z-index: 50;
+    & > img {
+        height: 1lh;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+        object-position: center;
+        transform: translateY(20%);
+    }
 }

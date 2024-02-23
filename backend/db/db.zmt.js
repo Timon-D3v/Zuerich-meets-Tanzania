@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { transcode } from "buffer";
 
 
 
@@ -43,7 +44,7 @@ export async function getPost () {
 export async function getPostWhereTitle (title) {
     let query = "SELECT * FROM `zmt`.`blog` WHERE title = ?;";
     let [result] = await pool.query(query, [title])
-        .catch(() => {throw new Error("Fehler")});
+        .catch(() => {throw new Error("Fehler");});
     if (result == []) throw new Error("Seite nicht vorhanden (404)");
     return result;
 };
@@ -59,7 +60,7 @@ export async function newsletterSignUp (data) {
 export async function getLastXPosts (x) {
     let query = "SELECT * from `zmt`.`blog` ORDER BY `id` DESC LIMIT " + x + ";";
     let [result] = await pool.query(query)
-        .catch(() => {throw new Error("Fehler")});
+        .catch(() => {throw new Error("Fehler");});
     if (result.length !== x) throw new Error("Nicht die gewünschte Antahl Elemente");
     return result;
 };
@@ -67,6 +68,29 @@ export async function getLastXPosts (x) {
 export async function getLastXPostLinks (x) {
     let query = "SELECT title from `zmt`.`blog` ORDER BY `id` DESC LIMIT " + x.toString() + ";";
     let [result] = await pool.query(query)
-        .catch(() => {throw new Error("Fehler")});
+        .catch(() => {throw new Error("Fehler");});
+    return result;
+};
+
+export async function validateAccount (username, password) {
+    let [account] = await getAccount(username)
+        .catch(() => {throw new Error("Keine Verbindung möglich...");});
+    if (!account) throw new Error("Dieser Benutzername existiert nicht.");
+    if (password === account.password) account.valid = true;
+    else account.valid = false;
+    return account;
+};
+
+export async function getAccount (username) {
+    let query = "SELECT * from `zmt`.`users` WHERE `username` = ?;";
+    let [result] = await pool.query(query, [username])
+        .catch(() => {throw new Error("Fehler");});
+    return result;
+};
+
+export async function createAccount (username, password, name, family_name, email, picture, phone) {
+    let query = "INSERT INTO `zmt`.`users` (`username`, `password`, `name`, `family_name`, `email`, `picture`, `phone`, `type`) VALUES (?, ?, ?, ?, ?, ?, ?, 'user');"
+    await pool.query(query, [username, password, name, family_name, email, picture, phone]);
+    let [result] = await getAccount(username);
     return result;
 };

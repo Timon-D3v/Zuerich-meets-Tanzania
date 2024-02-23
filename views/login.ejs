@@ -36,10 +36,10 @@
             </form>
             <form class="sign-up">
                 <h1>Registrieren</h1>
-                <label for="username">Benutzername</label>
+                <label for="new_username">Benutzername</label>
                 <div class="input">
                     <img alt="Eine Person wird hinzugefügt" src="/img/svg/personal_plus.svg">
-                    <input type="text" autocomplete="username" autofocus id="new_username" required placeholder="Benutzernamen eingeben">
+                    <input type="text" autocomplete="username" id="new_username" required placeholder="Benutzernamen eingeben">
                 </div>
                 <label for="name">Vorname</label>
                 <div class="input">
@@ -67,7 +67,7 @@
                     <label for="file" class="file">Profilbild hinzufügen</label>
                     <input type="file" id="file" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
                 </div>
-                <label for="password">Passwort</label>
+                <label for="new_password">Passwort</label>
                 <div class="input">
                     <img alt="Ein Schloss" src="/img/svg/lock.svg">
                     <input type="password" autocomplete="new-password" id="new_password" required placeholder="Passwort eingeben">
@@ -79,6 +79,7 @@
                     <button type="button" class="login_switch">Einloggen</button>
                 </div>
             </form>
+            <p class="error"><img alt="Achtung" src="/img/svg/alert.svg"> Ein Fehler ist aufgetreten: <span id="error">Keiner</span></p>
         </main>
         <img class="bg" alt="Hintergrund: Jungelpflanzen" src="/img/stock/jungle.jpg">
     </body>
