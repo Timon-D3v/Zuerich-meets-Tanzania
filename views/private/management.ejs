@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("../snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+    </head>
+    <body>
+        <%- include("../snippets/header.ejs") %>
+        <%- include("../snippets/nav.ejs") %>
+        <main>
+            <div class="general">
+                <h2>Webseiten</h2>
+                <p><a href="https://analytics.google.com/analytics/web/">Google Analytics</a></p>
+                <p><a href="https://www.google.com/adsense">Google Adsense</a></p>
+                <p><a href="https://imagekit.io/dashboard/media-library">ImageKit</a></p>
+                <h2>Login Daten</h2>
+                <p>Google Konto:</p>
+                <ul>
+                    <li>E-Mail: zuerich.meets.tanzania@gmail.com</li>
+                    <li>Passwort: IM ENV FILE</li>
+                </ul>
+                <p>ImageKit</p>
+                <ul>
+                    <li>E-Mail: zuerich.meets.tanzania@gmail.com</li>
+                    <li>Passwort: IM ENV FILE</li>
+                </ul>
+            </div>
+        </main>
+        <%- include("../snippets/footer.ejs", {origin_url: origin_url}) %>
+    </body>
+</html>

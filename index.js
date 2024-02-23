@@ -112,6 +112,18 @@ app.get("/login", async (req, res) => {
     });
 });
 
+app.get("/shop", async (req, res) => {
+    res.render("shop.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: "Fri Feb 23 2024 21:15:35 GMT+0100 (Mitteleuropäische Normalzeit)",
+        title: "Shop",
+        desc: "Auf dieser Seite können Sie direkt zum Unikat Höngg weiter um die einzigartigen Unikate zu kaufen, die beim Kauf den Verein unterstützen.",
+        sitetype: "static"
+    });
+});
+
 app.get("/blog/:id", async (req, res) => {
     let result = await db.getPostWhereTitle(req.params.id)
         .catch(() => res.redirect("/"));
@@ -134,8 +146,20 @@ app.get("/private/:id", async (req, res) => {
     if (req.session.user.type !== "admin") return res.redirect("/");
     let url = req.protocol + '://' + req.get('host');
     switch (req.params.id) {
+        case "management":
+            res.render("private/management.ejs", {
+                env: LOAD_LEVEL,
+                url: req.url,
+                origin_url: url,
+                date: "Fri Feb 23 2024 21:46:26 GMT+0100 (Mitteleuropäische Normalzeit)",
+                title: "Management",
+                desc: "Hier können die Mitglieder des Vereins Statistiken erfassen und alle Adminfunktionen benutzen.",
+                sitetype: "private",
+                user: req.session.user
+            });
+            break;
         case "writeBlog":
-            res.render("builder.ejs", {
+            res.render("private/builder.ejs", {
                 env: LOAD_LEVEL,
                 url: req.url,
                 origin_url: url,
@@ -145,10 +169,6 @@ app.get("/private/:id", async (req, res) => {
                 sitetype: "private",
                 user: req.session.user
             });
-            break;
-        case "management":
-            // TEMP ---------------------- //
-            res.redirect(url + "/private/writeBlog");
             break;
         default:
             res.redirect("/error404");

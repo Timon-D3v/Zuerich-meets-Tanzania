@@ -16,10 +16,11 @@
         <main>
             <%- include("./snippets/hero.ejs", {
                 img_alt: "Echse auf einem Stein",
-                img_path: "./img/stock/echse.jpg",
+                img_path: "/img/stock/echse.jpg",
                 title: "Medizinische Hilfe<br>in Tanzania",
                 subtitle: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren.",
-                cta_text: "Mehr erfahren"
+                cta_text: "Mehr erfahren",
+                cta_link: origin_url
             }) %>
             <%- include("./snippets/blogCards.ejs", {
                 title: undefined,

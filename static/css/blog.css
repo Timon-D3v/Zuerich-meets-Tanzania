@@ -168,6 +168,10 @@
     }
 }
 
+.hero-img {
+    filter: brightness(0.75);
+}
+
 @media screen and (min-width: 575px) and (max-width: 749px) {
     .blog_c-main,
     .blog_carousel {
