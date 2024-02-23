@@ -34,6 +34,10 @@ new_eye.click(() => {
     closeEyes(new_password, new_eye);
 });
 
+file.change(async () => {
+    $(".file").html("<img alt='Dein Bild' src='" + await toBase64(file.prop('files')[0]) + "'>");
+});
+
 submit.click(validateAccount);
 new_submit.click(addAccount);
 

@@ -77,6 +77,15 @@ label {
     font-size: 1em;
     margin: 0;
     padding-left: 1em;
+    & > img {
+        width: 100%;
+        height: auto !important;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+    }
+    &:has(img) {
+        width: 100%;
+    }
 }
 
 button {
@@ -108,12 +117,15 @@ button {
     display: flex;
     align-items: center;
     padding: 0 10px;
-    transition: 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
     &:focus-within {
         border: 1.5px solid #673ab7;
     }
     & img {
         height: 1.2em;
+    }
+    &:has(.file > img) {
+        height: auto;
     }
 }
 
