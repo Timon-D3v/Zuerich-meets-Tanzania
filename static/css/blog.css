@@ -150,6 +150,24 @@
     }
 }
 
+.blog_half {
+    display: grid;
+    place-items: center;
+    grid-template-rows: 1fr;
+    grid-template-columns: 47.5% 47.5%;
+    width: 90%;
+    gap: 5%;
+    margin: 2.5vh 5%;
+    & > img {
+        width: 100%;
+    }
+    & > p {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+}
+
 @media screen and (min-width: 575px) and (max-width: 749px) {
     .blog_c-main,
     .blog_carousel {

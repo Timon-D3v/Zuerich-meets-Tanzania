@@ -37,6 +37,8 @@
                 <button type="button" id="add_title">Titel hinzufügen</button>
                 <button type="button" id="add_subtitle">Untertitel hinzufügen</button>
                 <button type="button" id="add_text">Paragraf hinzufügen</button>
+                <button type="button" id="add_half_rechts" onclick="addHalf('rechts')">Halb Bild, Halb Text (Bild Rechts)</button>
+                <button type="button" id="add_half_links" onclick="addHalf('links')">Halb Bild, Halb Text (Bild Links)</button>
                 <button type="button" id="add_img">Einzelnes Bild hinzufügen</button>
                 <button type="button" id="add_imgs">Mehrere Bilder hinzufügen</button>
                 <button type="button" id="add_line">Trennlinie hinzufügen</button>
@@ -76,6 +78,63 @@
                     preview.classList.add("blog_title");
                     preview.id = id + "_2";
                     pre.append(preview);
+                };
+
+                function addHalf (side_of_img) {
+                    let div = document.createElement("div");
+                    div.classList.add("blog_half");
+                    let img = document.createElement("img");
+                    let id1 = randomId();
+                    ids.push(id1);
+                    img.id = id1;
+                    let p = document.createElement("p");
+                    let id2 = randomId();
+                    ids.push(id2);
+                    p.id = id2;
+                    let input1 = document.createElement("input");
+                    let input2 = document.createElement("input");
+                    let input3 = document.createElement("input");
+                    let id3 = randomId();
+                    let id4 = randomId();
+                    let id5 = randomId();
+                    ids.push(id3);
+                    ids.push(id4);
+                    ids.push(id5);
+                    input1.id = id3;
+                    input2.id = id4;
+                    input3.id = id5;
+                    input1.setAttribute("type", "text");
+                    input1.placeholder = "Paragraf";
+                    input2.setAttribute("type", "file");
+                    input2.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr";
+                    input2.placeholder = "Bild";
+                    input3.setAttribute("type", "text");
+                    input3.placeholder = "Kurze Beschriebung des Bildes (ca. 3-5 Wörter)";
+                    input1.addEventListener("input", () => {
+                        p.innerText = input1.value;
+                    });
+                    input3.addEventListener("input", () => {
+                        img.alt = input3.value;
+                    });
+                    input2.addEventListener("change", async (e) => {
+                        let file = e.target.files[0];
+                        if (file) {
+                            img.src = await toBase64(file);
+                        } else {
+                            img.src = "";
+                        };
+                    });
+                    bau.append(input1);
+                    bau.append(input2);
+                    bau.append(input3);
+                    if (side_of_img === "rechts") {
+                        $(div).append(p);
+                        $(div).append(img);
+                    } else {
+                        $(div).append(img);
+                        $(div).append(p);
+                    };
+                    pre.append(div);
                 };
 
                 function addSubtitle () {
