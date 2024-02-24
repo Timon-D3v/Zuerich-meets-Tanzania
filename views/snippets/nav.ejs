@@ -50,9 +50,10 @@
                     <li>
                         <div class="n-t-details">
                             <p class="n-t-summary">Weiteres</p>
-                            <ul>
-                                <li><a href="/login">Einloggen</a></li>
-                                <li><a href="/login">Registrieren</a></li>
+                            <ul><%
+                                if (!user) { %><li><a href="/login">Einloggen</a></li>
+                                <li><a href="/login?js=toggleForms">Registrieren</a></li>
+                                <% } else { %><li><a href="/profile">Mein Konto</a></li><% } %>
                                 <li><a href="#">Factsheet Tanzania</a></li>
                                 <li><a href="#">Statuten</a></li>
                             </ul>
@@ -119,9 +120,10 @@
                     <li>
                         <div class="n-t-details">
                             <p class="n-t-summary">Weiteres</p>
-                            <ul>
-                                <li><a href="/login">Einloggen</a></li>
-                                <li><a href="/login">Registrieren</a></li>
+                            <ul><%
+                                if (!user) { %><li><a href="/login">Einloggen</a></li>
+                                <li><a href="/login?js=toggleForms">Registrieren</a></li>
+                                <% } else { %><li><a href="/profile">Mein Konto</a></li><% } %>
                                 <li><a href="#">Factsheet Tanzania</a></li>
                                 <li><a href="#">Statuten</a></li>
                             </ul>
@@ -178,9 +180,10 @@
                     </ul>
                 </div>
                 <div class="n-foldable5 n-d">
-                    <ul class="n-f-ul">
-                        <li><a href="/login">Einloggen</a></li>
-                        <li><a href="/login">Registrieren</a></li>
+                    <ul class="n-f-ul"><%
+                        if (!user) { %><li><a href="/login">Einloggen</a></li>
+                        <li><a href="/login?js=toggleForms">Registrieren</a></li>
+                        <% } else { %><li><a href="/profile">Mein Konto</a></li><% } %>
                         <li><a href="#">Factsheet Tanzania</a></li>
                         <li><a href="#">Statuten</a></li>
                     </ul>

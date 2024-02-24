@@ -63,6 +63,11 @@
     --c-accent-800: #1e4841;
     --c-accent-900: #0f2421;
     --c-accent-950: #071210;
+
+    --error: #d61c35;
+    --green: #40b959;
+    --dark-green: #015019;
+    --violett: #673ab7;
 }
 
 :root[data-theme="light"] {

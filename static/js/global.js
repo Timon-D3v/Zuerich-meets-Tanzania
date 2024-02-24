@@ -76,6 +76,10 @@ function changeTheme() {
 	root.attr("data-theme", "dark");
 };
 
+function setTheme () {
+	$("#darkmode").click();
+};
+
 function openNav () {
 	gsap.to("#nav_mobile", navGsap(0, "100%"));
 	gsap.to("#nav_tab", navGsap("-100%", 0));

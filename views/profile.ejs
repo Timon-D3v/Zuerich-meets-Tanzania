@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <link rel="stylesheet" href="/css/static.css">
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main>
+            <div class="you">
+                <div class="static">
+                    <div class="img">
+                        <img alt="Dein Profilbild" src="<%= user.picture %>">
+                        <button type="button" class="edit_picture" id="edit_picture">
+                            <img alt="Ein Stift zum beartbeiten" src="/img/svg/pen.svg">
+                        </button>
+                    </div>
+                    <h2><%= user.username %></h2>
+                    <p>
+                        <%= user.name + " " + user.family_name %><br>
+                        <span>(<%= user.email %>)</span><%
+                        if (user.type === "admin" || user.type === "member") {
+                        %><br><br><span class="user_type_member"><%= user.type.replace("admin", "Verwalter").replace("member", "Mitglied") %></span><% }; %>
+                    </p>
+                </div>
+                <div class="dynamic">
+                    <div class="top">
+                        <button type="button" class="link active">Einstellungen</button>
+                        <button type="button" class="link">Präferenzen</button>
+                        <button type="button" class="link">Mitgliedschaft</button>
+                        <button type="button" class="link">Benachrichtigungen</button>
+                    </div>
+                    <div class="settings">
+                        <div class="profile-settings-input">
+                            <img alt="Eine Person" src="/img/svg/personal.svg">
+                            <input type="text" autocomplete="username" id="username" placeholder="<%= user.username %>">
+                        </div>
+                        <label for="password">Passwort</label>
+                        <div class="profile-settings-input">
+                            <img alt="Ein Schloss" src="/img/svg/lock.svg">
+                            <input type="password" autocomplete="current-password" id="password" placeholder="<%= user.password %>">
+                            <img alt="Ein Auge (Zu oder offen)" src="/img/svg/eye.svg" id="show_password">
+                        </div>
+                    </div>
+                    <div class="preferences"></div>
+                    <div class="mebership"></div>
+                    <div class="notifications"></div>
+                </div>
+            <div class="general" style="display: none;">
+                <p>Username: </p>
+                <p>Name: </p>
+                <p>E-Mail: </p>
+                <p>Telefonnummer: <%= user.phone %></p>
+            </div>
+        </main>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>

@@ -73,3 +73,7 @@ Time spent: 4h; Time worked: 3h;
 23.2.24
 Noch mehr Möglichkeiten für den Blogbuilder erstellt;
 Time spent: 1h; Time worked: 1h;
+
+24.2.24
+Querys für URL eingefügt. Ausserdem begonnen, ein overlay für Benutzer zu erstellen, um Accounteinstellungen und ähnliches zu erledigen.
+Time spent: 2h; Time worked: 2h;

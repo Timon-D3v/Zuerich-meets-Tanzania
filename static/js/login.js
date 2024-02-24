@@ -17,11 +17,6 @@ const login = $(".login"),
     error_field = $(".error");
 
 
-$(".login_switch").click(() => {
-    login.toggleClass("flex");
-    signUp.toggleClass("flex");
-});
-
 eye.click(() => {
     password.attr("type") === "text" ?
     openEyes(password, eye) :
@@ -40,6 +35,7 @@ file.change(async () => {
 
 submit.click(validateAccount);
 new_submit.click(addAccount);
+$(".login_switch").click(toggleForms);
 
 function openEyes (p, e) {
     p.attr("type", "password");
@@ -124,6 +120,11 @@ function showErrorField () {
     setTimeout(() => {
         gsap.to(error_field, {opacity: 0, duration: 5, ease: "power2.in", display: "none"});
     }, 5000);
+};
+
+function toggleForms () {
+    login.toggleClass("flex");
+    signUp.toggleClass("flex");
 };
 
 $(".h-t-b-m").remove();

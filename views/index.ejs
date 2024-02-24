@@ -52,6 +52,9 @@
                 origin_url: origin_url
             }) %>
         </main>
-        <%- include("./snippets/footer.ejs", {origin_url: origin_url}) %>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
     </body>
 </html>

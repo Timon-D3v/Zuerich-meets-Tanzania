@@ -21,7 +21,7 @@ form.sign-up {
     padding: 30px;
     box-sizing: border-box;
     border-radius: 20px;
-    background-color: #40b959;
+    background-color: var(--green);
     & h1 {
         text-align: center;
         text-transform: uppercase;
@@ -31,7 +31,7 @@ form.sign-up {
 }
 
 label {
-    color: #015019;
+    color: var(--dark-green);
     font-weight: 600;
     font-family: "Teko", monospace;
     font-size: x-large;
@@ -119,7 +119,7 @@ button {
     padding: 0 10px;
     transition: all 0.2s ease-in-out;
     &:focus-within {
-        border: 1.5px solid #673ab7;
+        border: 1.5px solid var(--violett);
     }
     & img {
         height: 1.2em;
@@ -139,7 +139,7 @@ button {
 .login_switch {
     background-color: transparent;
     border: none;
-    color: #673ab7;
+    color: var(--violett);
     cursor: pointer;
     font-size: 1rem;
     text-decoration: underline;
@@ -169,14 +169,14 @@ main {
 .t-shop-btn {
     /*background-color: #40b959;*/
     /*background-color: #673ab7;*/
-    background: linear-gradient(45deg, #40b959, #673ab7);
+    background: linear-gradient(45deg, var(--green), var(--violett));
 }
 
 .error {
     display: none;
     position: fixed;
     bottom: 5vh;
-    background-color: #d61c35;
+    background-color: var(--error);
     margin: 0 15%;
     padding: 20px;
     box-sizing: border-box;

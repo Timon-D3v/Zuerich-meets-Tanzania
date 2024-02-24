@@ -95,6 +95,7 @@ app.get("/", async (req, res) => {
         desc: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren. Eine bunt zusammengemischte Truppe engagierter, hilfsbereiter Leute. Erfahre auf dieser Seite mehr über unser Team, unsere Freunde in Mbalizi und unsere Partner.",
         sitetype: "home",
         user: req.session.user,
+        js: req.query.js,
         last4blogs: result
     });
 });
@@ -108,7 +109,7 @@ app.get("/login", async (req, res) => {
         title: "Login",
         desc: "Hier können sich Mitglieder und Verwalter einloggen oder neu registrieren.",
         sitetype: "login",
-        error: undefined
+        js: req.query.js
     });
 });
 
@@ -120,7 +121,28 @@ app.get("/shop", async (req, res) => {
         date: "Fri Feb 23 2024 21:15:35 GMT+0100 (Mitteleuropäische Normalzeit)",
         title: "Shop",
         desc: "Auf dieser Seite können Sie direkt zum Unikat Höngg weiter um die einzigartigen Unikate zu kaufen, die beim Kauf den Verein unterstützen.",
-        sitetype: "static"
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js
+    });
+});
+
+app.get("/account", (req, res) => res.redirect("/profile"));
+app.get("/me", (req, res) => res.redirect("/profile"));
+app.get("/profil", (req, res) => res.redirect("/profile"));
+app.get("/konto", (req, res) => res.redirect("/profile"));
+app.get("/profile", async (req, res) => {
+    if (!req.session.user?.valid) return res.redirect("/login");
+    res.render("profile.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: "Sat Feb 24 2024 10:53:44 GMT+0100 (Mitteleuropäische Normalzeit)",
+        title: req.session.user.username,
+        desc: "Dein Profil und alle Einstellungen auf einer Seite.",
+        sitetype: "profile",
+        user: req.session.user,
+        js: req.query.js
     });
 });
 
@@ -137,6 +159,7 @@ app.get("/blog/:id", async (req, res) => {
         desc: result.preview + " | Written by " + result.author,
         sitetype: "blog",
         user: req.session.user,
+        js: req.query.js,
         blog: result
     }) : res.redirect("/");
 });
@@ -155,7 +178,8 @@ app.get("/private/:id", async (req, res) => {
                 title: "Management",
                 desc: "Hier können die Mitglieder des Vereins Statistiken erfassen und alle Adminfunktionen benutzen.",
                 sitetype: "private",
-                user: req.session.user
+                user: req.session.user,
+                js: req.query.js
             });
             break;
         case "writeBlog":
@@ -167,7 +191,8 @@ app.get("/private/:id", async (req, res) => {
                 title: "Blog Verfassen",
                 desc: "Hier können die Mitglieder des Vereins Blogposts erstellen.",
                 sitetype: "private",
-                user: req.session.user
+                user: req.session.user,
+                js: req.query.js
             });
             break;
         default:

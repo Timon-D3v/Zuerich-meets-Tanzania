@@ -37,5 +37,11 @@
                     <a href="#">Sitemap</a>
                 </div>
             </div>
-            <p class="f-copyright">Copyright &copy; 2024 Zürich Meets Tanzania | Alle Rechte vorbehalten</p>
+            <p class="f-copyright">Copyright &copy; 2024 Zürich Meets Tanzania | Alle Rechte vorbehalten</p><%
+            if (js) { %><script id="query_script" defer>
+                $(document).ready(() => {
+                    <%= js %>();
+                    $("#query_script").remove();
+                });
+            </script><% }; %>
         </footer>
