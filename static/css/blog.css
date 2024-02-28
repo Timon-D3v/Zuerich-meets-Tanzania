@@ -133,13 +133,15 @@
     & img {
         height: 100%;
         aspect-ratio: 1/1;
-        padding: 26.25px;
-        box-sizing: border-box;
         border: none;
         border-radius: 50%;
         object-fit: cover;
         object-position: center;
         background-color: var(--background-200);
+    }
+    & img[src="/img/svg/personal.svg"] {
+        padding: 26.25px;
+        box-sizing: border-box;
     }
     & div {
         height: 100%;

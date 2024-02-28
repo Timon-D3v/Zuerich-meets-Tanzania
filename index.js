@@ -281,6 +281,12 @@ app.post("/post/upload/imagekit", async (req, res) => {
     res.end();
 });
 
+app.post("/post/getAuthorPicture", async (req, res) => {
+    let response = await db.getPictureWithFullName(req.query?.name, req.query?.family_name)
+        .catch(() => {return "/img/svg/personal.svg"});
+    res.send(response[0]);
+});
+
 
 
 

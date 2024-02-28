@@ -278,6 +278,9 @@ img[src$=".svg"] {
     & .line {
         display: block;
         line-height: 1.1;
+        -webkit-hyphens: none;
+        hyphens: none;
+        word-break: keep-all;
     }
 }
 
@@ -720,6 +723,7 @@ footer {
     min-height: calc(100vh - 80px);
     width: 100%;
     background-image: url(../img/svg/footer.svg);
+    background-attachment: fixed;
     display: grid;
     grid-gap: 2.5vh 0;
     grid-template-columns: 1fr;

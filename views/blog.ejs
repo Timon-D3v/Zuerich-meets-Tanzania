@@ -71,11 +71,8 @@
                             break;
                     };
                     return `${day}. ${month} ${year} um ${time}`;
-                };
-
-                let author_pic = blog.author.picture || origin_url + "/img/svg/personal.svg";
-                %>
-                <img src="<%= author_pic %>" alt="<%= blog.author %>">
+                };%>
+                <img id="blog_footer_img" src="/img/svg/personal.svg" alt="<%= blog.author %>">
                 <div>
                     <p>Autor: <%= blog.author %></p>
                     <p>Gepostet am <%= toRealDate(blog.date) %></p>

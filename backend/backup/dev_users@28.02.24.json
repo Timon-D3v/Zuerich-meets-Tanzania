@@ -1,0 +1,7 @@
+[{"id":1, "username":"Timon", "password":"Admin", "name":"Timon", "family_name":"Fiedler", "email":"fiedlertimon@gmail.com", "picture":"/img/stock/jungle.jpg", "phone":"0796602665", "type":"admin"},
+ {"id":2, "username":"TestUser1", "password":"TestPasword1", "name":"Test", "family_name":"User", "email":"test@user.com", "picture":"/img/svg/personal.svg", "phone":"Keine Nummer", "type":"user"},
+ {"id":4, "username":"TestUser2", "password":"TestPassword2", "name":"Test", "family_name":"User", "email":"test@user.com", "picture":"/img/svg/personal.svg", "phone":"+41796602665", "type":"user"},
+ {"id":5, "username":"TestUser3", "password":"TestPassword3", "name":"Test", "family_name":"User", "email":"test@user.com", "picture":"/img/svg/personal.svg", "phone":"Keine Nummer", "type":"user"},
+ {"id":6, "username":"TestUser4", "password":"TestPassword4", "name":"Test", "family_name":"User", "email":"test@user.com", "picture":"https://ik.imagekit.io/zmt/users/TestUser4auto_yk3xay1CgkC8YHAn6yGk7YKcfU3", "phone":"Keine Nummer", "type":"user"},
+ {"id":7, "username":"TestUser5", "password":"TestPassword5", "name":"Test", "family_name":"User", "email":"test@user.com", "picture":"https://ik.imagekit.io/zmt/users/TestUser5auto_Em5HC11YKYrQHp0bN09d4X10iyM", "phone":"Keine Nummer", "type":"user"},
+ {"id":8, "username":"Tanja", "password":"Hamburg2023$!", "name":"Tanja", "family_name":"Freund St\u00f6ssel", "email":"tanja.freund@smile.ch", "picture":"https://ik.imagekit.io/zmt/users/Tanja_auto_1VYbYWLTRtyvX5XswaoFEYytnKX", "phone":"0763764308", "type":"user"}]

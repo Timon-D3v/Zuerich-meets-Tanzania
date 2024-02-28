@@ -67,6 +67,11 @@ nav_desktop_l.forEach((elm, i) => {
 		$(nav_desktop_elm[i]).hasClass("active") ?
 		gsap.to(nav_desktop_elm[i], navGsap("-50%", "100%")) :
 		gsap.to(nav_desktop_elm[i], navGsap("-50%", 0));
+		$(nav_desktop_elm[i]).hasClass("active") ?
+		document.querySelectorAll("main *")
+		.forEach(elm => elm.addEventListener("click", closeNavWithMainDesktop)) :
+		document.querySelectorAll("main *")
+		.forEach(elm => elm.removeEventListener("click", closeNavWithMainDesktop));
 	});
 });
 
@@ -83,11 +88,30 @@ function setTheme () {
 function openNav () {
 	gsap.to("#nav_mobile", navGsap(0, "100%"));
 	gsap.to("#nav_tab", navGsap("-100%", 0));
+	gsap.set("main", {filter: "brightness(100%)"});
+	gsap.to("main", {filter: "brightness(75%)", duration: 0.5, ease: "power2.inOut"});
+	document.querySelectorAll("main *")
+	.forEach(elm => elm.addEventListener("click", closeNavWithMain));
 };
 
 function closeNav () {
 	gsap.to("#nav_mobile", navGsap(0, 0));
 	gsap.to("#nav_tab", navGsap(0, 0));
+	gsap.to("main", {filter: "brightness(100%)", duration: 0.5, ease: "power2.inOut"});
+	document.querySelectorAll("main *")
+	.forEach(elm => elm.removeEventListener("click", closeNavWithMain));
+};
+
+function closeNavWithMain (e) {
+	e.preventDefault();
+	$("#menu").click();
+};
+
+function closeNavWithMainDesktop (e) {
+	e.preventDefault();
+	navCloseOthers();
+	document.querySelectorAll("main *")
+	.forEach(elm => elm.removeEventListener("click", closeNavWithMainDesktop));
 };
 
 function navGsap (x, y) {
