@@ -94,3 +94,10 @@ export async function createAccount (username, password, name, family_name, emai
     let [result] = await getAccount(username);
     return result;
 };
+
+export async function getPictureWithFullName (name, family_name) {
+    let query = "SELECT picture FROM `zmt`.`users` WHERE name = ? AND family_name = ?;";
+    let [result] = await pool.query(query, [name, family_name])
+        .catch(() => {throw new Error("Keine Verbindung möglich...");});
+    return result;
+};
