@@ -81,3 +81,7 @@ Time spent: 2h; Time worked: 2h;
 28.2.24
 Mehr nicht programmier Arbeit. Aber ein paar quality of life fixes.
 Time spent: 4h; Time worked 2:30h;
+
+4.3.24
+Einiges an der profile seite geabreitet. Man kann nun seinen Account updaten.
+Time spent: 4h; Time worked: 4h;

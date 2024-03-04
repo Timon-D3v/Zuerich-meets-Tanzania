@@ -4,6 +4,7 @@ import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { transcode } from "buffer";
+import { query } from "express";
 
 
 
@@ -100,4 +101,11 @@ export async function getPictureWithFullName (name, family_name) {
     let [result] = await pool.query(query, [name, family_name])
         .catch(() => {throw new Error("Keine Verbindung möglich...");});
     return result;
+};
+
+export async function updateProfile (_id, username, password, name, family_name, email, phone) {
+    let query = "UPDATE `zmt`.`users` SET `username` = ?, `password` = ?, `name` = ?, `family_name` = ?, `email` = ?, `phone` = ? WHERE (`id` = '" + _id.toString() + "');";
+    await pool.query(query, [username, password, name, family_name, email, phone])
+        .catch(err => {return err, console.error(err)});
+    return "No Error";
 };

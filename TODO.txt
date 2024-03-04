@@ -1,3 +1,12 @@
+Add JS to the image upload
+Add stuff to präferenzen, mitgliedschaft und benachrichtigungen
+Add a link to the blogbuilder in the private tab
+
+
+
+
+
+
 IDEA:
 
 

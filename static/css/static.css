@@ -94,6 +94,7 @@
         line-height: 2;
         font-weight: bold;
         transition: all 0.5s ease;
+        color: var(--text-950);
         &.active {
             color: var(--green);
             &::after {
@@ -108,13 +109,81 @@
     }
 }
 
-.profile-settings-input {
-    border: 1.5px solid #ecedec;
+.you .dynamic .settings,
+.you .dynamic .preferences,
+.you .dynamic .mebership,
+.you .dynamic .notifications {
+    display: none;
+    &.active {
+        display: block;
+    }
+    & label {
+        display: block;
+        max-width: 45rem;
+        height: 35px;
+        font-size: 17.5px;
+        margin: 7.5px auto;
+        padding-top: 5px;
+    }
+}
+
+.dynamic .submit {
+    display: none;
+    margin: 20px auto 10px auto;
+    background-color: #151717;
+    border: none;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
     border-radius: 10px;
     height: 50px;
+    width: 100%;
+    max-width: 45rem;
+    cursor: pointer;
+    &:hover {
+        background-color: #252727;
+    }
+    &.active {
+        display: block;
+    }
+}
+
+.error,
+.no-error {
+    position: fixed;
+    bottom: 5vh;
+    left: 50%;
+    background-color: var(--error);
+    margin: 0 15%;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    font-size: 20px;
+    line-height: 1.25;
+    transform: translateX(-50%);
+    z-index: 50;
+    & > img {
+        height: 1lh;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+        object-position: center;
+        transform: translateY(20%);
+    }
+}
+
+.no-error {
+    background-color: var(--green);
+}
+
+.profile-settings-input {
+    border: 1.5px solid var(--text-900);
+    border-radius: 10px;
+    height: 50px;
+    max-width: 45rem;
     display: flex;
     align-items: center;
     padding: 0 10px;
+    margin: 0 auto;
     transition: all 0.2s ease-in-out;
     &:focus-within {
         border: 1.5px solid var(--violett);
@@ -125,6 +194,75 @@
     &:has(.file > img) {
         height: auto;
     }
+    & input {
+        margin-left: 10px;
+        border-radius: 10px;
+        border: none;
+        width: 85%;
+        height: 100%;
+        background-color: transparent;
+        &:focus-visible {
+            outline: none;
+        }
+    }
+}
+
+#picture_overlay {
+    display: none;
+    position: fixed;
+    top: 240px;
+    height: calc(100% - 360px);
+    width: 80%;
+    left: 10%;
+    place-items: center;
+    pointer-events: none;
+    &.active {
+        display: grid;
+    }
+}
+
+.custum-file-upload {
+    height: 200px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+    gap: 20px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #e8e8e8;
+    background-color: #212121;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 48px 35px -48px #e8e8e8;
+    pointer-events: all;
+}
+
+.custum-file-upload .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custum-file-upload .icon svg {
+    height: 80px;
+    fill: #e8e8e8;
+}
+
+.custum-file-upload .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custum-file-upload .text span {
+    font-weight: 400;
+    color: #e8e8e8;
+}
+
+.custum-file-upload input {
+    display: none;
 }
 
 @media screen and (min-width: 575px) and (max-width: 749px) {

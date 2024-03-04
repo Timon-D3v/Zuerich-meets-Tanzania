@@ -287,6 +287,22 @@ app.post("/post/getAuthorPicture", async (req, res) => {
     res.send(response[0]);
 });
 
+app.post("/post/updateProfile", async (req, res) => {
+    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    let b = req.body;
+    let result = await db.updateProfile(req.session.user.id, b.username, b.password, b.given_name, b.family_name, b.email, b.phone)
+        .catch(() => {return "No connection to database"});
+    if (result === "No Error") {
+        req.session.user.username = b.username;
+        req.session.user.password = b.password;
+        req.session.user.name = b.given_name;
+        req.session.user.family_name = b.family_name;
+        req.session.user.email = b.email;
+        req.session.user.phone = b.phone;
+    };
+    res.json({res: result});
+});
+
 
 
 
