@@ -7,7 +7,7 @@ const profile_dashboard_buttons = [
 profile_dashboard_content = [
         $(".dynamic .settings"),
         $(".dynamic .preferences"),
-        $(".dynamic .mebership"),
+        $(".dynamic .membership"),
         $(".dynamic .notifications")
 ],
 eye = $("#show_password"),
@@ -19,7 +19,12 @@ email = $("#email"),
 phone = $("#phone"),
 submit_changes = $("#profile-settings-input-submit"),
 change_picture = $("#edit_picture"),
-picture_overlay = $("#picture_overlay");
+picture_overlay = $("#picture_overlay"),
+file = $("#file_upload"),
+preview_file = $("#file_preview"),
+submit_file = $("#file_submit"),
+newsletterBtn = $("#notifications_newsletter"),
+newsletterSelect = $("#newsletterSignUpOption");
 const default_val = {
     username: username.attr("placeholder"),
     password: password.val(),
@@ -76,12 +81,25 @@ submit_changes.click(async () => {
     res = await res.json();
     if (res.res === "No Error") window.location.href = window.location.origin 
         + window.location.pathname + "?js=showCommitFeedback";
-
+    showNegativeCommitFeedback("Fehler beim senden.");
 });
 
 change_picture.click(() => {
     picture_overlay.toggleClass("active");
 });
+
+file.on("input", async () => {
+    preview_file.attr("src", await toBase64Max1MB(file[0].files[0]));
+    submit_file.addClass("flex");
+});
+
+submit_file.click(async () => {
+    picture_overlay.toggleClass("active");
+    submit_file.removeClass("flex");
+    sendNewProfilePicture();
+});
+
+$("#preferences_darkmode").click(preferences_toggleDarkmode);
 
 function showCommitFeedback () {
     let p = document.createElement("p");
@@ -138,4 +156,49 @@ function checkDefaultProfileVal () {
         phone.val() === "")
     ) return false;
     return true;
+};
+
+async function sendNewProfilePicture () {
+    let res = await fetch(window.location.origin + "/post/changePicture", {
+        method: "POST",
+		headers: {"Content-Type": "application/json"},
+        mode: "cors",
+        cache: "default",
+        body: JSON.stringify({
+            base64: preview_file.attr("src")
+        })
+    });
+    res = await res.json();
+    if (res.res === "No Error") window.location.href = window.location.origin 
+        + window.location.pathname + "?js=showCommitFeedback";
+    showNegativeCommitFeedback("Fehler beim hochladen des Bildes.")
+};
+
+function preferences_toggleDarkmode () {
+    fetch(window.location.origin + "/post/toggleDarkmode", {
+        method: "POST",
+		headers: {"Content-Type": "application/json"},
+        mode: "cors",
+        cache: "default"
+    });
+    window.location.reload();
+};
+
+async function checkNewsletter () {
+    let res = await fetch(window.location.origin + "/post/newsletter/check", {
+        method: "POST",
+		headers: {"Content-Type": "application/json"},
+        mode: "cors",
+        cache: "default"
+    });
+    res = await res.json();
+    if (res.check) newsletterBtn.attr("checked", true);
+};
+checkNewsletter();
+
+async function validateNewsletterOptions () {
+    if (newsletterSelect.val() === "") return "Du musst eine Anrede wählen.";
+    let res = await fetch();
+    res = await res.json();
+    return res.status;
 };

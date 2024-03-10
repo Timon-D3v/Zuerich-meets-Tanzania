@@ -1,4 +1,5 @@
-Add JS to the image upload
+Newsletter Anmeldung für Benutzer (Frontend)
+Image upload easy click out of field;
 Add stuff to präferenzen, mitgliedschaft und benachrichtigungen
 Add a link to the blogbuilder in the private tab
 

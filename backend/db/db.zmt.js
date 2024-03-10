@@ -5,6 +5,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { transcode } from "buffer";
 import { query } from "express";
+import exp from "constants";
 
 
 
@@ -22,12 +23,6 @@ const pool = mysql.createPool({
 
 
 
-
-export async function getChat (user1, user2) {
-    const query = "SELECT * FROM `messages`.`" + user2 + `_` + user1 + "`;";
-    const [result] = await pool.query(query);
-    return result;
-};
 
 export async function createPost (title, author, preview, content, tag = "Blog", img = {}, comment = "Kein Kommentar") {
     let query = "INSERT INTO `zmt`.`blog` (`title`, `author`, `preview`, `content`, `tag`, `img`, `comment`) VALUES (?, ?, ?, ?, ?, ?, ?);",
@@ -56,6 +51,21 @@ export async function newsletterSignUp (data) {
     await pool.query(query, [data.gender, data.vorname, data.nachname, data.email])
         .catch(error => status = error);
     return status;
+};
+
+export async function newsletterSignOff (email) {
+    let query = "DELETE FROM `zmt`.`newsletter` WHERE (`email` = ?);";
+    await pool.query(query, [email]);
+};
+
+export async function newsletterCheck (email) {
+    let query = "SELECT * FROM `zmt`.`newsletter` WHERE email = ?;";
+    let check;
+    let [result] = await pool.query(query, [email])
+        .catch(() => check = false);
+    if (result == []) check = false;
+    else check = true;
+    return check;
 };
 
 export async function getLastXPosts (x) {
@@ -93,6 +103,7 @@ export async function createAccount (username, password, name, family_name, emai
     let query = "INSERT INTO `zmt`.`users` (`username`, `password`, `name`, `family_name`, `email`, `picture`, `phone`, `type`) VALUES (?, ?, ?, ?, ?, ?, ?, 'user');"
     await pool.query(query, [username, password, name, family_name, email, picture, phone]);
     let [result] = await getAccount(username);
+    await createDarkmodeRow(result.id);
     return result;
 };
 
@@ -108,4 +119,33 @@ export async function updateProfile (_id, username, password, name, family_name,
     await pool.query(query, [username, password, name, family_name, email, phone])
         .catch(err => {return err, console.error(err)});
     return "No Error";
+};
+
+export async function updateProfilePicture (username, picture) {
+    let query = "UPDATE `zmt`.`users` SET `picture` = ? WHERE (`username` = '" + username + "');";
+    await pool.query(query, [picture])
+        .catch(err => {return err, console.error(err)});
+    return "No Error";
+};
+
+export async function toggleDarkmode (username) {
+    let [{ id }] = await getAccount(username);
+    let getQuery = "SELECT darkmode FROM `zmt`.`darkmode` WHERE (`user_id` = ?);";
+    let currentDarkmode = await pool.query(getQuery, [id]);
+    currentDarkmode = currentDarkmode[0][0].darkmode;
+    currentDarkmode < 1 ? currentDarkmode++ : currentDarkmode--;
+    let toggleQuery = "UPDATE `zmt`.`darkmode` SET `darkmode` = ? WHERE (`user_id` = ?);";
+    await pool.query(toggleQuery, [currentDarkmode, id]);
+};
+
+export async function createDarkmodeRow (id) {
+    let query = "INSERT INTO `zmt`.`darkmode` (`user_id`) VALUES (?);";
+    await pool.query(query, [id]);
+};
+
+export async function getDarkmode (username) {
+    let [{ id }] = await getAccount(username);
+    let query = "SELECT darkmode FROM `zmt`.`darkmode` WHERE (`user_id` = ?);";
+    let result = await pool.query(query, [id]);
+    return result[0][0].darkmode;
 };

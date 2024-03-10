@@ -230,6 +230,7 @@ app.post("/post/login", async (req, res) => {
         });
     if (result.valid) {
         req.session.user = result;
+        req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
         res.redirect("/");
     } else res.send({message: error || "Dein Passwort ist falsch."});
 });
@@ -245,6 +246,7 @@ app.post("/post/signUp", async (req, res) => {
         .catch(err => res.send({message: err}));
     if (result.username) {
         req.session.user = result;
+        req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
         res.redirect("/");
     };
 });
@@ -256,6 +258,33 @@ app.post("/post/newsletter/signUp", async (req, res) => {
             return "No connection to database";
         });
     res.send({status: result});
+});
+
+app.post("/post/newsletter/signUp/logedIn", async (req, res) => {
+    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    let result = await db.newsletterSignUp({
+        gender: req.body.gender,
+        vorname: req.session.user.name,
+        nachname: req.session.user.family_name,
+        email: req.session.user.email
+    })
+    .catch(error => {
+        console.error("An Error occured:", error);
+        return "No connection to database";
+    });
+    res.json({status: result});
+});
+
+app.post("/post/newsletter/signOff", async (req, res) => {
+    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    db.newsletterSignOff(req.session.user.email);
+    res.end();
+});
+
+app.post("/post/newsletter/check", async (req, res) => {
+    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    let result = await db.newsletterCheck(req.session.user.email);
+    res.json({check: result});
 });
 
 app.post("/post/blog", async (req, res) => {
@@ -275,6 +304,7 @@ app.post("/post/blog/getLinks/:num", async (req, res) => {
 });
 
 app.post("/post/upload/imagekit", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
     req.body.img.forEach(async (element, i) => {
         await imagekitUpload(element, req.body.alt[i].replaceAll(" ", "-") + "___" + req.body.suffix[i], "/blog/");
     });
@@ -301,6 +331,26 @@ app.post("/post/updateProfile", async (req, res) => {
         req.session.user.phone = b.phone;
     };
     res.json({res: result});
+});
+
+app.post("/post/changePicture", async (req, res) => {
+    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    let path = req.session.user.picture.replace("https://ik.imagekit.io/zmt/users/", "");
+    if (req.session.user.picture === "/img/svg/personal.svg") path = req.session.user.username + "_" + randomId();
+    let img = await imagekitUpload(req.body.base64, path, "/users/");
+    let result = await db.updateProfilePicture(req.session.user.username, img.path)
+        .catch(() => {return "No connection to database"});
+    if (result === "No Error") {
+        req.session.user.picture = img.path;
+    };
+    res.json({res: result});
+});
+
+app.post("/post/toggleDarkmode", async (req, res) => {
+    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    db.toggleDarkmode(req.session.user.username);
+    req.session.user.darkmode < 1 ? req.session.user.darkmode++ : req.session.user.darkmode--;
+    res.end();
 });
 
 

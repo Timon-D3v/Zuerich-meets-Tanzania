@@ -163,7 +163,7 @@ function newsletterSignUp (e) {
 	const errField = $("#newsletter-form-error");
 	let res = validateNewsletterForm();
 	if (res.error === 0) {
-		sendNewsetter(res.data);
+		sendNewsletter(res.data);
 		errField.html("Deine Anmeldung war erfolgreich!")
 			.css({
 				display: "block",
@@ -223,7 +223,7 @@ function toBase64Max1MB (file) {
 	});
 };
 
-async function sendNewsetter (data) {
+async function sendNewsletter (data) {
 	let res = await fetch(window.location.origin + "/post/newsletter/signUp", {
 		method: "POST",
 		headers: {"Content-Type": "application/json"},

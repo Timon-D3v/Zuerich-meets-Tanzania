@@ -111,7 +111,7 @@
 
 .you .dynamic .settings,
 .you .dynamic .preferences,
-.you .dynamic .mebership,
+.you .dynamic .membership,
 .you .dynamic .notifications {
     display: none;
     &.active {
@@ -222,8 +222,8 @@
 }
 
 .custum-file-upload {
-    height: 200px;
-    width: 300px;
+    height: 75%;
+    width: 60%;
     display: flex;
     flex-direction: column;
     align-items: space-between;
@@ -245,7 +245,7 @@
     justify-content: center;
 }
 
-.custum-file-upload .icon svg {
+.custum-file-upload .icon img {
     height: 80px;
     fill: #e8e8e8;
 }
@@ -263,6 +263,23 @@
 
 .custum-file-upload input {
     display: none;
+}
+
+.profile-preferences-div.preferences-darkmode-div {
+    display: flex;
+    gap: 5vw;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 12.5px;
+    & > p {
+        margin: 0;
+    }
+    & label.ui-switch {
+        margin: 0;
+        height: auto;
+        max-width: none;
+        padding-top: 0;
+    }
 }
 
 @media screen and (min-width: 575px) and (max-width: 749px) {
