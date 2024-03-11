@@ -29,7 +29,9 @@
                         <%= user.name + " " + user.family_name %><br>
                         <span>(<%= user.email %>)</span><%
                         if (user.type === "admin" || user.type === "member") {
-                        %><br><br><span class="user_type_member"><%= user.type.replace("admin", "Verwalter").replace("member", "Mitglied") %></span><% }; %>
+                        %><br>
+                        <br>
+                        <span class="user_type_member"><%= user.type.replace("admin", "Verwalter").replace("member", "Mitglied") %></span><% }; %>
                     </p>
                 </div>
                 <div class="dynamic">
@@ -77,7 +79,7 @@
                         <div class="profile-preferences-div preferences-darkmode-div">
                             <p>Darkmode:</p>
                             <label for="preferences_darkmode" class="uiverse ui-switch">
-                                <input id="preferences_darkmode" name="darkmode" type="checkbox" class="uiverse">
+                                <input id="preferences_darkmode" name="darkmode" type="checkbox" class="uiverse" <% if (user?.darkmode) { %>checked="true"<% }; %>>
                                 <div class="uiverse slider">
                                     <div class="uiverse circle"></div>
                                 </div>
@@ -86,27 +88,37 @@
                     </div>
                     <div class="membership">
                         <div class="profile-membership">
-                            Kartennummer
-                            Zahlungsart
-
-                            Wenn noch kein member dann aufforderung
+                            <h1>TODO</h1>
+                            <ol>
+                                <li>Kartennummer</li>
+                                <li>Zahlungsart</li>
+                                <li>Wenn der Benutzer noch kein Mitglied ist dann eine Aufforderung</li>
+                            </ol>
                         </div>
                     </div>
                     <div class="notifications">
-                        <p>Ich möchte gerne den Newsletter erhalten:</p>
-                        <label for="notifications_newsletter">
-                            <input type="checkbox" id="notifications_newsletter">
-                        </label>
-                        <select id="newsletterSignUpOption">
-                            <option value="" disabled selected>Anrede</option>
-                            <option value="Herr">Herr</option>
-                            <option value="Frau">Frau</option>
-                            <option value="Divers">Divers</option>
-                        </select>
+                        <div class="notifications_newsletter">
+                            <p>Ich möchte gerne den Newsletter erhalten:</p>
+                            <label for="notifications_newsletter" class="static-checkbox uiverse hirachy-class">
+                                <input type="checkbox" id="notifications_newsletter">
+                                <div class="uiverse static-checkbox-mark"></div>
+                            </label>
+                            <select id="newsletterSignUpOption">
+                                <option value="" disabled selected>Anrede</option>
+                                <option value="Herr">Herr</option>
+                                <option value="Frau">Frau</option>
+                                <option value="Divers">Divers</option>
+                            </select>
+                        </div>
+                        <div class="invisible">
+                            <div id="profile_name"><%= user.name %></div>
+                            <div id="profile_f_name"><%= user.family_name %></div>
+                            <div id="profile_email"><%= user.email %></div>
+                        </div>
                     </div>
                 </div>
             <div id="picture_overlay">
-                <label for="file_upload" class="custum-file-upload">
+                <label for="file_upload" class="custom-file-upload">
                     <div class="icon">
                         <img alt="Eine Datei" src="/img/svg/file.svg" id="file_preview">
                     </div>
@@ -117,6 +129,7 @@
                     <button id="file_submit" class="cta-btn">Hochladen</button>
                 </label>
             </div>
+            <div id="close_picture_overlay"></div>
         </main>
         <%- include("./snippets/footer.ejs", {
             origin_url: origin_url,

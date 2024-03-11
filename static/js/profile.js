@@ -24,7 +24,8 @@ file = $("#file_upload"),
 preview_file = $("#file_preview"),
 submit_file = $("#file_submit"),
 newsletterBtn = $("#notifications_newsletter"),
-newsletterSelect = $("#newsletterSignUpOption");
+newsletterSelect = document.getElementById("newsletterSignUpOption"),
+close_picture_overlay = $("#close_picture_overlay");
 const default_val = {
     username: username.attr("placeholder"),
     password: password.val(),
@@ -86,7 +87,10 @@ submit_changes.click(async () => {
 
 change_picture.click(() => {
     picture_overlay.toggleClass("active");
+    close_picture_overlay.toggleClass("active");
 });
+
+close_picture_overlay.click(() => change_picture.click());
 
 file.on("input", async () => {
     preview_file.attr("src", await toBase64Max1MB(file[0].files[0]));
@@ -100,6 +104,7 @@ submit_file.click(async () => {
 });
 
 $("#preferences_darkmode").click(preferences_toggleDarkmode);
+$("#notifications_newsletter").click(handleNewsletterCalling);
 
 function showCommitFeedback () {
     let p = document.createElement("p");
@@ -181,7 +186,7 @@ function preferences_toggleDarkmode () {
         mode: "cors",
         cache: "default"
     });
-    window.location.reload();
+    setTheme();
 };
 
 async function checkNewsletter () {
@@ -196,9 +201,37 @@ async function checkNewsletter () {
 };
 checkNewsletter();
 
-async function validateNewsletterOptions () {
-    if (newsletterSelect.val() === "") return "Du musst eine Anrede wählen.";
-    let res = await fetch();
+async function submitNewsletter () {
+    if (newsletterSelect.value === "") return newsletter_noGender();
+    let res = await fetch(window.location.origin + "/post/newsletter/signUp/logedIn", {
+        method: "POST",
+		headers: {"Content-Type": "application/json"},
+        mode: "cors",
+        cache: "default",
+        body: JSON.stringify({
+            gender: newsletterSelect.value
+        })
+    });
     res = await res.json();
     return res.status;
+};
+
+function cancelNewsletter () {
+    fetch(window.location.origin + "/post/newsletter/signOff", {
+        method: "POST",
+		headers: {"Content-Type": "application/json"},
+        mode: "cors",
+        cache: "default"
+    });
+};
+
+function newsletter_noGender () {
+    alert("Du musst eine Anrede wählen.");
+    console.warn("Du musst eine Anrede wählen.");
+    document.getElementById("notifications_newsletter").checked = false;
+};
+
+function handleNewsletterCalling () {
+    if (document.getElementById("notifications_newsletter").checked) submitNewsletter();
+    else cancelNewsletter();
 };

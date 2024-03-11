@@ -90,3 +90,9 @@ Time spent: 4h; Time worked: 4h;
 Eher Backend Arbeit. Darkmode Datenbank erstellet und somit einen Darkmode über alle Seiten für Benuter, die eingeloggt sind und es in den Einsetllungen aktivieren.
 Ausserdem eine Möglichkeit zum abmelden vom Newsletter erstellt (Nur für Benutzer, Sicherheit).
 Time spent: 3:25h; Time worked: 3h;
+
+11.3.24
+Benachrichtigungsabeitlung im Profil fertiggestellt. Quality of life upgrade beim hochladen eines neuen Profilbild (Einfach neben die Box klicken um abzubrechen).
+CSS Dateigrösse reduziert (Ganze Hamburger.css Datei entfehrnt und wichtiges in style.css übernommen.).
+Ein Link zum Blogbuilder zur Adminpage hinzugefügt.
+Time spent: 2:45h; Time worked: 1:45h;

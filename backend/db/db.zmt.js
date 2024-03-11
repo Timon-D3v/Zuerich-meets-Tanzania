@@ -63,8 +63,7 @@ export async function newsletterCheck (email) {
     let check;
     let [result] = await pool.query(query, [email])
         .catch(() => check = false);
-    if (result == []) check = false;
-    else check = true;
+    check = result.length === 0 ? false : true;
     return check;
 };
 

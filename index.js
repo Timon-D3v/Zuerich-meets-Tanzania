@@ -8,7 +8,7 @@ import cors from "cors";
 import * as db from "./backend/db/db.zmt.js";
 
 
-const LOAD_LEVEL = "dev", // Auf Produktions zu prod umstellen
+const LOAD_LEVEL = "dev", // Possible Values: "dev" or "prod"
     BACKUP = {
         BLOGS: [
             {
@@ -55,6 +55,34 @@ const imagekit = new ImageKit({
     privateKey: process.env.IMAGEKIT_SECRET_KEY,
     urlEndpoint: "https://ik.imagekit.io/zmt/"
 });
+
+
+
+async function imagekitUpload (base64, name, folder) {
+    let res;
+    imagekit.upload({
+        file: base64,
+        fileName: name,
+        folder: folder,
+        useUniqueFileName: false
+    },
+    (err, result) => {
+        err ? res = err : res = result;
+    });
+    return {
+        path: "https://ik.imagekit.io/zmt" + folder + name,
+        res: res
+    };
+};
+
+function randomId () {
+    let result = 'auto_';
+    const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 27; i++) {
+        result += char.charAt(Math.floor(Math.random() * char.length));
+    };
+    return result;
+};
 
 
 
@@ -360,35 +388,3 @@ app.post("/post/toggleDarkmode", async (req, res) => {
 app.listen(8080, () => {
     console.log("Server listens on localhost:8080");
 });
-
-
-
-
-
-
-
-async function imagekitUpload (base64, name, folder) {
-    let res;
-    imagekit.upload({
-        file: base64,
-        fileName: name,
-        folder: folder,
-        useUniqueFileName: false
-    },
-    (err, result) => {
-        err ? res = err : res = result;
-    });
-    return {
-        path: "https://ik.imagekit.io/zmt" + folder + name,
-        res: res
-    };
-};
-
-function randomId () {
-    let result = 'auto_';
-    const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 27; i++) {
-        result += char.charAt(Math.floor(Math.random() * char.length));
-    };
-    return result;
-};

@@ -218,10 +218,11 @@
     pointer-events: none;
     &.active {
         display: grid;
+        z-index: 101;
     }
 }
 
-.custum-file-upload {
+.custom-file-upload {
     height: 75%;
     width: 60%;
     display: flex;
@@ -239,29 +240,29 @@
     pointer-events: all;
 }
 
-.custum-file-upload .icon {
+.custom-file-upload .icon {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.custum-file-upload .icon img {
+.custom-file-upload .icon img {
     height: 80px;
     fill: #e8e8e8;
 }
 
-.custum-file-upload .text {
+.custom-file-upload .text {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.custum-file-upload .text span {
+.custom-file-upload .text span {
     font-weight: 400;
     color: #e8e8e8;
 }
 
-.custum-file-upload input {
+.custom-file-upload input {
     display: none;
 }
 
@@ -279,6 +280,144 @@
         height: auto;
         max-width: none;
         padding-top: 0;
+    }
+}
+
+.static-checkbox.uiverse input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.static-checkbox.uiverse,
+label.static-checkbox.uiverse.hirachy-class {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    font-size: 1.5rem;
+    -webkit-user-select: none;
+    user-select: none;
+    aspect-ratio: 1/1;
+}
+
+label.static-checkbox.uiverse.hirachy-class {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    font-size: 1.5rem;
+    -webkit-user-select: none;
+    user-select: none;
+    margin: 0;
+    padding: 0;
+    max-width: unset;
+    height: auto;
+    aspect-ratio: 1/1;
+}
+
+.static-checkbox-mark.uiverse {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 1.3em;
+    width: 1.3em;
+    background-color: #ccc;
+    border-radius: 50%;
+    transition: 300ms;
+}
+
+.static-checkbox.uiverse input:checked ~
+.static-checkbox-mark.uiverse {
+    background-color: #0B6E4F;
+    border-radius: .5rem;
+    animation: static_checkbox 0.5s ease-in-out;
+}
+
+.static-checkbox-mark.uiverse:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.static-checkbox.uiverse input:checked ~
+.static-checkbox-mark.uiverse:after {
+    display: block;
+}
+
+.static-checkbox.uiverse
+.static-checkbox-mark.uiverse:after {
+    left: 0.45em;
+    top: 0.25em;
+    width: 0.25em;
+    height: 0.5em;
+    border: solid #E0E0E2;
+    border-width: 0 0.15em 0.15em 0;
+    transform: rotate(45deg);
+}
+
+.notifications_newsletter {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+#newsletterSignUpOption {
+    appearance: none;
+    border: 0;
+    outline: 0;
+    height: 2.3rem;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    padding-right: 1.5rem;
+    color: var(--text-50);
+    background-image: url(../img/svg/select_arrow.svg);
+    background-position: center right 0.25rem;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+    background-color: #0B6E4F;
+    border-radius: 0.25em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    &::-ms-expand {
+        display: none;
+    }
+    &:focus {
+        outline: none;
+    }
+}
+
+#close_picture_overlay {
+    display: none;
+    pointer-events: none;
+    &.active {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 100;
+        pointer-events: all;
+    }
+}
+
+#newsletterSignUpOption option {
+    cursor: pointer;
+    color: var(--text-50);
+    background-color: #0B6E4F;
+    &:hover,
+    &:focus,
+    &:active,
+    &:target {
+        background-color: var(--dark-green);
+    }
+    &:disabled {
+        color: var(--text-200);
     }
 }
 
@@ -303,5 +442,25 @@
             width: 100%;
             margin-bottom: 80px;
         }
+    }
+}
+
+@keyframes static_checkbox {
+    0% {
+        box-shadow: 0 0 0 #0B6E4F90;
+        transform: rotate(20deg);
+    }
+
+    50% {
+        transform: rotate(-20deg);
+    }
+
+    75% {
+        box-shadow: 0 0 0 10px #0B6E4F60;
+    }
+
+    100% {
+        box-shadow: 0 0 0 13px #0B6E4F30;
+        transform: rotate(0deg);
     }
 }

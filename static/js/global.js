@@ -16,6 +16,7 @@ const root = $(":root"),
 		".n-foldable5",
 	],
 	b1 = $("#darkmode2"),
+	b2 = $("#darkmode3"),
 	f_a_h = $("#newsletter-anrede-herr"),
 	f_a_f = $("#newsletter-anrede-frau");
 
@@ -30,13 +31,6 @@ $(document).on("open-navigation", () => {
 	$("#menu").hasClass("is-active") ?
 	openNav() :
 	closeNav();
-});
-
-b1.click(() => {
-	$("#darkmode").click();
-	root.attr("data-theme") === "light" ?
-	b1.attr("data-tooltip-content", "Darkmode") :
-	b1.attr("data-tooltip-content", "Lightmode");
 });
 
 document.querySelectorAll(".n-t-summary").forEach((elm, i) => {
@@ -76,9 +70,15 @@ nav_desktop_l.forEach((elm, i) => {
 });
 
 function changeTheme() {
-	root.attr("data-theme") === "dark" ?
-	root.attr("data-theme", "light") :
-	root.attr("data-theme", "dark");
+	if (root.attr("data-theme") === "dark") {
+		root.attr("data-theme", "light");
+		b1.attr("data-tooltip-content", "Lightmode");
+		b2.attr("data-tooltip-content", "Lightmode");
+	} else {
+		root.attr("data-theme", "dark");
+		b1.attr("data-tooltip-content", "Darkmode");
+		b2.attr("data-tooltip-content", "Darkmode");
+	};
 };
 
 function setTheme () {
@@ -286,6 +286,7 @@ $("#darkmode").click(changeTheme);
 $("#newsletter-submit").click(newsletterSignUp);
 $(document).ready(setCssVariables);
 $(window).resize(setCssVariables);
+[b1, b2].forEach(e => e.click(setTheme)); 
 
 
 
