@@ -274,6 +274,7 @@ app.post("/post/signUp", async (req, res) => {
         .catch(err => res.send({message: err}));
     if (result.username) {
         req.session.user = result;
+        req.session.user.valid = true;
         req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
         res.redirect("/");
     };
