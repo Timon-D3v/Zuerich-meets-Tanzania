@@ -192,3 +192,54 @@ main {
         transform: translateY(20%);
     }
 }
+
+@media screen and (min-width: 575px) and (max-width: 749px) {
+    .blog_c-main,
+    .blog_carousel {
+        height: 50vh;
+    }
+
+    .blog_footer div p {
+        font-size: 20px;
+    }
+
+    form.login,
+    form.sign-up {
+        width: 100%;
+        max-width: unset;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .blog_c-main,
+    .blog_carousel {
+        height: 40vh;
+    }
+
+    .blog_footer div p {
+        font-size: 15px;
+    }
+
+    form.login,
+    form.sign-up {
+        width: 100%;
+        max-width: unset;
+    }
+}
+
+@media screen and (max-width: 260px) {
+    .blog_c-main,
+    .blog_carousel {
+        height: 30vh;
+    }
+
+    .blog_footer div p {
+        font-size: 10px;
+    }
+
+    form.login,
+    form.sign-up {
+        width: 100%;
+        max-width: unset;
+    }
+}

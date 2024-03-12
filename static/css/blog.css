@@ -125,13 +125,13 @@
 
 .blog_footer {
     width: 90%;
-    height: 150px;
+    min-height: 150px;
     margin: 15px 5%;
     display: flex;
     align-items: center;
     gap: 5%;
     & img {
-        height: 100%;
+        height: 150px;
         aspect-ratio: 1/1;
         border: none;
         border-radius: 50%;
@@ -147,6 +147,7 @@
         height: 100%;
         & p {
             padding: 0;
+            padding-right: 5vw;
             font-size: 25px;
         }
     }
@@ -179,6 +180,10 @@
     .blog_carousel {
         height: 50vh;
     }
+
+    .blog_footer div p {
+        font-size: 20px;
+    }
 }
 
 @media screen and (max-width: 575px) {
@@ -186,11 +191,19 @@
     .blog_carousel {
         height: 40vh;
     }
+
+    .blog_footer div p {
+        font-size: 15px;
+    }
 }
 
 @media screen and (max-width: 260px) {
     .blog_c-main,
     .blog_carousel {
         height: 30vh;
+    }
+
+    .blog_footer div p {
+        font-size: 10px;
     }
 }

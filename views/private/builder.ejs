@@ -272,11 +272,6 @@
                         elm.src = "https://ik.imagekit.io/zmt/blog/" + name.replaceAll(" ", "-") + "___" + elm.id;
                         img_names.push(elm.src);
                     });
-                    content.querySelectorAll("p").forEach((elm, i) => {
-                        let b = document.getElementById("baustelle");
-                        let t = b.querySelectorAll("textarea");
-                        elm.innerText = $(t).eq(i).val();
-                    });
                     fetch(window.location.origin + "/post/upload/imagekit", {
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
@@ -288,8 +283,7 @@
                             suffix: img_suffix_arr
                         })
                     });
-                    content = document.getElementById("preview").innerHTML;
-                    createBlogPost(content);
+                    createBlogPost(content.innerHTML);
                 };
 
                 function randomId () {
