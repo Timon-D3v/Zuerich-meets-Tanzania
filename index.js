@@ -1,7 +1,9 @@
 import session from "express-session";
 import bodyParser from "body-parser";
+import Mailjet from "node-mailjet";
 import ImageKit from "imagekit";
-import express, { response } from "express";
+import express from "express";
+import Stripe from "stripe";
 import dotenv from "dotenv";
 import https from "https";
 import cors from "cors";
@@ -55,6 +57,11 @@ const imagekit = new ImageKit({
     privateKey: process.env.IMAGEKIT_SECRET_KEY,
     urlEndpoint: "https://ik.imagekit.io/zmt/"
 });
+const mailjet = new Mailjet({
+    apiKey: process.env.MAILJET_PUBLIC_KEY,
+    apiSecret: process.env.MAILJET_PRIVAT_KEY
+});
+const stripe = Stripe(process.env.STRIPE_PRIVAT_KEY);
 
 
 
@@ -381,6 +388,62 @@ app.post("/post/toggleDarkmode", async (req, res) => {
     req.session.user.darkmode < 1 ? req.session.user.darkmode++ : req.session.user.darkmode--;
     res.end();
 });
+
+
+////// TEST
+app.post('/charge', async (req, res) => {
+    return res.json({error: "501: Forbidden"});
+    try {
+        const { amount, source, receipt_email } = req.body;
+        const charge = await stripeInstance.charges.create({
+            amount,
+            currency: 'usd',
+            source,
+            receipt_email,
+        });
+        res.status(200).json(charge);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+////// TEST
+const request = mailjet.post("send", {version: "v3.1"})
+    .request({
+        "Messages":[
+            {
+              "From": {
+                "Email": "zuerich.meets.tanzania@gmail.com",
+                "Name": "Timon"
+              },
+              "To": [
+                {
+                  "Email": "zuerich.meets.tanzania@gmail.com",
+                  "Name": "Timon"
+                }
+              ],
+              "Subject": "Greetings from Mailjet.",
+              "TextPart": "My first Mailjet email",
+              "HTMLPart": "<h3>Dear passenger 1, welcome to <a href='https://www.mailjet.com/'>Mailjet</a>!</h3><br />May the delivery force be with you!",
+              "CustomID": "CAMPAIGN ID",
+              // For File attachments
+              "Attachments": [
+                {
+                        "ContentType": "text/plain",
+                        "Filename": "test.txt",
+                        "Base64Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
+                }
+        ]
+            }
+          ],
+          // For Testing
+          "SandboxMode":true
+        });
+
+//request.then(result => console.log(result.body)).catch(err => console.log(err));
+
+// WORKS
+
+// => https://documentation.mailjet.com/hc/en-us/articles/360043007133-Do-you-have-special-pricing-for-non-profits
 
 
 

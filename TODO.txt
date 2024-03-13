@@ -1,5 +1,14 @@
 Add stuff to mitgliedschaft
 
+Links beim Blog builder einbauen
+Aktuelles (https://www.resignationbrewery.com)
+Newsletter => mail wenn aktuelles
+möglichkeit zum ändern von hero page auf index
+güne buttons schwarzer text (950)
+mitgilederliste für admins
+
+=> Werbung vielleicht
+
 
 
 

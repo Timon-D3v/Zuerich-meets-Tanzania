@@ -22,6 +22,15 @@
                 cta_text: "Mehr erfahren",
                 cta_link: origin_url
             }) %>
+            <%- include("./snippets/news.ejs", {
+                img_alt: "Echse auf einem Stein",
+                img_path: "/img/stock/zebra.jpg",
+                title: "Medizinische Hilfe<br>in Tanzania",
+                text: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren.",
+                cta_text: "Mehr erfahren",
+                cta_link: origin_url,
+                img_pos: "left" // || "center" || "right"
+            }) %>
             <%- include("./snippets/blogCards.ejs", {
                 title: undefined,
                 rows: 2,

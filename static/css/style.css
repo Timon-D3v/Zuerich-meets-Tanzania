@@ -3,6 +3,7 @@
 :root {
     --font-ratio: 1.414;
     --nav_desktop_margin: 5vw;
+    --basic-margin: 10vh 5vw;
 
     --c-text-50: #ecf3f8;
     --c-text-100: #d9e7f2;
@@ -1198,6 +1199,53 @@ p.news-a-t {
 
 .bg--accent-600 {
     background-color: var(--accent-600);
+}
+
+.news {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: var(--basic-margin);
+    min-height: 65vh;
+    background-color: var(--background-200);
+}
+
+.news-div {
+    padding: 5%;
+    padding-right: 5vw;
+    box-sizing: border-box;
+    width: 100%;
+    height: 65vh;
+}
+
+.news-img {
+    display: block;
+    width: 50%;
+    height: 65vh;
+    object-fit: cover;
+    &.news-left {
+        object-position: left;
+    }
+    &.news-right {
+        object-position: right;
+    }
+    &.news-center {
+        object-position: center;
+    }
+}
+
+.news-title {
+    margin: 0;
+    font-size: 3.5rem;
+    line-height: 1;
+    &::after {
+        display: block;
+        content: "";
+        width: 10%;
+        height: 5px;
+        background-color: var(--secondary-600);
+        margin: 1em 0;
+    }
 }
 
 @media screen and (min-width: 1200px) {
