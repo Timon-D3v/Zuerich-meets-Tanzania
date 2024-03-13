@@ -32,6 +32,57 @@
                     <li>Passwort: IM ENV FILE</li>
                 </ul>
             </div>
+            <div class="news-management">
+                <h1>News Verwaltung</h1>
+                <p>Hier können News verteilt werden.</p>
+                <form action="/post/submitNews" method="POST">
+                    <label for="news_text">Text</label>
+                    <input type="text" id="news_text" name="text" required>
+                    <label for="news_pdf">PDF oder Bild (Auswählen für PDF)</label>
+                    <input type="checkbox" id="news_pdf" name="pdf" required>
+                    <div id="show_pdf">
+                        <label for="news_pdf_src">Dateiname mit .pdf Endung hochgeladen auf imagekit unter dem Ordner pdf (Bsp: meinPDF.pdf)</label>
+                        <input type="text" id="news_pdf_src" name="pdf_src">
+                    </div>
+                    <div id="show_img">
+                        <label for="news_img_path">Link zum Bild</label>
+                        <input type="text" id="news_img_path" name="img_path">
+                        <label for="news_img_alt">Beschreibung des Bild</label>
+                        <input type="text" id="news_img_alt" name="img_alt">
+                        <label for="news_img_pos">Positionierung des Bildes (left, center oder right)</label>
+                        <input type="text" id="news_img_pos" name="img_pos">
+                    </div>
+                    <input type="checkbox" id="news_btn" name="btn" required checked="true">
+                    <div id="show_btn_menu">
+                        <label for="news_btn_text">Button Text</label>
+                        <input type="text" id="news_btn_text" name="btn_text">
+                        <label for="news_btn_link">Button Link</label>
+                        <input type="text" id="news_btn_link" name="btn_link">
+                    </div>
+                    <div id="show_nothing" class="invisible"></div>
+                    <button type="submit">Submit</button>
+                </form>
+                <script>
+                    let pdf = document.getElementById("news_pdf"),
+                        s_btn = document.getElementById("news_btn"),
+                        s_pdf = $("#show_pdf"),
+                        s_img = $("#show_img"),
+                        s_btn_menu = $("#show_btn_menu"),
+                        h_btn_menu = $("#show_nothing");
+
+                    s_pdf.hide();
+
+                    $(pdf).click(() => toggleDivs(pdf, s_pdf, s_img));
+                    $(s_btn).click(() => toggleDivs(s_btn, s_btn_menu, h_btn_menu));
+
+
+                    function toggleDivs (toggler, first, second) {
+                        first.hide();
+                        second.hide();
+                        toggler.checked ? first.show() : second.show();
+                    };
+                </script>
+            </div>
         </main>
         <%- include("../snippets/footer.ejs", {origin_url: origin_url}) %>
     </body>

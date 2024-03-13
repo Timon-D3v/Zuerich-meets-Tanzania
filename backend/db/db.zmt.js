@@ -148,3 +148,20 @@ export async function getDarkmode (username) {
     let result = await pool.query(query, [id]);
     return result[0][0].darkmode;
 };
+
+export async function getNews () {
+    let query = "SELECT * from `zmt`.`news` ORDER BY `id` DESC LIMIT 1;";
+    let [[result]] = await pool.query(query)
+        .catch(err => {throw new Error("Something went wrong");});
+    if (result.length === 0) throw new Error("Nothing there");
+    return result;
+};
+
+export async function submitNews(text, img_path, img_alt, img_pos, btn, btn_text, btn_link, pdf, pdf_src) {
+    let query = "INSERT INTO `zmt`.`news` (`text`, `img_path`, `img_alt`, `img_pos`, `btn`, `btn_text`, `btn_link`, `pdf`, `pdf_src`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    btn === "on" ? btn = 1 : btn = 0;
+    pdf === "on" ? pdf = 1 : pdf = 0;
+    let [result] = await pool.query(query, [text, img_path, img_alt, img_pos, btn, btn_text, btn_link, pdf, pdf_src])
+        .catch(err => {return err, console.error(err)});
+    return result;
+};

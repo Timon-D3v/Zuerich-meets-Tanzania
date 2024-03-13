@@ -33,7 +33,18 @@ const LOAD_LEVEL = "dev", // Possible Values: "dev" or "prod"
                 preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
                 img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (4).jpg"]},
             }
-        ]
+        ],
+        NEWS: {
+            text: "Keine Neuigkeiten",
+            img_path: "/img/stock/zebra.jpg",
+            img_alt: "Drei Zebras",
+            img_pos: "left",
+            btn: false,
+            btn_text: undefined,
+            btn_link: undefined,
+            pdf: false,
+            pdf_src: undefined
+        }
     };
 
 
@@ -119,8 +130,10 @@ app.use(cors());
 
 
 app.get("/", async (req, res) => {
-    let result = await db.getLastXPosts(4)
+    let blogs = await db.getLastXPosts(4)
         .catch(() => {return BACKUP.BLOGS});
+    let news = await db.getNews()
+        .catch(() => {return BACKUP.NEWS});
     res.render("index.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -131,7 +144,8 @@ app.get("/", async (req, res) => {
         sitetype: "home",
         user: req.session.user,
         js: req.query.js,
-        last4blogs: result
+        last4blogs: blogs,
+        news: news
     });
 });
 
@@ -387,6 +401,15 @@ app.post("/post/toggleDarkmode", async (req, res) => {
     db.toggleDarkmode(req.session.user.username);
     req.session.user.darkmode < 1 ? req.session.user.darkmode++ : req.session.user.darkmode--;
     res.end();
+});
+
+app.post("/post/submitNews", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    let b = req.body,
+        status = 200;
+    await db.submitNews(b.text, b.img_path, b.img_alt, b.img_pos, b.btn, b.btn_text, b.btn_link, b.pdf, b.pdf_src)
+        .catch(err => status = err);
+    res.json({res: status});
 });
 
 
