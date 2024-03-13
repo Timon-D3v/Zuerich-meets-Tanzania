@@ -16,7 +16,11 @@
         <%- include("../snippets/nav.ejs") %>
         <main>
             <h1>Blog Builder</h1>
-            <p>Herzlich Willkommen zum Blog Builder. Benutze das Menu unten, um zu beginnen. Wähle dazu einfach das gewünschte Element aus und leg los. Viel Erfolg!</p>
+            <p>
+                Herzlich Willkommen zum Blog Builder. Benutze das Menu unten, um zu beginnen. 
+                Wähle dazu einfach das gewünschte Element aus und leg los. Wenn du einen Link erstellen möchtest, 
+                benutze diese Vorlage: &lt;a href="<i>#Dein Link#</i>"&gt;<i>#Dein anzuzeigender Text#</i>&lt;/a&gt;. Viel Erfolg!
+            </p>
             <div class="blog_line"></div>
             <h1>Erstmal ein paar allgemeine Daten:</h1>
             <input type="text" id="basic_title" placeholder="Titel für den Blogpost">
@@ -263,6 +267,7 @@
                 function done () {
                     let content = document.getElementById("preview");
                     let pics = content.querySelectorAll("img");
+                    let para = content.querySelectorAll("p");
                     pics.forEach(elm => {
                         elm.classList.remove("active");
                         img_arr.push(elm.src);
@@ -271,6 +276,11 @@
                         let name = elm.alt;
                         elm.src = "https://ik.imagekit.io/zmt/blog/" + name.replaceAll(" ", "-") + "___" + elm.id;
                         img_names.push(elm.src);
+                    });
+                    para.forEach(elm => {
+                        let text = elm.innerText;
+                        text = text.replaceAll("&gt;", ">").replaceAll("&lt;", "<");
+                        elm.innerHTML = text;
                     });
                     fetch(window.location.origin + "/post/upload/imagekit", {
                         method: "POST",

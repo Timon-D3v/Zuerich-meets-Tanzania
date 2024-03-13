@@ -96,3 +96,12 @@ Benachrichtigungsabeitlung im Profil fertiggestellt. Quality of life upgrade bei
 CSS Dateigrösse reduziert (Ganze Hamburger.css Datei entfehrnt und wichtiges in style.css übernommen.).
 Ein Link zum Blogbuilder zur Adminpage hinzugefügt.
 Time spent: 2:45h; Time worked: 1:45h;
+
+13.3.24
+Ich habe Stripe als Zahlungsmittel und Mailjet als E-Mail API hinzugefügt und Vorlagen zum benutzen dieser hinterlegt.
+Ich habe wie gewünscht eine Newsbox auf der Homepage erstellt.
+Ich habe ein Backend zum verändern dieser Newsbox erstellt. Ausserdem kann man das Hero Bild auf der Homepage verändern.
+Auch habe ich zwei Tabellen in der Verwaltungsansicht erstellt, die eine über Benutzerkonten, die andere über Newsletter Anmeldungen.
+Ich habe ein logout hinzugefügt und eine Möglichkeit zum erstellen eines Links beim Blogpost.
+Und noch die Farben beim Login wie gewünscht angepasst.
+Time spent: 6h; Time worked: 5:30h;
