@@ -167,9 +167,11 @@ main {
 .t-spenden-btn,
 .t-kontakt-btn,
 .t-shop-btn {
-    /*background-color: #40b959;*/
-    /*background-color: #673ab7;*/
-    background: linear-gradient(45deg, var(--green), var(--violett));
+    background-color: #40b959;
+    color: var(--text-950);
+    &:hover {
+        background-color: #4ee06b;
+    }
 }
 
 .error {
