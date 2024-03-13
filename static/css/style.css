@@ -1559,6 +1559,10 @@ p.news-a-t {
         }
     }
 
+    .news-img {
+        width: 100%;
+    }
+
     header,
     main::before {
         height: 80px;
@@ -1616,6 +1620,10 @@ p.news-a-t {
         }
     }
 
+    .news-img {
+        width: 100%;
+    }
+
     nav {
         top: calc(-100% + 160px);
         height: calc(100% - 80px);
@@ -1663,6 +1671,10 @@ p.news-a-t {
         & > .news-div {
             height: auto;
         }
+    }
+
+    .news-img {
+        width: 100%;
     }
 
     nav {

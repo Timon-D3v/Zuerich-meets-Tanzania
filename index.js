@@ -412,6 +412,12 @@ app.post("/post/submitNews", async (req, res) => {
     res.json({res: status});
 });
 
+app.post("/post/changeHeroImg", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    let status = await imagekitUpload(req.body.base64, "hero", "/assets/");
+    res.json({res: status});
+});
+
 
 ////// TEST
 app.post('/charge', async (req, res) => {

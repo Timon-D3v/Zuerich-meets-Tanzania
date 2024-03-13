@@ -39,7 +39,7 @@
                     <label for="news_text">Text</label>
                     <input type="text" id="news_text" name="text" required>
                     <label for="news_pdf">PDF oder Bild (Auswählen für PDF)</label>
-                    <input type="checkbox" id="news_pdf" name="pdf" required>
+                    <input type="checkbox" id="news_pdf" name="pdf">
                     <div id="show_pdf">
                         <label for="news_pdf_src">Dateiname mit .pdf Endung hochgeladen auf imagekit unter dem Ordner pdf (Bsp: meinPDF.pdf)</label>
                         <input type="text" id="news_pdf_src" name="pdf_src">
@@ -52,7 +52,7 @@
                         <label for="news_img_pos">Positionierung des Bildes (left, center oder right)</label>
                         <input type="text" id="news_img_pos" name="img_pos">
                     </div>
-                    <input type="checkbox" id="news_btn" name="btn" required checked="true">
+                    <input type="checkbox" id="news_btn" name="btn" checked="true">
                     <div id="show_btn_menu">
                         <label for="news_btn_text">Button Text</label>
                         <input type="text" id="news_btn_text" name="btn_text">
@@ -81,6 +81,29 @@
                         second.hide();
                         toggler.checked ? first.show() : second.show();
                     };
+                </script>
+            </div>
+            <div class="hero-management">
+                <h1>Neues Homepage Bild hochladen</h1>
+                <input type="file" id="hero_img_upload" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
+                <button type="button" id="hero_img_upload_submit">Hochladen</button>
+                <script>
+                    var data = "";
+
+                    $("#hero_img_upload").on("change", async e => {
+                        data = await toBase64(e.target.files[0]);
+                    });
+
+                    $("#hero_img_upload_submit").click(async () => {
+                        if (data === "") return;
+                        let res = await fetch(window.location.origin + "/post/changeHeroImg", {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            mode: "cors",
+                            cache: "default",
+                            body: JSON.stringify({base64: data})
+                        });
+                    })
                 </script>
             </div>
         </main>
