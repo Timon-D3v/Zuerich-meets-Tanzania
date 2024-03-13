@@ -162,6 +162,11 @@ app.get("/login", async (req, res) => {
     });
 });
 
+app.get("/logout", (req, res) => {
+    if (req.session?.user) delete req.session.user;
+    res.redirect("/");
+});
+
 app.get("/shop", async (req, res) => {
     res.render("shop.ejs", {
         env: LOAD_LEVEL,
