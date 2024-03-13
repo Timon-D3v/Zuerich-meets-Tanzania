@@ -157,11 +157,25 @@ export async function getNews () {
     return result;
 };
 
-export async function submitNews(text, img_path, img_alt, img_pos, btn, btn_text, btn_link, pdf, pdf_src) {
+export async function submitNews (text, img_path, img_alt, img_pos, btn, btn_text, btn_link, pdf, pdf_src) {
     let query = "INSERT INTO `zmt`.`news` (`text`, `img_path`, `img_alt`, `img_pos`, `btn`, `btn_text`, `btn_link`, `pdf`, `pdf_src`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     btn === "on" ? btn = 1 : btn = 0;
     pdf === "on" ? pdf = 1 : pdf = 0;
     let [result] = await pool.query(query, [text, img_path, img_alt, img_pos, btn, btn_text, btn_link, pdf, pdf_src])
         .catch(err => {return err, console.error(err)});
+    return result;
+};
+
+export async function getAllUsers () {
+    let query = "SELECT username, name, family_name, email, phone, type FROM `zmt`.`users`;";
+    let [result] = await pool.query(query)
+        .catch(err => {throw new Error("Something went wrong");});
+    return result;
+};
+
+export async function getAllNewsletterSignUps () {
+    let query = "SELECT gender, vorname, nachname, email FROM `zmt`.`newsletter`;";
+    let [result] = await pool.query(query)
+        .catch(err => {throw new Error("Something went wrong");});
     return result;
 };

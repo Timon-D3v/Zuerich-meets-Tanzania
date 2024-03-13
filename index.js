@@ -219,6 +219,8 @@ app.get("/private/:id", async (req, res) => {
     let url = req.protocol + '://' + req.get('host');
     switch (req.params.id) {
         case "management":
+            let users = await db.getAllUsers();
+            let newsletter = await db.getAllNewsletterSignUps();
             res.render("private/management.ejs", {
                 env: LOAD_LEVEL,
                 url: req.url,
@@ -228,7 +230,9 @@ app.get("/private/:id", async (req, res) => {
                 desc: "Hier können die Mitglieder des Vereins Statistiken erfassen und alle Adminfunktionen benutzen.",
                 sitetype: "private",
                 user: req.session.user,
-                js: req.query.js
+                js: req.query.js,
+                all_users: users,
+                all_newsletter: newsletter
             });
             break;
         case "writeBlog":
