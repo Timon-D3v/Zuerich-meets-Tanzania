@@ -3,6 +3,7 @@ Add stuff to mitgliedschaft
 Links beim Blog builder einbauen
 Newsletter => mail wenn aktuelles
 mitgilederliste für admins
+In Verwaltung eine Möglichkeit zum Erstellen von Admins machen.
 
 => Werbung vielleicht
 
