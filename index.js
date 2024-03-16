@@ -444,7 +444,7 @@ app.post('/charge', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-////// TEST
+/*///// TEST
 const request = mailjet.post("send", {version: "v3.1"})
     .request({
         "Messages":[
@@ -481,7 +481,7 @@ const request = mailjet.post("send", {version: "v3.1"})
 
 // WORKS
 
-// => https://documentation.mailjet.com/hc/en-us/articles/360043007133-Do-you-have-special-pricing-for-non-profits
+// => https://documentation.mailjet.com/hc/en-us/articles/360043007133-Do-you-have-special-pricing-for-non-profits*/
 
 
 
