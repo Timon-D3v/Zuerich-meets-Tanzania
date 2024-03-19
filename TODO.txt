@@ -6,6 +6,7 @@ In Verwaltung eine Möglichkeit zum Erstellen von Admins machen
 Für Bilder ein Colagenbuilder machen
 Logo: zurich meets tanzania (alles klein, zurich und tanzania fett)
 contact form
+nav links hover > clr orange
 
 => Werbung vielleicht
 
