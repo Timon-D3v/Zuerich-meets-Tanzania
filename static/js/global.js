@@ -129,7 +129,7 @@ function navCloseOthers (i) {
 };
 
 function setCssVariables () {
-	root.css({
+	$("#nav_desktop").css({
 		"--nav_desktop_margin": $(".logo").outerWidth().toString() + "px",
 		"--h_d_l_1": $("#h-n-b-e-1").outerWidth().toString() + "px",
 		"--h_d_l_2": $("#h-n-b-e-2").outerWidth().toString() + "px",

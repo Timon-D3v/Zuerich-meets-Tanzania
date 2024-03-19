@@ -7,6 +7,7 @@ import Stripe from "stripe";
 import dotenv from "dotenv";
 import https from "https";
 import cors from "cors";
+import fs from "fs";
 import * as db from "./backend/db/db.zmt.js";
 
 
@@ -226,6 +227,12 @@ app.get("/private/:id", async (req, res) => {
         case "management":
             let users = await db.getAllUsers();
             let newsletter = await db.getAllNewsletterSignUps();
+            let passwords = {
+                gmail: process.env.PASSWORD_GMAIL_ACCOUNT,
+                imagekit: process.env.PASSWORD_IMAGEKIT_ACCOUNT,
+                stripe: process.env.PASSWORD_STRIPE_ACCOUNT,
+                mailjet: process.env.PASSWORD_MAILJET_ACCOUNT
+            };
             res.render("private/management.ejs", {
                 env: LOAD_LEVEL,
                 url: req.url,
@@ -237,7 +244,8 @@ app.get("/private/:id", async (req, res) => {
                 user: req.session.user,
                 js: req.query.js,
                 all_users: users,
-                all_newsletter: newsletter
+                all_newsletter: newsletter,
+                passwords: passwords
             });
             break;
         case "writeBlog":

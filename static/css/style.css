@@ -2,7 +2,6 @@
 
 :root {
     --font-ratio: 1.414;
-    --nav_desktop_margin: 5vw;
     --basic-margin: 10vh 5vw;
 
     --c-text-50: #ecf3f8;
@@ -598,6 +597,7 @@ nav {
         background-color: var(--background-50);
     }
     & #nav_desktop {
+        --nav_desktop_margin: 5vw;
         background-color: initial;
         display: flex;
         pointer-events: none;

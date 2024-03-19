@@ -9,30 +9,49 @@
             env: env,
             sitetype: sitetype
         }) %>
+        <script type="text/javascript" src="/js/private.js" defer></script>
     </head>
     <body>
         <%- include("../snippets/header.ejs") %>
         <%- include("../snippets/nav.ejs") %>
         <main>
-            <div class="general">
-                <h2>Webseiten</h2>
+            <div class="general container">
+                <h1>Webseiten</h1>
                 <p><a href="https://analytics.google.com/analytics/web/">Google Analytics</a></p>
                 <p><a href="https://www.google.com/adsense">Google Adsense</a></p>
                 <p><a href="https://imagekit.io/dashboard/media-library">ImageKit</a></p>
                 <p><a href="/private/writeBlog">Zum Blog Builder</a></p>
-                <h2>Login Daten</h2>
-                <p>Google Konto:</p>
-                <ul>
-                    <li>E-Mail: zuerich.meets.tanzania@gmail.com</li>
-                    <li>Passwort: IM ENV FILE</li>
-                </ul>
-                <p>ImageKit</p>
-                <ul>
-                    <li>E-Mail: zuerich.meets.tanzania@gmail.com</li>
-                    <li>Passwort: IM ENV FILE</li>
-                </ul>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Webseite</th>
+                            <th>E-Mail</th>
+                            <th>Passwort</th>
+                        </tr>
+                        <tr>
+                            <td>Google</td>
+                            <td>zuerich.meets.tanzania@gmail.com</td>
+                            <td><%= passwords.gmail %></td>
+                        </tr>
+                        <tr>
+                            <td>ImageKit</td>
+                            <td>zuerich.meets.tanzania@gmail.com</td>
+                            <td><%= passwords.imagekit %></td>
+                        </tr>
+                        <tr>
+                            <td>Stripe</td>
+                            <td>zuerich.meets.tanzania@gmail.com</td>
+                            <td><%= passwords.stripe %></td>
+                        </tr>
+                        <tr>
+                            <td>Mailjet</td>
+                            <td>zuerich.meets.tanzania@gmail.com</td>
+                            <td><%= passwords.mailjet %></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div class="news-management">
+            <div class="news-management container">
                 <h1>News Verwaltung</h1>
                 <p>Hier können News verteilt werden.</p>
                 <form action="/post/submitNews" method="POST">
@@ -62,107 +81,77 @@
                     <div id="show_nothing" class="invisible"></div>
                     <button type="submit">Submit</button>
                 </form>
-                <script>
-                    let pdf = document.getElementById("news_pdf"),
-                        s_btn = document.getElementById("news_btn"),
-                        s_pdf = $("#show_pdf"),
-                        s_img = $("#show_img"),
-                        s_btn_menu = $("#show_btn_menu"),
-                        h_btn_menu = $("#show_nothing");
-
-                    s_pdf.hide();
-
-                    $(pdf).click(() => toggleDivs(pdf, s_pdf, s_img));
-                    $(s_btn).click(() => toggleDivs(s_btn, s_btn_menu, h_btn_menu));
-
-
-                    function toggleDivs (toggler, first, second) {
-                        first.hide();
-                        second.hide();
-                        toggler.checked ? first.show() : second.show();
-                    };
-                </script>
             </div>
-            <div class="hero-management">
+            <div class="hero-management container">
                 <h1>Neues Homepage Bild hochladen</h1>
                 <input type="file" id="hero_img_upload" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
                 <button type="button" id="hero_img_upload_submit">Hochladen</button>
-                <script>
-                    var data = "";
-
-                    $("#hero_img_upload").on("change", async e => {
-                        data = await toBase64(e.target.files[0]);
-                    });
-
-                    $("#hero_img_upload_submit").click(async () => {
-                        if (data === "") return;
-                        let res = await fetch(window.location.origin + "/post/changeHeroImg", {
-                            method: "POST",
-                            headers: {"Content-Type": "application/json"},
-                            mode: "cors",
-                            cache: "default",
-                            body: JSON.stringify({base64: data})
-                        });
-                    })
-                </script>
             </div>
-            <div class="user-management">
-                <style>
-                    table {
-                        font-family: arial, sans-serif;
-                        border-collapse: collapse;
-                        margin: 5vh 5vw;
-                        width: calc(100% - 10vw);
-                    }
-                    
-                    td, th {
-                        border: 1px solid #dddddd;
-                        text-align: left;
-                        padding: 8px;
-                    }
-                    
-                    tr:nth-child(even) {
-                        background-color: #dddddd;
-                    }
-                </style>
+            <div class="user-management container">
                 <h1>Benutzerliste</h1>
-                <table>
-                    <tr>
-                      <th>Benutzername</th>
-                      <th>Vorname</th>
-                      <th>Nachname</th>
-                      <th>E-Mail</th>
-                      <th>Telefonnummer</th>
-                      <th>Typ</th>
-                    </tr><%
-                    all_users.forEach(user => { %>
-                    <tr>
-                        <td><%= user.username %></td>
-                        <td><%= user.name %></td>
-                        <td><%= user.family_name %></td>
-                        <td><%= user.email %></td>
-                        <td><%= user.phone %></td>
-                        <td><%= user.type %></td>
-                    </tr>
-                    <% }) %>
-                </table>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Benutzername</th>
+                            <th>Vorname</th>
+                            <th>Nachname</th>
+                            <th>E-Mail</th>
+                            <th>Telefonnummer</th>
+                            <th>Typ</th>
+                        </tr><%
+                        all_users.forEach(user => { %>
+                        <tr>
+                            <td><%= user.username %></td>
+                            <td><%= user.name %></td>
+                            <td><%= user.family_name %></td>
+                            <td><%= user.email %></td>
+                            <td><%= user.phone %></td>
+                            <td><%= user.type %></td>
+                        </tr>
+                        <% }) %>
+                    </table>
+                </div>
                 <h1>Newsletterliste</h1>
-                <table>
-                    <tr>
-                        <th>Anrede</th>
-                        <th>Vorname</th>
-                        <th>Nachname</th>
-                        <th>E-Mail</th>
-                    </tr><%
-                    all_newsletter.forEach(user => { %>
-                    <tr>
-                        <td><%= user.gender %></td>
-                        <td><%= user.vorname %></td>
-                        <td><%= user.nachname %></td>
-                        <td><%= user.email %></td>
-                    </tr>
-                    <% }) %>
-                </table>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Anrede</th>
+                            <th>Vorname</th>
+                            <th>Nachname</th>
+                            <th>E-Mail</th>
+                        </tr><%
+                        all_newsletter.forEach(user => { %>
+                        <tr>
+                            <td><%= user.gender %></td>
+                            <td><%= user.vorname %></td>
+                            <td><%= user.nachname %></td>
+                            <td><%= user.email %></td>
+                        </tr>
+                        <% }) %>
+                    </table>
+                </div>
+                <h1>Mitgliederliste</h1>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Benutzername</th>
+                            <th>Vorname</th>
+                            <th>Nachname</th>
+                            <th>E-Mail</th>
+                            <th>Telefonnummer</th>
+                        </tr><%
+                        all_users.forEach(user => {
+                        if (user.type === "member") { %>
+                        <tr>
+                            <td><%= user.username %></td>
+                            <td><%= user.name %></td>
+                            <td><%= user.family_name %></td>
+                            <td><%= user.email %></td>
+                            <td><%= user.phone %></td>
+                        </tr>
+                        <% };}); %>
+                    </table>
+                </div>
             </div>
         </main>
         <%- include("../snippets/footer.ejs", {origin_url: origin_url}) %>

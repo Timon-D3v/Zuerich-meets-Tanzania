@@ -72,3 +72,36 @@ main textarea {
         }
     }
 }
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    margin: 5vh 5vw;
+    width: calc(100% - 10vw);
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+td, th {
+    border: 1px solid var(--text-950);
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.container {
+    margin: 5vh 0;
+    padding: 2vh 5vw;
+    &:nth-child(even) {
+        background-color: #b3b1af;
+    }
+}
+
+:root[data-theme="dark"] .container:nth-child(even) {
+    background-color: #575655;
+}
