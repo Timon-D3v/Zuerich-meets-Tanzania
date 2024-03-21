@@ -4,7 +4,7 @@ Links beim Blog builder einbauen
 Newsletter => mail wenn aktuelles
 In Verwaltung eine Möglichkeit zum Erstellen von Admins machen
 
-=> Werbung vielleicht
+=> Werbung vielleicht / eher nicht
 
 
 BUG: If you submit news you get redirected to the json data => fix with converting everything to js fetch and not form
@@ -14,32 +14,8 @@ Style at least a bit of the management section
 
 
 
-
-IDEA:
-
-
-Ich will, dass uf deren Server nur statisches HTML lauft, aber jedi Site (standartsite nur wenig, neui blog post eigentlich komplett)
-durch post und get über frontend fetch afrage a mini site schickt.
-Uf mim Server lauft den das Backend sozege.
-Ich werd also e Datebank für die ha.
-Uf dere Datebank werdet erstens mal alli Blogpost gspeichert.
-Es söll aber au en pfad geh wo immer die neuste 5 oder so verschickt werdet.
-Allgemein bechumt die Site de unterordner https://timondev.vip/zmt/*
-
-
-
-
----------------------------------------------------------------------------------------------------------------------------------------------
-
-Geld online sammeln
-https://www.raisenow.com/?utm_source=product&utm_medium=tamaro
-
----------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
 Wenn das denn alles gschafft isch, chan man ja no witer gah und bilderalbum builder oder so erstelle
+
 
 
 
@@ -51,7 +27,7 @@ Realtimecolors Link: https://www.realtimecolors.com/?colors=dde9f3-0a0600-ca8907
 
 SHOP 
 
- - Link zu "Unikat"
+ - Link zu "Unikat" (DONE)
  - Buch direkt bei Tanja oder wo es das gibt
 
 
@@ -65,8 +41,8 @@ VEREIN
 
 FOOTER
 
- - Just for us
- - Statuten
+ - Just for us Link (DONE)
+ - Statuten Link (DONE)
 
 
 PROJEKTE
@@ -87,9 +63,3 @@ HOME
 KONTAKT
 
 vereb@gmx.net
-
-
-DEATHLINE
-
-Bis Ende Februar ein Gerüst
-=> Das heisst eine DB, ein basic blog builder (ohne gross gestyled), einige Sachen übernehmen (zb. Blog post als vorschau).
