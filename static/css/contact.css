@@ -1,0 +1,107 @@
+#contact-form {
+    display: flex;
+    flex-direction: column;
+    margin: var(--basic-margin);
+    padding: 5vh 4vw;
+    gap: 1vh;
+    background-color: var(--accent-300);
+    & label {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+}
+
+.contact-names {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-auto-flow: column;
+    gap: 1vh 5vw;
+}
+
+#contact-name,
+#contact-family-name,
+#contact-email,
+#contact-message {
+    padding: 0.5em;
+    border: 2px solid #ccc;
+    border-radius: 0.25em;
+    color: var(--text-950);
+    outline: none;
+    &:focus {
+        border-color: var(--text-500);
+        box-shadow: 0 0 0 0.2rem rgba(66, 134, 189, 0.25);
+    }
+}
+
+#contact-message {
+    resize: vertical;
+    min-height: 30vh;
+}
+
+#contact-submit {
+    align-self: flex-end;
+    margin: 20px 0 10px 0;
+    background-color: #151717;
+    border: none;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+    max-width: 600px;
+    align-self: center;
+    &:hover {
+        background-color: #252727;
+    }
+}
+
+main,
+footer {
+    position: relative;
+    z-index: 2;
+}
+
+.bg {
+    position: fixed;
+    left: 0;
+    top: 80px;
+    height: calc(100% - 80px);
+    width: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.t-mitglied-btn,
+.t-spenden-btn,
+.t-kontakt-btn,
+.t-shop-btn {
+    background-color: var(--accent-500);
+    color: var(--text-950);
+    &:hover {
+        background-color: var(--accent-600);
+    }
+}
+
+:root[data-theme="dark"] {
+    & .t-mitglied-btn,
+    & .t-spenden-btn,
+    & .t-kontakt-btn,
+    & .t-shop-btn {
+        background-color: var(--violett);
+        color: var(--text-950);
+        &:hover {
+            background-color: #4a2984;
+        }
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .contact-names {
+        display: flex;
+        flex-direction: column;
+        gap: 1vh;
+    }
+}

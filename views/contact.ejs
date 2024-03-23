@@ -9,7 +9,7 @@
             env: env,
             sitetype: sitetype
         }) %>
-        <link rel="stylesheet" href="/css/static.css">
+        <link rel="stylesheet" href="/css/contact.css">
         <script type="text/javascript" src="/js/contact.js" defer></script>
     </head>
     <body>
@@ -17,10 +17,12 @@
         <%- include("./snippets/nav.ejs") %>
         <main>
             <form id="contact-form">
-                <label for="contact-name">Vorname</label>
-                <input type="text" id="contact-name" autocomplete="given-name" required value="<%= user?.name || "" %>">
-                <label for="contact-family-name">Nachname</label>
-                <input type="text" id="contact-family-name" autocomplete="family-name" required value="<%= user?.family_name || "" %>">
+                <div class="contact-names">
+                    <label for="contact-name">Vorname</label>
+                    <input type="text" id="contact-name" autocomplete="given-name" required value="<%= user?.name || "" %>">
+                    <label for="contact-family-name">Nachname</label>
+                    <input type="text" id="contact-family-name" autocomplete="family-name" required value="<%= user?.family_name || "" %>">
+                </div>
                 <label for="contact-email">E-Mail</label>
                 <input type="text" id="contact-email" autocomplete="email" required value="<%= user?.email || "" %>">
                 <label for="contact-message">Nachricht</label>
@@ -30,6 +32,20 @@
             <p id="error_field"></p>
             <p id="success_field"></p>
         </main>
+        <img class="bg" alt="Hintergrund: Himmel" src="/img/stock/sky.jpg">
+        <script defer>
+            const contact_root = $(":root"),
+                contact_bg_img = $(".bg");
+            contact_root.attr("data-theme") === "dark" ?
+            contact_bg_img.attr("src", "/img/stock/nightsky.jpg") :
+            contact_bg_img.attr("src", "/img/stock/sky.jpg");
+            contact_root.on("change", () => {
+                contact_root.attr("data-theme") === "dark" ?
+                contact_bg_img.attr("src", "/img/stock/nightsky2.jpg") :
+                contact_bg_img.attr("src", "/img/stock/sky.jpg");
+            });
+        </script>
+        <div style="height: 10vh;"></div>
         <%- include("./snippets/footer.ejs", {
             origin_url: origin_url,
             js: js
