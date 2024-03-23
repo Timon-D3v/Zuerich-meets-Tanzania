@@ -105,3 +105,8 @@ Auch habe ich zwei Tabellen in der Verwaltungsansicht erstellt, die eine über B
 Ich habe ein logout hinzugefügt und eine Möglichkeit zum erstellen eines Links beim Blogpost.
 Und noch die Farben beim Login wie gewünscht angepasst.
 Time spent: 6h; Time worked: 5:30h;
+
+23.3.24
+Habe die Kontaktseite erstellt. Einige neue URLs erstellt, damit man alles auch auf deutsch eingeben kann.
+Ich habe ausserdem das Logo zu png geändert und als icon verwendet und wenn man über navigationslinks mit der Muas geht, werden sie jetzt orange.
+Time spent: 4:39h; Time worked: 4h;
