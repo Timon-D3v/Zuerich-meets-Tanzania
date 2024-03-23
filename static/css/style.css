@@ -287,6 +287,9 @@ img[src$=".svg"] {
         -webkit-hyphens: none;
         hyphens: none;
         word-break: keep-all;
+        &.header_fat {
+            font-weight: bolder;
+        }
     }
 }
 
