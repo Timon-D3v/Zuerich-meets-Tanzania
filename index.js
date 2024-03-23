@@ -130,6 +130,7 @@ app.use(cors());
 
 
 
+app.get("/home", (req, res) => res.redirect("/"));
 app.get("/", async (req, res) => {
     let blogs = await db.getLastXPosts(4)
         .catch(() => {return BACKUP.BLOGS});
@@ -150,6 +151,10 @@ app.get("/", async (req, res) => {
     });
 });
 
+app.get("/signup", (req, res) => res.redirect("/login?js=toggleForms"));
+app.get("/signUp", (req, res) => res.redirect("/login?js=toggleForms"));
+app.get("/registrieren", (req, res) => res.redirect("/login?js=toggleForms"));
+app.get("/einloggen", (req, res) => res.redirect("/login"));
 app.get("/login", async (req, res) => {
     res.render("login.ejs", {
         env: LOAD_LEVEL,
@@ -163,11 +168,14 @@ app.get("/login", async (req, res) => {
     });
 });
 
+app.get("/ausloggen", (req, res) => res.redirect("/logout"));
+app.get("/logOut", (req, res) => res.redirect("/logout"));
 app.get("/logout", (req, res) => {
     if (req.session?.user) delete req.session.user;
     res.redirect("/");
 });
 
+app.get("/einkaufen", (req, res) => res.redirect("/shop"));
 app.get("/shop", async (req, res) => {
     res.render("shop.ejs", {
         env: LOAD_LEVEL,
