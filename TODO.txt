@@ -5,7 +5,6 @@ Newsletter => mail wenn aktuelles
 In Verwaltung eine Möglichkeit zum Erstellen von Admins machen
 Für Bilder ein Colagenbuilder machen
 contact form
-nav links hover > clr orange
 
 => Werbung vielleicht / eher nicht
 

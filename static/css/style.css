@@ -537,6 +537,10 @@ main::before {
     content: "";
 }
 
+nav ul li > a:hover {
+    color: var(--primary-500);
+}
+
 .hero-title {
     font-size: 90px;
     font-weight: 600;
