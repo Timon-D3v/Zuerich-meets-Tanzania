@@ -103,6 +103,67 @@ function randomId () {
     return result;
 };
 
+function toRealDate (date) {
+	date = date.toString();
+	let time = date.slice(16, 24);
+	let day = date.slice(8, 10);
+	let year = date.slice(11, 15);
+	let month = date.slice(4, 7);
+	switch (month) {
+		case "Jan":
+			month = "Januar";
+			break;
+		case "Feb":
+			month = "Februar";
+			break;
+		case "Mar":
+			month = "März";
+			break;
+		case "Apr":
+			month = "April";
+			break;
+		case "May":
+			month = "Mai";
+			break;
+		case "Jun":
+			month = "Juni";
+			break;
+		case "Jul":
+			month = "Juli";
+			break;
+		case "Aug":
+			month = "August";
+			break;
+		case "Sep":
+			month = "September";
+			break;
+		case "Oct":
+			month = "Oktober";
+			break;
+		case "Nov":
+			month = "November";
+			break;
+		case "Dec":
+			month = "Dezember";
+			break;
+	};
+	return `${day}. ${month} ${year} um ${time}`;
+};;
+
+function createMailSubject (obj) {
+    return obj.author_name + " schreibt über Webseitenformular";
+};
+
+function createMailText (obj) {
+    let date = toRealDate(Date());
+    let divider = "----------------------------------------------";
+    let adress = `${obj.author_name} ${obj.author_family_name} hat diese E-Mail hinterlegt: ${obj.author_email}`;
+    let footer1 = "Dies ist eine automatisch verschickte E-Mail über eine API von postmail.invotes.com\nProgrammiert und aufesetzt von Timon Fiedler.";
+    let footer2 = "Timon Fiedler ist nicht verantwortlich für eventuellen Spam oder andere Fehler, die durch den Endnutzer entstehen.";
+    let part2 = `${divider}\n\n${obj.message}\n\n${divider}\n${adress}\n${divider}\n\n${footer1}\n${footer2}`;
+    return `${obj.author_name} ${obj.author_family_name} schreibt am ${date}: \n${part2}`;
+};
+
 
 
 app.use(express.static("./static"));
@@ -204,6 +265,23 @@ app.get("/profile", async (req, res) => {
         title: req.session.user.username,
         desc: "Dein Profil und alle Einstellungen auf einer Seite.",
         sitetype: "profile",
+        user: req.session.user,
+        js: req.query.js
+    });
+});
+
+app.get("/kontakt", (req, res) => res.redirect("/contact"));
+app.get("/contactUs", (req, res) => res.redirect("/contact"));
+app.get("/kontaktiereUns", (req, res) => res.redirect("/contact"));
+app.get("/contact", (req, res) => {
+    res.render("contact.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: "Sat Mar 23 2024 14:22:59 GMT+0100 (Mitteleuropäische Normalzeit)",
+        title: "Kontakt",
+        desc: "Über diese Seite kannst du uns ganz einfach kontaktieren, indem du uns eine E-Mail schreibst. Wir geben unser Bestes, so schnell wie möglich zu antworten.",
+        sitetype: "contact",
         user: req.session.user,
         js: req.query.js
     });
@@ -441,6 +519,26 @@ app.post("/post/changeHeroImg", async (req, res) => {
     if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
     let status = await imagekitUpload(req.body.base64, "hero", "/assets/");
     res.json({res: status});
+});
+
+app.post("/post/sendMail", async (req, res) => {
+    let token;
+    LOAD_LEVEL === "prod" ?
+    token = process.env.POSTMAIL_TOKEN :
+    token = process.env.POSTMAIL_TEST_TOKEN;
+    let data = new URLSearchParams();
+    let text = createMailText(req.body);
+    let subject = createMailSubject(req.body);
+    data.append("access_token", token);
+    data.append("subject", subject);
+    data.append("text", text);
+    let result = await fetch("https://postmail.invotes.com/send", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: data
+    });
+    if (result.status === 200) return res.json({res: "Die E-Mail wurde erfolgreich verschickt."}).status(200);
+    else return res.json({res: "Die E-Mail konnte nicht verschickt werden, versuche es in einigen Sekunden noch einmal."}).status(500);
 });
 
 

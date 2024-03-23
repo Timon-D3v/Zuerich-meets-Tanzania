@@ -178,9 +178,12 @@ main {
     display: none;
     position: fixed;
     bottom: 5vh;
-    background-color: var(--error);
-    margin: 0 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 70vw;
+    margin: 0;
     padding: 20px;
+    background-color: var(--error);
     box-sizing: border-box;
     border-radius: 15px;
     font-size: 20px;
@@ -192,6 +195,7 @@ main {
         object-fit: contain;
         object-position: center;
         transform: translateY(20%);
+        margin-right: 0.25em;
     }
 }
 

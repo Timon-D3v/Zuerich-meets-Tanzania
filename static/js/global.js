@@ -223,6 +223,53 @@ function toBase64Max1MB (file) {
 	});
 };
 
+function toRealDate (date) {
+	date = date.toString();
+	let time = date.slice(15, 24);
+	let day = date.slice(8, 10);
+	let year = date.slice(11, 15);
+	let month = date.slice(4, 7);
+	switch (month) {
+		case "Jan":
+			month = "Januar";
+			break;
+		case "Feb":
+			month = "Februar";
+			break;
+		case "Mar":
+			month = "März";
+			break;
+		case "Apr":
+			month = "April";
+			break;
+		case "May":
+			month = "Mai";
+			break;
+		case "Jun":
+			month = "Juni";
+			break;
+		case "Jul":
+			month = "Juli";
+			break;
+		case "Aug":
+			month = "August";
+			break;
+		case "Sep":
+			month = "September";
+			break;
+		case "Oct":
+			month = "Oktober";
+			break;
+		case "Nov":
+			month = "November";
+			break;
+		case "Dec":
+			month = "Dezember";
+			break;
+	};
+	return `${day}. ${month} ${year} um ${time}`;
+};
+
 async function sendNewsletter (data) {
 	let res = await fetch(window.location.origin + "/post/newsletter/signUp", {
 		method: "POST",

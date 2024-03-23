@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <link rel="stylesheet" href="/css/static.css">
+        <script type="text/javascript" src="/js/contact.js" defer></script>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main>
+            <form id="contact-form">
+                <label for="contact-name">Vorname</label>
+                <input type="text" id="contact-name" autocomplete="given-name" required value="<%= user?.name || "" %>">
+                <label for="contact-family-name">Nachname</label>
+                <input type="text" id="contact-family-name" autocomplete="family-name" required value="<%= user?.family_name || "" %>">
+                <label for="contact-email">E-Mail</label>
+                <input type="text" id="contact-email" autocomplete="email" required value="<%= user?.email || "" %>">
+                <label for="contact-message">Nachricht</label>
+                <textarea id="contact-message" required></textarea>
+                <button type="submit" id="contact-submit">Submit</button>
+            </form>
+            <p id="error_field"></p>
+            <p id="success_field"></p>
+        </main>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>

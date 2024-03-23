@@ -1289,7 +1289,47 @@ p.news-a-t {
 .news-text {
     word-break: normal;
     word-wrap: normal;
-    
+}
+
+#error_field,
+#info_field,
+#success_field {
+    background-color: var(--error);
+    display: none;
+    position: fixed;
+    bottom: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 70vw;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    font-size: 20px;
+    line-height: 1.25;
+    z-index: 50;
+    & > img {
+        height: 1lh;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+        object-position: center;
+        transform: translateY(20%);
+        margin-right: 0.25em;
+    }
+}
+
+#info_field {
+    background-color: var(--accent-500);
+    & > img {
+        transform: rotate(180deg) translateY(-20%);
+    }
+}
+
+#success_field {
+    background-color: var(--green);
+    & > img {
+        transform: rotate(180deg) translateY(-20%);
+    }
 }
 
 @media screen and (min-width: 1200px) {
