@@ -16,20 +16,36 @@
         <%- include("../snippets/nav.ejs") %>
         <main>
             <h1>Blog Builder</h1>
-            <p>
+            <p class="basic-text">
                 Herzlich Willkommen zum Blog Builder. Benutze das Menu unten, um zu beginnen. 
                 Wähle dazu einfach das gewünschte Element aus und leg los. Wenn du einen Link erstellen möchtest, 
                 benutze diese Vorlage: &lt;a href="<i>#Dein Link#</i>"&gt;<i>#Dein anzuzeigender Text#</i>&lt;/a&gt;. Viel Erfolg!
             </p>
             <div class="blog_line"></div>
             <h1>Erstmal ein paar allgemeine Daten:</h1>
-            <input type="text" id="basic_title" placeholder="Titel für den Blogpost">
-            <input type="text" id="basic_preview" placeholder="Kurze Zusammenfassung">
-            <input type="text" id="basic_comment" placeholder="Privater Kommentar (Nur für Verwalter sichtbar, optional)">
-            <input type="text" id="basic_author" placeholder="Autor">
-            <label for="basic_img">Titelbild aussuchen</label>
-            <input type="file" id="basic_img" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
-            <input type="text" id="basic_alt" placeholder="Beschreibe das Titelbild kurz (3-5 Wörter)">
+            <input type="text" id="basic_title" placeholder="Titel für den Blogpost" class="basic-input">
+            <input type="text" id="basic_preview" placeholder="Kurze Zusammenfassung" class="basic-input">
+            <input type="text" id="basic_comment" placeholder="Privater Kommentar (Nur für Verwalter sichtbar, optional)" class="basic-input">
+            <input type="text" id="basic_author" placeholder="Autor" class="basic-input">
+            <label for="basic_img" class="basic-label">Titelbild aussuchen</label>
+            <label for="basic_img" id="picture_overlay" style="height: 35vh; width: 60%; margin: 6vh 20%;">
+                <div class="custom-file-upload">
+                    <div class="icon">
+                        <img alt="Eine Datei" src="/img/svg/file.svg" id="hero_file_preview" style="height: 20vh;">
+                    </div>
+                    <div class="text">
+                    <span>Klicken um ein neues Bild hochzuladen</span>
+                    </div>
+                </div>
+            </label>
+            <input style="display: none;" type="file" id="basic_img" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
+            <input type="text" id="basic_alt" placeholder="Beschreibe das Titelbild kurz (3-5 Wörter)" class="basic-input">
+            <script>
+                $("#basic_img").on("change", async (e) => {
+                    data = await toBase64(e.target.files[0]);
+                    $("#hero_file_preview").attr("src", data);
+                });
+            </script>
             <div class="blog_line"></div>
             <h1>Deine Auswahl</h1>
             <div id="baustelle"></div>
@@ -70,6 +86,7 @@
                 function addTitle () {
                     let input = document.createElement("input");
                     input.setAttribute("type", "text");
+                    input.classList.add("basic-input");
                     input.placeholder = "Titel";
                     let id = randomId();
                     ids.push(id);
@@ -98,6 +115,9 @@
                     let input1 = document.createElement("input");
                     let input2 = document.createElement("input");
                     let input3 = document.createElement("input");
+                    input1.classList.add("basic-input");
+                    input2.classList.add("basic-input");
+                    input3.classList.add("basic-input");
                     let id3 = randomId();
                     let id4 = randomId();
                     let id5 = randomId();
@@ -145,6 +165,7 @@
                     let input = document.createElement("input");
                     input.setAttribute("type", "text");
                     input.placeholder = "Untertitel";
+                    input.classList.add("basic-input");
                     let id = randomId();
                     ids.push(id);
                     input.id = id;
@@ -161,6 +182,7 @@
                 function addText () {
                     let input = document.createElement("textarea");
                     input.innerText = "Paragraf";
+                    input.classList.add("basic-input");
                     let id = randomId();
                     ids.push(id);
                     input.id = id;
@@ -177,6 +199,7 @@
                 function addImg () {
                     let input = document.createElement("input");
                     input.setAttribute("type", "file");
+                    input.classList.add("basic-input");
                     input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr";
                     input.placeholder = "Bild";
                     let id = randomId();
@@ -202,6 +225,7 @@
                     pre.append(preview);
                     let alt = document.createElement("input");
                     alt.setAttribute("type", "text");
+                    alt.classList.add("basic-input");
                     alt.placeholder = "Kurze Beschriebung des Bildes (ca. 3-5 Wörter)";
                     alt.id = id + "_3";
                     bau.append(alt);
@@ -212,6 +236,7 @@
 
                 function addMultipleImg () {
                     let input = document.createElement("input");
+                    input.classList.add("basic-input");
                     input.setAttribute("multiple", "true");
                     input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr";
                     input.setAttribute("type", "file");

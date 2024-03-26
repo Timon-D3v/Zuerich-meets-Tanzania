@@ -217,6 +217,8 @@ app.get("/signUp", (req, res) => res.redirect("/login?js=toggleForms"));
 app.get("/registrieren", (req, res) => res.redirect("/login?js=toggleForms"));
 app.get("/einloggen", (req, res) => res.redirect("/login"));
 app.get("/login", async (req, res) => {
+    let redir = req.query.redir;
+    if (redir === undefined || typeof redir === "undefined") redir = "/";
     res.render("login.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -225,7 +227,8 @@ app.get("/login", async (req, res) => {
         title: "Login",
         desc: "Hier können sich Mitglieder und Verwalter einloggen oder neu registrieren.",
         sitetype: "login",
-        js: req.query.js
+        js: req.query.js,
+        redir: redir
     });
 });
 
@@ -256,7 +259,7 @@ app.get("/me", (req, res) => res.redirect("/profile"));
 app.get("/profil", (req, res) => res.redirect("/profile"));
 app.get("/konto", (req, res) => res.redirect("/profile"));
 app.get("/profile", async (req, res) => {
-    if (!req.session.user?.valid) return res.redirect("/login");
+    if (!req.session.user?.valid) return res.redirect("/login?redir=/profile");
     res.render("profile.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -307,7 +310,7 @@ app.get("/blog/:id", async (req, res) => {
 });
 
 app.get("/private/:id", async (req, res) => {
-    if (!req.session.user) return res.redirect("/login");
+    if (!req.session.user) return res.redirect("/login?redir=/private/" + req.params.id);
     if (req.session.user.type !== "admin") return res.redirect("/");
     let url = req.protocol + '://' + req.get('host');
     switch (req.params.id) {
@@ -384,7 +387,7 @@ app.post("/post/login", async (req, res) => {
     if (result.valid) {
         req.session.user = result;
         req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
-        res.redirect("/");
+        res.redirect(req.body.redir);
     } else res.send({message: error || "Dein Passwort ist falsch."});
 });
 
@@ -401,7 +404,7 @@ app.post("/post/signUp", async (req, res) => {
         req.session.user = result;
         req.session.user.valid = true;
         req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
-        res.redirect("/");
+        res.redirect(req.body.redir);
     };
 });
 

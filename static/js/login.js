@@ -50,7 +50,8 @@ function closeEyes (p, e) {
 async function validateAccount (e) {
     e.preventDefault();
     let u = username.val(),
-        p = password.val();
+        p = password.val(),
+        r = $("#redir").attr("redirect");
     if (u === "" || p === "") return;
     let res = await fetch(window.location.origin + "/post/login", {
         method: "POST",
@@ -59,7 +60,8 @@ async function validateAccount (e) {
         cache: "default",
         body: JSON.stringify({
             username: u,
-            password: p
+            password: p,
+            redir: r
         })
     })
     .catch(err => {
@@ -83,7 +85,8 @@ async function addAccount (e) {
         f = family_name.val(),
         m = email.val(),
         t = phone.val(),
-        i = file.prop('files')[0];
+        i = file.prop('files')[0],
+        r = $("#redir").attr("redirect");
     if (u === "" || p === "" || n === "" || f === "" || m === "") return;
     t === "" ? t = "Keine Nummer" : t = t.toString();
     i ? i = await toBase64Max1MB(i) : i = "/img/svg/personal.svg";
@@ -99,7 +102,8 @@ async function addAccount (e) {
             family_name: f,
             email: m,
             picture: i,
-            phone: t
+            phone: t,
+            redir: r
         })
     })
     .catch(err => {
