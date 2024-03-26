@@ -110,3 +110,7 @@ Time spent: 6h; Time worked: 5:30h;
 Habe die Kontaktseite erstellt. Einige neue URLs erstellt, damit man alles auch auf deutsch eingeben kann.
 Ich habe ausserdem das Logo zu png geändert und als icon verwendet und wenn man über navigationslinks mit der Muas geht, werden sie jetzt orange.
 Time spent: 4:39h; Time worked: 4h;
+
+26.3.24
+Managementseite gestylet. Wenn man sich einloggt wird man direkt zur richtigen Seite weitergeleitet.
+Man kann jetzt Admins hinzufügen und entfernen. Man kommt jetzt zum Mitgliedschaftsbereich wenn man auf Mitglied drückt.
