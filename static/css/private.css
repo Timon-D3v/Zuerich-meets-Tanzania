@@ -88,10 +88,15 @@ td, th {
     border: 1px solid var(--text-950);
     text-align: left;
     padding: 8px;
+    color: var(--text-950);
 }
 
 tr:nth-child(even) {
     background-color: #dddddd;
+}
+
+:root[data-theme="dark"] tr:nth-child(even) {
+    background-color: #7c7c7c;
 }
 
 .container {

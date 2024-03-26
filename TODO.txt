@@ -1,4 +1,4 @@
-Add stuff to mitgliedschaft =>> NEED PAYMENT METHOD
+Add stuff to mitgliedschaft =>> NEED PAYMENT METHOD (Create a member sign up page)
 Newsletter => mail wenn aktuelles =>> NEED MAILJET
 Für Bilder ein Colagenbuilder machen
 Fix news form

@@ -249,6 +249,7 @@
 .custom-file-upload .icon img {
     height: 80px;
     fill: #e8e8e8;
+    filter: none;
 }
 
 .custom-file-upload .text {

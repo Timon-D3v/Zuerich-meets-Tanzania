@@ -271,7 +271,6 @@ app.get("/profile", async (req, res) => {
         user: req.session.user,
         js: req.query.js
     });
-    console.log(req.query.js);
 });
 
 app.get("/kontakt", (req, res) => res.redirect("/contact"));

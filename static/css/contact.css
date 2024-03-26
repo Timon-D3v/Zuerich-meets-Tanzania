@@ -26,7 +26,7 @@
     padding: 0.5em;
     border: 2px solid #ccc;
     border-radius: 0.25em;
-    color: var(--text-950);
+    color: var(--c-text-950);
     outline: none;
     &:focus {
         border-color: var(--text-500);
