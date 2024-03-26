@@ -1,8 +1,7 @@
-Add stuff to mitgliedschaft
-
-Links beim Blog builder einbauen
-Newsletter => mail wenn aktuelles
+Add stuff to mitgliedschaft =>> NEED PAYMENT METHOD
+Newsletter => mail wenn aktuelles =>> NEED MAILJET
 Für Bilder ein Colagenbuilder machen
+Fix news form
 
 => Werbung vielleicht / eher nicht
 
