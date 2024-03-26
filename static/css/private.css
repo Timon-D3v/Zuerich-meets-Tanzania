@@ -105,3 +105,129 @@ tr:nth-child(even) {
 :root[data-theme="dark"] .container:nth-child(even) {
     background-color: #575655;
 }
+
+.basic-label {
+    font-size: large;
+    font-weight: bold;
+}
+
+.basic-input {
+    transition: all 0.25s ease;
+    height: 2.5em;
+    padding: 0.5em 2em;
+    box-sizing: border-box;
+    font-size: large;
+    border: 2px var(--background-950) solid;
+    outline: none;
+    background-color: inherit;
+    color: var(--text-950);
+    &:focus {
+        border-color: var(--text-400);
+    }
+}
+
+.basic-text {
+    width: 90%;
+    margin: 1vh 5%;
+    padding: 0;
+    font-size: medium;
+}
+
+.basic-button {
+    transition: all 0.25s ease;
+    border: none;
+    min-width: 8em;
+    height: 2.5em;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-50);
+    background-color: var(--secondary-500);
+    font-size: large;
+    font-weight: bold;
+    padding: 1vh 2vw;
+    margin: 1vh 0;
+    letter-spacing: 0.1em;
+    &:hover {
+        background-color: var(--secondary-400);
+    }
+}
+
+.basic-link {
+    transition: all 0.25s ease;
+    font-size: inherit;
+    color: inherit;
+    &:hover {
+        color: var(--primary-500);
+    }
+}
+
+.basic-title {
+    text-align: center;
+}
+
+.basic-checkbox {
+    transition: all 0.25s ease;
+    appearance: none;
+    cursor: pointer;
+    height: clamp(30px, 3vh + 10px, 3vw);
+    width: clamp(30px, 3vh + 10px, 3vw);
+    aspect-ratio: 1/1;
+    border: 5px var(--error) solid;
+    &:checked {
+        border: 15px var(--green) double;
+    }
+    &:hover {
+        border: 5px var(--text-400) solid;
+        &:checked {
+            border: 15px var(--text-400) double;
+        }
+    }
+}
+
+#picture_overlay {
+    display: grid;
+    height: 60vh;
+    width: 80%;
+    margin: 6vh 10%;
+    place-items: center;
+}
+
+.custom-file-upload {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #e8e8e8;
+    background-color: #212121;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 48px 35px -48px #e8e8e8;
+    pointer-events: all;
+}
+
+.custom-file-upload .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-file-upload .icon img {
+    height: 30vh;
+    fill: #e8e8e8;
+}
+
+.custom-file-upload .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-file-upload .text span {
+    font-weight: 400;
+    color: #e8e8e8;
+}

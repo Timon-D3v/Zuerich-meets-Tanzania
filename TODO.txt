@@ -2,9 +2,7 @@ Add stuff to mitgliedschaft
 
 Links beim Blog builder einbauen
 Newsletter => mail wenn aktuelles
-In Verwaltung eine Möglichkeit zum Erstellen von Admins machen und entfernen
 Für Bilder ein Colagenbuilder machen
-contact form
 
 => Werbung vielleicht / eher nicht
 

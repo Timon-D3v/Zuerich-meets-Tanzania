@@ -10,6 +10,7 @@ s_pdf.hide();
 
 $("#hero_img_upload").on("change", async (e) => {
 	data = await toBase64(e.target.files[0]);
+	$("#hero_file_preview").attr("src", data);
 });
 
 $("#hero_img_upload_submit").click(async () => {
