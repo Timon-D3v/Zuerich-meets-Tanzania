@@ -179,3 +179,19 @@ export async function getAllNewsletterSignUps () {
         .catch(err => {throw new Error("Something went wrong");});
     return result;
 };
+
+export async function makeAdmin (username) {
+    let query = "UPDATE `zmt`.`users` SET `type` = 'admin' WHERE (`username` = ?);";
+    let result = true;
+    await pool.query(query, username).
+        catch(() => result = false);
+    return result;
+};
+
+export async function deleteAdmin (username) {
+    let query = "UPDATE `zmt`.`users` SET `type` = 'user' WHERE (`username` = ?);";
+    let result = true;
+    await pool.query(query, username).
+        catch(() => result = false);
+    return result;
+};

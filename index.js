@@ -268,6 +268,7 @@ app.get("/profile", async (req, res) => {
         user: req.session.user,
         js: req.query.js
     });
+    console.log(req.query.js);
 });
 
 app.get("/kontakt", (req, res) => res.redirect("/contact"));
@@ -539,6 +540,21 @@ app.post("/post/sendMail", async (req, res) => {
     });
     if (result.status === 200) return res.json({res: "Die E-Mail wurde erfolgreich verschickt."}).status(200);
     else return res.json({res: "Die E-Mail konnte nicht verschickt werden, versuche es in einigen Sekunden noch einmal."}).status(500);
+});
+
+app.post("/post/makeAdmin", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    let result = await db.makeAdmin(req.body.username)
+        .catch(() => {return false});
+    res.json({good: result});
+});
+
+app.post("/post/deleteAdmin", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.body.username === "Timon" || req.body.username === "Sara Pieretti") return res.json({good: false});
+    let result = await db.deleteAdmin(req.body.username)
+        .catch(() => {return false});
+    res.json({good: result});
 });
 
 

@@ -1,5 +1,11 @@
 <nav>
-            <div class="w750 w1000" id="nav_tab">
+            <div class="w750 w1000" id="nav_tab"><%
+                let link_mitglied;
+                if (typeof user !== "undefined" && user !== null) {
+                    user?.valid ? link_mitglied = "/account?js=profile_toMembership" : link_mitglied = "/login";
+                } else {
+                    link_mitglied = "/login";
+                }; %>
                 <ul class="n-t">
                     <li>
                         <div class="n-t-details">
@@ -251,7 +257,7 @@
                     </li>
                 </ul>
                 <div class="n-m-f">
-                    <a class="t-mitglied-btn flex jusify-center" href ="#">Mitglied werden</a>
+                    <a class="t-mitglied-btn flex jusify-center" href ="<%= link_mitglied %>">Mitglied werden</a>
                     <a class="t-spenden-btn flex jusify-center" href ="#">Spenden</a>
                     <a class="t-shop-btn flex jusify-center" href ="/shop">Shop</a>
                     <div class="n-m-f-small-buttons">

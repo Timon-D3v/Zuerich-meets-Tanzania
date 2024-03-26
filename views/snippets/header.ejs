@@ -8,24 +8,30 @@
                 </span>
             </a>
             <div class="h-c">
-                <div class="h-t-b">
+                <div class="h-t-b"><%
+                    let link_mitglied;
+                    if (typeof user !== "undefined" && user !== null) {
+                        user?.valid ? link_mitglied = "/account?js=profile_toMembership" : link_mitglied = "/login";
+                    } else {
+                        link_mitglied = "/login";
+                    }; %>
                     <div class="h-t-b-btn">
-                        <a class="t-mitglied-btn" href ="#">Mitglied werden</a>
-                        <a class="t-spenden-btn" href ="#">Spenden</a>
-                        <a class="t-kontakt-btn" href ="/contact">Kontakt</a>
-                        <a class="t-shop-btn" href ="/shop">Shop</a>
+                        <a class="t-mitglied-btn" href="<%= link_mitglied %>">Mitglied werden</a>
+                        <a class="t-spenden-btn" href="#">Spenden</a>
+                        <a class="t-kontakt-btn" href="/contact">Kontakt</a>
+                        <a class="t-shop-btn" href="/shop">Shop</a>
                     </div>
                     <div class="h-t-b-ico">
-                        <a class="h-t-b-link" href ="#">
+                        <a class="h-t-b-link" href="<%= link_mitglied %>">
                             <img class="h-t-b-img" alt="Mitglied werden" src="/img/svg/member.svg">
                         </a>
-                        <a class="h-t-b-link" href ="#">
+                        <a class="h-t-b-link" href="#">
                             <img class="h-t-b-img" alt="Spenden" src="/img/svg/spenden.svg">
                         </a>
-                        <a class="h-t-b-link" href ="/contact">
+                        <a class="h-t-b-link" href="/contact">
                             <img class="h-t-b-img" alt="Kontaktiere uns." src="/img/svg/contact.svg">
                         </a>
-                        <a class="h-t-b-link" href ="#">
+                        <a class="h-t-b-link" href="/shop">
                             <img class="h-t-b-img" alt="Shop" src="/img/svg/shop.svg">
                         </a>
                     </div>

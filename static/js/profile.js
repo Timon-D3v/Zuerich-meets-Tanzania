@@ -235,3 +235,11 @@ function handleNewsletterCalling () {
     if (document.getElementById("notifications_newsletter").checked) submitNewsletter();
     else cancelNewsletter();
 };
+
+function profile_toSection (num) {
+    profile_dashboard_buttons[num - 1].click();
+};
+
+function profile_toMembership () {
+    profile_toSection(3);
+};

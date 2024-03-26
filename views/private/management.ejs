@@ -153,6 +153,17 @@
                     </table>
                 </div>
             </div>
+            <div class="container">
+                <label for="make-admin">Zum Admin ernennen:</label>
+                <p>Gib einen Benutzernamen ein um ihn zum Admin zu ernennen.</p>
+                <input type="text" id="make-admin" placeholder="Benutzername">
+                <button type="button" id="submit-make-admin">Ernennen</button>
+                <br>
+                <label for="delete-admin">Zum Admin ernennen:</label>
+                <p>Gib einen Benutzernamen ein um ihm Adminrechte zu entfernen.</p>
+                <input type="text" id="delete-admin" placeholder="Benutzername">
+                <button type="button" id="submit-delete-admin">Ernennen</button>
+            </div>
         </main>
         <%- include("../snippets/footer.ejs", {origin_url: origin_url}) %>
     </body>
