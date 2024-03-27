@@ -80,7 +80,8 @@
                     img_arr = [],
                     alt_arr = [],
                     img_suffix_arr = [],
-                    img_names = [];
+                    img_names = [],
+                    ruler_img = [];
 
 
                 function addTitle () {
@@ -300,6 +301,7 @@
                         img_suffix_arr.push(elm.id);
                         let name = elm.alt;
                         elm.src = "https://ik.imagekit.io/zmt/blog/" + name.replaceAll(" ", "-") + "___" + elm.id;
+                        if (elm.id in ruler_img) elm.src += "?tr=w-200,h-200";
                         img_names.push(elm.src);
                     });
                     para.forEach(elm => {
@@ -424,6 +426,7 @@
                         img.classList.add(ids[ids.length - 1]);
                         img.loading = "lazy";
                         img.id = ids[ids.length - 1];
+                        ruler_img.push(img.id);
                         img.src = elm;
                         img.alt = "Keine Beschreibung für dieses Bild...";
                         main.append(img);
