@@ -1255,7 +1255,7 @@ p.news-a-t {
         width: 10%;
         height: 5px;
         background-color: var(--secondary-600);
-        margin: 1em 0;
+        margin: 0.75em 0;
     }
 }
 

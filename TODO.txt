@@ -1,64 +1,14 @@
 Add stuff to mitgliedschaft =>> NEED PAYMENT METHOD (Create a member sign up page)
 Newsletter => mail wenn aktuelles =>> NEED MAILJET
 Für Bilder ein Colagenbuilder machen
-Fix news form
-
-=> Werbung vielleicht / eher nicht
-
-
-BUG: If you submit news you get redirected to the json data => fix with converting everything to js fetch and not form
-Style at least a bit of the management section
-
-
-
-
-
-Wenn das denn alles gschafft isch, chan man ja no witer gah und bilderalbum builder oder so erstelle
-
-
-
-
-
-Realtimecolors Link: https://www.realtimecolors.com/?colors=dde9f3-0a0600-ca8907-e9770c-92d3c8&fonts=Teko-Titillium%20Web
-
-
-
-
-SHOP 
-
- - Link zu "Unikat" (DONE)
- - Buch direkt bei Tanja oder wo es das gibt
-
-
-VEREIN
-
- - Vorstand
- - Wie alles begann
- - Erfoglsrechnung
- - GV Daten
-
-
-FOOTER
-
- - Just for us Link (DONE)
- - Statuten Link (DONE)
-
-
-PROJEKTE
-
- - 20for40
- - mbuzi
- - zürich meets tanzania
- - tanzania meets zürich
- - meducation
- - bajaji
-
-
-HOME
-
- - Alles wichtige aufgelistet
 
 
 KONTAKT
 
 vereb@gmx.net
+
+
+
+ZU BESPRECHEN
+
+=> Werbung vielleicht / eher nicht
