@@ -513,7 +513,8 @@ app.post("/post/submitNews", async (req, res) => {
     if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
     let b = req.body,
         status = 200;
-    await db.submitNews(b.text, b.img_path, b.img_alt, b.img_pos, b.btn, b.btn_text, b.btn_link, b.pdf, b.pdf_src)
+    let img_path = await imagekitUpload(b.img, b.img_alt.replaceAll(" ", "_"), "/news/");
+    await db.submitNews(b.text, img_path.path, b.img_alt, b.img_pos, b.btn, b.btn_text, b.btn_link, b.pdf, b.pdf_src)
         .catch(err => status = err);
     res.json({res: status});
 });

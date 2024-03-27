@@ -1222,7 +1222,7 @@ p.news-a-t {
     padding-right: 5vw;
     box-sizing: border-box;
     width: 100%;
-    height: 65vh;
+    min-height: 65vh;
     &:has(.news-cta) {
         display: flex;
         flex-direction: column;

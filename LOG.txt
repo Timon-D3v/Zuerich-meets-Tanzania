@@ -114,3 +114,7 @@ Time spent: 4:39h; Time worked: 4h;
 26.3.24
 Managementseite gestylet. Wenn man sich einloggt wird man direkt zur richtigen Seite weitergeleitet.
 Man kann jetzt Admins hinzufügen und entfernen. Man kommt jetzt zum Mitgliedschaftsbereich wenn man auf Mitglied drückt.
+
+27.3.24
+Ein paar Bug gefixt. Man kann jetzt bim Erstellen von neuen News Bilder hochladen, anstatt nur den Pfad anzugeben.
+Time worked: 1h; Time spent: 45min;

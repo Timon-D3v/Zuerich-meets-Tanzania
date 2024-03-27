@@ -54,7 +54,7 @@
             <div class="news-management container">
                 <h1 class="basic-title">News Verwaltung</h1>
                 <p class="basic-text">Hier können News verteilt werden.</p>
-                <form action="/post/submitNews" method="POST">
+                <form id="news_form" action="/post/submitNews" method="POST">
                     <label for="news_text" class="basic-label">Text</label>
                     <input type="text" class="basic-input" id="news_text" name="text" required>
                     <label for="news_pdf" class="basic-label">PDF oder Bild (Auswählen für PDF)</label>
@@ -64,8 +64,8 @@
                         <input type="text" class="basic-input" id="news_pdf_src" name="pdf_src">
                     </div>
                     <div id="show_img">
-                        <label for="news_img_path" class="basic-label">Link zum Bild</label>
-                        <input type="text" class="basic-input" id="news_img_path" name="img_path">
+                        <label for="news_img_file" class="basic-label">Bild</label>
+                        <input type="file" class="basic-input" id="news_img_file" name="img_file" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
                         <label for="news_img_alt" class="basic-label">Beschreibung des Bild</label>
                         <input type="text" class="basic-input" id="news_img_alt" name="img_alt">
                         <label for="news_img_pos" class="basic-label">Positionierung des Bildes (left, center oder right)</label>

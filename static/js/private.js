@@ -13,6 +13,8 @@ $("#hero_img_upload").on("change", async (e) => {
 	$("#hero_file_preview").attr("src", data);
 });
 
+$("#news_form").on("submit", admin_sendNews);
+
 $("#hero_img_upload_submit").click(async () => {
 	if (data === "") return;
 	let res = await fetch(window.location.origin + "/post/changeHeroImg", {
@@ -27,7 +29,7 @@ $("#hero_img_upload_submit").click(async () => {
 $("#submit-make-admin").click(async () => {
 	let username = $("#make-admin").val();
 	if (username === "") return alert("Bitte gib einen gültigen Benutzernamen ein.");
-	let res = await fetch("/post/makeAdmin", {
+	let res = await fetch(window.location.origin + "/post/makeAdmin", {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		mode: "cors",
@@ -42,7 +44,7 @@ $("#submit-make-admin").click(async () => {
 $("#submit-delete-admin").click(async () => {
 	let username = $("#delete-admin").val();
 	if (username === "") return alert("Bitte gib einen gültigen Benutzernamen ein.");
-	let res = await fetch("/post/deleteAdmin", {
+	let res = await fetch(window.location.origin + "/post/deleteAdmin", {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		mode: "cors",
@@ -62,4 +64,40 @@ function toggleDivs (toggler, first, second) {
     first.hide();
     second.hide();
     toggler.checked ? first.show() : second.show();
+};
+
+async function admin_sendNews (e) {
+	e.preventDefault();
+
+	let picture = await toBase64(
+		document.getElementById("news_img_file").files[0]
+	);
+
+	let res = await fetch(window.location.origin + "/post/submitNews", {
+		method: "POST",
+		headers: {"Content-Type": "application/json"},
+        mode: "cors",
+        cache: "default",
+		body: JSON.stringify({
+			text: $("#news_text").val(),
+			img: picture,
+			img_alt: $("#news_img_alt").val(),
+			img_pos: $("#news_img_pos").val(),
+			btn: document.getElementById("news_btn").checked.toString(),
+			btn_text: $("#news_btn_text").val(),
+			btn_link: $("#news_btn_link").val(),
+			pdf: document.getElementById("news_pdf").checked.toString(),
+			pdf_src: $("#news_pdf_src").val()
+		})
+	});
+
+	res = await res.json();
+
+	let message;
+
+	res.res === 200 ?
+	message = "Das hat geklappt. Die News sind jetzt online." :
+	message = "Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut";
+
+	alert(message);
 };

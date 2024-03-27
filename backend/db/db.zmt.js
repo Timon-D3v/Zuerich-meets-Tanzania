@@ -159,8 +159,8 @@ export async function getNews () {
 
 export async function submitNews (text, img_path, img_alt, img_pos, btn, btn_text, btn_link, pdf, pdf_src) {
     let query = "INSERT INTO `zmt`.`news` (`text`, `img_path`, `img_alt`, `img_pos`, `btn`, `btn_text`, `btn_link`, `pdf`, `pdf_src`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    btn === "on" ? btn = 1 : btn = 0;
-    pdf === "on" ? pdf = 1 : pdf = 0;
+    btn === "true" ? btn = 1 : btn = 0;
+    pdf === "true" ? pdf = 1 : pdf = 0;
     let [result] = await pool.query(query, [text, img_path, img_alt, img_pos, btn, btn_text, btn_link, pdf, pdf_src])
         .catch(err => {return err, console.error(err)});
     return result;
