@@ -1,6 +1,9 @@
 Add stuff to mitgliedschaft =>> NEED PAYMENT METHOD (Create a member sign up page)
 Newsletter => mail wenn aktuelles =>> NEED MAILJET
-Für Bilder ein Colagenbuilder machen
+Für Bilder ein Colagenbuilder machen =>> Erst nach Bestätigung
+Einige Mockups Designen und mit lorem ipsums und einen picture img füllen.
+Etwa 4-6 Designs wären top
+Alles bitte in jeweils ein eigenes Snippet
 
 
 KONTAKT

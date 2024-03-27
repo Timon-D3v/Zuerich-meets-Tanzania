@@ -209,7 +209,6 @@
                     bau.append(input);
                     let preview = document.createElement("img");
                     preview.id = id + "_2";
-                    preview.loading = "lazy";
                     preview.classList.add("blog_img");
                     input.addEventListener("change", (e) => {
                         const file = e.target.files[0];
@@ -424,7 +423,6 @@
                         let img = document.createElement("img");
                         ids.push(randomId());
                         img.classList.add(ids[ids.length - 1]);
-                        img.loading = "lazy";
                         img.id = ids[ids.length - 1];
                         ruler_img.push(img.id);
                         img.src = elm;

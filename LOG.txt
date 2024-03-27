@@ -1,7 +1,6 @@
 THIS IS MY PERSONAL LOG FILE FOR HOW MUCH I WORKED
 
 I will only count time I actually made progress, not the time I just thought.
-I suggest a loan of 15 CHF / h, but would preffer a offer for a fixed price.
 
 
 
@@ -119,3 +118,7 @@ Spent worked: 2h; Time worked: 2h;
 27.3.24
 Ein paar Bug gefixt. Man kann jetzt bim Erstellen von neuen News Bilder hochladen, anstatt nur den Pfad anzugeben.
 Time worked: 1h; Time spent: 45min;
+
+27.3.24
+Wieder ein paar Bugs gefixt. Hauptsächlich nicht programmiersachen gemacht (E-Mails, Mailjet Login...)
+Time worked: 1h30; Time spent: 1h10;
