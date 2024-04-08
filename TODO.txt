@@ -1,6 +1,10 @@
 Add stuff to Mitgliedschaft =>> NEED PAYMENT METHOD (Create a member sign up page)
+After payment method: Also make a part where you can buy Tanjas book directly on the Shop page
 Newsletter => mail wenn aktuelles =>> NEED MAILJET => NEED LOCAL SERVER
+
+
 Für Bilder ein Colagenbuilder machen =>> JA
+Move all sorts of stuff to the constants folder in a js file
 
 
 Für Static
