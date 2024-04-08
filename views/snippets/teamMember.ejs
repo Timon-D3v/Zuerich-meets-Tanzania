@@ -1,0 +1,35 @@
+<ul class="team-member"><% 
+                members.forEach(member => { %>
+                <li>
+                    <div class="member">
+                        <div class="preview">
+                            <img alt="<%= member.name + " " + member.family_name %>" src="<%= member.picture %>"><% 
+                            let position = member.position
+                            if (position !== "") position += ": " %>
+                            <h3><%= position + member.name + " " + member.family_name %></h3>
+                            <p><%= member.job %></p>
+                        </div>
+                        <div class="full">
+                            <p class="motivation"><%- member.motivation %></p><% 
+                            if (member.picture2) { %>
+                            <img alt="<%= member.name + " " + member.family_name %>" src="<%=
+                                member.picture.split("s/")[0] + "s/secondary/" + member.picture.split("s/")[1]
+                            %>"><% }; %>
+                        </div>
+                    </div>
+                </li>
+                <%
+                }); %>
+            </ul>
+            <script>
+                let team_member_previews = $(".team-member .member .preview");
+
+                for (let i = 0; i < team_member_previews.length; i++) {
+                    team_member_previews.eq(i).click(() => {
+                        let parent = team_member_previews.eq(i).parent();
+                        parent.hasClass("open") ?
+                        parent.removeClass("open") :
+                        parent.addClass("open");
+                    });
+                };
+            </script>

@@ -1,7 +1,10 @@
-/.hintrc
-/.env
-/_old/
-/README.docx
-/backend/backup/
-/cert/
-/private/
+.hintrc
+.env
+_old/
+README.docx
+backend/backup/
+cert/
+private/
+_Beiträge/
+.vscode/
+static/vid/

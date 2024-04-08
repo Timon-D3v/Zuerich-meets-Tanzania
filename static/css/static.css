@@ -422,6 +422,12 @@ label.static-checkbox.uiverse.hirachy-class {
     }
 }
 
+@media screen and  (min-width: 1200px) {}
+
+@media screen and  (min-width: 1000px) and (max-width: 1199px) {}
+
+@media screen and  (min-width: 750px) and (max-width: 999px) {}
+
 @media screen and (min-width: 575px) and (max-width: 749px) {
     .you {
         flex-direction: column;
@@ -445,6 +451,8 @@ label.static-checkbox.uiverse.hirachy-class {
         }
     }
 }
+
+@media screen and (max-width: 260px) {}
 
 @keyframes static_checkbox {
     0% {

@@ -293,13 +293,24 @@ img[src$=".svg"] {
     }
 }
 
+.title {
+    text-align: center;
+    margin: 0;
+    font-size: 2.75em;
+    text-decoration: underline;
+    padding: 0 5vw;
+    & ~ * {
+        margin-top: 5vh !important;
+    }
+}
+
 /*!
  * Hamburgers
  * @description Tasty CSS-animated hamburgers
  * @author Jonathan Suh @jonsuh
  * @site https://jonsuh.com/hamburgers
  * @link https://github.com/jonsuh/hamburgers
- * Untill next Comment
+ * Until next Comment
  */
 
 .hamburger {
@@ -1332,6 +1343,92 @@ p.news-a-t {
     }
 }
 
+.team-member {
+    box-sizing: border-box;
+    list-style: none;
+    margin: 10vh 0;
+    padding: 0;
+    border-bottom: solid var(--text-950) 4px;
+    & .member {
+        display: grid;
+        grid-template-rows: 20vh 0fr;
+        padding: 1vh 5vw;
+        border-top: solid var(--text-950) 4px;
+        transition: grid-template-rows 0.5s ease-out,
+                    color 0.2s, background-color 0.2s;
+        overflow-y: hidden;
+        & .preview {
+            padding-right: max(60px, 5vw);
+            margin: 0;
+            height: 20vh;
+            display: grid;
+            grid-template-rows: 10vh 10vh;
+            grid-template-columns: 20vh 1fr;
+            gap: 0 5vw;
+            position: relative;
+            cursor: pointer;
+            &::before,
+            &::after {
+                display: block;
+                content: "";
+                position: absolute;
+                right: 0;
+                top: calc(10vh - 2px);
+                background-color: var(--text-950);
+                height: 4px;
+                width: 40px;
+                transition: all 0.4s ease;
+            }
+            &::after {
+                transform: rotate(90deg);
+            }
+            & img {
+                grid-area: 1 / 1 / 3 / 2;
+                padding: 2vh;
+                box-sizing: border-box;
+                aspect-ratio: 1/1;
+                height: 20vh;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+            & h3 {
+                padding-top: 2vh;
+                padding-bottom: 1vh;
+                margin: 0;
+                font-size: 3vh;
+                line-height: 1.16666666666;
+            }
+            & p {
+                padding-top: 1vh;
+                padding-bottom: 2vh;
+                margin: 0;
+                font-size: calc(3vh / var(--font-ratio));
+            }
+        }
+        & .full {
+            overflow-y: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            & img {
+                max-width: 80%;
+                max-height: 40vh;
+                object-position: center;
+                border: solid var(--text-950) 2px;
+            }
+            & p {
+                font-size: calc(2.5vh / var(--font-ratio));
+            }
+        }
+        &.open {
+            grid-template-rows: 20vh 1fr;
+            & .preview::after {
+                transform: rotate(-180deg);
+            }
+        }
+    }
+}
+
 @media screen and (min-width: 1200px) {
     .h-t-b-m {
         display: none;
@@ -1705,6 +1802,15 @@ p.news-a-t {
             grid-area: 1 / 1 / 2 / 2;
         }
     }
+
+    .team-member .member .preview {
+        & h3 {
+            font-size: 2.5vh;
+        }
+        & p {
+            font-size: calc(2.5vh / var(--font-ratio));
+        }
+    }
 }
 
 @media screen and (max-width: 575px) {
@@ -1775,6 +1881,27 @@ p.news-a-t {
         }
         & > p {
             font-size: calc(20px / var(--font-ratio))
+        }
+    }
+
+    .team-member .member {
+        grid-template-rows: 40vh 0fr;
+        &.open {
+            grid-template-rows: 40vh 1fr;
+        }
+        & .preview {
+            grid-template-rows: 20vh 10vh 10vh;
+            grid-template-columns: 1fr;
+            place-items: center;
+            gap: 0;
+            height: 40vh;
+            &::before,
+            &::after {
+                top: calc(20vh - 2px);
+            }
+            & img {
+                grid-area: unset;
+            }
         }
     }
 

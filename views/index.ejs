@@ -35,6 +35,7 @@
                 pdf_src: news.pdf_src,
                 origin_url: origin_url
             }) %>
+            <h1 class="title">Blogbeiträge</h1>
             <%- include("./snippets/blogCards.ejs", {
                 title: undefined,
                 rows: 2,
@@ -64,6 +65,10 @@
                 ],
                 origin_url: origin_url
             }) %>
+            <h1 class="title">Unser Vorstand</h1>
+            <%- include("./snippets/teamMember.ejs", {
+                members: member_list
+            }); %>
         </main>
         <%- include("./snippets/footer.ejs", {
             origin_url: origin_url,

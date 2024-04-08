@@ -9,44 +9,12 @@ import https from "https";
 import cors from "cors";
 import fs from "fs";
 import * as db from "./backend/db/db.zmt.js";
+import BACKUP from "./backend/constants/backup.js";
+import ABOUT_US from "./backend/constants/admins.js";
 
 
-const LOAD_LEVEL = "dev", // Possible Values: "dev" or "prod"
-    BACKUP = {
-        BLOGS: [
-            {
-                title: "Fehler",
-                preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (1).jpg"]},
-            },
-            {
-                title: "Fehler",
-                preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (2).jpg"]},
-            },
-            {
-                title: "Fehler",
-                preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (3).jpg"]},
-            },
-            {
-                title: "Fehler",
-                preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-                img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (4).jpg"]},
-            }
-        ],
-        NEWS: {
-            text: "Keine Neuigkeiten",
-            img_path: "/img/stock/zebra.jpg",
-            img_alt: "Drei Zebras",
-            img_pos: "left",
-            btn: false,
-            btn_text: undefined,
-            btn_link: undefined,
-            pdf: false,
-            pdf_src: undefined
-        }
-    };
+
+const LOAD_LEVEL = "dev"; // Possible Values: "dev" or "prod"
 
 
 
@@ -148,7 +116,7 @@ function toRealDate (date) {
 			break;
 	};
 	return `${day}. ${month} ${year} um ${time}`;
-};;
+};
 
 function createMailSubject (obj) {
     return obj.author_name + " schreibt über Webseitenformular";
@@ -208,7 +176,12 @@ app.get("/", async (req, res) => {
         user: req.session.user,
         js: req.query.js,
         last4blogs: blogs,
-        news: news
+        news: news,
+
+
+
+        /* TEMP */
+        member_list: ABOUT_US.TEAM
     });
 });
 

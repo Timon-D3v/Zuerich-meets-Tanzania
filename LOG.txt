@@ -113,7 +113,7 @@ Time spent: 4:39h; Time worked: 4h;
 26.3.24
 Managementseite gestylet. Wenn man sich einloggt wird man direkt zur richtigen Seite weitergeleitet.
 Man kann jetzt Admins hinzufügen und entfernen. Man kommt jetzt zum Mitgliedschaftsbereich wenn man auf Mitglied drückt.
-Spent worked: 2h; Time worked: 2h;
+Spent worked: 3h; Time worked: 2h;
 
 27.3.24
 Ein paar Bug gefixt. Man kann jetzt bim Erstellen von neuen News Bilder hochladen, anstatt nur den Pfad anzugeben.
@@ -122,3 +122,7 @@ Time worked: 1h; Time spent: 45min;
 27.3.24
 Wieder ein paar Bugs gefixt. Hauptsächlich nicht programmiersachen gemacht (E-Mails, Mailjet Login...)
 Time worked: 1h30; Time spent: 1h10;
+
+8.4.24
+Habe die Mitgliederliste fertig gemacht und eine gute Lösung gefunden.
+Time worked: 3:15h; Time spent: 2:45h;
