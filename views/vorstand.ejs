@@ -22,13 +22,22 @@
         <%- include("./snippets/nav.ejs") %>
         <main>
             <%- include("./snippets/hero.ejs", {
-                img_alt: "Ein Shop in Tanzania",
-                img_path: "/img/common/shop/hero.jpg",
-                title: "Einzigartige Unikate",
-                subtitle: "All unsere Produkte können im Unikat Höngg bezogen werden.",
-                cta_text: "Zum Shop",
-                cta_link: "https://www.unikat-hoengg.ch"
+                img_alt: "Ein Bild des Teams",
+                img_path: "/img/common/vorstand/team.jpg",
+                title: "Der Vorstand",
+                subtitle: "Wir sind das Team für Ifisi!",
+                cta_text: "",
+                cta_link: ""
             }) %>
+            <h1 class="title margin-t-5vh w1000 w1200">Der Vorstand</h1>
+            <p class="text">
+                Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehrern. 
+                Eine bunt zusammengemischte Truppe engagierter, hilfsbereiter Leute. 
+                Erfahre auf dieser Seite mehr über unser Team, unsere Freunde in Mbalizi und unsere Partner.
+            </p>
+            <%- include("./snippets/teamMember.ejs", {
+                members: member_list
+            }); %>
         </main>
         <%- include("./snippets/footer.ejs", {
             origin_url: origin_url,

@@ -1,19 +1,12 @@
 Add stuff to Mitgliedschaft =>> NEED PAYMENT METHOD (Create a member sign up page)
-Newsletter => mail wenn aktuelles =>> NEED MAILJET
+Newsletter => mail wenn aktuelles =>> NEED MAILJET => NEED LOCAL SERVER
 Für Bilder ein Colagenbuilder machen =>> JA
 
 
 Für Static
- - Überarbeitbar (File oder Builder?)
+ - Überarbeitbar (File oder Builder?) => File => Aber alles wichtige us den EJS files nehmen und eine einzige JS Datei machen
  - Länge?
  - Erstellungsdatum ersichtlich!
-
-MEHR ANZEIGEN Text für zu lange Motivationen.
-ABOUT_US to a json file and access with filereader
-
-Einige Mockups Designen und mit lorem ipsums und einen picture img füllen.
-Etwa 4-6 Designs wären top
-Alles bitte in jeweils ein eigenes Snippet
 
 
 KONTAKT

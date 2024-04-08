@@ -299,9 +299,17 @@ img[src$=".svg"] {
     font-size: 2.75em;
     text-decoration: underline;
     padding: 0 5vw;
-    & ~ * {
+    & ~ *:not(p.text) {
         margin-top: 5vh !important;
     }
+}
+
+.text {
+    text-align: left;
+    word-break: normal;
+    word-wrap: break-word;
+    padding: 5vh 5vw;
+    margin: 0;
 }
 
 /*!
@@ -1412,7 +1420,7 @@ p.news-a-t {
             align-items: center;
             & img {
                 max-width: 80%;
-                max-height: 40vh;
+                max-height: 60vh;
                 object-position: center;
                 border: solid var(--text-950) 2px;
             }

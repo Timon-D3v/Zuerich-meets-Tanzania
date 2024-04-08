@@ -422,6 +422,10 @@ label.static-checkbox.uiverse.hirachy-class {
     }
 }
 
+.margin-t-5vh {
+    margin-top: 5vh;
+}
+
 @media screen and  (min-width: 1200px) {}
 
 @media screen and  (min-width: 1000px) and (max-width: 1199px) {}

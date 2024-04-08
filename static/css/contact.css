@@ -5,6 +5,8 @@
     padding: 5vh 4vw;
     gap: 1vh;
     background-color: var(--accent-300);
+    box-shadow: rgba(146, 211, 200, 0.4) 0px 5px, rgba(146, 211, 200, 0.3) 0px 10px, rgba(146, 211, 200, 0.2) 0px 15px, rgba(146, 211, 200, 0.1) 0px 20px, rgba(146, 211, 200, 0.05) 0px 25px, rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    border-radius: 5px;
     & label {
         font-size: 1.2rem;
         font-weight: bold;
@@ -25,7 +27,7 @@
 #contact-message {
     padding: 0.5em;
     border: 2px solid #ccc;
-    border-radius: 0.25em;
+    border-radius: 0.5em;
     color: var(--c-text-950);
     outline: none;
     &:focus {

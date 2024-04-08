@@ -177,10 +177,6 @@ app.get("/", async (req, res) => {
         js: req.query.js,
         last4blogs: blogs,
         news: news,
-
-
-
-        /* TEMP */
         member_list: ABOUT_US.TEAM
     });
 });
@@ -258,6 +254,38 @@ app.get("/contact", (req, res) => {
         title: "Kontakt",
         desc: "Über diese Seite kannst du uns ganz einfach kontaktieren, indem du uns eine E-Mail schreibst. Wir geben unser Bestes, so schnell wie möglich zu antworten.",
         sitetype: "contact",
+        user: req.session.user,
+        js: req.query.js
+    });
+});
+
+app.get("/board", (req, res) => res.redirect("/us"));
+app.get("/vorstand", (req, res) => res.redirect("/us"));
+app.get("/us", (req, res) => {
+    res.render("vorstand.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: "Mon Apr 08 2024 21:02:18 GMT+0200 (Mitteleuropäische Sommerzeit)",
+        title: "Vorstand",
+        desc: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren. Eine bunt zusammengemischte Truppe engagierter, hilfsbereiter Leute. Erfahre auf dieser Seite mehr über den Vorstand des Vereins",
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        member_list: ABOUT_US.TEAM
+    });
+});
+
+app.get("/statutes", (req, res) => res.redirect("/statuten"));
+app.get("/statuten", (req, res) => {
+    res.render("statuten.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: "Mon Apr 08 2024 22:07:50 GMT+0200 (Mitteleuropäische Sommerzeit)",
+        title: "Statuten",
+        desc: "Die Stauten des Vereins",
+        sitetype: "static",
         user: req.session.user,
         js: req.query.js
     });

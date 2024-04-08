@@ -171,8 +171,10 @@
     }
 }
 
-.hero-img {
-    filter: brightness(0.75);
+@media screen and (min-width: 1000px) {
+    .hero-img {
+        filter: brightness(0.75);
+    }
 }
 
 @media screen and (min-width: 750px) and (max-width: 1000px) {
