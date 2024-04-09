@@ -11,6 +11,7 @@ import fs from "fs";
 import * as db from "./backend/db/db.zmt.js";
 import BACKUP from "./backend/constants/backup.js";
 import ABOUT_US from "./backend/constants/admins.js";
+import STATUTEN from "./backend/constants/statuten.js";
 
 
 
@@ -287,7 +288,8 @@ app.get("/statuten", (req, res) => {
         desc: "Die Stauten des Vereins",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js
+        js: req.query.js,
+        statuten: STATUTEN
     });
 });
 
