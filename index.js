@@ -12,6 +12,7 @@ import * as db from "./backend/db/db.zmt.js";
 import BACKUP from "./backend/constants/backup.js";
 import ABOUT_US from "./backend/constants/admins.js";
 import STATUTEN from "./backend/constants/statuten.js";
+import VORSTAND from "./backend/constants/vorstand.js";
 
 
 
@@ -273,7 +274,8 @@ app.get("/us", (req, res) => {
         sitetype: "static",
         user: req.session.user,
         js: req.query.js,
-        member_list: ABOUT_US.TEAM
+        member_list: ABOUT_US.TEAM,
+        vorstand: VORSTAND
     });
 });
 

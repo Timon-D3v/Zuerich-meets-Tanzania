@@ -82,4 +82,5 @@ const STATUTEN = [
 ];
 
 
+
 export default STATUTEN;
