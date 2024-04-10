@@ -3,6 +3,7 @@
 :root {
     --font-ratio: 1.414;
     --basic-margin: 10vh 5vw;
+    --header-height: 80px;
 
     --c-text-50: #ecf3f8;
     --c-text-100: #d9e7f2;
@@ -240,6 +241,7 @@ header {
     box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
     gap: 5vw;
     width: 100%;
+    height: var(--header-height);
     z-index: 100;
 }
 
@@ -554,6 +556,7 @@ img[src$=".svg"] {
 main::before {
     display: block;
     content: "";
+    height: var(--header-height);
 }
 
 nav ul li > a:hover {
@@ -565,15 +568,18 @@ nav ul li > a:hover {
     font-weight: 600;
     line-height: 115px;
     letter-spacing: 1px;
-    margin: 40px 5vw;
+    margin: 0;
+    padding: 40px 5vw;
     text-align: center;
     &::after {
         display: block;
         content: "";
         width: 15vw;
         height: 10px;
-        margin-left: 37.5vw;
         background-color: var(--text-950);
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
@@ -1438,17 +1444,16 @@ p.news-a-t {
 }
 
 @media screen and (min-width: 1200px) {
+    :root {
+        --header-height: 140px;
+    }
+
     .h-t-b-m {
         display: none;
     }
 
     .w1200 {
         display: block;
-    }
-
-    header,
-    main::before {
-        height: 140px;
     }
 
     nav {
@@ -1519,7 +1524,7 @@ p.news-a-t {
         font-weight: 700;
         line-height: 125px;
         letter-spacing: 2px;
-        margin: 0;
+        padding: 0;
         transform: translateY(-50%);
         max-width: 90vw;
         color: var(--text-50);
@@ -1528,6 +1533,8 @@ p.news-a-t {
             display: block;
             content: "";
             position: absolute;
+            left: 0;
+            transform: none;
             top: 100%;
             width: 7.5vw;
             height: 10px;
@@ -1575,11 +1582,6 @@ p.news-a-t {
 }
 
 @media screen and (min-width: 1000px) and (max-width: 1199px) {
-    header,
-    main::before {
-        height: 80px;
-    }
-
     nav {
         top: 80px;
         height: calc(100% - 80px);
@@ -1643,7 +1645,7 @@ p.news-a-t {
         font-weight: 600;
         line-height: 115px;
         letter-spacing: 1px;
-        margin: 0;
+        padding: 0;
         transform: translateY(-50%);
         max-width: 90vw;
         color: var(--text-50);
@@ -1652,6 +1654,8 @@ p.news-a-t {
             display: block;
             content: "";
             position: absolute;
+            left: 0;
+            transform: none;
             top: 100%;
             width: 7.5vw;
             height: 10px;
@@ -1699,7 +1703,6 @@ p.news-a-t {
 }
 
 @media screen and (min-width: 750px) and (max-width: 999px) {
-
     .t-kontakt-btn {
         display: none;
     }
@@ -1713,11 +1716,6 @@ p.news-a-t {
 
     .news-img {
         width: 100%;
-    }
-
-    header,
-    main::before {
-        height: 80px;
     }
 
     nav {
@@ -1760,11 +1758,6 @@ p.news-a-t {
 }
 
 @media screen and (min-width: 575px) and (max-width: 749px) {
-    header,
-    main::before {
-        height: 80px;
-    }
-
     .news {
         flex-direction: column;
         & > .news-div {
@@ -1822,11 +1815,6 @@ p.news-a-t {
 }
 
 @media screen and (max-width: 575px) {
-    header,
-    main::before {
-        height: 80px;
-    }
-
     .news {
         flex-direction: column;
         & > .news-div {

@@ -277,7 +277,8 @@ app.get("/us", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         member_list: ABOUT_US.TEAM,
-        vorstand: VORSTAND
+        vorstand: VORSTAND,
+        toRealDate
     });
 });
 
@@ -293,7 +294,8 @@ app.get("/statuten", (req, res) => {
         sitetype: "static",
         user: req.session.user,
         js: req.query.js,
-        statuten: STATUTEN
+        statuten: STATUTEN,
+        toRealDate
     });
 });
 
@@ -312,7 +314,8 @@ app.get("/projects/meducation", (req, res) => {
         sitetype: "static",
         user: req.session.user,
         js: req.query.js,
-        meducation: MEDUCATION
+        meducation: MEDUCATION,
+        toRealDate
     });
 });
 
@@ -336,8 +339,33 @@ app.get("/projects/gyn%C3%A4kologie", (req, res) => {
         sitetype: "static",
         user: req.session.user,
         js: req.query.js,
-        gyno: GYNO
+        gyno: GYNO,
+        toRealDate
     });
+});
+
+app.get("/gallery/:id", (req, res) => res.redirect("/galerie/" + req.params.id));
+app.get("/galerie/:id", async (req, res) => {
+    /*let result = await db.getGalleyWhereTitle(req.params.id)
+        .catch(() => res.redirect("/"));
+    result = result?.[0];*/
+    let result = {img: {arr: [{src: "https://ik.imagekit.io/zmt/users/stefan", alt: "Logo"}, {src: "https://ik.imagekit.io/zmt/users/caterina", alt: "Logo 2"}]},
+                    title: "Titel",
+                subtitle: "Subtitle", date: Date()}
+    result ? res.render("gallery.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: result.date,
+        title: result.title,
+        desc: result.subtitle + " | Uploaded by " + result.author,
+        sitetype: "gallery",
+        user: req.session.user,
+        js: req.query.js,
+        img: result.img,
+        subtitle: result.subtitle,
+        toRealDate
+    }) : res.redirect("/");
 });
 
 app.get("/blog/:id", async (req, res) => {
@@ -395,6 +423,19 @@ app.get("/private/:id", async (req, res) => {
                 date: "Sat Feb 17 2024 11:53:24 GMT+0100 (Mitteleuropäische Normalzeit)",
                 title: "Blog Verfassen",
                 desc: "Hier können die Mitglieder des Vereins Blogposts erstellen.",
+                sitetype: "private",
+                user: req.session.user,
+                js: req.query.js
+            });
+            break;
+        case "imgBuilder":
+            res.render("private/img_builder.ejs", {
+                env: LOAD_LEVEL,
+                url: req.url,
+                origin_url: url,
+                date: "Wed Apr 10 2024 10:47:14 GMT+0200 (Mitteleuropäische Sommerzeit)",
+                title: "Bilderalbum hinzufügen",
+                desc: "Hier können die Mitglieder des Vereins Bilderalben erstellen.",
                 sitetype: "private",
                 user: req.session.user,
                 js: req.query.js

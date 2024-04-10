@@ -51,6 +51,7 @@
                 $("main p").addClass("text");
                 $("main h1").eq(0).removeClass("title");
             </script>
+            <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>
         <%- include("./snippets/footer.ejs", {
             origin_url: origin_url,

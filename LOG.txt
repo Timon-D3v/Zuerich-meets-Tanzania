@@ -130,3 +130,11 @@ Time spent: 3:15h; Time worked: 2:45h;
 8.4.24
 Statuten und die Vorstandseite fertiggestellt.
 Time spent: 2h; Time worked: 2h;
+
+10.4.24
+Meducation und Gynäkologie fertiggestellt.
+Time spent: 3h; Time worked: 2:30h;
+
+10.4.24
+Eine Gallery designt und erstellt. Backend folgt.
+Time spent: 3:20h: Time worked: 3:20h;

@@ -1,0 +1,100 @@
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2.5vw;
+    place-items: center;
+    margin: var(--basic-margin);
+    & > .gallery-container {
+        display: grid;
+        place-items: center;
+        position: relative;
+    }
+    & .gallery-img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 10px;
+        transition: all 0.25s ease;
+        &:hover,
+        &:has(~ .gallery-context-menu:hover) {
+            filter: brightness(65%) blur(1px);
+            transform: scale(1.1);
+            & ~ .gallery-context-menu {
+                display: grid;
+            }
+        }
+        & ~ .gallery-context-menu {
+            display: none;
+            position: absolute;
+            width: 100%;
+            aspect-ratio: 1/1;
+            place-items: center;
+            &:hover {
+                display: block;
+            }
+            & > p {
+                font-weight: bold;
+                font-size: 30px;
+                color: var(--c-text-50);
+                margin: 0;
+            }
+        }
+    }
+}
+
+.gallery-show {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: #24242493;
+    transition: all 0.25s ease;
+}
+
+.gallery-big {
+    position: absolute;
+    left: 50%;
+    top: calc(50% + var(--header-height) / 2);
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: calc((100% - var(--header-height)) * 0.9);
+    object-fit: contain;
+    object-position: center;
+}
+
+.gallery-next,
+.gallery-prev {
+    position: absolute;
+    top: calc(50% + var(--header-height) / 2);
+    width: clamp(40px, 5%, 1000px);
+    aspect-ratio: 1/1;
+    z-index: 10;
+    border: none;
+    border-radius: 50%;
+    background-position: center;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-color: #41403f;
+    &:hover {
+        background-color: #222121;
+    }
+    &:active {
+        background-color: #1a0f00;
+    }
+}
+
+.gallery-prev {
+    left: 5vw;
+    transform: translate(-50%, -50%);
+    background-image: url(../img/svg/carousel_toleft.svg);
+}
+
+.gallery-next {
+    right: 5vw;
+    transform: translate(50%, -50%);
+    background-image: url(../img/svg/carousel_toright.svg);
+}

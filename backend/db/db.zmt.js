@@ -195,3 +195,11 @@ export async function deleteAdmin (username) {
         catch(() => result = false);
     return result;
 };
+
+export async function getGalleyWhereTitle (title) {
+    let query = "SELECT * FROM `zmt`.`gallery` WHERE title = ?;";
+    let [result] = await pool.query(query, [title])
+        .catch(() => {throw new Error("Fehler");});
+    if (result == []) throw new Error("Seite nicht vorhanden (404)");
+    return result;
+};

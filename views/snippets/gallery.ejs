@@ -1,0 +1,14 @@
+<div class="gallery"><%
+    img.arr.forEach((elm, i) => { %>
+    <div class="gallery-container" id="gallery_<%= i %>">
+        <img class="gallery-img" alt="<%= elm.alt %>" src="<%= elm.src %>?tr=w-200,h-200" loading="lazy">
+        <div class="gallery-context-menu">
+            <p>Anzeigen!</p>
+        </div>
+    </div><% }); %>
+    <div class="gallery-show">
+        <img class="gallery-big" alt="" src="">
+        <button class="gallery-next" type="button"></button>
+        <button class="gallery-prev" type="button"></button>
+    </div>
+</div>

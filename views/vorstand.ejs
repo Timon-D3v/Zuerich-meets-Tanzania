@@ -34,6 +34,7 @@
             <%- include("./snippets/teamMember.ejs", {
                 members: member_list
             }); %>
+            <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>
         <%- include("./snippets/footer.ejs", {
             origin_url: origin_url,

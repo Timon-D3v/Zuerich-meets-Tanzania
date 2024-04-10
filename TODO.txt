@@ -4,7 +4,8 @@ Newsletter => mail wenn aktuelles =>> NEED MAILJET => NEED LOCAL SERVER
 
 
 Für Bilder ein Colagenbuilder machen =>> JA
-Move all sorts of stuff to the constants folder in a js file
+
+Create getGalleryWhereTitel function
 
 
 Für Static

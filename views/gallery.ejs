@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <link rel="stylesheet" href="/css/gallery.css">
+        <script type="text/javascript" src="/js/gallery.js" defer></script>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main><%
+            const randClr = () => {
+                let arr = [
+                    "--violett",
+                    "--error",
+                    "--green",
+                    "--dark-green",
+                    "--c-text-400",
+                    "--c-text-600",
+                    "--c-accent-700",
+                    "--c-primary-400",
+                    "--c-primary-700",
+                    "--c-secondary-500",
+                    "--c-secondary-700",
+                    "--c-background-400",
+                    "--c-background-800"
+                ];
+                return arr[Math.floor(Math.random() * arr.length)];
+            }; %>
+            <div class="hero" style="min-height: 400px; background-color: var(<%= randClr() %>)">
+                <h1 class="hero-title"><%- title %></h1>
+                <p class="hero-subtitle"><%- subtitle %></p>
+            </div>
+            <%- include("./snippets/gallery.ejs", {
+                img
+            }) %>
+            <p style="text-align: right; padding: 0 5vw;">Hochgeladen am <%= toRealDate(date) %></p>
+        </main>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>

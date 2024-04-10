@@ -33,6 +33,7 @@
             <p class="text"><%= gyno.abs1 %></p>
             <p class="text"><%= gyno.abs2 %></p>
             <p class="text"><%= gyno.abs3 %></p>
+            <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>
         <%- include("./snippets/footer.ejs", {
             origin_url: origin_url,

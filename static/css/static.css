@@ -426,6 +426,11 @@ label.static-checkbox.uiverse.hirachy-class {
     margin-top: 5vh;
 }
 
+.date {
+    text-align: right;
+    padding: 0 5vw;
+}
+
 @media screen and  (min-width: 1200px) {}
 
 @media screen and  (min-width: 1000px) and (max-width: 1199px) {}
