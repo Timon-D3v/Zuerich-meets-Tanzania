@@ -13,6 +13,8 @@ import BACKUP from "./backend/constants/backup.js";
 import ABOUT_US from "./backend/constants/admins.js";
 import STATUTEN from "./backend/constants/statuten.js";
 import VORSTAND from "./backend/constants/vorstand.js";
+import GYNO from "./backend/constants/gynäkologie.js";
+import MEDUCATION from "./backend/constants/meducation.js";
 
 
 
@@ -268,9 +270,9 @@ app.get("/us", (req, res) => {
         env: LOAD_LEVEL,
         url: req.url,
         origin_url: req.protocol + '://' + req.get('host'),
-        date: "Mon Apr 08 2024 21:02:18 GMT+0200 (Mitteleuropäische Sommerzeit)",
+        date: VORSTAND.aktualisiert,
         title: "Vorstand",
-        desc: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren. Eine bunt zusammengemischte Truppe engagierter, hilfsbereiter Leute. Erfahre auf dieser Seite mehr über den Vorstand des Vereins",
+        desc: VORSTAND.beschreibung,
         sitetype: "static",
         user: req.session.user,
         js: req.query.js,
@@ -285,13 +287,56 @@ app.get("/statuten", (req, res) => {
         env: LOAD_LEVEL,
         url: req.url,
         origin_url: req.protocol + '://' + req.get('host'),
-        date: "Mon Apr 08 2024 22:07:50 GMT+0200 (Mitteleuropäische Sommerzeit)",
+        date: STATUTEN.aktualisiert,
         title: "Statuten",
         desc: "Die Stauten des Vereins",
         sitetype: "static",
         user: req.session.user,
         js: req.query.js,
         statuten: STATUTEN
+    });
+});
+
+app.get("/p/meducation", (req, res) => res.redirect("/projects/meducation"));
+app.get("/Projekte/meducation", (req, res) => res.redirect("/projects/meducation"));
+app.get("/projekte/meducation", (req, res) => res.redirect("/projects/meducation"));
+app.get("/meducation", (req, res) => res.redirect("/projects/meducation"));
+app.get("/projects/meducation", (req, res) => {
+    res.render("meducation.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: MEDUCATION.aktualisiert,
+        title: "Meducation",
+        desc: MEDUCATION.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        meducation: MEDUCATION
+    });
+});
+
+app.get("/projects/gyno", (req, res) => res.redirect("/projects/gynäkologie"));
+app.get("/p/gyno", (req, res) => res.redirect("/projects/gynäkologie"));
+app.get("/Projekte/gyno", (req, res) => res.redirect("/projects/gynäkologie"));
+app.get("/projekte/gyno", (req, res) => res.redirect("/projects/gynäkologie"));
+app.get("/gyno", (req, res) => res.redirect("/projects/gynäkologie"));
+app.get("/p/gyn%C3%A4kologie", (req, res) => res.redirect("/projects/gynäkologie"));
+app.get("/Projekte/gyn%C3%A4kologie", (req, res) => res.redirect("/projects/gynäkologie"));
+app.get("/projekte/gyn%C3%A4kologie", (req, res) => res.redirect("/projects/gynäkologie"));
+app.get("/gyn%C3%A4kologie", (req, res) => res.redirect("/projects/gynäkologie"));
+app.get("/projects/gyn%C3%A4kologie", (req, res) => {
+    res.render("gyno.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: GYNO.aktualisiert,
+        title: "Meducation",
+        desc: GYNO.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        gyno: GYNO
     });
 });
 

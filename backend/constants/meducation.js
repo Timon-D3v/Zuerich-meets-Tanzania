@@ -8,6 +8,8 @@
  * Titel müssen am Anfang immer ein <h1> und am Ende ein </h1>.
  * Untertitel genau gleich, aber mit einem <h2> und </h2>.
  * Normaler Text befindet sich in <p> und </p>.
+ * "beschreibung" ist eine kurze Beschreibung, worin es auf der Seite geht.
+ * "aktualisiert" sollte immer das Datum der Bearbeitung haben.
  * Es gibt allerdings einige Ausnahmen:
  * - Die Zeichen < und > müssen als &lt; und &gt; geschrieben werden. (Ausser schon bestehende)
  * - Es keine Absätze gemacht werden, falls der Text trotzdem welche braucht kann dafür ein <br> verwendet werden.
@@ -19,6 +21,8 @@
  * 
 */
 const MEDUCATION = {
+    beschreibung: "Das Projekt Meducation, welches 2017 gegründet wurde, sorgt für eine gezielt Aus- und Weiterbildung des örtlichen Personals in Ifisi.",
+    aktualisiert: "Wed Apr 10 2024 09:32:14 GMT+0200 (Mitteleuropäische Sommerzeit)",
     titel: "Meducation",
     abs1: "Mit ein Zweck der Gründung unseres Vereins 2017 war es, mit dem gespendeten Geld gezielt die Aus- und Weiterbildung von örtlichem Personal zu fördern.",
     abs2: "Unter dem label «meducation» haben aktuell neun Personen ihre Ausbildung beendet und sind, sofern sie schon vorher am Spital in Ifisi gearbeitet haben, auch dahin zurückgekehrt. Drei Personen sollten dieses, vier nächstes Jahr die Fortbildung abschliessen.",

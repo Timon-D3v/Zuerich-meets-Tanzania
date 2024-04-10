@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <style type="text/css">
+            @media screen and (min-width: 1000px) {
+                .hero-img {
+                    filter: brightness(0.75);
+                }
+            }
+
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                margin: 5vh 5vw;
+                width: calc(100% - 10vw);
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            td, th {
+                border: 1px solid var(--text-950);
+                text-align: left;
+                padding: 8px;
+                color: var(--text-950);
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+
+            :root[data-theme="dark"] tr:nth-child(even) {
+                background-color: #7c7c7c;
+            }
+        </style>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main>
+            <%- include("./snippets/hero.ejs", {
+                img_alt: "Ein Bild des Teams",
+                img_path: "/img/content/meducation.jpg",
+                title: meducation.titel,
+                subtitle: "",
+                cta_text: "",
+                cta_link: ""
+            }) %>
+            <h1 class="title margin-t-5vh w1000 w1200"><%= meducation.titel %></h1>
+            <p class="text"><%= meducation.abs1 %><br><%= meducation.abs2 %><br><%= meducation.abs3 %><br><%= meducation.abs4 %><br><%= meducation.abs5 %></p>
+            <h2 class="title">Abgeschlossene Ausbildung:</h2>
+            <div class="table-container">
+                <table><%
+                meducation.tabelle1.forEach((elm, i) => { 
+                    if (i === 0) { %>
+                    <tr>
+                        <th></th>
+                        <th><%= elm[1] %></th>
+                        <th><%= elm[2] %></th>
+                        <th><%= elm[3] %></th>
+                    </tr>
+                <%  } else { %>
+                    <tr>
+                        <td><%= i + "." %></td>
+                        <td><%= elm[1] %></td>
+                        <td><%= elm[2] %></td>
+                        <td><%= elm[3] %></td>
+                    </tr>
+                <%  };
+                }); %>
+                </table>
+            </div>
+            <h2 class="title">Ausstehende Ausbildung:</h2>
+            <div class="table-container">
+                <table><%
+                meducation.tabelle2.forEach((elm, i) => { 
+                    if (i === 0) { %>
+                    <tr>
+                        <th></th>
+                        <th><%= elm[1] %></th>
+                        <th><%= elm[2] %></th>
+                        <th><%= elm[3] %></th>
+                    </tr>
+                <%  } else { %>
+                    <tr>
+                        <td><%= i + "." %></td>
+                        <td><%= elm[1] %></td>
+                        <td><%= elm[2] %></td>
+                        <td><%= elm[3] %></td>
+                    </tr>
+                <%  };
+                }); %>
+                </table>
+            </div>
+        </main>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>

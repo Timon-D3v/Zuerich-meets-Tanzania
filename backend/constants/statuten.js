@@ -8,6 +8,7 @@
  * Titel müssen am Anfang immer ein <h1> und am Ende ein </h1>.
  * Untertitel genau gleich, aber mit einem <h2> und </h2>.
  * Normaler Text befindet sich in <p> und </p>.
+ * "aktualisiert" sollte immer das Datum der Bearbeitung haben.
  * Es gibt allerdings einige Ausnahmen:
  * - Die Zeichen < und > müssen als &lt; und &gt; geschrieben werden. (Ausser schon bestehende)
  * - Es keine Absätze gemacht werden, falls der Text trotzdem welche braucht kann dafür ein <br> verwendet werden.
