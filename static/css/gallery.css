@@ -4,12 +4,14 @@
     gap: 2.5vw;
     place-items: center;
     margin: var(--basic-margin);
-    & > .gallery-container {
+    & > .gallery-container,
+    & > .gallery-container-vid {
         display: grid;
         place-items: center;
         position: relative;
     }
-    & .gallery-img {
+    & .gallery-img,
+    & .gallery-vid {
         width: 100%;
         aspect-ratio: 1/1;
         object-fit: cover;
@@ -43,7 +45,8 @@
     }
 }
 
-.gallery-show {
+.gallery-show,
+.gallery-cinema {
     display: none;
     position: fixed;
     top: 0;
@@ -55,7 +58,8 @@
     transition: all 0.25s ease;
 }
 
-.gallery-big {
+.gallery-big,
+.gallery-big-vid {
     position: absolute;
     left: 50%;
     top: calc(50% + var(--header-height) / 2);
@@ -67,7 +71,9 @@
 }
 
 .gallery-next,
-.gallery-prev {
+.gallery-prev,
+.gallery-next-vid,
+.gallery-prev-vid {
     position: absolute;
     top: calc(50% + var(--header-height) / 2);
     width: clamp(40px, 5%, 1000px);
@@ -87,13 +93,15 @@
     }
 }
 
-.gallery-prev {
+.gallery-prev,
+.gallery-prev-vid {
     left: 5vw;
     transform: translate(-50%, -50%);
     background-image: url(../img/svg/carousel_toleft.svg);
 }
 
-.gallery-next {
+.gallery-next,
+.gallery-next-vid {
     right: 5vw;
     transform: translate(50%, -50%);
     background-image: url(../img/svg/carousel_toright.svg);

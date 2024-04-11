@@ -11,4 +11,23 @@
         <button class="gallery-next" type="button"></button>
         <button class="gallery-prev" type="button"></button>
     </div>
-</div>
+</div><% 
+if (img.vid.length > 0) { %>
+<h1 class="title">Videos</h1>
+<div class="gallery"><%
+    img.vid.forEach((elm, i) => { %>
+    <div class="gallery-container-vid" id="galleryvid_<%= i %>">
+        <video class="gallery-vid" alt="<%= elm.alt %>" src="<%= 
+            origin_url + "/" + elm.src.split("\\static\\").pop().replaceAll("\\", "/") 
+            %>" loading="lazy" type="<%= elm.type %>"></video>
+        <div class="gallery-context-menu">
+            <p>Abspielen!</p>
+        </div>
+    </div><% }); %>
+    <div class="gallery-cinema">
+        <video class="gallery-big-vid" alt="" src="" type="" controls></video>
+        <button class="gallery-next-vid" type="button"></button>
+        <button class="gallery-prev-vid" type="button"></button>
+    </div>
+</div><% 
+}; %>

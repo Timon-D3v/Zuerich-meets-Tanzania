@@ -3,10 +3,6 @@ After payment method: Also make a part where you can buy Tanjas book directly on
 Newsletter => mail wenn aktuelles =>> NEED MAILJET => NEED LOCAL SERVER
 
 
-Für Bilder ein Colagenbuilder machen =>> JA
-=> Noch Funktion für Videos hinzufügen
-
-
 Für Static
  - Überarbeitbar (File oder Builder?) => File => Aber alles wichtige us den EJS files nehmen und eine einzige JS Datei machen
  - Länge?
