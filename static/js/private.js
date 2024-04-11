@@ -61,13 +61,20 @@ $("#gallery_img_upload_submit").click(async () => {
 		subtitle = $("#gallery_subtitle").val(),
 		author = $("#username").val();
 	if (title === "") return alert("Fülle alle Felder aus.");
-	let img = {arr: []};
+	let img = {arr: [], vid: []};
 	let files = document.getElementById("gallery_img_upload").files;
 	if (files.length === 0) return alert("Keine Bilder hochgeladen.");
 	for (let i = 0; i < files.length; i++) {
-		let obj = {alt: title + "_" + i.toString()};
-		obj.src = await toBase64(files[i]);
-		img.arr.push(obj);
+		let obj = {
+			alt: title + "_" + i.toString(),
+			src: await toBase64(files[i])
+		};
+		if (files[i].type.startsWith('video/')) {
+			obj.type = files[i].type;
+			img.vid.push(obj);
+		} else {
+			img.arr.push(obj);
+		};
 	};
 	let res = await fetch(window.location.origin + "/post/createGallery", {
 		method: "POST",

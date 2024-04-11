@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </label>
-            <input style="display: none;" type="file" id="basic_img" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
+            <input style="display: none;" type="file" id="basic_img" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
             <input type="text" id="basic_alt" placeholder="Beschreibe das Titelbild kurz (3-5 Wörter)" class="basic-input">
             <script>
                 $("#basic_img").on("change", async (e) => {
@@ -131,7 +131,7 @@
                     input1.setAttribute("type", "text");
                     input1.placeholder = "Paragraf";
                     input2.setAttribute("type", "file");
-                    input2.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr";
+                    input2.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico";
                     input2.placeholder = "Bild";
                     input3.setAttribute("type", "text");
                     input3.placeholder = "Kurze Beschriebung des Bildes (ca. 3-5 Wörter)";
@@ -201,7 +201,7 @@
                     let input = document.createElement("input");
                     input.setAttribute("type", "file");
                     input.classList.add("basic-input");
-                    input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr";
+                    input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico";
                     input.placeholder = "Bild";
                     let id = randomId();
                     ids.push(id);
@@ -238,7 +238,7 @@
                     let input = document.createElement("input");
                     input.classList.add("basic-input");
                     input.setAttribute("multiple", "true");
-                    input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr";
+                    input.accept = "image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico";
                     input.setAttribute("type", "file");
                     input.placeholder = "Bild";
                     let id = randomId();

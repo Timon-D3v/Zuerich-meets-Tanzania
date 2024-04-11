@@ -7,7 +7,10 @@ import Stripe from "stripe";
 import dotenv from "dotenv";
 import https from "https";
 import cors from "cors";
+import path from "path";
 import fs from "fs";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 import * as db from "./backend/db/db.zmt.js";
 import BACKUP from "./backend/constants/backup.js";
 import ABOUT_US from "./backend/constants/admins.js";
@@ -136,6 +139,17 @@ function createMailText (obj) {
     let footer2 = "Timon Fiedler ist nicht verantwortlich für eventuellen Spam oder andere Fehler, die durch den Endnutzer entstehen.";
     let part2 = `${divider}\n\n${obj.message}\n\n${divider}\n${adress}\n${divider}\n\n${footer1}\n${footer2}`;
     return `${obj.author_name} ${obj.author_family_name} schreibt am ${date}: \n${part2}`;
+};
+
+async function saveVideo (base64, type) {
+    type === "video/mp4" ?
+    type = ".mp4" :
+    type = ".mov";
+    const video = path.resolve(dirname(fileURLToPath(import.meta.url)), `./static/vid/${randomId() + type}`);
+    fs.writeFile(video, base64.split(';base64,').pop(), "base64", err => {
+        if (err) console.error('Error saving video:', err);
+    });
+    return video;
 };
 
 
@@ -645,6 +659,9 @@ app.post("/post/createGallery", async (req, res) => {
     for (let i = 0; i < img.arr.length; i++) {
         let {path} = await imagekitUpload(img.arr[i].src, img.arr[i].alt + "___" + randomId(), `/gallery/`);
         img.arr[i].src = path;
+    };
+    for (let i = 0; i < img.vid.length; i++) {
+        img.vid[i].src = await saveVideo(img.vid[i].src, img.vid[i].type);
     };
     let result = await db.createGallery(b.title, b.subtitle, b.author, img)
         .catch(err => {return err});

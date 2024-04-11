@@ -65,7 +65,7 @@
                     </div>
                     <div id="show_img">
                         <label for="news_img_file" class="basic-label">Bild</label>
-                        <input type="file" class="basic-input" id="news_img_file" name="img_file" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
+                        <input type="file" class="basic-input" id="news_img_file" name="img_file" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
                         <label for="news_img_alt" class="basic-label">Beschreibung des Bild</label>
                         <input type="text" class="basic-input" id="news_img_alt" name="img_alt">
                         <label for="news_img_pos" class="basic-label">Positionierung des Bildes (left, center oder right)</label>
@@ -95,7 +95,7 @@
                         </div>
                     </div>
                 </label>
-                <input style="display: none;" type="file" id="hero_img_upload" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
+                <input style="display: none;" type="file" id="hero_img_upload" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
                 <button type="button" id="hero_img_upload_submit" class="basic-button">Hochladen</button>
             </div>
             <div class="container">
@@ -122,7 +122,7 @@
                     </div>
                 </label>
                 <input type="text" value="<%= user.name + " " + user.family_name %>" style="display: none;" id="username">
-                <input style="display: none;" type="file" id="gallery_img_upload" multiple accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
+                <input style="display: none;" type="file" id="gallery_img_upload" multiple accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico, video/mp4, video/quicktime">
                 <input type="text" class="basic-input" id="gallery_title" placeholder="Titel" required>
                 <input type="text" class="basic-input" id="gallery_subtitle" placeholder="Beschreibung" required>
                 <button type="button" id="gallery_img_upload_submit" class="basic-button">Hochladen</button>
