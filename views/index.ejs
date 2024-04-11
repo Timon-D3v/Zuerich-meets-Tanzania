@@ -15,13 +15,13 @@
         <%- include("./snippets/nav.ejs") %>
         <main>
             <%- include("./snippets/hero.ejs", {
-                img_alt: "Echse auf einem Stein",
+                img_alt: "Das Titelbild unserer Seite",
                 img_path: "https://ik.imagekit.io/zmt/assets/hero?timestamp=" + Date().toString(),
-                title: "Medizinische Hilfe<br>in Tanzania",
-                subtitle: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren.",
-                cta_text: "Mehr erfahren",
-                cta_link: origin_url,
-                origin_url: origin_url
+                title: hero.title,
+                subtitle: hero.subtitle,
+                cta_text: hero.button_text,
+                cta_link: hero.link,
+                origin_url
             }) %>
             <%- include("./snippets/news.ejs", {
                 text: news.text,
@@ -65,7 +65,7 @@
                 ],
                 origin_url: origin_url
             }) %>
-            <h1 class="title">Unser Vorstand</h1>
+            <h1 class="title" id="scroll_to_vorstand">Unser Vorstand</h1>
             <%- include("./snippets/teamMember.ejs", {
                 members: member_list
             }); %>

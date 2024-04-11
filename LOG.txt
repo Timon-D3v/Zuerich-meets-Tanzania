@@ -138,3 +138,7 @@ Time spent: 3h; Time worked: 2:30h;
 10.4.24
 Eine Gallery designt und erstellt. Backend folgt.
 Time spent: 3:20h: Time worked: 3:20h;
+
+11.4.24
+Navigationslinks für die Galerie hinzugefügt. Buxfixes.
+Time spent: 1:30h; Time worked: 1:15h;

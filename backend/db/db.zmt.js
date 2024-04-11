@@ -3,10 +3,6 @@ import dotenv from "dotenv";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { transcode } from "buffer";
-import { query } from "express";
-import exp from "constants";
-
 
 
 dotenv.config({path: path.resolve(dirname(fileURLToPath(import.meta.url)), "../../.env")});
@@ -201,5 +197,20 @@ export async function getGalleyWhereTitle (title) {
     let [result] = await pool.query(query, [title])
         .catch(() => {throw new Error("Fehler");});
     if (result == []) throw new Error("Seite nicht vorhanden (404)");
+    return result;
+};
+
+export async function createGallery (title, subtitle, author, img) {
+    let query = "INSERT INTO `zmt`.`gallery` (`author`, `title`, `subtitle`, `date`, `img`) VALUES (?, ?, ?, ?, ?);",
+        error;
+    await pool.query(query, [author, title, subtitle, Date().toString(), JSON.stringify(img)])
+        .catch(err => {error = err});
+    return error;
+};
+
+export async function getLastXGalleryLinks (x) {
+    let query = "SELECT title from `zmt`.`gallery` ORDER BY `id` DESC LIMIT " + x.toString() + ";";
+    let [result] = await pool.query(query)
+        .catch(() => {throw new Error("Fehler");});
     return result;
 };

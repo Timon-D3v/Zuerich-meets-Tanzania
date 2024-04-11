@@ -4,8 +4,7 @@ Newsletter => mail wenn aktuelles =>> NEED MAILJET => NEED LOCAL SERVER
 
 
 Für Bilder ein Colagenbuilder machen =>> JA
-
-Create getGalleryWhereTitel function
+=> Noch Funktion für Videos hinzufügen
 
 
 Für Static

@@ -16,7 +16,7 @@ $("#hero_img_upload").on("change", async (e) => {
 $("#news_form").on("submit", admin_sendNews);
 
 $("#hero_img_upload_submit").click(async () => {
-	if (data === "") return;
+	if (data === "") return alert("Kein Bild hochgeladen.");
 	let res = await fetch(window.location.origin + "/post/changeHeroImg", {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
@@ -53,6 +53,37 @@ $("#submit-delete-admin").click(async () => {
 	});
 	res = await res.json();
 	if (res.good) return alert(username + " ist jetzt kein Admin mehr.");
+	alert("Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut.");
+});
+
+$("#gallery_img_upload_submit").click(async () => {
+	let title = $("#gallery_title").val(),
+		subtitle = $("#gallery_subtitle").val(),
+		author = $("#username").val();
+	if (title === "") return alert("Fülle alle Felder aus.");
+	let img = {arr: []};
+	let files = document.getElementById("gallery_img_upload").files;
+	if (files.length === 0) return alert("Keine Bilder hochgeladen.");
+	for (let i = 0; i < files.length; i++) {
+		let obj = {alt: title + "_" + i.toString()};
+		obj.src = await toBase64(files[i]);
+		img.arr.push(obj);
+	};
+	let res = await fetch(window.location.origin + "/post/createGallery", {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		mode: "cors",
+		cache: "default",
+		body: JSON.stringify({
+			title,
+			subtitle,
+			author,
+			img
+		}),
+	});
+	res = await res.json();
+	res.error === "OK" ?
+	alert("Galerie erfolgreich hochgeladen.") :
 	alert("Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut.");
 });
 

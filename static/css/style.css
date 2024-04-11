@@ -209,6 +209,7 @@ body {
     margin: 0;
     color: var(--text-950);
     background-color: var(--background-50);
+    scroll-behavior: smooth;
 }
 
 p, a, li, ul, ol, label, input, input::placeholder,
@@ -568,8 +569,9 @@ nav ul li > a:hover {
     font-weight: 600;
     line-height: 115px;
     letter-spacing: 1px;
+    box-sizing: border-box;
+    padding: 40px 5VW;
     margin: 0;
-    padding: 40px 5vw;
     text-align: center;
     &::after {
         display: block;
@@ -579,6 +581,7 @@ nav ul li > a:hover {
         background-color: var(--text-950);
         position: relative;
         left: 50%;
+        bottom: 0;
         transform: translateX(-50%);
     }
 }

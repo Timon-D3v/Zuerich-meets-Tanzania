@@ -98,6 +98,35 @@
                 <input style="display: none;" type="file" id="hero_img_upload" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
                 <button type="button" id="hero_img_upload_submit" class="basic-button">Hochladen</button>
             </div>
+            <div class="container">
+                <label for="make-admin" class="basic-label">Zum Admin ernennen:</label>
+                <p class="basic-text">Gib einen Benutzernamen ein um ihn zum Admin zu ernennen.</p>
+                <input type="text" class="basic-input" id="make-admin" placeholder="Benutzername">
+                <button type="button" id="submit-make-admin" class="basic-button">Ernennen</button>
+                <br>
+                <label for="delete-admin" class="basic-label">Adminrechte entfernen:</label>
+                <p class="basic-text">Gib einen Benutzernamen ein um ihm die Adminrechte zu entfernen.</p>
+                <input type="text" class="basic-input" id="delete-admin" placeholder="Benutzername">
+                <button type="button" id="submit-delete-admin" class="basic-button">Entfernen</button>
+            </div>
+            <div class="container">
+                <h1 class="basic-title">Neue Bildergalerie hochladen</h1>
+                <label for="gallery_img_upload" id="picture_overlay">
+                    <div class="custom-file-upload">
+                        <div class="icon">
+                            <img alt="Eine Datei" src="/img/svg/file.svg">
+                        </div>
+                        <div class="text">
+                            <span>Klicken um Bilder hochzuladen</span>
+                        </div>
+                    </div>
+                </label>
+                <input type="text" value="<%= user.name + " " + user.family_name %>" style="display: none;" id="username">
+                <input style="display: none;" type="file" id="gallery_img_upload" multiple accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/psd, image/eps, image/ai, image/indd, image/raw, image/bpm, image/webp, image/svg, image/ico, image/heif, image/wmf, image/emf, image/tga, image/hdr">
+                <input type="text" class="basic-input" id="gallery_title" placeholder="Titel" required>
+                <input type="text" class="basic-input" id="gallery_subtitle" placeholder="Beschreibung" required>
+                <button type="button" id="gallery_img_upload_submit" class="basic-button">Hochladen</button>
+            </div>
             <div class="user-management container">
                 <h1 class="basic-title">Benutzerliste</h1>
                 <div class="table-container">
@@ -163,17 +192,6 @@
                         <% };}); %>
                     </table>
                 </div>
-            </div>
-            <div class="container">
-                <label for="make-admin" class="basic-label">Zum Admin ernennen:</label>
-                <p class="basic-text">Gib einen Benutzernamen ein um ihn zum Admin zu ernennen.</p>
-                <input type="text" class="basic-input" id="make-admin" placeholder="Benutzername">
-                <button type="button" id="submit-make-admin" class="basic-button">Ernennen</button>
-                <br>
-                <label for="delete-admin" class="basic-label">Adminrechte entfernen:</label>
-                <p class="basic-text">Gib einen Benutzernamen ein um ihm die Adminrechte zu entfernen.</p>
-                <input type="text" class="basic-input" id="delete-admin" placeholder="Benutzername">
-                <button type="button" id="submit-delete-admin" class="basic-button">Entfernen</button>
             </div>
         </main>
         <%- include("../snippets/footer.ejs", {origin_url: origin_url}) %>

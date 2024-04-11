@@ -20,7 +20,8 @@ const root = $(":root"),
 	f_a_h = $("#newsletter-anrede-herr"),
 	f_a_f = $("#newsletter-anrede-frau");
 
-let	num_of_title = 5;
+let	num_of_title = 5,
+	num_of_gallery = 5;
 
 $("#menu").click(() => {
 	$("#menu").toggleClass("is-active");
@@ -328,6 +329,45 @@ async function getBlogTitle (num) {
 	});
 };
 getBlogTitle(num_of_title);
+
+async function getGalleryTitle (num) {
+	let res = await fetch(window.location.origin + "/post/gallery/getLinks/" + num.toString(), {
+		method: "POST",
+		headers: {"Content-Type": "application/json"},
+        mode: "cors",
+        cache: "default"
+	});
+	res = await res.json();
+	[
+		$(".n-t li .n-t-details ul").eq(3),
+		$(".n-m li .n-t-details ul").eq(3),
+		$(".n-foldable4 ul")
+	].forEach(container => {
+		container.html("");
+		res.title.forEach(elm => {
+			let li = document.createElement("li");
+			let a = document.createElement("a");
+			a.href = window.location.origin + "/gallery/" + elm.title;
+			a.innerText = elm.title;
+			container.append(li);
+			$(li).append(a);
+		});
+		if (res.title.length === num) {
+			let a = document.createElement("a");
+			let li = document.createElement("li");
+			a.href = "#";
+			a.innerText = "Weitere";
+			a.onclick = (e) => {
+				e.preventDefault();
+				num_of_gallery += 5;
+				getBlogTitle(num_of_gallery);
+			};
+			container.append(li);
+			$(li).append(a);
+		};
+	});
+};
+getGalleryTitle(num_of_gallery);
 
 $("#darkmode").click(changeTheme);
 $("#newsletter-submit").click(newsletterSignUp);

@@ -15,6 +15,7 @@ import STATUTEN from "./backend/constants/statuten.js";
 import VORSTAND from "./backend/constants/vorstand.js";
 import GYNO from "./backend/constants/gynäkologie.js";
 import MEDUCATION from "./backend/constants/meducation.js";
+import HERO from "./backend/constants/heropage.js";
 
 
 
@@ -50,19 +51,20 @@ const stripe = Stripe(process.env.STRIPE_PRIVAT_KEY);
 
 
 async function imagekitUpload (base64, name, folder) {
-    let res;
+    let res, fileName = name.replace(/[:\/\\<>{}?]/g, "_").replaceAll(" ", "_");
     imagekit.upload({
         file: base64,
-        fileName: name,
+        fileName,
         folder: folder,
         useUniqueFileName: false
     },
     (err, result) => {
         err ? res = err : res = result;
     });
+    let path = "https://ik.imagekit.io/zmt" + folder + fileName;
     return {
-        path: "https://ik.imagekit.io/zmt" + folder + name,
-        res: res
+        path,
+        res
     };
 };
 
@@ -181,7 +183,8 @@ app.get("/", async (req, res) => {
         js: req.query.js,
         last4blogs: blogs,
         news: news,
-        member_list: ABOUT_US.TEAM
+        member_list: ABOUT_US.TEAM,
+        hero: HERO
     });
 });
 
@@ -346,12 +349,9 @@ app.get("/projects/gyn%C3%A4kologie", (req, res) => {
 
 app.get("/gallery/:id", (req, res) => res.redirect("/galerie/" + req.params.id));
 app.get("/galerie/:id", async (req, res) => {
-    /*let result = await db.getGalleyWhereTitle(req.params.id)
+    let result = await db.getGalleyWhereTitle(req.params.id)
         .catch(() => res.redirect("/"));
-    result = result?.[0];*/
-    let result = {img: {arr: [{src: "https://ik.imagekit.io/zmt/users/stefan", alt: "Logo"}, {src: "https://ik.imagekit.io/zmt/users/caterina", alt: "Logo 2"}]},
-                    title: "Titel",
-                subtitle: "Subtitle", date: Date()}
+    result = result?.[0];
     result ? res.render("gallery.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -423,19 +423,6 @@ app.get("/private/:id", async (req, res) => {
                 date: "Sat Feb 17 2024 11:53:24 GMT+0100 (Mitteleuropäische Normalzeit)",
                 title: "Blog Verfassen",
                 desc: "Hier können die Mitglieder des Vereins Blogposts erstellen.",
-                sitetype: "private",
-                user: req.session.user,
-                js: req.query.js
-            });
-            break;
-        case "imgBuilder":
-            res.render("private/img_builder.ejs", {
-                env: LOAD_LEVEL,
-                url: req.url,
-                origin_url: url,
-                date: "Wed Apr 10 2024 10:47:14 GMT+0200 (Mitteleuropäische Sommerzeit)",
-                title: "Bilderalbum hinzufügen",
-                desc: "Hier können die Mitglieder des Vereins Bilderalben erstellen.",
                 sitetype: "private",
                 user: req.session.user,
                 js: req.query.js
@@ -649,6 +636,28 @@ app.post("/post/deleteAdmin", async (req, res) => {
     let result = await db.deleteAdmin(req.body.username)
         .catch(() => {return false});
     res.json({good: result});
+});
+
+app.post("/post/createGallery", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    let b = req.body,
+        img = b.img;
+    for (let i = 0; i < img.arr.length; i++) {
+        let {path} = await imagekitUpload(img.arr[i].src, img.arr[i].alt + "___" + randomId(), `/gallery/`);
+        img.arr[i].src = path;
+    };
+    let result = await db.createGallery(b.title, b.subtitle, b.author, img)
+        .catch(err => {return err});
+    if (result === undefined) result = "OK";
+    res.json({error: result});
+});
+
+app.post("/post/gallery/getLinks/:num", async (req, res) => {
+    let response = await db.getLastXGalleryLinks(req.params.num)
+        .catch(() => {return "No connection to database"});
+    typeof response !== "string" ?
+    res.json({title: response}) :
+    res.json({error: response});
 });
 
 
