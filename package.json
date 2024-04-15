@@ -22,7 +22,9 @@
     "imagekit": "^5.0.0",
     "mysql2": "^3.8.0",
     "node-mailjet": "^6.0.5",
-    "nodemon": "^3.0.3",
     "stripe": "^14.20.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

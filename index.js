@@ -157,10 +157,10 @@ async function saveVideo (base64, type) {
 app.use(express.static("./static"));
 app.use(express.urlencoded({
     extended: true,
-    limit: "1000mb"
+    limit: "10000mb"
 }));
 app.use(express.json({
-    limit: '1000mb'
+    limit: '10000mb'
 }));
 app.use(session({
     secret: process.env.SESSION_SECRET_KEY,
@@ -207,6 +207,7 @@ app.get("/signUp", (req, res) => res.redirect("/login?js=toggleForms"));
 app.get("/registrieren", (req, res) => res.redirect("/login?js=toggleForms"));
 app.get("/einloggen", (req, res) => res.redirect("/login"));
 app.get("/login", async (req, res) => {
+    if (req.session.user?.valid) return res.redirect("/profile");
     let redir = req.query.redir;
     if (redir === undefined || typeof redir === "undefined") redir = "/";
     res.render("login.ejs", {
@@ -225,7 +226,11 @@ app.get("/login", async (req, res) => {
 app.get("/ausloggen", (req, res) => res.redirect("/logout"));
 app.get("/logOut", (req, res) => res.redirect("/logout"));
 app.get("/logout", (req, res) => {
-    if (req.session?.user) delete req.session.user;
+    console.log(req.session.user, "Hallo")
+    if (req.session?.user) req.session.destroy(err => {
+        if (err) req.session.user = undefined;
+    });
+    console.log(req.session.user);
     res.redirect("/");
 });
 
