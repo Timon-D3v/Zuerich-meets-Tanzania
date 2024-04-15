@@ -19,7 +19,9 @@
  * 
  * 
 */
-const STATUTEN = [
+const STATUTEN = {
+    aktualisiert: "Mon Apr 08 2024 22:07:50 GMT+0200 (Mitteleuropäische Sommerzeit)",
+    data: [
     "<h1>Rechtsform, Zweck und Sitz</h1>",
     "<h2>Art. 1</h2>",
     "<p>Unter dem Namen «zurich – meets – tanzania», besteht ein Verein gemäss den vorliegenden Statuten und im Sinne von Artikel 60 ff. des Schweizerischen Zivilgesetzbuches.</p>",
@@ -80,7 +82,7 @@ const STATUTEN = [
     "<p>Eine Fusion kann nur mit einer anderen wegen Gemeinnützigkeit oder öffentlichen Zwecks von der Steuerpflicht befreiten juristischen Person mit Sitz in der Schweiz erfolgen.<br>Im Falle einer Auflösung werden Gewinn und Kapital einer anderen wegen Gemeinnützigkeit oder öffentlichen Zwecks steuerbefreiten juristischen Person mit Sitz in der Schweiz zugewendet. Deren Zwecksetzung muss gleich oder ähnlich sein. Eine Verteilung unter die Mitglieder ist ausgeschlossen.</p>",
     "<p>Diese Statuten wurden von der Gründungsversammlung am 23.04.2017 in Zürich angenommen und in Kraft gesetzt.</p>",
     "<p>Der Präsident: Stefan Christen<br><br>Der Sekretär: Christoph Schubert</p>"
-];
+]};
 
 
 

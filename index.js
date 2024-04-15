@@ -311,7 +311,7 @@ app.get("/statuten", (req, res) => {
         sitetype: "static",
         user: req.session.user,
         js: req.query.js,
-        statuten: STATUTEN,
+        statuten: STATUTEN.data,
         toRealDate
     });
 });

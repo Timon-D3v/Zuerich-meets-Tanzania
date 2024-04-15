@@ -38,7 +38,7 @@ const ABOUT_US = {
             family_name: "Häusermann",
             picture: "https://ik.imagekit.io/zmt/users/eliane",
             job: "Hausärztin, FMH Allgemeine Innere Medizin",
-            motivation: "&gt;&gt; Ich sehe es als meine Verpflichtung als gut ausgebildeter Mensch aus einem der reichten Länder dieser Welt der weniger priviligierten Bevölkerung Hilfsmittel, Wissen und Resourcen weiter zu geben um der wirtschaftlichen und sozialen Ungerechtigkeit und unfairen Verteilung entgegen zu wirken. Dabei geht es weniger um ein humanistischer Akt der Grosszügigkeit sondern um eine notwendige Umverteilung für eine soziale Gerechtigkeit.<br>&gt;&gt; Dabei sollte der klassische humanitäre Weg der direkten Hilfeleistung schritt für Schritt durch eine indirekte Hilfeleistung im Sinne einer Finanzierung der Aus- und Weiterbildung der lokalen Bevölkerung und somit Erzielen einer nachhaltigen und langfristigen Verbesserung der gesundheitlichen Strukturen des jeweiligen Landes ersetzt werden. Längerfristige Vision ist einen Austausch auf Augenhöhe mit gegenseitiger Achtung und Respektierung der Andersartigkeit, das Zulassen der, auch auf medizinischer Ebene, unterschiedlichen Denk- und Herangehensweise mit bestmöglicher Optimierung der gesellschaftlichen  Gesundheit.",
+            motivation: "&gt;&gt; Ich sehe es als meine Verpflichtung als gut ausgebildeter Mensch aus einem der reichten Länder dieser Welt der weniger priviligierten Bevölkerung Hilfsmittel, Wissen und Resourcen weiter zu geben um der wirtschaftlichen und sozialen Ungerechtigkeit und unfairen Verteilung entgegen zu wirken. Dabei geht es weniger um ein humanistischer Akt der Grosszügigkeit sondern um eine notwendige Umverteilung für eine soziale Gerechtigkeit.<br>&gt;&gt; Dabei sollte der klassische humanitäre Weg der direkten Hilfeleistung Schritt für Schritt durch eine indirekte Hilfeleistung im Sinne einer Finanzierung der Aus- und Weiterbildung der lokalen Bevölkerung und somit Erzielen einer nachhaltigen und langfristigen Verbesserung der gesundheitlichen Strukturen des jeweiligen Landes ersetzt werden. Längerfristige Vision ist einen Austausch auf Augenhöhe mit gegenseitiger Achtung und Respektierung der Andersartigkeit, das Zulassen der, auch auf medizinischer Ebene, unterschiedlichen Denk- und Herangehensweise mit bestmöglicher Optimierung der gesellschaftlichen Gesundheit.",
             position: "Revisorin",
             picture2: false
         },{
@@ -61,8 +61,8 @@ const ABOUT_US = {
             name: "Tanja",
             family_name: "Freund Stössel",
             picture: "https://ik.imagekit.io/zmt/users/tanja",
-            job: "Anästhesiepflege",
-            motivation: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
+            job: "Anästhesiepflege NDS HF",
+            motivation: "Mein Wunsch in Afrika zu arbeiten war schon lange Zeit vorhanden, deshalb absolvierte ich nach der Krankenschwesterausbildung die Tropenschule in Basel und wollte dann eigentlich für ein humanitäres Institut mein Wissen einsetzen. Weiterbildung und Familiengründung durchkreuzten meine Pläne, aber als die Kinder gross und mein Anästhesiewissen fundiert wurde, kam ich im Spital mit Zurich meets Tanzania in Kontakt.<br>Nach meinem ersten Einsatz merkte ich wie wertvoll die Zusammenarbeit mit dem dortigen Spitalpersonal ist. Gegenseitiges Vertrauen und Zusammenarbeit mit dem Team von Zurich meets Tanzania ist für mich eine Seelenreinigung. Es macht mir Freude, dass mich meine Familie voll unterstützt und auch motiviert ist.",
             position: "",
             picture2: true
         },{
@@ -73,7 +73,7 @@ const ABOUT_US = {
             motivation: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
             position: "",
             picture2: false
-        },
+        }
     ]
 };
 
