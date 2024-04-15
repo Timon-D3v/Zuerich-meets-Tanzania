@@ -3,6 +3,9 @@ After payment method: Also make a part where you can buy Tanjas book directly on
 Newsletter => mail wenn aktuelles =>> NEED MAILJET => NEED LOCAL SERVER
 
 
+Remove timestamp from hero picture => To long loading time.
+
+
 Für Static
  - Überarbeitbar (File oder Builder?) => File => Aber alles wichtige us den EJS files nehmen und eine einzige JS Datei machen
  - Länge?
