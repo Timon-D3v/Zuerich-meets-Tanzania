@@ -20,7 +20,6 @@ import VORSTAND from "./backend/constants/vorstand.js";
 import GYNO from "./backend/constants/gynäkologie.js";
 import MEDUCATION from "./backend/constants/meducation.js";
 import HERO from "./backend/constants/heropage.js";
-import { type } from "os";
 
 
 
@@ -169,17 +168,6 @@ app.get("/login", async (req, res) => {
         js: req.query.js,
         redir: redir
     });
-});
-
-app.get("/ausloggen", (req, res) => res.redirect("/logout"));
-app.get("/logOut", (req, res) => res.redirect("/logout"));
-app.get("/logout", (req, res) => {
-    console.log(req.session.user, "Hallo")
-    if (req.session?.user) req.session.destroy(err => {
-        if (err) req.session.user = undefined;
-    });
-    console.log(req.session.user);
-    res.redirect("/");
 });
 
 app.get("/einkaufen", (req, res) => res.redirect("/shop"));
@@ -401,6 +389,10 @@ app.get("/private/:id", async (req, res) => {
     };
 });
 
+app.get("/package/timonjs", (req, res) => {
+    res.sendFile(path.resolve(dirname(fileURLToPath(import.meta.url)), "node_modules/timonjs/lib/timon.js"))
+});
+
 app.get("/*", (req, res) => {
     let url = req.protocol + '://' + req.get('host');
     res.render("errors/error404.ejs", {
@@ -451,6 +443,16 @@ app.post("/post/signUp", async (req, res) => {
         req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
         res.redirect(req.body.redir);
     };
+});
+
+app.post("/logout", (req, res) => {
+    console.log(req.session.user, "Hallo")
+    if (req.session?.user) req.session.destroy(err => {
+        if (err) req.session.user = undefined;
+        if (req.session.user !== undefined) return res.status(500).json({status: 500})
+    });
+    console.log(req.session.user);
+    res.status(200).json({status: 200});
 });
 
 app.post("/post/newsletter/signUp", async (req, res) => {

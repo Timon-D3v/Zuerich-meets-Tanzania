@@ -18,7 +18,8 @@ const root = $(":root"),
 	b1 = $("#darkmode2"),
 	b2 = $("#darkmode3"),
 	f_a_h = $("#newsletter-anrede-herr"),
-	f_a_f = $("#newsletter-anrede-frau");
+	f_a_f = $("#newsletter-anrede-frau"),
+	logouts = getQuery(".logout");
 
 let	num_of_title = 5,
 	num_of_gallery = 5;
@@ -68,6 +69,12 @@ nav_desktop_l.forEach((elm, i) => {
 		document.querySelectorAll("main *")
 		.forEach(elm => elm.removeEventListener("click", closeNavWithMainDesktop));
 	});
+});
+
+if (logouts.length > 0) logouts.click(async e => {
+	e.preventDefault();
+	let res = await post("/logout");
+	console.log(res);
 });
 
 function changeTheme() {
@@ -184,15 +191,6 @@ function newsletterSignUp (e) {
 		errField.html("Du musst deine E-Mail angeben.")
 			.css("display", "block");
 	};
-};
-
-function toBase64 (file) {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onload = () => resolve(reader.result);
-		reader.onerror = reject;
-		reader.readAsDataURL(file);
-	});
 };
 
 function toBase64Max1MB (file) {
