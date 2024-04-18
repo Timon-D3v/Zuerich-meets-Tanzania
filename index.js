@@ -5,6 +5,7 @@ import ImageKit from "imagekit";
 import express from "express";
 import Stripe from "stripe";
 import dotenv from "dotenv";
+import timon from "timonjs";
 import https from "https";
 import cors from "cors";
 import path from "path";
@@ -19,6 +20,7 @@ import VORSTAND from "./backend/constants/vorstand.js";
 import GYNO from "./backend/constants/gynäkologie.js";
 import MEDUCATION from "./backend/constants/meducation.js";
 import HERO from "./backend/constants/heropage.js";
+import { type } from "os";
 
 
 
@@ -71,61 +73,7 @@ async function imagekitUpload (base64, name, folder) {
     };
 };
 
-function randomId () {
-    let result = 'auto_';
-    const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 27; i++) {
-        result += char.charAt(Math.floor(Math.random() * char.length));
-    };
-    return result;
-};
-
-function toRealDate (date) {
-	date = date.toString();
-	let time = date.slice(16, 24);
-	let day = date.slice(8, 10);
-	let year = date.slice(11, 15);
-	let month = date.slice(4, 7);
-	switch (month) {
-		case "Jan":
-			month = "Januar";
-			break;
-		case "Feb":
-			month = "Februar";
-			break;
-		case "Mar":
-			month = "März";
-			break;
-		case "Apr":
-			month = "April";
-			break;
-		case "May":
-			month = "Mai";
-			break;
-		case "Jun":
-			month = "Juni";
-			break;
-		case "Jul":
-			month = "Juli";
-			break;
-		case "Aug":
-			month = "August";
-			break;
-		case "Sep":
-			month = "September";
-			break;
-		case "Oct":
-			month = "Oktober";
-			break;
-		case "Nov":
-			month = "November";
-			break;
-		case "Dec":
-			month = "Dezember";
-			break;
-	};
-	return `${day}. ${month} ${year} um ${time}`;
-};
+function toRealDate (date) {return timon.toDateString(new Date(date))};
 
 function createMailSubject (obj) {
     return obj.author_name + " schreibt über Webseitenformular";
@@ -145,7 +93,7 @@ async function saveVideo (base64, type) {
     type === "video/mp4" ?
     type = ".mp4" :
     type = ".mov";
-    const video = path.resolve(dirname(fileURLToPath(import.meta.url)), `./static/vid/${randomId() + type}`);
+    const video = path.resolve(dirname(fileURLToPath(import.meta.url)), `./static/vid/${timon.randomString() + type}`);
     fs.writeFile(video, base64.split(';base64,').pop(), "base64", err => {
         if (err) console.error('Error saving video:', err);
     });
@@ -489,13 +437,14 @@ app.post("/post/login", async (req, res) => {
 
 app.post("/post/signUp", async (req, res) => {
     let data = req.body;
-    if (await db.getAccount(data.username).length === 0) return res.send({message:"Dieser Benutzername ist schon vergeben."});
+    let users = await db.getAccount(data.username);
+    if (users.length > 0) return res.json({message:"Dieser Benutzername ist schon vergeben."});
     if (data.picture !== "/img/svg/personal.svg") {
-        data.picture = await imagekitUpload(data.picture, data.username + "_" + randomId(), "/users/");
+        data.picture = await imagekitUpload(data.picture, data.username + "_" + timon.randomString(), "/users/");
         data.picture = data.picture.path;
     };
     let result = await db.createAccount(data.username, data.password, data.name, data.family_name, data.email, data.picture, data.phone)
-        .catch(err => res.send({message: err}));
+        .catch(err => res.json({message: err}));
     if (result.username) {
         req.session.user = result;
         req.session.user.valid = true;
@@ -589,7 +538,7 @@ app.post("/post/updateProfile", async (req, res) => {
 app.post("/post/changePicture", async (req, res) => {
     if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
     let path = req.session.user.picture.replace("https://ik.imagekit.io/zmt/users/", "");
-    if (req.session.user.picture === "/img/svg/personal.svg") path = req.session.user.username + "_" + randomId();
+    if (req.session.user.picture === "/img/svg/personal.svg") path = req.session.user.username + "_" + timon.randomString();
     let img = await imagekitUpload(req.body.base64, path, "/users/");
     let result = await db.updateProfilePicture(req.session.user.username, img.path)
         .catch(() => {return "No connection to database"});
@@ -662,7 +611,7 @@ app.post("/post/createGallery", async (req, res) => {
     let b = req.body,
         img = b.img;
     for (let i = 0; i < img.arr.length; i++) {
-        let {path} = await imagekitUpload(img.arr[i].src, img.arr[i].alt + "___" + randomId(), `/gallery/`);
+        let {path} = await imagekitUpload(img.arr[i].src, img.arr[i].alt + "___" + timon.randomString(), `/gallery/`);
         img.arr[i].src = path;
     };
     for (let i = 0; i < img.vid.length; i++) {

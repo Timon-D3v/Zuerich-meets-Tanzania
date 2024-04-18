@@ -1,0 +1,19 @@
+{
+  "name": "timonjs",
+  "version": "0.0.1",
+  "description": "This package contains some functions and variables that I (Timon Fiedler) need from time to time.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Timon-D3v/timon.js.git"
+  },
+  "author": "Timon Fiedler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Timon-D3v/timon.js/issues"
+  },
+  "homepage": "https://github.com/Timon-D3v/timon.js#readme"
+}

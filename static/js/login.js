@@ -108,12 +108,14 @@ async function addAccount (e) {
     })
     .catch(err => {
         error.html(err);
+        console.error(err)
         showErrorField();
     });
     if (res.ok && res.redirected) window.location.href = res.url;
     else {
         new_submit.attr("disabled", false);
         res = await res.json();
+        console.error(res.message);
         error.html(res.message);
         showErrorField();
     };
