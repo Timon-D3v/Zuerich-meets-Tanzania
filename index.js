@@ -302,6 +302,21 @@ app.get("/projects/gyn%C3%A4kologie", (req, res) => {
     });
 });
 
+app.get("/donate", (req, res) => res.redirect("/spenden"));
+app.get("/spenden", (req, res) => {
+    res.render("donate.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: "Fri Apr 19 2024 19:53:02 GMT+0200 (Mitteleuropäische Sommerzeit)",
+        title: "Spenden",
+        desc: "Wir freuen uns sehr, wenn Sie uns etwas spenden wollen. Deshalb gibt es diese Seite. So können Sie uns ganz unkompliziert unterstützen. Vielen Dank!",
+        sitetype: "static",
+        user: req.session.user,
+        js: undefined, // To make payments more secure, I don't risk to allow users to call functions.
+    });
+});
+
 app.get("/gallery/:id", (req, res) => res.redirect("/galerie/" + req.params.id));
 app.get("/galerie/:id", async (req, res) => {
     let result = await db.getGalleyWhereTitle(req.params.id)

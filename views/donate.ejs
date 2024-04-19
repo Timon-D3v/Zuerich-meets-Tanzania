@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main></main>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>
