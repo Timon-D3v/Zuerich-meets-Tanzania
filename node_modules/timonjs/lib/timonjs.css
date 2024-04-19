@@ -1,0 +1,17 @@
+/*!
+ * timon.js
+ * Copyright(c) 2024 Timon Fiedler
+ * MIT Licensed
+ * Also served over https://ik.imagekit.io/timon/timonjs/timonjs.css
+ */
+
+@keyframes timonjs-fadeout {
+    from {
+        opacity: 1;
+        display: inherit;
+    }
+    to {
+        opacity: 0;
+        display: none;
+    }
+}

@@ -146,3 +146,7 @@ Time spent: 1:30h; Time worked: 1:15h;
 11.4.24
 Bilderalbum mit Videos fertiggestellt.
 Time spent: 3h; Time worked: 2:30h;
+
+15.4.24 - 19.4.24
+Einige kleinere Aufgaben erledigt. Viel getestet und bugs markiert. Kleinere Fehler schon behoben.
+Time spent: 5h; TIme worked: 4:30h;

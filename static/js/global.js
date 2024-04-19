@@ -74,7 +74,9 @@ nav_desktop_l.forEach((elm, i) => {
 if (logouts.length > 0) logouts.click(async e => {
 	e.preventDefault();
 	let res = await post("/logout");
-	console.log(res);
+	res.status === 200 ?
+	window.location.reload() :
+	errorField();
 });
 
 function changeTheme() {

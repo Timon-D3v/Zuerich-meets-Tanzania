@@ -446,12 +446,9 @@ app.post("/post/signUp", async (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-    console.log(req.session.user, "Hallo")
     if (req.session?.user) req.session.destroy(err => {
-        if (err) req.session.user = undefined;
-        if (req.session.user !== undefined) return res.status(500).json({status: 500})
+        if (err) return res.status(500).json({status: 500});
     });
-    console.log(req.session.user);
     res.status(200).json({status: 200});
 });
 
