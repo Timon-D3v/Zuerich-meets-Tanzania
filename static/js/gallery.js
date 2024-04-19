@@ -5,7 +5,8 @@ const showroom = $(".gallery-show"),
     gallery_next = $(".gallery-next"),
     gallery_prev = $(".gallery-prev"),
     gallery_next_vid = $(".gallery-next-vid"),
-    gallery_prev_vid = $(".gallery-prev-vid");
+    gallery_prev_vid = $(".gallery-prev-vid"),
+    device_width = window.innerWidth;
 
 var close_showroom = true,
     gallery_current = document.getElementById("gallery_0"),
@@ -18,6 +19,7 @@ $(".gallery-container").click(e => {
     showroom_img.attr({
         alt,
         src: src.replace("?tr=w-200,h-200", "")
+                .replace(`?tr=w-${device_width.toString()}`, "")
     });
     gallery_next.off("click");
     gallery_prev.off("click");
@@ -46,6 +48,14 @@ cinema.click(e => {
     if (close_cinema) cinema.hide();
 });
 
+addEventListener("DOMContentLoaded", () => {
+    getQuery(".gallery")[0].querySelectorAll("img").forEach(async elm => {
+        let img = new Image();
+        img.src = elm.src.replace("?tr=w-200,h-200", `?tr=w-${device_width.toString()}`);
+        img.onload = () => elm.src = img.src;
+    });
+});
+
 function moveGallery (direction) {
     close_showroom = false;
     let id = gallery_current.id.split("_");
@@ -58,6 +68,7 @@ function moveGallery (direction) {
     showroom_img.attr({
         alt,
         src: src.replace("?tr=w-200,h-200", "")
+                .replace(`?tr=w-${device_width.toString()}`, "")
     });
     setTimeout(() => close_showroom = true, 100);
 };
