@@ -17,9 +17,10 @@ if (img.vid.length > 0) { %>
 <div class="gallery"><%
     img.vid.forEach((elm, i) => { %>
     <div class="gallery-container-vid" id="galleryvid_<%= i %>">
-        <video class="gallery-vid" alt="<%= elm.alt %>" src="<%= 
-            origin_url + "/" + elm.src.split("\\static\\").pop().replaceAll("\\", "/") 
-            %>" loading="lazy" type="<%= elm.type %>"></video>
+        <video class="gallery-vid" src="<%= origin_url + "/" + elm.src.split("\\static\\").pop().replaceAll("\\", "/") 
+            %>" type="<%= elm.type %>" loading="lazy" preload="metadata" alt="<%= elm.alt %>">
+            Ihr Browser kann dieses Video leider nicht wiedergeben.
+        </video>
         <div class="gallery-context-menu">
             <p>Abspielen!</p>
         </div>

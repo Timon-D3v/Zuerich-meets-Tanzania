@@ -81,10 +81,11 @@ function moveCinema (direction) {
     if (id[1] < 0) id[1] = $(".gallery-vid").length - 1;
     if (id[1] === $(".gallery-vid").length) id[1] = 0;
     cinema_current = document.getElementById(id[0] + id[1].toString());
-    let {alt, src} = cinema_current.querySelector(".gallery-vid");
+    let {alt, src, type} = cinema_current.querySelector(".gallery-vid");
     showroom_vid.attr({
         alt,
-        src
+        src,
+        type
     });
     setTimeout(() => close_cinema = true, 100);
 };

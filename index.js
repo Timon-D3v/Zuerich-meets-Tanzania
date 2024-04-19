@@ -92,7 +92,7 @@ async function saveVideo (base64, type) {
     type === "video/mp4" ?
     type = ".mp4" :
     type = ".mov";
-    const video = path.resolve(dirname(fileURLToPath(import.meta.url)), `./static/vid/${timon.randomString() + type}`);
+    const video = path.resolve(dirname(fileURLToPath(import.meta.url)), `./static/vid/${timon.randomString(32) + type}`);
     fs.writeFile(video, base64.split(';base64,').pop(), "base64", err => {
         if (err) console.error('Error saving video:', err);
     });
@@ -432,7 +432,7 @@ app.post("/post/signUp", async (req, res) => {
     let users = await db.getAccount(data.username);
     if (users.length > 0) return res.json({message:"Dieser Benutzername ist schon vergeben."});
     if (data.picture !== "/img/svg/personal.svg") {
-        data.picture = await imagekitUpload(data.picture, data.username + "_" + timon.randomString(), "/users/");
+        data.picture = await imagekitUpload(data.picture, data.username + "_" + timon.randomString(32), "/users/");
         data.picture = data.picture.path;
     };
     let result = await db.createAccount(data.username, data.password, data.name, data.family_name, data.email, data.picture, data.phone)
@@ -537,7 +537,7 @@ app.post("/post/updateProfile", async (req, res) => {
 app.post("/post/changePicture", async (req, res) => {
     if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
     let path = req.session.user.picture.replace("https://ik.imagekit.io/zmt/users/", "");
-    if (req.session.user.picture === "/img/svg/personal.svg") path = req.session.user.username + "_" + timon.randomString();
+    if (req.session.user.picture === "/img/svg/personal.svg") path = req.session.user.username + "_" + timon.randomString(32);
     let img = await imagekitUpload(req.body.base64, path, "/users/");
     let result = await db.updateProfilePicture(req.session.user.username, img.path)
         .catch(() => {return "No connection to database"});
@@ -610,7 +610,7 @@ app.post("/post/createGallery", async (req, res) => {
     let b = req.body,
         img = b.img;
     for (let i = 0; i < img.arr.length; i++) {
-        let {path} = await imagekitUpload(img.arr[i].src, img.arr[i].alt + "___" + timon.randomString(), `/gallery/`);
+        let {path} = await imagekitUpload(img.arr[i].src, img.arr[i].alt + "___" + timon.randomString(32), `/gallery/`);
         img.arr[i].src = path;
     };
     for (let i = 0; i < img.vid.length; i++) {
