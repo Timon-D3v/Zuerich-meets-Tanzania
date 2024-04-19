@@ -961,7 +961,7 @@ footer {
 
 .f-input {
     width: 100%;
-    height: calc(25px + 1vw);
+    height: calc(35px + 1vw);
     border-radius: 5px;
     outline: none;
     border: 1px solid #303030;
@@ -990,7 +990,7 @@ footer {
 
 .f-submit {
     width: 50%;
-    height: 35px;
+    height: calc(35px + 1vw);
     color: var(--c-text-950);
     border: none;
     background: linear-gradient(45deg, var(--c-accent-100), var(--c-background-50));
