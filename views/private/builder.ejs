@@ -252,14 +252,14 @@
                     input.addEventListener("change", async (e) => {
                         const files = e.target.files;
                         let arr = [];
-                        if (files != []) {
+                        if (files.length > 0) {
                             for (let i = 0; i < files.length; i++) {
                                 let res = await toBase64(files[i]);
                                 arr.push(res);
                             };
                             carousel = await createCarouselHTML(arr);
                             preview.innerHTML = carousel[0];
-                            eval(carousel[1]);
+                            eval(carousel[1].replace('elm.src += "?tr=w-100,h-100"', "console.log('REPLACEME')"));
                         } else {
                             preview.innerHTML = "Fehler";
                         };
@@ -439,7 +439,8 @@
                     img_arr.forEach((elm, i) => {
                         scriptHTML += `    $(".${ids[i + 10]}"),\n`;
                     });
-                    scriptHTML += `];\n\nlet current_${ids[6]} = 1;\n\narr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n\n`;
+                    scriptHTML += `];\n\ndocument.querySelector(".blog_c-ruler.${ids[4]}").querySelectorAll("img").forEach(elm => elm.src += "?tr=w-100,h-100");`
+                    scriptHTML += `\n\nlet current_${ids[6]} = 1;\n\narr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n\n`;
                     scriptHTML += `function next_${ids[7]} () {\n    current_${ids[6]} + 1 > arr_${ids[5]}.length ?\n    current_${ids[6]} = 1 :\n    current_${ids[6]}++;\n    `;
                     scriptHTML += `current_${ids[6]} === 1 ?\n    arr_${ids[5]}[arr_${ids[5]}.length - 1].toggleClass("active") :\n    `;
                     scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 2].toggleClass("active");\n    arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\n`;
