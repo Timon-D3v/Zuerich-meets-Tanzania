@@ -125,7 +125,7 @@ function getQuery(id) {
    * @param {Function} callback - The callback function to execute when the event is triggered.
    */
   elements.on = (event, callback) => {
-    elements.addEventListener(event, callback);
+    elements.forEach(elm => elm.addEventListener(event, callback));
   };
 
   /**
@@ -133,7 +133,7 @@ function getQuery(id) {
    * @param {Function} callback - The callback function to execute when the click event is triggered.
    */
   elements.click = (callback) => {
-    elements.addEventListener("click", callback);
+    elements.forEach(elm => elm.addEventListener("click", callback));
   };
 
   /**
@@ -144,7 +144,7 @@ function getQuery(id) {
     const cssString = Object.entries(styles)
       .map(([property, value]) => `${property}: ${value}`)
       .join('; ');
-    elements.style.cssText = cssString;
+    elements.forEach(elm => elm.style.cssText = cssString);
   };
 
   elements.forEach(element => {
@@ -183,7 +183,7 @@ function getQuery(id) {
 /**
  * Sends a POST request to the specified URL with a JSON payload.
  * @param {string} url - The URL to which the POST request will be sent.
- * @param {string} body - The JSON payload of the POST request.
+ * @param {Object} body - The data payload of the POST request. It will be transformed to an object.
  * @returns {Promise} - A promise that resolves with the response from the server.
  */
 async function post(url, body) {
@@ -196,7 +196,7 @@ async function post(url, body) {
       redirect: "follow",
       credentials: "same-origin",
       referrerPolicy: "no-referrer-when-downgrade",
-      body,
+      body: JSON.stringify(body),
     });
     return await response.json();
   } catch (error) {
@@ -332,6 +332,205 @@ function onClick(element, callback) {
   element.addEventListener("click", callback);
 }
 
+/**
+ * Creates and displays an error message on the webpage for a specified duration.
+ * @param {string} [message="Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut."] - The error message to be displayed.
+ * @param {number} [time=5000] - The duration in milliseconds for which the error message will be visible.
+ */
+function errorField(message = "Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut.", time = 5000) {
+  const field = document.createElement("p");
+  const img = document.createElement("img");
+  const span = document.createElement("span");
+  const output = document.createElement("span");
+
+  field.style.cssText = `
+    display: block;
+    position: fixed;
+    bottom: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 70vw;
+    margin: 0;
+    padding: 20px;
+    background-color: #d61c35;
+    background-color: var(--error);
+    opacity: 1;
+    box-sizing: border-box;
+    border-radius: 15px;
+    font-size: 20px;
+    line-height: 1.25;
+    z-index: 1000000;
+  `;
+
+  img.style.cssText = `
+    height: 1lh;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    object-position: center;
+    transform: translateY(20%);
+    margin-right: 0.25em;
+  `;
+
+  field.classList.add("error");
+
+  img.alt = "Achtung";
+  img.src = "https://ik.imagekit.io/timon/timonjs/alert.svg";
+
+  span.innerText = "Ein Fehler ist aufgetreten: ";
+  output.innerText = message;
+
+  field.append(img, span, output);
+
+  document.querySelector("body").appendChild(field);
+
+  setTimeout(() => {
+    if (typeof gsap?.version === "string") {
+      gsap.to(field, { opacity: 0, display: "none", duration: time / 1000, ease: "power2.in" });
+    } else {
+      const style = document.createElement("link");
+      style.rel = "stylesheet";
+      style.href = "https://ik.imagekit.io/timon/timonjs/timonjs.css";
+      document.querySelector("head").appendChild(style);
+
+      field.style.animation = `timonjs-fadeout ${time}ms ease-in`;
+    }
+
+    setTimeout(() => field.remove(), time);
+  }, time);
+}
+
+/**
+ * Creates and displays an info message on the webpage for a specified duration.
+ * @param {string} message - The info message to be displayed.
+ * @param {number} [time=5000] - The duration in milliseconds for which the error message will be visible.
+ */
+function infoField(message, time = 5000) {
+  const field = document.createElement("p");
+  const img = document.createElement("img");
+  const span = document.createElement("span");
+
+  field.style.cssText = `
+    display: block;
+    position: fixed;
+    bottom: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 70vw;
+    margin: 0;
+    padding: 20px;
+    background-color: #d61c35;
+    background-color: var(--error);
+    opacity: 1;
+    box-sizing: border-box;
+    border-radius: 15px;
+    font-size: 20px;
+    line-height: 1.25;
+    z-index: 1000000;
+  `;
+
+  img.style.cssText = `
+    height: 1lh;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    object-position: center;
+    transform: translateY(20%);
+    margin-right: 0.25em;
+    transform: rotate(180deg);
+  `;
+
+  field.classList.add("error");
+
+  img.alt = "Info";
+  img.src = "https://ik.imagekit.io/timon/timonjs/alert.svg";
+
+  span.innerText = message;
+
+  field.append(img, span);
+
+  document.querySelector("body").appendChild(field);
+
+  setTimeout(() => {
+    if (typeof gsap?.version === "string") {
+      gsap.to(field, { opacity: 0, display: "none", duration: time / 1000, ease: "power2.in" });
+    } else {
+      const style = document.createElement("link");
+      style.rel = "stylesheet";
+      style.href = "https://ik.imagekit.io/timon/timonjs/timonjs.css";
+      document.querySelector("head").appendChild(style);
+
+      field.style.animation = `timonjs-fadeout ${time}ms ease-in`;
+    }
+
+    setTimeout(() => field.remove(), time);
+  }, time);
+}
+
+/**
+ * Creates and displays a success message on the webpage for a specified duration.
+ * @param {string} message - The success message to be displayed.
+ * @param {number} [time=5000] - The duration in milliseconds for which the error message will be visible.
+ */
+function successField(message, time = 5000) {
+  const field = document.createElement("p");
+  const img = document.createElement("img");
+  const span = document.createElement("span");
+
+  field.style.cssText = `
+    display: block;
+    position: fixed;
+    bottom: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 70vw;
+    margin: 0;
+    padding: 20px;
+    background-color: #d61c35;
+    background-color: var(--error);
+    opacity: 1;
+    box-sizing: border-box;
+    border-radius: 15px;
+    font-size: 20px;
+    line-height: 1.25;
+    z-index: 1000000;
+  `;
+
+  img.style.cssText = `
+    height: 1lh;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    object-position: center;
+    transform: translateY(20%);
+    margin-right: 0.25em;
+    transform: rotate(180deg);
+  `;
+
+  field.classList.add("error");
+
+  img.alt = "Info";
+  img.src = "https://ik.imagekit.io/timon/timonjs/alert.svg";
+
+  span.innerText = message;
+
+  field.append(img, span);
+
+  document.querySelector("body").appendChild(field);
+
+  setTimeout(() => {
+    if (typeof gsap?.version === "string") {
+      gsap.to(field, { opacity: 0, display: "none", duration: time / 1000, ease: "power2.in" });
+    } else {
+      const style = document.createElement("link");
+      style.rel = "stylesheet";
+      style.href = "https://ik.imagekit.io/timon/timonjs/timonjs.css";
+      document.querySelector("head").appendChild(style);
+
+      field.style.animation = `timonjs-fadeout ${time}ms ease-in`;
+    }
+
+    setTimeout(() => field.remove(), time);
+  }, time);
+}
+
 // Variables
 
 // Exports
@@ -352,5 +551,8 @@ export default {
   randomString,
   post,
   download,
-  scrollToQuery
+  scrollToQuery,
+  successField,
+  infoField,
+  errorField
 };

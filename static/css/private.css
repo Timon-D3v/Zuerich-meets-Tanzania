@@ -60,17 +60,19 @@ main textarea {
     align-items: center;
     z-index: 50;
     overflow: auto;
-    & button {
-        border: none;
-        background-color: var(--secondary-500);
-        padding: 15px;
-        margin: 5px;
-        color: var(--text-950);
-        font-size: calc(25px / var(--font-ratio));
-        &:hover {
-            background-color: var(--secondary-300);
-        }
-    }
+}
+
+#auswahl button {
+    border: none;
+    background-color: var(--secondary-500);
+    padding: 15px;
+    margin: 5px;
+    color: var(--text-950);
+    font-size: calc(25px / var(--font-ratio));
+}
+
+#auswahl button:hover {
+    background-color: var(--secondary-300);
 }
 
 table {
@@ -102,9 +104,10 @@ tr:nth-child(even) {
 .container {
     margin: 5vh 0;
     padding: 2vh 5vw;
-    &:nth-child(even) {
-        background-color: #b3b1af;
-    }
+}
+
+.container:nth-child(even) {
+    background-color: #b3b1af;
 }
 
 :root[data-theme="dark"] .container:nth-child(even) {
@@ -126,9 +129,10 @@ tr:nth-child(even) {
     outline: none;
     background-color: inherit;
     color: var(--text-950);
-    &:focus {
-        border-color: var(--text-400);
-    }
+}
+
+.basic-input:focus {
+    border-color: var(--text-400);
 }
 
 .basic-text {
@@ -153,18 +157,20 @@ tr:nth-child(even) {
     padding: 1vh 2vw;
     margin: 1vh 0;
     letter-spacing: 0.1em;
-    &:hover {
-        background-color: var(--secondary-400);
-    }
+}
+
+.basic-button:hover {
+    background-color: var(--secondary-400);
 }
 
 .basic-link {
     transition: all 0.25s ease;
     font-size: inherit;
     color: inherit;
-    &:hover {
-        color: var(--primary-500);
-    }
+}
+
+.basic-link:hover {
+    color: var(--primary-500);
 }
 
 .basic-title {
@@ -179,15 +185,18 @@ tr:nth-child(even) {
     width: clamp(30px, 3vh + 10px, 3vw);
     aspect-ratio: 1/1;
     border: 5px var(--error) solid;
-    &:checked {
-        border: 15px var(--green) double;
-    }
-    &:hover {
-        border: 5px var(--text-400) solid;
-        &:checked {
-            border: 15px var(--text-400) double;
-        }
-    }
+}
+
+.basic-checkbox:checked {
+    border: 15px var(--green) double;
+}
+
+.basic-checkbox:hover {
+    border: 5px var(--text-400) solid;
+}
+
+.basic-checkbox:hover:checked {
+    border: 15px var(--text-400) double;
 }
 
 #picture_overlay {

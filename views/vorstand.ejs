@@ -24,8 +24,9 @@
             <%- include("./snippets/hero.ejs", {
                 img_alt: "Ein Bild des Teams",
                 img_path: vorstand.bildURL,
-                title: "Der Vorstand",
-                subtitle: vorstand.leitsatz,
+                title: "<span style=\"color: var(--c-text-50);\">Der Vorstand</span>\n\
+                <style>h1.hero-title::after {background-color: var(--c-text-50);}</style>",
+                subtitle: `<span style="color: var(--c-text-50);">${vorstand.leitsatz}</span>`,
                 cta_text: "",
                 cta_link: ""
             }) %>

@@ -32,12 +32,13 @@
                     <h2>Rechtliches</h2>
                     <a href="#">Datenschutz</a>
                     <a href="#">Impressum</a>
-                    <a href="https://www.timondev.vip/">Programmiert</a>
+                    <a href="https://www.timondev.com/">Programmiert</a>
                     <a href="/statuten">Statuten</a>
                 </div>
             </div>
             <p class="f-copyright">Copyright &copy; 2024 Zürich Meets Tanzania | Alle Rechte vorbehalten</p><%
-            if (js) { %>
+            if (js) {
+                js = js.replaceAll("\"", "`"); %>
             <script id="query_script" defer>
                 $(document).ready(() => {
                     <%= js %>();

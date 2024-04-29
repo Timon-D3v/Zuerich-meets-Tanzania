@@ -183,7 +183,7 @@ function getQuery(id) {
 /**
  * Sends a POST request to the specified URL with a JSON payload.
  * @param {string} url - The URL to which the POST request will be sent.
- * @param {string} body - The JSON payload of the POST request.
+ * @param {Object} body - The data payload of the POST request. It will be transformed to an object.
  * @returns {Promise} - A promise that resolves with the response from the server.
  */
 async function post(url, body) {
@@ -196,7 +196,7 @@ async function post(url, body) {
       redirect: "follow",
       credentials: "same-origin",
       referrerPolicy: "no-referrer-when-downgrade",
-      body,
+      body: JSON.stringify(body),
     });
     return await response.json();
   } catch (error) {

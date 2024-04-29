@@ -1,6 +1,7 @@
 import mysql from "mysql2";
 import dotenv from "dotenv";
 import path from "path";
+import timon from "timonjs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -94,6 +95,13 @@ export async function getAccount (username) {
     return result;
 };
 
+export async function getAccountWithId (id) {
+    let query = "SELECT * from `zmt`.`users` WHERE `id` = ?;";
+    let [result] = await pool.query(query, [id])
+        .catch(() => {throw new Error("Fehler");});
+    return result;
+};
+
 export async function createAccount (username, password, name, family_name, email, picture, phone) {
     let query = "INSERT INTO `zmt`.`users` (`username`, `password`, `name`, `family_name`, `email`, `picture`, `phone`, `type`) VALUES (?, ?, ?, ?, ?, ?, ?, 'user');"
     await pool.query(query, [username, password, name, family_name, email, picture, phone]);
@@ -169,6 +177,13 @@ export async function getAllUsers () {
     return result;
 };
 
+export async function getAllUsersFull () {
+    let query = "SELECT * FROM `zmt`.`users`;";
+    let [result] = await pool.query(query)
+        .catch(err => {throw new Error("Something went wrong");});
+    return result;
+};
+
 export async function getAllNewsletterSignUps () {
     let query = "SELECT gender, vorname, nachname, email FROM `zmt`.`newsletter`;";
     let [result] = await pool.query(query)
@@ -181,6 +196,7 @@ export async function makeAdmin (username) {
     let result = true;
     await pool.query(query, username).
         catch(() => result = false);
+    toggleIsAdmin(username);
     return result;
 };
 
@@ -189,6 +205,7 @@ export async function deleteAdmin (username) {
     let result = true;
     await pool.query(query, username).
         catch(() => result = false);
+    toggleIsAdmin(username);
     return result;
 };
 
@@ -213,4 +230,99 @@ export async function getLastXGalleryLinks (x) {
     let [result] = await pool.query(query)
         .catch(() => {throw new Error("Fehler");});
     return result;
+};
+
+export async function getSessionIdWithUserId (user_id) {
+    let query = "SELECT * from `zmt`.`payment_session` WHERE (`user_id` = ?) ORDER BY `pay_id` DESC LIMIT 1;";
+    let [result] = await pool.query(query, [user_id]);
+    return result[0];
+};
+
+export async function linkUserWithSession (user, session_id, key) {
+    let query = "INSERT INTO `zmt`.`payment_session` (`user_id`, `session_id`, `username`, `user_password`, `pay_key`) VALUES (?, ?, ?, ?, ?);";
+    await pool.query(query, [user.id, session_id, user.username, user.password, key]);
+};
+
+export async function createTempPayment (subscription_id, period_start, period_end, customer_id, start_date, status) {
+    let query = "INSERT INTO `zmt`.`temp_sub` (`sub_id`, `customer_id`, `period_end`, `period_start`, `start_date`, `status`) VALUES (?, ?, ?, ?, ?, ?);";
+    await pool.query(query, [subscription_id, customer_id, period_end, period_start, start_date, status]);
+};
+
+export async function getMemberWithSubscriptionId (subscription_id) {
+    let query = "SELECT * FROM `zmt`.`members` WHERE `subscription_id` = ?;";
+    let [result] = await pool.query(query, [subscription_id]);
+    return result;
+};
+
+export async function updateTempSubscriptionPeriodStart (subscription_id, period_start) {
+    let query = "UPDATE `zmt`.`temp_sub` SET `period_start` = ? WHERE (`subscription_id` = ?);";
+    await pool.query(query, [period_start, subscription_id]);
+};
+
+export async function updateTempSubscriptionPeriodEnd (subscription_id, period_end) {
+    let query = "UPDATE `zmt`.`temp_sub` SET `period_end` = ? WHERE (`subscription_id` = ?);";
+    await pool.query(query, [period_end, subscription_id]);
+};
+
+export async function updateTempSubscriptionStatus (subscription_id, status) {
+    let query = "UPDATE `zmt`.`temp_sub` SET `status` = ? WHERE (`sub_id` = ?);";
+    await pool.query(query, [status, subscription_id]);
+};
+
+export async function updateMemberPeriodStart (subscription_id, period_start) {
+    let query = "UPDATE `zmt`.`members` SET `period_start` = ? WHERE (`subscription_id` = ?);";
+    await pool.query(query, [period_start, subscription_id]);
+};
+
+export async function updateMemberPeriodEnd (subscription_id, period_end) {
+    let query = "UPDATE `zmt`.`members` SET `period_end` = ? WHERE (`subscription_id` = ?);";
+    await pool.query(query, [period_end, subscription_id]);
+};
+
+export async function updateMemberStatus (subscription_id, status) {
+    let query = "UPDATE `zmt`.`members` SET `status` = ? WHERE (`subscription_id` = ?);";
+    await pool.query(query, [status, subscription_id]);
+};
+
+export async function deleteMemberWithSubscriptionId (subscription_id) {
+    let query = "DELETE FROM `zmt`.`members` WHERE (`subscription_id` = ?);";
+    await pool.query(query, [subscription_id]);
+};
+
+export async function removeMemberWithUserId (id) {
+    let query = "UPDATE `zmt`.`users` SET `type` = 'user' WHERE (`id` = ?);";
+    await pool.query(query, [id]);
+};
+
+export async function getSubscriptionIdWithCustomerId (customer_id) {
+    let query = "SELECT * FROM `zmt`.`temp_sub` WHERE `customer_id` = ?;";
+    let [result] = await pool.query(query, customer_id);
+    return result[0];
+};
+
+export async function getMemberWithCustomerId (customer_id) {
+    let query = "SELECT * FROM `zmt`.`members` WHERE `cusomer_id` = ?;";
+    let [result] = await pool.query(query, customer_id);
+    return result[0];
+};
+
+export async function addInvoiceToDatabase(subscription_id, pdf, url) {
+    let query = "INSERT INTO `zmt`.`invoice` (`subscription_id`, `pdf`, `url`) VALUES (?, ?, ?);";
+    await pool.query(query, [subscription_id, pdf, url]);
+};
+
+export async function getTempPaymentWithSubscriptionId (subscription_id) {
+    let query = "SELECT * FROM `zmt`.`temp_sub` WHERE `sub_id` = ?;";
+    let [result] = await pool.query(query, [subscription_id]);
+    return result[0];
+};
+
+export async function createMember (user_id, subscription_id, customer_id, status, period_start, period_end, start_date, is_admin) {
+    let query = "INSERT INTO `zmt`.`members` (`user_id`, `subscription_id`, `cusomer_id`, `status`, `period_start`, `period_end`, `start_date`, `is_admin`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+    await pool.query(query, [user_id, subscription_id, customer_id, status, period_start, period_end, start_date, is_admin]);
+};
+
+export async function addMemberWithUserId (user_id) {
+    let query = "UPDATE `zmt`.`users` SET `type` = 'member' WHERE (`id` = ?);";
+    await pool.query(query, [user_id]);
 };

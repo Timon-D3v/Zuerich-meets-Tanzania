@@ -271,6 +271,8 @@ function toRealDate (date) {
 	return `${day}. ${month} ${year} um ${time}`;
 };
 
+function nofunction () {return false;};
+
 async function sendNewsletter (data) {
 	let res = await fetch(window.location.origin + "/post/newsletter/signUp", {
 		method: "POST",

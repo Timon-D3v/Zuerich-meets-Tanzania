@@ -5,12 +5,19 @@
     padding: 5vh 4vw;
     gap: 1vh;
     background-color: var(--accent-300);
-    box-shadow: rgba(146, 211, 200, 0.4) 0px 5px, rgba(146, 211, 200, 0.3) 0px 10px, rgba(146, 211, 200, 0.2) 0px 15px, rgba(146, 211, 200, 0.1) 0px 20px, rgba(146, 211, 200, 0.05) 0px 25px, rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    box-shadow: rgba(146, 211, 200, 0.4) 0px 5px, 
+                rgba(146, 211, 200, 0.3) 0px 10px, 
+                rgba(146, 211, 200, 0.2) 0px 15px, 
+                rgba(146, 211, 200, 0.1) 0px 20px, 
+                rgba(146, 211, 200, 0.05) 0px 25px, 
+                rgba(0, 0, 0, 0.25) 0px 14px 28px, 
+                rgba(0, 0, 0, 0.22) 0px 10px 10px;
     border-radius: 5px;
-    & label {
-        font-size: 1.2rem;
-        font-weight: bold;
-    }
+}
+
+#contact-form label {
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .contact-names {
@@ -30,10 +37,14 @@
     border-radius: 0.5em;
     color: var(--c-text-950);
     outline: none;
-    &:focus {
-        border-color: var(--text-500);
-        box-shadow: 0 0 0 0.2rem rgba(66, 134, 189, 0.25);
-    }
+}
+
+#contact-name:focus,
+#contact-family-name:focus,
+#contact-email:focus,
+#contact-message:focus {
+    border-color: var(--text-500);
+    box-shadow: 0 0 0 0.2rem rgba(66, 134, 189, 0.25);
 }
 
 #contact-message {
@@ -55,9 +66,10 @@
     cursor: pointer;
     max-width: 600px;
     align-self: center;
-    &:hover {
-        background-color: #252727;
-    }
+}
+
+#contact-submit:hover {
+    background-color: #252727;
 }
 
 main,
@@ -82,22 +94,28 @@ footer {
 .t-shop-btn {
     background-color: var(--accent-500);
     color: var(--text-950);
-    &:hover {
-        background-color: var(--accent-600);
-    }
 }
 
-:root[data-theme="dark"] {
-    & .t-mitglied-btn,
-    & .t-spenden-btn,
-    & .t-kontakt-btn,
-    & .t-shop-btn {
-        background-color: var(--violett);
-        color: var(--text-950);
-        &:hover {
-            background-color: #4a2984;
-        }
-    }
+.t-mitglied-btn:hover,
+.t-spenden-btn:hover,
+.t-kontakt-btn:hover,
+.t-shop-btn:hover {
+    background-color: var(--accent-600);
+}
+
+:root[data-theme="dark"] .t-mitglied-btn,
+:root[data-theme="dark"] .t-spenden-btn,
+:root[data-theme="dark"] .t-kontakt-btn,
+:root[data-theme="dark"] .t-shop-btn {
+    background-color: var(--violett);
+    color: var(--text-950);
+}
+
+:root[data-theme="dark"] .t-mitglied-btn:hover,
+:root[data-theme="dark"] .t-spenden-btn:hover,
+:root[data-theme="dark"] .t-kontakt-btn:hover,
+:root[data-theme="dark"] .t-shop-btn:hover {
+    background-color: #4a2984;
 }
 
 @media screen and (max-width: 575px) {

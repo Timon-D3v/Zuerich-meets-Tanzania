@@ -5,7 +5,7 @@ import ImageKit from "imagekit";
 import express from "express";
 import Stripe from "stripe";
 import dotenv from "dotenv";
-import timon from "timonjs";
+import timon, { randomString } from "timonjs";
 import https from "https";
 import cors from "cors";
 import path from "path";
@@ -20,6 +20,8 @@ import VORSTAND from "./backend/constants/vorstand.js";
 import GYNO from "./backend/constants/gynäkologie.js";
 import MEDUCATION from "./backend/constants/meducation.js";
 import HERO from "./backend/constants/heropage.js";
+import DONATE from "./backend/constants/spenden.js";
+import VISION from "./backend/constants/vision.js";
 
 
 
@@ -50,7 +52,12 @@ const mailjet = new Mailjet({
     apiKey: process.env.MAILJET_PUBLIC_KEY,
     apiSecret: process.env.MAILJET_PRIVAT_KEY
 });
-const stripe = Stripe(process.env.STRIPE_PRIVAT_KEY);
+const stripe = new Stripe(
+    LOAD_LEVEL === "prod" ?
+    process.env.STRIPE_PRIVATE_KEY :
+    process.env.STRIPE_PRIVATE_KEY_TEST    
+);
+const payment_keys = [];
 
 
 
@@ -88,6 +95,108 @@ function createMailText (obj) {
     return `${obj.author_name} ${obj.author_family_name} schreibt am ${date}: \n${part2}`;
 };
 
+
+
+async function stripe_c_s_created (subscription_id, period_start, period_end, customer_id, start_date, status) {
+    try {
+        await db.createTempPayment(subscription_id, period_start, period_end, customer_id, start_date, status);
+    } catch (err) {
+        timon.errorLog(err);
+        //! sendMailTo
+    };
+};
+
+async function stripe_c_s_updated (subscription_id, period_start, period_end, status) {
+    try {
+        const member = await db.getMemberWithSubscriptionId(subscription_id);
+        const data = [
+            period_start,
+            period_end,
+            status
+        ];
+
+        if (member.length > 0) {
+            member = member[0];
+            const update = [
+                db.updateMemberPeriodStart,
+                db.updateMemberPeriodEnd,
+                db.updateMemberStatus
+            ];
+
+            data.forEach(async (set, i) => {
+                if (typeof set !== "undefined") await update[i](subscription_id, set);
+            });
+        } else {
+            const update = [
+                db.updateTempSubscriptionPeriodStart,
+                db.updateTempSubscriptionPeriodEnd,
+                db.updateTempSubscriptionStatus
+            ];
+
+            data.forEach(async (set, i) => {
+                try {
+                    if (typeof set !== "undefined") await update[i](subscription_id, set);
+                } catch (err) {
+                    console.error("Error:", err);
+                };
+            });
+        };
+    } catch (err) {
+        timon.errorLog(err);
+        //! sendMailTo
+    };
+};
+
+async function stripe_c_s_deleted (subscription_id) {
+    try {
+        const [member] = await db.getMemberWithSubscriptionId(subscription_id);
+        const user_id = member.user_id;
+        await db.deleteMemberWithSubscriptionId(subscription_id);
+        await db.removeMemberWithUserId(user_id);
+    } catch (err) {
+        timon.errorLog(err);
+    };
+};
+
+async function stripe_i_p_success (customer_id, pdf, url) {
+    try {
+        const session = await db.getSubscriptionIdWithCustomerId(customer_id);
+        let subscription_id;
+        if (typeof session === "undefined") {
+            subscription_id = await db.getMemberWithCustomerId(customer_id);
+            subscription_id = subscription_id.subscription_id;
+        } else {
+            subscription_id = session.sub_id;
+        };
+        await db.addInvoiceToDatabase(subscription_id, pdf, url);
+    } catch (err) {
+        timon.errorLog(err);
+    };
+};
+
+async function buyMembership (user, key, url) {
+    try {
+        const session = await stripe.checkout.sessions.create({
+            line_items: [{
+                price: LOAD_LEVEL === "prod" ? 
+                    process.env.STRIPE_PRICE_MEMBERSHIP :
+                    process.env.STRIPE_PRICE_MEMBERSHIP_TEST,
+                quantity: 1
+            }],
+            mode: "subscription",
+            success_url: `${url}/return`,
+            cancel_url: `${url}/spenden`
+        });
+
+        await db.linkUserWithSession(user, session.id, key)
+
+        return session.url;
+    } catch (err) {
+        timon.log(err.message);
+        return `/spenden?js=errorField`;
+    };
+};
+
 async function saveVideo (base64, type) {
     type === "video/mp4" ?
     type = ".mp4" :
@@ -106,9 +215,13 @@ app.use(express.urlencoded({
     extended: true,
     limit: "10000mb"
 }));
-app.use(express.json({
-    limit: '10000mb'
-}));
+app.use((req, res, next) => {
+    if (req.originalUrl === "/post/stripe/webhook") {
+        next();
+    } else {
+        express.json({limit: '10000mb'})(req, res, next);
+    }
+});
 app.use(session({
     secret: process.env.SESSION_SECRET_KEY,
     resave: false,
@@ -119,7 +232,13 @@ app.use(session({
     }
 }));
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+app.use((req, res, next) => {
+    if (req.originalUrl === "/post/stripe/webhook") {
+        next();
+    } else {
+        bodyParser.json()(req, res, next);
+    }
+});
 app.use(cors());
 
 
@@ -221,9 +340,9 @@ app.get("/contact", (req, res) => {
     });
 });
 
-app.get("/board", (req, res) => res.redirect("/us"));
-app.get("/vorstand", (req, res) => res.redirect("/us"));
-app.get("/us", (req, res) => {
+app.get("/board", (req, res) => res.redirect("/vorstand"));
+app.get("/us", (req, res) => res.redirect("/vorstand"));
+app.get("/vorstand", (req, res) => {
     res.render("vorstand.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -237,6 +356,27 @@ app.get("/us", (req, res) => {
         member_list: ABOUT_US.TEAM,
         vorstand: VORSTAND,
         toRealDate
+    });
+});
+
+app.get("/leitideen", (req, res) => res.redirect("/vision"));
+app.get("/ideen", (req, res) => res.redirect("/vision"));
+app.get("/idee", (req, res) => res.redirect("/vision"));
+app.get("/ideas", (req, res) => res.redirect("/vision"));
+app.get("/vision", (req, res) => {
+    res.render("vision.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: VISION.datum,
+        title: "Vision",
+        desc: VISION.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        toRealDate,
+        text: VISION.text,
+        bild: VISION.bild
     });
 });
 
@@ -313,8 +453,84 @@ app.get("/spenden", (req, res) => {
         desc: "Wir freuen uns sehr, wenn Sie uns etwas spenden wollen. Deshalb gibt es diese Seite. So können Sie uns ganz unkompliziert unterstützen. Vielen Dank!",
         sitetype: "static",
         user: req.session.user,
-        js: undefined, // To make payments more secure, I don't risk to allow users to call functions.
+        js: req.query.js,
+        donate: DONATE
     });
+});
+
+app.get("/pay", async (req, res) => {
+    const q = req.query;
+    const types = ["membership", "onetime"];
+    const amount = Number(q.a);
+    if (!payment_keys.includes(q.key) || isNaN(amount) || !types.includes(q.t)) return res.redirect("/");
+    const links = LOAD_LEVEL === "prod" ? [
+        DONATE.ZAHLUNG.linkX,
+        DONATE.ZAHLUNG.link50,
+        DONATE.ZAHLUNG.link80,
+        DONATE.ZAHLUNG.link120,
+        DONATE.ZAHLUNG.member
+    ] : [
+        DONATE.ZAHLUNG.dev.linkX,
+        DONATE.ZAHLUNG.dev.link50,
+        DONATE.ZAHLUNG.dev.link80,
+        DONATE.ZAHLUNG.dev.link120,
+        DONATE.ZAHLUNG.dev.member
+    ];
+    let link = links[0];
+    if (amount === 50) link = links[1];
+    else if (amount === 80) link = links[2];
+    else if (amount === 120) link = links[3];
+
+    if (q.t === "membership") {
+        if (!req.session?.user?.valid) return res.redirect("/login?redir=/spenden");
+        if (req.session.user.type === "member" || req.session.user.type === "admin") return res.redirect("/?js=infoField(`Du bist schon ein Mitglied`);nofunction");
+        link = await buyMembership(req.session.user, q.key, req.protocol + '://' + req.get('host'));
+    };
+
+    res.redirect(303, link);
+});
+
+app.get("/return", async (req, res) => {
+    if (!req.session?.user?.valid) return res.redirect("/login?redir=/spenden");
+    try {
+        const user_details = await db.getSessionIdWithUserId(req.session.user.id);
+
+        if (typeof user_details === "undefined") throw new Error("Du hast noch keine Bestellung gemacht.");
+
+        const user = req.session.user;
+        const auth = {
+            id: user.id === user_details.user_id,
+            username: user.username === user_details.username,
+            password: user.password === user_details.user_password,
+            key: payment_keys.includes(user_details.pay_key)
+        };
+
+        for (const property in auth) {
+            if (auth[property] === false) throw new Error(`Dein ${property} stimmt nicht mit denjenigen auf der Bestellung überein.`);
+        };
+
+        const session = await stripe.checkout.sessions.retrieve(user_details.session_id);
+        const subscription_id = session.subscription;
+
+        if (session.status === "complete") {
+            const result = await db.getTempPaymentWithSubscriptionId(subscription_id);
+            const admin = user.type === "admin" ? 1 : 0;
+            if (admin === 0) {
+                req.session.user.type = "member";
+                await db.addMemberWithUserId(user.id);
+            };
+            await db.createMember(user.id, subscription_id, result.customer_id, result.status, result.period_start, result.period_end, result.start_date, admin);
+            await db.updateMemberStatus(subscription_id, "paid");
+            return res.redirect(`/profile?js=successField(\`Die Zahlung war erfolgreich. Danke, dass du ein Mitglied von Zurich meets Tanzania bist!\`);nofunction`);
+        } else if (session.status === "open") {
+            throw new Error("Die Zahlung steht noch offen. Bitte beende deine Zahlung ordnungsgemäss.");
+        } else if (session.status === "expired") {
+            throw new Error("Die Zahlung hat zu lange gedauert, bitte versuche es erneut...");
+        };
+    } catch (err) {
+        return res.redirect(`/spenden?js=errorField(\`${err.message}\`);nofunction`);
+    };
+    res.redirect("/");
 });
 
 app.get("/gallery/:id", (req, res) => res.redirect("/galerie/" + req.params.id));
@@ -645,22 +861,66 @@ app.post("/post/gallery/getLinks/:num", async (req, res) => {
     res.json({error: response});
 });
 
+app.post("/post/getPaymentLink", async (req, res) => {
+    if (isNaN(req.body.amount)) return res.end();
+    let key = randomString(256);
+    payment_keys.push(key);
+    res.json({link: `${req.protocol}://${req.get('host')}/pay?key=${key}&a=${req.body.amount}&t=${req.body.type}`});
+});
 
-////// TEST
-app.post('/charge', async (req, res) => {
-    return res.json({error: "501: Forbidden"});
+app.post("/post/stripe/webhook", bodyParser.raw({type: 'application/json'}), async (req, res) => {
+    let event;
+    const endpointSecret = LOAD_LEVEL === "prod" ?
+        process.env.STRIPE_ENDPOINT_SECRET :
+        process.env.STRIPE_ENDPOINT_SECRET_TEST;
+
+    // Verify the event came from Stripe
     try {
-        const { amount, source, receipt_email } = req.body;
-        const charge = await stripeInstance.charges.create({
-            amount,
-            currency: 'usd',
-            source,
-            receipt_email,
-        });
-        res.status(200).json(charge);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+      const sig = req.headers['stripe-signature'];
+      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    } catch (err) {
+      console.error(`Error: ${err.message}`);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    };
+  
+    // Handle event
+    switch (event.type) {
+        case "customer.subscription.created":
+            const subscription_id = event.data.object.id;
+            const period_start = event.data.object.current_period_start;
+            const period_end = event.data.object.current_period_end;
+            const customer_id = event.data.object.customer;
+            const start_date = event.data.object.start_date;
+            const status = event.data.object.status;
+
+            await stripe_c_s_created(subscription_id, period_start, period_end, customer_id, start_date, status);
+            break;
+        case "customer.subscription.updated":
+            const _subscription_id = event.data.object.id;
+            const _period_start = event.data.previous_attributes.current_period_start;
+            const _period_end = event.data.previous_attributes.current_period_end;
+            const _status = event.data.previous_attributes.status;
+
+            await stripe_c_s_updated(_subscription_id, _period_start, _period_end, _status);
+            break;
+        case "customer.subscription.deleted":
+            const __subscription_id = event.data.object.id;
+
+            await stripe_c_s_deleted(__subscription_id);
+            break;
+        case "invoice.payment_succeeded":
+            const _customer_id = event.data.object.customer;
+            const pdf = event.data.object.invoice_pdf;
+            const url = event.data.object.hosted_invoice_url;
+
+            await stripe_i_p_success(_customer_id, pdf, url);
+            break;
+        default:
+            console.warn(`Unhandled event type ${event.type}`);
+            break;
+    };
+  
+    res.json({received: true});
 });
 /*///// TEST
 const request = mailjet.post("send", {version: "v3.1"})

@@ -9,11 +9,54 @@
             env: env,
             sitetype: sitetype
         }) %>
+        <script type="text/javascript" src="/js/donate.js" defer></script>
     </head>
     <body>
         <%- include("./snippets/header.ejs") %>
         <%- include("./snippets/nav.ejs") %>
-        <main></main>
+        <main>
+            <%- include("./snippets/hero.ejs", {
+                img_alt: donate.alt,
+                img_path: donate.bild,
+                title: donate.titel,
+                subtitle: "",
+                cta_text: "Spenden",
+                cta_link: "#scrollToDonate",
+                origin_url
+            }) %>
+            <div id="scrollToDonate" class="donate-wrapper">
+                <h1 class="donate-title">Ich helfe mit</h1>
+                <div class="donate-decider">
+                    <button type="button" class="donate-decider-btn active" id="donate_switch_onetime">Einmalig</button>
+                    <button type="button" class="donate-decider-btn" id="donate_switch_member">Regelmässig</button>
+                </div>
+                <div class="donate-onetime active">
+                    <div class="donate-amount">
+                        <div class="donate-currency">CHF</div>
+                        <input type="number" name="donate50" class="donate-number" value="50" disabled>
+                    </div>
+                    <div class="donate-amount">
+                        <div class="donate-currency">CHF</div>
+                        <input type="number" name="donate80" class="donate-number" value="80" disabled>
+                    </div>
+                    <div class="donate-amount">
+                        <div class="donate-currency">CHF</div>
+                        <input type="number" name="donate120" class="donate-number" value="120" disabled>
+                    </div>
+                    <div class="donate-amount">
+                        <div class="donate-currency">CHF</div>
+                        <input type="number" id="donate_custom" class="donate-number" placeholder="___" min="1" max="100000000">
+                    </div>
+                </div>
+                <div class="donate-membership">
+                    <div class="donate-amount">
+                        <div class="donate-currency">CHF / Monat</div>
+                        <input type="number" name="donate20" class="donate-number" value="40" disabled>
+                    </div>
+                </div>
+                <button type="button" class="hero-cta donate-btn" id="donate_btn">Jetzt Spenden</button>
+            </div>
+        </main>
         <%- include("./snippets/footer.ejs", {
             origin_url: origin_url,
             js: js

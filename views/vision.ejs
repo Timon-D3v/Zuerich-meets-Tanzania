@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <style type="text/css">
+            @media screen and (min-width: 1000px) {
+                .hero-img {
+                    filter: brightness(0.75);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main>
+            <h1 class="title vision">Vision</h1>
+            <div class="news vision">
+                <div class="news-div vision">
+                    <p class="vision-text">
+                        <span class="zitat"><%- text.zitat %></span>
+                        <br>
+                        <span class="zitat_autor"><%- text.autor_zitat %></span>
+                    </p>
+                    <p class="vision-text"><%- text.abs1 %></p>
+                    <p class="vision-text"><%- text.abs2 %></p>
+                    <p class="vision-text">
+                        <span class="zitat"><%- text.zitat2 %></span>
+                        <br>
+                        <span class="zitat_autor"><%- text.autor_zitat2 %></span>
+                    </p>
+                </div>
+                <img class="news-img news-left vision" alt="<%- bild.beschreibung %>" src="<%- bild.url %>">
+            </div>
+            <div class="vision-wrapper">
+                <p class="vision-text"><%- text.abs3 %></p>
+                <ul class="visions-liste">
+                    <li><%- text.liste.a %></li>
+                    <li><%- text.liste.b %></li>
+                    <li><%- text.liste.c %></li>
+                    <li><%- text.liste.d %></li>
+                </ul>
+                <p class="vision-text"><%- text.abs4 %></p>
+                <ul class="visions-liste">
+                    <li><%- text.liste2.a %></li>
+                    <li><%- text.liste2.b %></li>
+                    <li><%- text.liste2.c %></li>
+                    <li><%- text.liste2.d %></li>
+                    <li><%- text.liste2.e %></li>
+                </ul>
+                <p class="vision-text"><%- text.abs5 %></p>
+                <p class="vision-text sign"><%- text.signierung %></p>
+                <h2 class="subtitle vision"><%- text.ausschnitt.art_num %></h2>
+                <p class="vision-text"><%- text.ausschnitt.art_ausschnitt %></p>
+            </div>
+            <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
+        </main>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>
