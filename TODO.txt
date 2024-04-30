@@ -27,6 +27,10 @@ Für Static
  - Erstellungsdatum ersichtlich!
 
 
+Laszlos Namen ändern in Saras Motivation 
+projektnamen klein schrieben
+mailjet API einrichten mit info@timondev.com fürs erste
+
 KONTAKT
 
 vereb@gmx.net
