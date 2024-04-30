@@ -22,7 +22,7 @@
     "imagekit": "^5.0.0",
     "mysql2": "^3.8.0",
     "node-mailjet": "^6.0.5",
-    "stripe": "^15.3.0",
+    "stripe": "^15.4.0",
     "timonjs": "^0.0.5"
   },
   "devDependencies": {
