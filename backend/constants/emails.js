@@ -19,13 +19,13 @@
 */
 const EMAILS = {
     sender_email: "info@timondev.com",
-    sender_name: "Zurich meets Tanzania",
+    sender_name: "zurich meets tanzania",
     anschrift: "___ANREDE___ ___GENDER___ ___NACHNAME___",
     anschrift_html: `<p style="font-size: 18px; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; display: block; margin-block-start: 0; margin-block-end: 0; margin-inline-start: 0; margin-inline-end: 0; margin: 1em 0; word-wrap: normal; word-break: keep-all; hyphens: auto; -webkit-hyphens: auto;">
                     ___ANREDE___ ___GENDER___ ___NACHNAME___</p>`,
-    grüsse_text: "\n\nMit freundlichen Grüssen\nZurich meets Tanzania",
+    grüsse_text: "\n\nMit freundlichen Grüssen\nzurich meets tanzania",
     grüsse_html: `<p style="font-size: 18px; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; display: block; margin-block-start: 0; margin-block-end: 0; margin-inline-start: 0; margin-inline-end: 0; margin: 1em 0; word-wrap: normal; word-break: keep-all; hyphens: auto; -webkit-hyphens: auto;">
-                Mit freundlichen Grüssen<br><strong style="font-size: 18px; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; font-weight: bold;">Zurich meets Tanzania</strong></p>`,
+                Mit freundlichen Grüssen<br><strong style="font-size: 18px; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; font-weight: bold;">zurich meets tanzania</strong></p>`,
     header: `<div style="display: block; overflow-x: auto;">
             <table align="center" style="width: 100%; background-color: #fff5e5;">
                 <td style="display: block; min-height: 100px; margin-bottom: 20px;">
@@ -64,7 +64,7 @@ const EMAILS = {
                                         <a style="font-size: 20px; margin-right: 20px; line-height: 1.5; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; cursor: pointer; text-decoration: underline;" href="https://zurich-meets-tanzania.com">Homepage</a>
                                     </td>
                                     <td>
-                                        <a style="font-size: 20px; line-height: 1.5; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; cursor: pointer; text-decoration: underline;" href="https://timondev.com">Programmiert</a>
+                                        <a style="font-size: 20px; line-height: 1.5; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; cursor: pointer; text-decoration: underline;" href="https://zurich-meets-tanzania.com/abmelden">Abmelden</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -73,13 +73,18 @@ const EMAILS = {
                             <tbody>
                                 <tr>
                                     <td>
+                                        <a style="display: block; height: 30px; width: 30px; cursor: pointer; margin-right: 20px; text-decoration: none; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif;" href="https://www.instagram.com/zurichmeetstanzania/">
+                                            <img style="height: 30px; width: 30px; overflow: clip; overflow-clip-margin: content-box;" alt="Instagram Link" src="https://ik.imagekit.io/zmt/email%20files/instgram.png?updatedAt=1714585204115">
+                                        </a>
+                                    </td>
+                                    <td>
                                         <a style="display: block; height: 30px; width: 30px; cursor: pointer; text-decoration: none; margin-right: 20px; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif;" href="https://www.facebook.com/profile.php?id=100064463715451">
                                             <img style="height: 30px; width: 30px; overflow: clip; overflow-clip-margin: content-box;" alt="Facebook Link" src="https://ik.imagekit.io/zmt/email%20files/facebook.png?updatedAt=1714585219445">
                                         </a>
                                     </td>
                                     <td>
-                                        <a style="display: block; height: 30px; width: 30px; cursor: pointer; text-decoration: none; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif;" href="https://www.instagram.com/zurichmeetstanzania/">
-                                            <img style="height: 30px; width: 30px; overflow: clip; overflow-clip-margin: content-box;" alt="Instagram Link" src="https://ik.imagekit.io/zmt/email%20files/instgram.png?updatedAt=1714585204115">
+                                        <a style="display: block; height: 30px; width: 30px; cursor: pointer; text-decoration: none; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif;" href="https://www.timondev.com">
+                                            <img style="height: 30px; width: 30px; border-radius: 5px; overflow: clip; overflow-clip-margin: content-box;" src="https://ik.imagekit.io/timon/cdn/icon" alt="Logo des Entwicklers">
                                         </a>
                                     </td>
                                 </tr>
@@ -90,7 +95,8 @@ const EMAILS = {
             </div>`,
     newsletter: `<p style="font-size: 16px; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; display: block; margin-block-start: 0; margin-block-end: 0; margin-inline-start: 0; margin-inline-end: 0; margin: 1em 0; word-wrap: normal; word-break: keep-all; hyphens: auto; -webkit-hyphens: auto;">
                 Wir freuen uns Ihnen mitteilen zu können, dass wir Neuigkeiten haben. Sie können sie sich gerne unter folgendem <a style="color: #c2630a; text-decoration: underline; cursor: pointer; font-size: 16px; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; display: inline; word-wrap: normal; word-break: keep-all; hyphens: auto; -webkit-hyphens: auto;" href="https://zurich-meets-tanzania.com/#scroll_to_news">Link</a>
-                anschauen.<br><br>Hier ist schon eine kleine Vorschau:<br>`
+                anschauen.<br><br>Hier ist schon eine kleine Vorschau:<br>`,
+    newsletterSubject: "Es gibt Neuigkeiten!"
 };
 
 export default EMAILS;

@@ -107,9 +107,14 @@ function toggleDivs (toggler, first, second) {
 async function admin_sendNews (e) {
 	e.preventDefault();
 
-	let picture = await toBase64(
-		document.getElementById("news_img_file").files[0]
-	);
+	let picture = "";
+	try {
+		picture = await toBase64(
+			document.getElementById("news_img_file").files[0]
+		);
+	} catch (err) {
+		warnLog("No image uploaded");
+	};
 
 	let res = await fetch(window.location.origin + "/post/submitNews", {
 		method: "POST",

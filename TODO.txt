@@ -3,17 +3,12 @@ After payment method: Also make a part where you can buy Tanjas book directly on
 Newsletter => mail wenn aktuelles =>> NEED MAILJET => NEED LOCAL SERVER
 
 
-Spenden schnell auffindbar machen auf mobile
-Make tables for members
+Ein .get("/abmelden") für den Newsletter machen
 
+Spenden schnell auffindbar machen auf mobile
 Rechnungsabschnitt beim Account
 Link zu member werden beim Account
-
-Update docstring in email.js and spenden.js
 Mal schauen, was mit .header-fat los ist (ist im logo)
-
-
-Laszlos Namen ändern in Saras Motivation 
 projektnamen klein schrieben
 mailjet API einrichten mit info@timondev.com fürs erste
 

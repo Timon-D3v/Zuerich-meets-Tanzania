@@ -34,7 +34,7 @@ Google Ad, Imagekit und weitere aufgesetzt. Ausserdem die Links zu den Blogs auf
 Time spent: 4:15h; Time worked: 3h;
 
 17.2.24
-Habe angefangen den Blog zu designen, habe aber gemerkt, dass das ohne builder schwer geht, weil ich keine ahnung habe was wo hinkommt und dann den builder angefangen.
+Habe angefangen den Blog zu designen, habe aber gemerkt, dass das ohne builder schwer geht, weil ich keine Ahnung habe was wo hinkommt und dann den builder angefangen.
 Time spent: 3h; Time worked: 2:30h;
 
 17.2.24
@@ -74,7 +74,7 @@ Noch mehr Möglichkeiten für den Blogbuilder erstellt;
 Time spent: 1h; Time worked: 1h;
 
 24.2.24
-Querys für URL eingefügt. Ausserdem begonnen, ein overlay für Benutzer zu erstellen, um Accounteinstellungen und ähnliches zu erledigen.
+Queries für URL eingefügt. Ausserdem begonnen, ein overlay für Benutzer zu erstellen, um Accounteinstellungen und ähnliches zu erledigen.
 Time spent: 2h; Time worked: 2h;
 
 28.2.24
@@ -82,17 +82,17 @@ Mehr nicht programmier Arbeit. Aber ein paar quality of life fixes.
 Time spent: 4h; Time worked 2:30h;
 
 4.3.24
-Einiges an der profile seite geabreitet. Man kann nun seinen Account updaten.
+Einiges an der profile Seite gearbeitet. Man kann nun seinen Account updaten.
 Time spent: 4h; Time worked: 4h;
 
 10.3.24
-Eher Backend Arbeit. Darkmode Datenbank erstellet und somit einen Darkmode über alle Seiten für Benuter, die eingeloggt sind und es in den Einsetllungen aktivieren.
+Eher Backend Arbeit. Darkmode Datenbank erstellt und somit einen Darkmode über alle Seiten für Benutzer, die eingeloggt sind und es in den Einstellungen aktivieren.
 Ausserdem eine Möglichkeit zum abmelden vom Newsletter erstellt (Nur für Benutzer, Sicherheit).
 Time spent: 3:25h; Time worked: 3h;
 
 11.3.24
 Benachrichtigungsabeitlung im Profil fertiggestellt. Quality of life upgrade beim hochladen eines neuen Profilbild (Einfach neben die Box klicken um abzubrechen).
-CSS Dateigrösse reduziert (Ganze Hamburger.css Datei entfehrnt und wichtiges in style.css übernommen.).
+CSS Dateigrösse reduziert (Ganze Hamburger.css Datei entfernt und wichtiges in style.css übernommen.).
 Ein Link zum Blogbuilder zur Adminpage hinzugefügt.
 Time spent: 2:45h; Time worked: 1:45h;
 
@@ -107,11 +107,11 @@ Time spent: 6h; Time worked: 5:30h;
 
 23.3.24
 Habe die Kontaktseite erstellt. Einige neue URLs erstellt, damit man alles auch auf deutsch eingeben kann.
-Ich habe ausserdem das Logo zu png geändert und als icon verwendet und wenn man über navigationslinks mit der Muas geht, werden sie jetzt orange.
+Ich habe ausserdem das Logo zu png geändert und als icon verwendet und wenn man über navigationslinks mit der Maus geht, werden sie jetzt orange.
 Time spent: 4:39h; Time worked: 4h;
 
 26.3.24
-Managementseite gestylet. Wenn man sich einloggt wird man direkt zur richtigen Seite weitergeleitet.
+Managementseite gestylt. Wenn man sich einloggt wird man direkt zur richtigen Seite weitergeleitet.
 Man kann jetzt Admins hinzufügen und entfernen. Man kommt jetzt zum Mitgliedschaftsbereich wenn man auf Mitglied drückt.
 Spent spent: 3h; Time worked: 2h;
 

@@ -5,7 +5,7 @@ import ImageKit from "imagekit";
 import express from "express";
 import Stripe from "stripe";
 import dotenv from "dotenv";
-import timon, { randomString } from "timonjs";
+import timon from "timonjs";
 import https from "https";
 import cors from "cors";
 import path from "path";
@@ -13,14 +13,14 @@ import fs from "fs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import * as db from "./backend/db/db.zmt.js";
-import BACKUP from "./backend/constants/backup.js";
-import ABOUT_US from "./backend/constants/admins.js";
+import MEDUCATION from "./backend/constants/meducation.js";
 import STATUTEN from "./backend/constants/statuten.js";
 import VORSTAND from "./backend/constants/vorstand.js";
 import GYNO from "./backend/constants/gynäkologie.js";
-import MEDUCATION from "./backend/constants/meducation.js";
-import HERO from "./backend/constants/heropage.js";
+import ABOUT_US from "./backend/constants/admins.js";
 import DONATE from "./backend/constants/spenden.js";
+import BACKUP from "./backend/constants/backup.js";
+import HERO from "./backend/constants/heropage.js";
 import VISION from "./backend/constants/vision.js";
 import EMAILS from "./backend/constants/emails.js";
 
@@ -89,10 +89,10 @@ function createMailSubject (obj) {
 function createMailText (obj) {
     let date = toRealDate(Date());
     let divider = "----------------------------------------------";
-    let adress = `${obj.author_name} ${obj.author_family_name} hat diese E-Mail hinterlegt: ${obj.author_email}`;
-    let footer1 = "Dies ist eine automatisch verschickte E-Mail über eine API von postmail.invotes.com\nProgrammiert und aufesetzt von Timon Fiedler.";
+    let address = `${obj.author_name} ${obj.author_family_name} hat diese E-Mail hinterlegt: ${obj.author_email}`;
+    let footer1 = "Dies ist eine automatisch verschickte E-Mail über eine API von postmail.invotes.com\nProgrammiert und aufgesetzt von Timon Fiedler.";
     let footer2 = "Timon Fiedler ist nicht verantwortlich für eventuellen Spam oder andere Fehler, die durch den Endnutzer entstehen.";
-    let part2 = `${divider}\n\n${obj.message}\n\n${divider}\n${adress}\n${divider}\n\n${footer1}\n${footer2}`;
+    let part2 = `${divider}\n\n${obj.message}\n\n${divider}\n${address}\n${divider}\n\n${footer1}\n${footer2}`;
     return `${obj.author_name} ${obj.author_family_name} schreibt am ${date}: \n${part2}`;
 };
 
@@ -102,8 +102,14 @@ async function stripe_c_s_created (subscription_id, period_start, period_end, cu
     try {
         await db.createTempPayment(subscription_id, period_start, period_end, customer_id, start_date, status);
     } catch (err) {
-        timon.errorLog(err);
-        //! sendMailTo
+        const message = "Beim Bezahlen eines Benutzers ist ein kritischer Fehler aufgetreten. Bitte sofort überprüfen (lassen).<br><br>Weitere Informationen:";
+        timon.errorLog(err.message);
+        sendMail("info@zurich-meets-tanzania.com", {
+            Subject: "Kritischer Fehler",
+            TextPart: "Ein kritischer Fehler ist aufgetreten\n\n" + message.replace("<br>", "\n") + err.message,
+            HTMLPart: "<h1>Ein kritischer Fehler ist aufgetreten</h1><br><br><p>" + message + err.message + "</p>",
+            CustomID: timon.randomString(32)
+        });
     };
 };
 
@@ -143,8 +149,14 @@ async function stripe_c_s_updated (subscription_id, period_start, period_end, st
             });
         };
     } catch (err) {
-        timon.errorLog(err);
-        //! sendMailTo
+        const message = "Beim Erneuern des Abos eines Benutzers ist ein kritischer Fehler aufgetreten. Bitte sofort überprüfen (lassen).<br><br>Weitere Informationen:";
+        timon.errorLog(err.message);
+        sendMail("info@zurich-meets-tanzania.com", {
+            Subject: "Kritischer Fehler",
+            TextPart: "Ein kritischer Fehler ist aufgetreten\n\n" + message.replace("<br>", "\n") + err.message,
+            HTMLPart: "<h1>Ein kritischer Fehler ist aufgetreten</h1><br><br><p>" + message + err.message + "</p>",
+            CustomID: timon.randomString(32)
+        });
     };
 };
 
@@ -155,7 +167,14 @@ async function stripe_c_s_deleted (subscription_id) {
         await db.deleteMemberWithSubscriptionId(subscription_id);
         await db.removeMemberWithUserId(user_id);
     } catch (err) {
-        timon.errorLog(err);
+        const message = "Beim Löschen eines Abos eines Benutzers ist ein kritischer Fehler aufgetreten. Bitte sofort überprüfen (lassen).<br><br>Weitere Informationen:";
+        timon.errorLog(err.message);
+        sendMail("info@zurich-meets-tanzania.com", {
+            Subject: "Kritischer Fehler",
+            TextPart: "Ein kritischer Fehler ist aufgetreten\n\n" + message.replace("<br>", "\n") + err.message,
+            HTMLPart: "<h1>Ein kritischer Fehler ist aufgetreten</h1><br><br><p>" + message + err.message + "</p>",
+            CustomID: timon.randomString(32)
+        });
     };
 };
 
@@ -207,6 +226,27 @@ async function saveVideo (base64, type) {
         if (err) console.error('Error saving video:', err);
     });
     return video;
+};
+
+async function downloadFileAsBase64(fileUrl) {
+    return new Promise((resolve, reject) => {
+        https.get(fileUrl, function(response) {
+            const chunks = [];
+    
+            response.on('data', function(chunk) {
+                chunks.push(chunk);
+            });
+    
+            response.on('end', function() {
+                const buffer = Buffer.concat(chunks);
+                const base64String = buffer.toString('base64');
+                
+                resolve(base64String);
+            });
+        }).on('error', function(err) {
+            reject(err);
+        });
+    });
 };
 
 async function sendMail (email, data, files = [], test = false) {
@@ -752,7 +792,7 @@ app.post("/logout", (req, res) => {
 app.post("/post/newsletter/signUp", async (req, res) => {
     let result = await db.newsletterSignUp(req.body)
         .catch(error => {
-            console.error("An Error occured:", error);
+            console.error("An Error occurred:", error);
             return "No connection to database";
         });
     res.send({status: result});
@@ -767,7 +807,7 @@ app.post("/post/newsletter/signUp/logedIn", async (req, res) => {
         email: req.session.user.email
     })
     .catch(error => {
-        console.error("An Error occured:", error);
+        console.error("An Error occurred:", error);
         return "No connection to database";
     });
     res.json({status: result});
@@ -789,7 +829,7 @@ app.post("/post/blog", async (req, res) => {
     let b = req.body;
     let result = await db.createPost(b.title, b.author, b.preview, b.content, "Blog", b.img, b.comment)
         .catch(error => {
-            console.error("An Error occured:", error);
+            console.error("An Error occurred:", error);
             return "No connection to database";
         });
     res.send({status: result});
@@ -856,6 +896,22 @@ app.post("/post/submitNews", async (req, res) => {
     let b = req.body,
         status = 200;
     let img_path = await imagekitUpload(b.img, b.img_alt.replaceAll(" ", "_"), "/news/");
+    const file_arr = [];
+    if (b.pdf) {
+        const file = await downloadFileAsBase64("https://ik.imagekit.io/zmt/pdf/" + b.pdf_src);
+        file_arr.push({
+            ContentType: "application/pdf",
+            Filename: b.pdf_src,
+            Base64Content: file
+        });
+    };
+    try {
+        const recipients = await db.getAllNewsletterSignUps();
+        sendNewsletterEmail(recipients, EMAILS.newsletterSubject, b.text, file_arr);
+    } catch (err) {
+        console.error(err);
+        status = 500;
+    };
     await db.submitNews(b.text, img_path.path, b.img_alt, b.img_pos, b.btn, b.btn_text, b.btn_link, b.pdf, b.pdf_src)
         .catch(err => status = err);
     res.json({res: status});
@@ -929,7 +985,7 @@ app.post("/post/gallery/getLinks/:num", async (req, res) => {
 
 app.post("/post/getPaymentLink", async (req, res) => {
     if (isNaN(req.body.amount)) return res.end();
-    let key = randomString(256);
+    let key = timon.randomString(256);
     payment_keys.push(key);
     res.json({link: `${req.protocol}://${req.get('host')}/pay?key=${key}&a=${req.body.amount}&t=${req.body.type}`});
 });
@@ -985,7 +1041,7 @@ app.post("/post/stripe/webhook", bodyParser.raw({type: 'application/json'}), asy
             console.warn(`Unhandled event type ${event.type}`);
             break;
     };
-  
+
     res.json({received: true});
 });
 

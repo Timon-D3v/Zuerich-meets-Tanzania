@@ -30,19 +30,22 @@
                 </div>
                 <div class="f-l-r">
                     <h2>Rechtliches</h2>
-                    <a href="#">Datenschutz</a>
-                    <a href="#">Impressum</a>
                     <a href="https://www.timondev.com/">Programmiert</a>
                     <a href="/statuten">Statuten</a>
+                    <h2>Spendenkonto</h2>
+                    <a href="/spenden">zurich-meets-tanzania</a>
+                    <a href="/spenden">IBAN: CH 20 0900 0000 6184 2154 0</a>
                 </div>
             </div>
             <p class="f-copyright">Copyright &copy; 2024 Zürich Meets Tanzania | Alle Rechte vorbehalten</p><%
             if (js) {
-                js = js.replaceAll("\"", "`"); %>
+                js = js.replaceAll("\"", "`"); 
+            %>
             <script id="query_script" defer>
                 $(document).ready(() => {
                     <%= js %>();
                     $("#query_script").remove();
                 });
-            </script><% }; %>
+            </script><% 
+            }; %>
         </footer>

@@ -68,7 +68,7 @@ export async function getLastXPosts (x) {
     let query = "SELECT * from `zmt`.`blog` ORDER BY `id` DESC LIMIT " + x + ";";
     let [result] = await pool.query(query)
         .catch(() => {throw new Error("Fehler");});
-    if (result.length !== x) throw new Error("Nicht die gewünschte Antahl Elemente");
+    if (result.length !== x) throw new Error("Nicht die gewünschte Anzahl Elemente");
     return result;
 };
 
