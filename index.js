@@ -22,6 +22,7 @@ import MEDUCATION from "./backend/constants/meducation.js";
 import HERO from "./backend/constants/heropage.js";
 import DONATE from "./backend/constants/spenden.js";
 import VISION from "./backend/constants/vision.js";
+import EMAILS from "./backend/constants/emails.js";
 
 
 
@@ -206,6 +207,71 @@ async function saveVideo (base64, type) {
         if (err) console.error('Error saving video:', err);
     });
     return video;
+};
+
+async function sendMail (email, data, files = [], test = false) {
+    try {
+        const { Subject, TextPart, HTMLPart, CustomID } = data;
+        const req = await mailjet.post("send", {version: "v3.1"}).request({
+            Messages: [{
+                From: {
+                    Email: EMAILS.sender_email,
+                    Name: EMAILS.sender_name
+                },
+                To: [{
+                    Email: email
+                }],
+                Subject,
+                TextPart,
+                HTMLPart,
+                CustomID,
+                Attachments: files
+            }],
+            SandboxMode: test
+        });
+        return req;
+    } catch (err) {
+        console.error(err.message);
+        return err;
+    };
+};
+
+function sendNewsletterEmail (recipients, subject, text, files = []) {
+    recipients.forEach(recipient => {
+        let { anschrift, anschrift_html } = EMAILS;
+        const { header, newsletter, grüsse_html, footer } = EMAILS;
+
+        if (recipient.gender === "Herr") {
+            anschrift = anschrift.replace("___ANREDE___", "Lieber");
+            anschrift_html = anschrift_html.replace("___ANREDE___", "Lieber");
+
+            anschrift = anschrift.replace("___GENDER___", recipient.gender);
+            anschrift_html = anschrift_html.replace("___GENDER___", recipient.gender);
+        } else if (recipient.gender === "Frau") {
+            anschrift = anschrift.replace("___ANREDE___", "Liebe");
+            anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe");
+
+            anschrift = anschrift.replace("___GENDER___", recipient.gender);
+            anschrift_html = anschrift_html.replace("___GENDER___", recipient.gender);
+        } else {
+            anschrift = anschrift.replace("___ANREDE___", "Liebe(r)");
+            anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe(r)");
+
+            anschrift = anschrift.replace("___GENDER___", recipient.vorname);
+            anschrift_html = anschrift_html.replace("___GENDER___", recipient.vorname);
+        };
+
+        anschrift = anschrift.replace("___NACHNAME___", recipient.nachname);
+        anschrift_html = anschrift_html.replace("___NACHNAME___", recipient.nachname);
+
+        const data = {
+            Subject: subject,
+            TextPart: anschrift + text + EMAILS.grüsse,
+            HTMLPart: header + anschrift_html + newsletter + text + "</p>" + grüsse_html + footer,
+            CustomID: "Newsletter" 
+        };
+        sendMail(recipient.email, data, files);
+    });
 };
 
 
@@ -448,7 +514,7 @@ app.get("/spenden", (req, res) => {
         env: LOAD_LEVEL,
         url: req.url,
         origin_url: req.protocol + "://" + req.get("host"),
-        date: "Fri Apr 19 2024 19:53:02 GMT+0200 (Mitteleuropäische Sommerzeit)",
+        date: DONATE.datum,
         title: "Spenden",
         desc: "Wir freuen uns sehr, wenn Sie uns etwas spenden wollen. Deshalb gibt es diese Seite. So können Sie uns ganz unkompliziert unterstützen. Vielen Dank!",
         sitetype: "static",
@@ -922,43 +988,17 @@ app.post("/post/stripe/webhook", bodyParser.raw({type: 'application/json'}), asy
   
     res.json({received: true});
 });
-/*///// TEST
-const request = mailjet.post("send", {version: "v3.1"})
-    .request({
-        "Messages":[
-            {
-              "From": {
-                "Email": "zuerich.meets.tanzania@gmail.com",
-                "Name": "Timon"
-              },
-              "To": [
-                {
-                  "Email": "zuerich.meets.tanzania@gmail.com",
-                  "Name": "Timon"
-                }
-              ],
-              "Subject": "Greetings from Mailjet.",
-              "TextPart": "My first Mailjet email",
-              "HTMLPart": "<h3>Dear passenger 1, welcome to <a href='https://www.mailjet.com/'>Mailjet</a>!</h3><br />May the delivery force be with you!",
-              "CustomID": "CAMPAIGN ID",
-              // For File attachments
-              "Attachments": [
-                {
-                        "ContentType": "text/plain",
-                        "Filename": "test.txt",
-                        "Base64Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
-                }
-        ]
-            }
-          ],
-          // For Testing
-          "SandboxMode":true
-        });
 
-//request.then(result => console.log(result.body)).catch(err => console.log(err));
-
-// WORKS
-
+app.post("/post/getMyBills", async (req, res) => {
+    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    try {
+        const member = await db.getMemberWithUserId(req.session.user.id);
+        const bills = await db.getBills(member?.subscription_id);
+        res.json(bills);
+    } catch (error) {
+        res.json({error});
+    };
+});
 // => https://documentation.mailjet.com/hc/en-us/articles/360043007133-Do-you-have-special-pricing-for-non-profits*/
 
 

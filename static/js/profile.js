@@ -25,7 +25,8 @@ preview_file = $("#file_preview"),
 submit_file = $("#file_submit"),
 newsletterBtn = $("#notifications_newsletter"),
 newsletterSelect = document.getElementById("newsletterSignUpOption"),
-close_picture_overlay = $("#close_picture_overlay");
+close_picture_overlay = $("#close_picture_overlay"),
+get_member = $("#get_member");
 const default_val = {
     username: username.attr("placeholder"),
     password: password.val(),
@@ -102,6 +103,18 @@ submit_file.click(async () => {
     submit_file.removeClass("flex");
     sendNewProfilePicture();
 });
+
+if (JSON.stringify(get_member) !== "{}") {
+    get_member.click(async () => {
+        const res = await post("/post/getPaymentLink", {
+            amount: 40,
+            type: "membership"
+        });
+        window.location.href = res.link;
+    });
+} else {
+    getMyBills();
+};
 
 $("#preferences_darkmode").click(preferences_toggleDarkmode);
 $("#notifications_newsletter").click(handleNewsletterCalling);
@@ -214,6 +227,20 @@ async function submitNewsletter () {
     });
     res = await res.json();
     return res.status;
+};
+
+async function getMyBills () {
+    const bills = await post("/post/getMyBills");
+    bills.forEach((bill, i) => {
+        if (i === 0) {
+            // Append to Aktuell
+        } else if (i === 1) {
+            // Create "More Bills"
+            // Append there
+        } else {
+            // Append to "More Bills"
+        };
+    });
 };
 
 function cancelNewsletter () {

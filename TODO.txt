@@ -3,28 +3,14 @@ After payment method: Also make a part where you can buy Tanjas book directly on
 Newsletter => mail wenn aktuelles =>> NEED MAILJET => NEED LOCAL SERVER
 
 
-Webhooks
-Log
-Some way to remove members after a year and readd them if they pay
 Spenden schnell auffindbar machen auf mobile
-Debuggen und verbessern von allen zahlungssachen (ist das wichtigste und noch am chaotischsten)
 Make tables for members
-
-Zu viel chaos
-morgen ändern
-
-
-Change 20 for 40 zu richtig
-Kontakt und Shop unter weiteres im Nav
 
 Rechnungsabschnitt beim Account
 Link zu member werden beim Account
-Member machen bei /return
 
-Für Static
- - Überarbeitbar (File oder Builder?) => File => Aber alles wichtige us den EJS files nehmen und eine einzige JS Datei machen
- - Länge?
- - Erstellungsdatum ersichtlich!
+Update docstring in email.js and spenden.js
+Mal schauen, was mit .header-fat los ist (ist im logo)
 
 
 KONTAKT

@@ -1657,6 +1657,10 @@ button.donate-btn {
     font-size: 1.2em;
 }
 
+.hero-cta.donate-btn.mitglied {
+    margin-top: 5vh;
+}
+
 @media screen and (min-width: 1200px) {
     :root {
         --header-height: 140px;

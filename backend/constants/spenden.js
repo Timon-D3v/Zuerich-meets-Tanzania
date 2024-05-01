@@ -1,4 +1,24 @@
+/*
+ *
+ * * Bearbeiten
+ * Diese Datei darf nur von Vorstandsmitgliedern des Vereins Zurich meets Tanzania verändert werden.
+ * 
+ * * Wegleitung zum Bearbeiten
+ * Grundsätzlich können alle Daten ganz normal ersetzt oder ausgetauscht werden.
+ * "bild" ist der Link zu einem Bild und "alt" ist eine kurze Beschreibung des Bilds.
+ * "datum" sollte immer das Datum der Bearbeitung haben.
+ * Es gibt allerdings einige Ausnahmen:
+ * - Die Zeichen < und > müssen als &lt; und &gt; geschrieben werden.
+ * - Es dürfen keine Absätze gemacht werden, falls der Text trotzdem welche braucht kann dafür ein <br> verwendet werden.
+ * - Wenn ein Gänsefüsschen benutzt werden möchte muss davor ein \ kommen, also: \"
+ * - Falls ein \ benutzt werden möchte, müssen zwei davon geschrieben werden, also: \\
+ * 
+ * ! Die Änderungen sind erst nach einem Neustart des Servers live
+ * 
+ * 
+*/
 const DONATE = {
+    datum: "Fri Apr 19 2024 19:53:02 GMT+0200 (Mitteleuropäische Sommerzeit)",
     titel: "Ihre Unterstützung zählt",
     bild: "/img/common/donate.jpg",
     alt: "Ein armes Kind, welches Ihre Hilfe braucht!",

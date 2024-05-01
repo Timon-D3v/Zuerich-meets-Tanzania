@@ -7,7 +7,7 @@
  * Grundsätzlich können alle Daten ganz normal ersetzt oder ausgetauscht werden.
  * Es gibt allerdings einige Ausnahmen:
  * - Die Zeichen < und > müssen als &lt; und &gt; geschrieben werden.
- * - Es keine Absätze gemacht werden, falls der Text trotzdem welche braucht kann dafür ein <br> verwendet werden.
+ * - Es dürfen keine Absätze gemacht werden, falls der Text trotzdem welche braucht kann dafür ein <br> verwendet werden.
  * - Wenn ein Gänsefüsschen benutzt werden möchte muss davor ein \ kommen, also: \"
  * - Falls ein \ benutzt werden möchte, müssen zwei davon geschrieben werden, also: \\
  * - Wenn die Person zwei Bilder hat, das zweite in den Ordner "/secondary" hochladen und picture2 zu "true" ändern
@@ -46,7 +46,7 @@ const ABOUT_US = {
             family_name: "Pieretti",
             picture: "https://ik.imagekit.io/zmt/users/sara",
             job: "Projektmanager",
-            motivation: "Durch Caterina und Lásló bin ich zum Verein dazugestossen zuerst als Mitglied und danach fürs Sekretariat. Ich setzte mich gerne für eine gute Sache ein.",
+            motivation: "Durch Caterina und László bin ich zum Verein dazugestossen zuerst als Mitglied und danach fürs Sekretariat. Ich setzte mich gerne für eine gute Sache ein.",
             position: "Sekretariat Webdesign",
             picture2: false
         },{

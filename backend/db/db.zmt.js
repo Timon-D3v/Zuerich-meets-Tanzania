@@ -306,6 +306,12 @@ export async function getMemberWithCustomerId (customer_id) {
     return result[0];
 };
 
+export async function getMemberWithUserId (user_id) {
+    let query = "SELECT * FROM `zmt`.`members` WHERE `user_id` = ?;";
+    let [result] = await pool.query(query, user_id);
+    return result[0];
+};
+
 export async function addInvoiceToDatabase(subscription_id, pdf, url) {
     let query = "INSERT INTO `zmt`.`invoice` (`subscription_id`, `pdf`, `url`) VALUES (?, ?, ?);";
     await pool.query(query, [subscription_id, pdf, url]);
@@ -325,4 +331,10 @@ export async function createMember (user_id, subscription_id, customer_id, statu
 export async function addMemberWithUserId (user_id) {
     let query = "UPDATE `zmt`.`users` SET `type` = 'member' WHERE (`id` = ?);";
     await pool.query(query, [user_id]);
+};
+
+export async function getBills (subscription_id) {
+    let query = "SELECT * FROM `zmt`.`invoice` WHERE (`subscription_id` = ?);";
+    let [result] = await pool.query(query, [subscription_id]);
+    return result;
 };

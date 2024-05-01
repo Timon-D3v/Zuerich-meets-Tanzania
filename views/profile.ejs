@@ -87,13 +87,12 @@
                         </div>
                     </div>
                     <div class="membership">
-                        <div class="profile-membership">
-                            <h1>TODO</h1>
-                            <ol>
-                                <li>Kartennummer</li>
-                                <li>Zahlungsart</li>
-                                <li>Wenn der Benutzer noch kein Mitglied ist dann eine Aufforderung</li>
-                            </ol>
+                        <div class="profile-membership"><%
+                        if (user.type !== "user") { %>
+                            <div></div><% 
+                        } else { %>
+                            <button type="button" class="hero-cta donate-btn mitglied" id="get_member">Mitglied werden</button><% 
+                        }; %>
                         </div>
                     </div>
                     <div class="notifications">

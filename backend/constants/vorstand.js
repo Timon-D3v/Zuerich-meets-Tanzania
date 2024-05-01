@@ -5,11 +5,11 @@
  * 
  * * Wegleitung zum Bearbeiten
  * Grundsätzlich können alle Daten ganz normal ersetzt oder ausgetauscht werden.
- * "beschreibung" ist eine kurze Beschreibung, worin es auf der Seite geht.
+ * "beschreibung" ist eine kurze Beschreibung, worum es auf der Seite geht.
  * "aktualisiert" sollte immer das Datum der Bearbeitung haben.
  * Es gibt allerdings einige Ausnahmen:
  * - Die Zeichen < und > müssen als &lt; und &gt; geschrieben werden.
- * - Es keine Absätze gemacht werden, falls der Text trotzdem welche braucht kann dafür ein <br> verwendet werden.
+ * - Es dürfen keine Absätze gemacht werden, falls der Text trotzdem welche braucht kann dafür ein <br> verwendet werden.
  * - Wenn ein Gänsefüsschen benutzt werden möchte muss davor ein \ kommen, also: \"
  * - Falls ein \ benutzt werden möchte, müssen zwei davon geschrieben werden, also: \\
  * 
