@@ -59,6 +59,7 @@ const stripe = new Stripe(
     process.env.STRIPE_PRIVATE_KEY_TEST    
 );
 const payment_keys = [];
+const newsletter_code = [];
 
 
 
@@ -308,10 +309,51 @@ function sendNewsletterEmail (recipients, subject, text, files = []) {
             Subject: subject,
             TextPart: anschrift + text + EMAILS.grüsse,
             HTMLPart: header + anschrift_html + newsletter + text + "</p>" + grüsse_html + footer,
-            CustomID: "Newsletter" 
+            CustomID: "Newsletter"
         };
         sendMail(recipient.email, data, files);
     });
+};
+
+function sendMailCode (email, user) {
+    let { anschrift, anschrift_html } = EMAILS;
+    const { header, grüsse_html, footer } = EMAILS;
+
+    if (user.gender === "Herr") {
+        anschrift = anschrift.replace("___ANREDE___", "Lieber");
+        anschrift_html = anschrift_html.replace("___ANREDE___", "Lieber");
+
+        anschrift = anschrift.replace("___GENDER___", user.gender);
+        anschrift_html = anschrift_html.replace("___GENDER___", user.gender);
+    } else if (user.gender === "Frau") {
+        anschrift = anschrift.replace("___ANREDE___", "Liebe");
+        anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe");
+
+        anschrift = anschrift.replace("___GENDER___", user.gender);
+        anschrift_html = anschrift_html.replace("___GENDER___", user.gender);
+    } else {
+        anschrift = anschrift.replace("___ANREDE___", "Liebe(r)");
+        anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe(r)");
+
+        anschrift = anschrift.replace("___GENDER___", user.vorname);
+        anschrift_html = anschrift_html.replace("___GENDER___", user.vorname);
+    };
+
+    anschrift = anschrift.replace("___NACHNAME___", user.nachname);
+    anschrift_html = anschrift_html.replace("___NACHNAME___", user.nachname);
+
+    const code = timon.randomString(16);
+    const text = "Dein Code lautet: " + code;
+
+    const data = {
+        Subject: "Newsletter Abmeldung",
+        TextPart: anschrift + text + EMAILS.grüsse,
+        HTMLPart: header + anschrift_html + text + "</p>" + grüsse_html + footer,
+        CustomID: "Newsletter Abmeldung"
+    };
+    sendMail(email, data);
+
+    return code;
 };
 
 
@@ -637,6 +679,20 @@ app.get("/return", async (req, res) => {
         return res.redirect(`/spenden?js=errorField(\`${err.message}\`);nofunction`);
     };
     res.redirect("/");
+});
+
+app.get("/newsletter/abmelden", (req, res) => {
+    res.render("newsletter_abmeldung.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: "Sun May 05 2024 15:20:55 GMT+0200 (Mitteleuropäische Sommerzeit)",
+        title: "Abmelden",
+        desc: "Hier kannst du dich von unserem Newsletter abmelden.",
+        sitetype: "newsletter",
+        user: req.session.user,
+        js: undefined
+    });
 });
 
 app.get("/gallery/:id", (req, res) => res.redirect("/galerie/" + req.params.id));
@@ -1055,7 +1111,46 @@ app.post("/post/getMyBills", async (req, res) => {
         res.json({error});
     };
 });
-// => https://documentation.mailjet.com/hc/en-us/articles/360043007133-Do-you-have-special-pricing-for-non-profits*/
+
+app.post("/newsletter/requestCode", async (req, res) => {
+    let status = 501,
+        message = "";
+    try {
+        const user = await db.getNewsletterSignUpWithEmail(req.body.email);
+        if (user.length === 0) throw new Error("Diese E-Mail existiert nicht.");
+        const code = sendMailCode(req.body.email, user[0]);
+        newsletter_code.push({
+            code,
+            email: req.body.email
+        });
+        status = 200;
+    } catch (err) {
+        console.error(err);
+        status = 500;
+        message = err.message;
+    };
+    res.json({status, message});
+});
+
+app.post("/newsletter/submitCode", (req, res) => {
+    let status = 501,
+        message = "";
+    try {
+        newsletter_code.forEach((obj, i) => {
+            if (obj.email === req.body.email && obj.code === req.body.code) {
+                status = 200;
+                newsletter_code.splice(i, 1);
+            };
+        });
+        if (status !== 200) throw new Error("Bitte gib einen gültigen Code ein, dieser stimmt nicht.");
+        db.deleteNewsletterSignUpWithEmail(req.body.email);
+    } catch (err) {
+        console.error(err);
+        status = 500;
+        message = err.message;
+    };
+    res.json({status, message});
+});
 
 
 

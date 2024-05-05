@@ -338,3 +338,14 @@ export async function getBills (subscription_id) {
     let [result] = await pool.query(query, [subscription_id]);
     return result;
 };
+
+export async function getNewsletterSignUpWithEmail (email) {
+    let query = "SELECT * FROM `zmt`.`newsletter` WHERE `email` = ?;";
+    let [result] = await pool.query(query, [email]);
+    return result;
+};
+
+export async function deleteNewsletterSignUpWithEmail (email) {
+    let query = "DELETE FROM `zmt`.`newsletter` WHERE (`email` = ?);";
+    await pool.query(query, [email]);
+};

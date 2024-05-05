@@ -64,7 +64,7 @@ const EMAILS = {
                                         <a style="font-size: 20px; margin-right: 20px; line-height: 1.5; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; cursor: pointer; text-decoration: underline;" href="https://zurich-meets-tanzania.com">Homepage</a>
                                     </td>
                                     <td>
-                                        <a style="font-size: 20px; line-height: 1.5; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; cursor: pointer; text-decoration: underline;" href="https://zurich-meets-tanzania.com/abmelden">Abmelden</a>
+                                        <a style="font-size: 20px; line-height: 1.5; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; cursor: pointer; text-decoration: underline;" href="https://zurich-meets-tanzania.com/newsletter/abmelden">Abmelden</a>
                                     </td>
                                 </tr>
                             </tbody>

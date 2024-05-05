@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <style>
+            main {
+                background-color: var(--background-100);
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+            }
+
+            .wrapper {
+                margin: auto 0;
+            }
+
+            main form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                transition: all 0.5s ease;
+            }
+
+            .email {
+                padding-top: 5vh;
+            }
+
+            .email-before {
+                transform: translateY(-5vh);
+            }
+
+            .code {
+                padding-bottom: 5vh;
+            }
+
+            button.cta-btn {
+                display: block;
+            }
+
+            main input {
+                margin: 0 5vw;
+                margin-bottom: 2vh;
+                width: clamp(100px, 40vw, 500px);
+                height: 40px;
+                background-color: var(--background-100);
+                outline: none;
+                border: 3px solid var(--primary-500);
+                padding: 1px 10px;
+                font-size: 16px;
+            }
+        </style>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main>
+            <div class="wrapper">
+                <form class="email email-before" action="/newsletter/requestCode" method="post">
+                    <input type="email" autocomplete="email" name="email" id="email" required placeholder="E-Mail:">
+                    <button type="submit" class="cta-btn first-btn">Code Anfordern</button>
+                </form>
+                <form class="code" style="display: none;" action="/newsletter/submitCode" method="post">
+                    <input type="text" required placeholder="Erhaltener Code per E-Mail:" name="code" id="code">
+                    <button type="submit" class="cta-btn second-btn">Bestätigen</button>
+                </form>
+            </div>
+            <script>
+                const email = getElm("email");
+                const code = getElm("code");
+
+                $(".email").on("submit", async e => {
+                    e.preventDefault();
+                    const val = email.value;
+                    if (val === "" || val.replace("@", "").replaceAll(".", "") === val) return alert("Du musst deine E-Mail eingeben.");
+                    const res = await post("/newsletter/requestCode", {email: val});
+                    if (res.status !== 200) return alert("Etwas hat nicht geklappt: " + res.message);
+                    $(".email").removeClass("email-before");
+                    $(".first-btn").hide();
+                    $(".code").show();
+                });
+
+                $(".code").on("submit", async e => {
+                    e.preventDefault();
+                    if (code.value.split("").length !== 16) return alert("Bitte gib einen gültigen Code ein.");
+                    const res = await post("/newsletter/submitCode", {
+                        code: code.value,
+                        email: email.value
+                    });
+                    if (res.status !== 200) return alert("Etwas hat nicht geklappt: " + res.message);
+                    alert("Das hat geklappt! Du wirst jetzt nicht mehr Benachrichtigt.");
+                    window.location.href = window.location.origin;
+                });
+            </script>
+        </main>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>
