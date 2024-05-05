@@ -14,6 +14,8 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import * as db from "./backend/db/db.zmt.js";
 import MEDUCATION from "./backend/constants/meducation.js";
+import BEGINNING from "./backend/constants/beginning.js";
+import TANZANIA from "./backend/constants/tanzania.js";
 import STATUTEN from "./backend/constants/statuten.js";
 import VORSTAND from "./backend/constants/vorstand.js";
 import GYNO from "./backend/constants/gynäkologie.js";
@@ -525,6 +527,54 @@ app.get("/vision", (req, res) => {
         toRealDate,
         text: VISION.text,
         bild: VISION.bild
+    });
+});
+
+app.get("/anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/Anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/Beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/der%20anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/Der%20anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/der%20Anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/Der%20Anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/The%20beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/the%20beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/wie-alles-begann", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/Wie-alles-begann", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/Wie%20alles%20began", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/wie%20alles%20began", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/in%20the%20beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/In%20the%20beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/Wie%20alles%20begann", (req, res) => {
+    res.render("beginning.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: BEGINNING.datum,
+        title: BEGINNING.title,
+        desc: BEGINNING.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        toRealDate,
+        text: BEGINNING
+    });
+});
+
+app.get("/tanzania", (req, res) => {
+    res.render("tanzania.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: TANZANIA.datum,
+        title: TANZANIA.title,
+        desc: TANZANIA.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        toRealDate,
+        tanzania: TANZANIA
     });
 });
 

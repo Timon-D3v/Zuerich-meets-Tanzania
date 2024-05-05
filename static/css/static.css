@@ -545,8 +545,14 @@ label.static-checkbox.uiverse.hirachy-class {
     margin-top: 3em;
 }
 
-.title.vision {
+.title.vision,
+.title.beginning {
     margin-top: 5vh;
+}
+
+.text-beginning {
+    padding: 0 5vw;
+    margin: 5vh 0;
 }
 
 @media screen and  (min-width: 1200px) {}

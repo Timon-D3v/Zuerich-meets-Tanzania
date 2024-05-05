@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main>
+            <h1 class="title beginning"><%- text.title %></h1>
+            <p class="text-beginning"><%- text.abs1 %></p>
+            <p class="text-beginning"><%- text.abs2 %></p>
+            <p class="text-beginning"><%- text.abs3 %></p>
+            <p class="text-beginning"><%- text.abs4 %></p>
+            <p class="text-beginning"><%- text.abs5 %></p>
+            <p class="date">Zuletzt aktualisiert am <%= toRealDate(text.datum) %></p>
+        </main>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>

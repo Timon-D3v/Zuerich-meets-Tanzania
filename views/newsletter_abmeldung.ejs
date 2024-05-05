@@ -11,7 +11,14 @@
         }) %>
         <style>
             main {
-                background-color: var(--background-100);
+                background-color: var(--background-50);
+                background-image: linear-gradient(135deg, var(--background-200) 25%, transparent 25%),
+                                  linear-gradient(225deg, var(--background-200) 25%, transparent 25%),
+                                  linear-gradient(45deg, var(--background-200) 25%, transparent 25%),
+                                  linear-gradient(315deg, var(--background-200) 25%, var(--background-50) 25%);
+                background-position:  22px 0, 22px 0, 0 0, 0 0;
+                background-size: 22px 22px;
+                background-repeat: repeat;
                 display: flex;
                 align-items: center;
                 flex-direction: column;
@@ -42,12 +49,15 @@
 
             button.cta-btn {
                 display: block;
+                padding: 0 2.5vw;
+                height: auto;
+                min-height: 40px;
             }
 
             main input {
                 margin: 0 5vw;
                 margin-bottom: 2vh;
-                width: clamp(100px, 40vw, 500px);
+                width: clamp(110px, 40vw, 500px);
                 height: 40px;
                 background-color: var(--background-100);
                 outline: none;
@@ -67,7 +77,7 @@
                     <button type="submit" class="cta-btn first-btn">Code Anfordern</button>
                 </form>
                 <form class="code" style="display: none;" action="/newsletter/submitCode" method="post">
-                    <input type="text" required placeholder="Erhaltener Code per E-Mail:" name="code" id="code">
+                    <input type="text" required placeholder="Erhaltener Code:" name="code" id="code">
                     <button type="submit" class="cta-btn second-btn">Bestätigen</button>
                 </form>
             </div>
