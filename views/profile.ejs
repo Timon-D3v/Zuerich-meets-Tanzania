@@ -39,7 +39,6 @@
                         <button type="button" id="profile_dashboard_btn1" class="link active">Einstellungen</button>
                         <button type="button" id="profile_dashboard_btn2" class="link">Präferenzen</button>
                         <button type="button" id="profile_dashboard_btn3" class="link">Mitgliedschaft</button>
-                        <button type="button" id="profile_dashboard_btn4" class="link">Benachrichtigungen</button>
                     </div>
                     <div class="settings active">
                         <label for="username">Benutzername</label>
@@ -85,17 +84,6 @@
                                 </div>
                             </label>
                         </div>
-                    </div>
-                    <div class="membership">
-                        <div class="profile-membership"><%
-                        if (user.type !== "user") { %>
-                            <div></div><% 
-                        } else { %>
-                            <button type="button" class="hero-cta donate-btn mitglied" id="get_member">Mitglied werden</button><% 
-                        }; %>
-                        </div>
-                    </div>
-                    <div class="notifications">
                         <div class="notifications_newsletter">
                             <p>Ich möchte gerne den Newsletter erhalten:</p>
                             <label for="notifications_newsletter" class="static-checkbox uiverse hirachy-class">
@@ -113,6 +101,30 @@
                             <div id="profile_name"><%= user.name %></div>
                             <div id="profile_f_name"><%= user.family_name %></div>
                             <div id="profile_email"><%= user.email %></div>
+                        </div>
+                    </div>
+                    <div class="membership">
+                        <div class="profile-membership"><%
+                        if (user.type !== "user") { %>
+                            <div class="invoices">
+                                <h1 class="title">Rechnungen</h1>
+                                <table class="invoice">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Abonnement</th>
+                                            <th>Preis</th>
+                                            <th>Status</th>
+                                            <th>Link</th>
+                                            <th>Datei</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="invoice_append"></tbody>
+                                </table>
+                            </div><% 
+                        } else { %>
+                            <button type="button" class="hero-cta donate-btn mitglied" id="get_member">Mitglied werden</button><% 
+                        }; %>
                         </div>
                     </div>
                 </div>

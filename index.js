@@ -317,7 +317,7 @@ function sendNewsletterEmail (recipients, subject, text, files = []) {
 
 function sendMailCode (email, user) {
     let { anschrift, anschrift_html } = EMAILS;
-    const { header, grüsse_html, footer } = EMAILS;
+    const { header, newsletter, grüsse_html, footer } = EMAILS;
 
     if (user.gender === "Herr") {
         anschrift = anschrift.replace("___ANREDE___", "Lieber");
@@ -348,7 +348,7 @@ function sendMailCode (email, user) {
     const data = {
         Subject: "Newsletter Abmeldung",
         TextPart: anschrift + text + EMAILS.grüsse,
-        HTMLPart: header + anschrift_html + text + "</p>" + grüsse_html + footer,
+        HTMLPart: header + anschrift_html + newsletter.substring(0,304) + text + "</p>" + grüsse_html + footer,
         CustomID: "Newsletter Abmeldung"
     };
     sendMail(email, data);
@@ -788,7 +788,7 @@ app.get("/package/timonjs", (req, res) => {
 
 app.get("/*", (req, res) => {
     let url = req.protocol + '://' + req.get('host');
-    res.render("errors/error404.ejs", {
+    res.status(404).render("errors/error404.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
         origin_url: url,

@@ -231,7 +231,7 @@
     background-color: transparent;
 }
 
-.profile-settings-input:focus-visible {
+.profile-settings-input input:focus-visible {
     outline: none;
 }
 
@@ -313,6 +313,45 @@
     height: auto;
     max-width: none;
     padding-top: 0;
+}
+
+h1.title ~ table.invoice:has(thead) {
+    margin-top: 3vh !important;
+}
+
+.invoices {
+    overflow-x: auto;
+}
+
+.invoices .title {
+    margin-top: 2vh;
+}
+
+.invoice {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--text-950);
+    font-family: "Titillium Web", sans-serif;
+}
+
+.invoice th {
+    border: 1px solid var(--text-950);
+    padding: 12px 8px;
+}
+
+.invoice td {
+    text-align: center;
+    border: 1px solid var(--text-950);
+    padding: 8px;
+    color: var(--text-950);
+}
+
+.invoice tbody tr:nth-child(even) {
+    background-color: var(--text-300);
+}
+
+:root[data-theme="dark"] tr:nth-child(even) {
+    background-color: var(--text-200);
 }
 
 .static-checkbox.uiverse input {

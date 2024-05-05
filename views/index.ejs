@@ -22,7 +22,19 @@
                 cta_text: hero.button_text,
                 cta_link: hero.link,
                 origin_url
-            }) %>
+            }) %><%
+            let link_mitglied;
+            if (typeof user !== "undefined" && user !== null) {
+                user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
+            } else {
+                link_mitglied = "/login";
+            }; %>
+            <h1 class="title w-575 w575">Spenden</h1>
+            <div class="mobile-donation">
+                <a class="cta-btn flex" href="/spenden">Spenden</a>
+                <a class="cta-btn flex" href="/shop">Shop</a>
+                <a class="cta-btn flex" href="<%= link_mitglied %>">Mitglied werden</a>
+            </div>
             <%- include("./snippets/news.ejs", {
                 text: news.text,
                 img_path: news.img_path,

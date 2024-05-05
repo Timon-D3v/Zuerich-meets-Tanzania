@@ -1,14 +1,12 @@
 const profile_dashboard_buttons = [
     $("#profile_dashboard_btn1"),
     $("#profile_dashboard_btn2"),
-    $("#profile_dashboard_btn3"),
-    $("#profile_dashboard_btn4")
+    $("#profile_dashboard_btn3")
 ],
 profile_dashboard_content = [
         $(".dynamic .settings"),
         $(".dynamic .preferences"),
-        $(".dynamic .membership"),
-        $(".dynamic .notifications")
+        $(".dynamic .membership")
 ],
 eye = $("#show_password"),
 password = $("#password"),
@@ -26,7 +24,8 @@ submit_file = $("#file_submit"),
 newsletterBtn = $("#notifications_newsletter"),
 newsletterSelect = document.getElementById("newsletterSignUpOption"),
 close_picture_overlay = $("#close_picture_overlay"),
-get_member = $("#get_member");
+get_member = $("#get_member"),
+invoice_append = $("#invoice_append");
 const default_val = {
     username: username.attr("placeholder"),
     password: password.val(),
@@ -231,15 +230,34 @@ async function submitNewsletter () {
 
 async function getMyBills () {
     const bills = await post("/post/getMyBills");
-    bills.forEach((bill, i) => {
-        if (i === 0) {
-            // Append to Aktuell
-        } else if (i === 1) {
-            // Create "More Bills"
-            // Append there
-        } else {
-            // Append to "More Bills"
-        };
+    bills.forEach(bill => {
+        const tr = document.createElement("tr");
+        const id = document.createElement("td");
+        const abo = document.createElement("td");
+        const price = document.createElement("td");
+        const status = document.createElement("td");
+        const link = document.createElement("td");
+        const file = document.createElement("td");
+        const stripe = document.createElement("a");
+        const pdf = document.createElement("a");
+        const img = document.createElement("img");
+
+        img.alt = "Download";
+        img.src = "/img/svg/download.svg";
+        pdf.appendChild(img)
+        stripe.innerHTML = "Zu Stripe";
+        pdf.target = "_blank";
+        stripe.target = "_blank";
+        pdf.href = bill.pdf;
+        stripe.href = bill.url;
+        id.innerHTML = bill.id;
+        abo.innerHTML = "Mitgliedschaft";
+        price.innerHTML = "40 CHF";
+        status.innerHTML = "Bezahlt";
+        link.appendChild(stripe);
+        file.appendChild(pdf);
+        tr.append(id, abo, price, status, link, file);
+        invoice_append.append(tr);
     });
 };
 

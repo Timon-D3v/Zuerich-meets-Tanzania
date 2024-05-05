@@ -294,7 +294,7 @@ img[src$=".svg"] {
     word-break: keep-all;
 }
 
-.logo-span .line.header-fat {
+.logo-span .line.header_fat {
     font-weight: bolder;
 }
 
@@ -1661,6 +1661,27 @@ button.donate-btn {
     margin-top: 5vh;
 }
 
+nav .mit-bild a {
+    text-transform: lowercase;
+}
+
+.title ~ div.mobile-donation:has(a.cta-btn.flex) {
+    margin-top: 3vh !important;
+}
+
+.mobile-donation {
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5vw;
+    margin: 3vh 5vw;
+}
+
+.mobile-donation a {
+    height: 50px;
+    padding: 0 2.5vw;
+}
+
 @media screen and (min-width: 1200px) {
     :root {
         --header-height: 140px;
@@ -2039,6 +2060,10 @@ button.donate-btn {
     .donate-onetime {
         --factor: 2;
     }
+
+    .mobile-donation {
+        display: flex;
+    }
 }
 
 @media screen and (max-width: 575px) {
@@ -2136,6 +2161,10 @@ button.donate-btn {
 
     .donate-onetime {
         --factor: 2;
+    }
+
+    .mobile-donation {
+        display: flex;
     }
 
     @media screen and (max-width: 433px) {
