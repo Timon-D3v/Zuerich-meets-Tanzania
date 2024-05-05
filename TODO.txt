@@ -11,6 +11,7 @@ Link zu member werden beim Account
 Mal schauen, was mit .header-fat los ist (ist im logo)
 projektnamen klein schrieben
 mailjet API einrichten mit info@timondev.com fürs erste
+Email font size zu clamp(12px, 12px+5vw, 18) ändern
 
 KONTAKT
 
