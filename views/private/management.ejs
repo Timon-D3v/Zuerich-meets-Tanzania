@@ -40,7 +40,7 @@
                         </tr>
                         <tr>
                             <td>Stripe</td>
-                            <td>zuerich.meets.tanzania@gmail.com</td>
+                            <td>info@zurich-meets-tanzania.com</td>
                             <td><%= passwords.stripe %></td>
                         </tr>
                         <tr>
@@ -108,6 +108,27 @@
                 <p class="basic-text">Gib einen Benutzernamen ein um ihm die Adminrechte zu entfernen.</p>
                 <input type="text" class="basic-input" id="delete-admin" placeholder="Benutzername">
                 <button type="button" id="submit-delete-admin" class="basic-button">Entfernen</button>
+            </div>
+            <div class="container">
+                <h1 class="basic-title">Blogs zusammenfügen</h1>
+                <input type="number" class="basic-input" id="merge_blogs" placeholder="Anzahl Blogs" min="2" max="100">
+                <input type="text" class="basic-input" id="merge_blogs_title" placeholder="Neuer Titel">
+                <input type="text" class="basic-input" id="merge_blogs_desc" placeholder="Kurze Beschreibung">
+                <input type="text" class="basic-input" id="merge_blogs_author" placeholder="Autor">
+                <label for="merge_blogs_basic_img" class="basic-label">Titelbild aussuchen</label>
+                <label for="merge_blogs_basic_img" id="merge_blogs_picture_overlay" style="height: 35vh; width: 60%; margin: 6vh 20%;">
+                    <div class="custom-file-upload" style="max-height: 35vh; box-sizing: border-box; max-width: 60vw;">
+                        <div class="icon">
+                            <img alt="Eine Datei" src="/img/svg/file.svg" id="hero_file_preview" style="height: 15vh;">
+                        </div>
+                        <div class="text">
+                            <span>Klicken um ein neues Bild hochzuladen</span>
+                        </div>
+                    </div>
+                </label>
+                <input style="display: none;" type="file" id="merge_blogs_basic_img" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
+                <input type="text" id="merge_blogs_basic_alt" placeholder="Beschreibe das Titelbild kurz (3-5 Wörter)" class="basic-input">
+                <button type="button" id="merge_blogs_btn" class="basic-button">Zusammenfügen</button>
             </div>
             <div class="container">
                 <h1 class="basic-title">Neue Bildergalerie hochladen</h1>

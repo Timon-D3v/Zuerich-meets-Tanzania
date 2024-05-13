@@ -1619,9 +1619,20 @@ button.donate-btn {
     top: 0;
     transform: translateX(-50%);
     margin: 0;
-    margin-bottom: 5vh;
+    margin-bottom: 2.5vh;
     height: auto;
     min-height: 80px;
+}
+
+.donate-qr-link-wrapper {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 5vh;
+}
+
+.donate-qr-link:hover {
+    color: var(--primary-500);
 }
 
 .donate-decider {
@@ -1678,8 +1689,8 @@ nav .mit-bild a {
 }
 
 .mobile-donation a {
-    height: 50px;
-    padding: 0 2.5vw;
+    height: 55px;
+    padding: 0 5vw;
 }
 
 @media screen and (min-width: 1200px) {

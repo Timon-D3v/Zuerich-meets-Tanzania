@@ -941,6 +941,13 @@ app.post("/post/blog", async (req, res) => {
     res.send({status: result});
 });
 
+app.post("/post/mergeBlogs", async (req, res) => {
+    const { number, title, description, author, base64, alt } = req.body;
+    const { path } = await imagekitUpload(base64, alt + timon.randomString(32), "/blog/");
+    const result = await db.mergeBlogs(number, title, description, author, path, alt);
+    res.json(result);
+});
+
 app.post("/post/blog/getLinks/:num", async (req, res) => {
     let response = await db.getLastXPostLinks(req.params.num)
         .catch(() => {return "No connection to database"});

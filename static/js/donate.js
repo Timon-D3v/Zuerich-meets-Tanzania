@@ -4,7 +4,8 @@ const donate_btn = $("#donate_btn"),
     donate_switch_onetime = $("#donate_switch_onetime"),
     donate_switch_member = $("#donate_switch_member"),
     donate_selections = getQuery(".donate-amount"),
-    donate_custom = getElm("donate_custom");
+    donate_custom = getElm("donate_custom"),
+    donate_qr_link = getElm("donate_qr_code_link");
 
 donate_switch_member.click(donate_toggleForms);
 donate_switch_onetime.click(donate_toggleForms);
@@ -41,8 +42,13 @@ function donate_toggleForms () {
         donate_switch_member
     ].forEach(elm => elm.toggleClass("active"));
 
-    if (donate_once.hasClass("active")) donate_btn.html("Jetzt spenden");
-    else donate_btn.html("Mitglied werden");
+    if (donate_once.hasClass("active")) {
+        donate_btn.text("Jetzt spenden");
+        donate_qr_link.href = "https://ik.imagekit.io/zmt/pdf/Rechnung%20Spendenkonto.pdf";
+    } else {
+        donate_btn.text("Mitglied werden");
+        donate_qr_link.href = "https://ik.imagekit.io/zmt/pdf/Rechnung%20Mitgliederkonto.pdf";
+    };
 };
 
 function donate_getAmount () {

@@ -1,7 +1,6 @@
 import mysql from "mysql2";
 import dotenv from "dotenv";
 import path from "path";
-import timon from "timonjs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -348,4 +347,39 @@ export async function getNewsletterSignUpWithEmail (email) {
 export async function deleteNewsletterSignUpWithEmail (email) {
     let query = "DELETE FROM `zmt`.`newsletter` WHERE (`email` = ?);";
     await pool.query(query, [email]);
+};
+
+export async function deleteLastXPosts (x) {
+    let query = "DELETE FROM `zmt`.`blog` ORDER BY `id` DESC LIMIT " + x + ";";
+    let [result] = await pool.query(query)
+        .catch(() => {throw new Error("Fehler");});
+    return result;
+};
+
+export async function mergeBlogs (number, title, description, author, img, alt) {
+    try {
+        const json = {
+            alt: [alt],
+            img: [img]
+        };
+        const comment = "Zusammengefügt";
+        const tag = "Blog";
+        let content = "";
+        const blogs = await getLastXPosts(number);
+        for (let i = 0; i < blogs.length; i++) {
+            content += blogs[blogs.length - 1 - i].content;
+        };
+        await deleteLastXPosts(number);
+        await createPost(title, author, description, content, tag, json, comment);
+        return {
+            status: 200,
+            message: "Das hat geklappt! Die Blogs sind jetzt zusammengefügt."
+        };
+    } catch (err) {
+        console.error(err.message);
+        return {
+            status: 500,
+            message: "Etwas hat nicht geklappt: " + err.message
+        };
+    };
 };

@@ -4,7 +4,14 @@ const pdf = document.getElementById("news_pdf"),
     s_pdf = $("#show_pdf"),
     s_img = $("#show_img"),
     s_btn_menu = $("#show_btn_menu"),
-    h_btn_menu = $("#show_nothing");
+    h_btn_menu = $("#show_nothing"),
+	merge_blogs_num = getElm("merge_blogs"),
+	merge_blogs_title = getElm("merge_blogs_title"),
+	merge_blogs_desc = getElm("merge_blogs_desc"),
+	merge_blogs_author = getElm("merge_blogs_author"),
+	merge_blogs_file = getElm("merge_blogs_basic_img"),
+	merge_blogs_alt = getElm("merge_blogs_basic_alt"),
+	merge_blogs_btn = getElm("merge_blogs_btn");
 
 s_pdf.hide();
 
@@ -92,6 +99,23 @@ $("#gallery_img_upload_submit").click(async () => {
 	res.error === "OK" ?
 	alert("Galerie erfolgreich hochgeladen.") :
 	alert("Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut.");
+});
+
+merge_blogs_btn.click(async () => {
+	const res = await post("/post/mergeBlogs", {
+		title: merge_blogs_title.val(),
+		description: merge_blogs_desc.val(),
+		author: merge_blogs_author.val(),
+		base64: await merge_blogs_file.getImgBase64(),
+		alt: merge_blogs_alt.val(),
+		number: Number(merge_blogs_num.val())
+	});
+
+	alert(res.message);
+
+	if (res.status === 200) console.log(res.message);
+	else if (res.status === 500) console.error(res.message);
+	else console.error("Unbekannter Fehler");
 });
 
 $(pdf).click(() => toggleDivs(pdf, s_pdf, s_img));
