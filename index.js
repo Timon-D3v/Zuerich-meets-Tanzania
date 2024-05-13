@@ -832,10 +832,6 @@ app.get("/private/:id", async (req, res) => {
     };
 });
 
-app.get("/package/timonjs", (req, res) => {
-    res.sendFile(path.resolve(dirname(fileURLToPath(import.meta.url)), "node_modules/timonjs/lib/timon.js"))
-});
-
 app.get("/*", (req, res) => {
     let url = req.protocol + '://' + req.get('host');
     res.status(404).render("errors/error404.ejs", {

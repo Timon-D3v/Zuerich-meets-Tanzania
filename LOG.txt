@@ -169,4 +169,8 @@ Time spent: 13h; Time worked: 10h;
 
 1.5.24
 E-Mail designt und das Verschicken vereinfacht. Ausserdem einige kleinere Fehler behoben.
-Time spenden: 6h; Time worked: 6h;
+Time spent: 6h; Time worked: 6h;
+
+7.5.24 - 13.5.24
+Hauptsächlich erarbeitet, dass man Blogpost zusammenführen kann.
+Time spent: 9h, Time worked: 5h;
