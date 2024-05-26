@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <style type="text/css">
+            @media screen and (min-width: 1000px) {
+                .hero-img {
+                    filter: brightness(0.75);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main>
+            <iframe class="iframe-efr" src="https://ik.imagekit.io/zmt/pdf/erfolgsrechnung/Bilanz.pdf"></iframe>
+            <iframe class="iframe-efr" src="https://ik.imagekit.io/zmt/pdf/erfolgsrechnung/Erfolgsrechnung Mitgliederkonto.pdf"></iframe>
+            <iframe class="iframe-efr" src="https://ik.imagekit.io/zmt/pdf/erfolgsrechnung/Erfolgsrechnung Spendenkonto.pdf"></iframe>
+        </main>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>

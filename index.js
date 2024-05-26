@@ -369,7 +369,7 @@ app.use((req, res, next) => {
     if (req.originalUrl === "/post/stripe/webhook") {
         next();
     } else {
-        express.json({limit: '10000mb'})(req, res, next);
+        express.json({limit: "10000mb"})(req, res, next);
     }
 });
 app.use(session({
@@ -395,7 +395,7 @@ app.use(cors());
 
 
 
-app.get("/home", (req, res) => res.redirect("/"));
+app.get("/home", (req, res) => res.status(301).redirect("/"));
 app.get("/", async (req, res) => {
     let blogs = await db.getLastXPosts(4)
         .catch(() => {return BACKUP.BLOGS});
@@ -418,10 +418,10 @@ app.get("/", async (req, res) => {
     });
 });
 
-app.get("/signup", (req, res) => res.redirect("/login?js=toggleForms"));
-app.get("/signUp", (req, res) => res.redirect("/login?js=toggleForms"));
-app.get("/registrieren", (req, res) => res.redirect("/login?js=toggleForms"));
-app.get("/einloggen", (req, res) => res.redirect("/login"));
+app.get("/signup", (req, res) => res.status(301).redirect("/login?js=toggleForms"));
+app.get("/signUp", (req, res) => res.status(301).redirect("/login?js=toggleForms"));
+app.get("/registrieren", (req, res) => res.status(301).redirect("/login?js=toggleForms"));
+app.get("/einloggen", (req, res) => res.status(301).redirect("/login"));
 app.get("/login", async (req, res) => {
     if (req.session.user?.valid) return res.redirect("/profile");
     let redir = req.query.redir;
@@ -439,7 +439,7 @@ app.get("/login", async (req, res) => {
     });
 });
 
-app.get("/einkaufen", (req, res) => res.redirect("/shop"));
+app.get("/einkaufen", (req, res) => res.status(301).redirect("/shop"));
 app.get("/shop", async (req, res) => {
     res.render("shop.ejs", {
         env: LOAD_LEVEL,
@@ -454,10 +454,10 @@ app.get("/shop", async (req, res) => {
     });
 });
 
-app.get("/account", (req, res) => res.redirect("/profile"));
-app.get("/me", (req, res) => res.redirect("/profile"));
-app.get("/profil", (req, res) => res.redirect("/profile"));
-app.get("/konto", (req, res) => res.redirect("/profile"));
+app.get("/account", (req, res) => res.status(301).redirect("/profile"));
+app.get("/me", (req, res) => res.status(301).redirect("/profile"));
+app.get("/profil", (req, res) => res.status(301).redirect("/profile"));
+app.get("/konto", (req, res) => res.status(301).redirect("/profile"));
 app.get("/profile", async (req, res) => {
     if (!req.session.user?.valid) return res.redirect("/login?redir=/profile");
     res.render("profile.ejs", {
@@ -473,9 +473,9 @@ app.get("/profile", async (req, res) => {
     });
 });
 
-app.get("/kontakt", (req, res) => res.redirect("/contact"));
-app.get("/contactUs", (req, res) => res.redirect("/contact"));
-app.get("/kontaktiereUns", (req, res) => res.redirect("/contact"));
+app.get("/kontakt", (req, res) => res.status(301).redirect("/contact"));
+app.get("/contactUs", (req, res) => res.status(301).redirect("/contact"));
+app.get("/kontaktiereUns", (req, res) => res.status(301).redirect("/contact"));
 app.get("/contact", (req, res) => {
     res.render("contact.ejs", {
         env: LOAD_LEVEL,
@@ -490,8 +490,8 @@ app.get("/contact", (req, res) => {
     });
 });
 
-app.get("/board", (req, res) => res.redirect("/vorstand"));
-app.get("/us", (req, res) => res.redirect("/vorstand"));
+app.get("/board", (req, res) => res.status(301).redirect("/vorstand"));
+app.get("/us", (req, res) => res.status(301).redirect("/vorstand"));
 app.get("/vorstand", (req, res) => {
     res.render("vorstand.ejs", {
         env: LOAD_LEVEL,
@@ -509,10 +509,10 @@ app.get("/vorstand", (req, res) => {
     });
 });
 
-app.get("/leitideen", (req, res) => res.redirect("/vision"));
-app.get("/ideen", (req, res) => res.redirect("/vision"));
-app.get("/idee", (req, res) => res.redirect("/vision"));
-app.get("/ideas", (req, res) => res.redirect("/vision"));
+app.get("/leitideen", (req, res) => res.status(301).redirect("/vision"));
+app.get("/ideen", (req, res) => res.status(301).redirect("/vision"));
+app.get("/idee", (req, res) => res.status(301).redirect("/vision"));
+app.get("/ideas", (req, res) => res.status(301).redirect("/vision"));
 app.get("/vision", (req, res) => {
     res.render("vision.ejs", {
         env: LOAD_LEVEL,
@@ -530,22 +530,22 @@ app.get("/vision", (req, res) => {
     });
 });
 
-app.get("/anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/Anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/Beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/der%20anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/Der%20anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/der%20Anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/Der%20Anfang", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/The%20beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/the%20beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/wie-alles-begann", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/Wie-alles-begann", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/Wie%20alles%20began", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/wie%20alles%20began", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/in%20the%20beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
-app.get("/In%20the%20beginning", (req, res) => res.redirect("/Wie%20alles%20begann"));
+app.get("/anfang", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/Anfang", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/Beginning", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/beginning", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/der%20anfang", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/Der%20anfang", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/der%20Anfang", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/Der%20Anfang", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/The%20beginning", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/the%20beginning", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/wie-alles-begann", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/Wie-alles-begann", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/Wie%20alles%20began", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/wie%20alles%20began", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/in%20the%20beginning", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
+app.get("/In%20the%20beginning", (req, res) => res.status(301).redirect("/Wie%20alles%20begann"));
 app.get("/Wie%20alles%20begann", (req, res) => {
     res.render("beginning.ejs", {
         env: LOAD_LEVEL,
@@ -578,7 +578,7 @@ app.get("/tanzania", (req, res) => {
     });
 });
 
-app.get("/statutes", (req, res) => res.redirect("/statuten"));
+app.get("/statutes", (req, res) => res.status(301).redirect("/statuten"));
 app.get("/statuten", (req, res) => {
     res.render("statuten.ejs", {
         env: LOAD_LEVEL,
@@ -595,10 +595,25 @@ app.get("/statuten", (req, res) => {
     });
 });
 
-app.get("/p/meducation", (req, res) => res.redirect("/projects/meducation"));
-app.get("/Projekte/meducation", (req, res) => res.redirect("/projects/meducation"));
-app.get("/projekte/meducation", (req, res) => res.redirect("/projects/meducation"));
-app.get("/meducation", (req, res) => res.redirect("/projects/meducation"));
+app.get("/income-statement", (req, res) => res.status(301).redirect("/erfolgsrechnung"));
+app.get("/erfolgsrechnung", (req, res) => {
+    res.render("erfolgsrechnung.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: STATUTEN.aktualisiert,
+        title: "Erfolgsrechnung",
+        desc: "Die Erfolgsrechnung und Bilanz des Vereins",
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js
+    });
+});
+
+app.get("/p/meducation", (req, res) => res.status(301).redirect("/projects/meducation"));
+app.get("/Projekte/meducation", (req, res) => res.status(301).redirect("/projects/meducation"));
+app.get("/projekte/meducation", (req, res) => res.status(301).redirect("/projects/meducation"));
+app.get("/meducation", (req, res) => res.status(301).redirect("/projects/meducation"));
 app.get("/projects/meducation", (req, res) => {
     res.render("meducation.ejs", {
         env: LOAD_LEVEL,
@@ -615,15 +630,15 @@ app.get("/projects/meducation", (req, res) => {
     });
 });
 
-app.get("/projects/gyno", (req, res) => res.redirect("/projects/gynäkologie"));
-app.get("/p/gyno", (req, res) => res.redirect("/projects/gynäkologie"));
-app.get("/Projekte/gyno", (req, res) => res.redirect("/projects/gynäkologie"));
-app.get("/projekte/gyno", (req, res) => res.redirect("/projects/gynäkologie"));
-app.get("/gyno", (req, res) => res.redirect("/projects/gynäkologie"));
-app.get("/p/gyn%C3%A4kologie", (req, res) => res.redirect("/projects/gynäkologie"));
-app.get("/Projekte/gyn%C3%A4kologie", (req, res) => res.redirect("/projects/gynäkologie"));
-app.get("/projekte/gyn%C3%A4kologie", (req, res) => res.redirect("/projects/gynäkologie"));
-app.get("/gyn%C3%A4kologie", (req, res) => res.redirect("/projects/gynäkologie"));
+app.get("/projects/gyno", (req, res) => res.status(301).redirect("/projects/gynäkologie"));
+app.get("/p/gyno", (req, res) => res.status(301).redirect("/projects/gynäkologie"));
+app.get("/Projekte/gyno", (req, res) => res.status(301).redirect("/projects/gynäkologie"));
+app.get("/projekte/gyno", (req, res) => res.status(301).redirect("/projects/gynäkologie"));
+app.get("/gyno", (req, res) => res.status(301).redirect("/projects/gynäkologie"));
+app.get("/p/gyn%C3%A4kologie", (req, res) => res.status(301).redirect("/projects/gynäkologie"));
+app.get("/Projekte/gyn%C3%A4kologie", (req, res) => res.status(301).redirect("/projects/gynäkologie"));
+app.get("/projekte/gyn%C3%A4kologie", (req, res) => res.status(301).redirect("/projects/gynäkologie"));
+app.get("/gyn%C3%A4kologie", (req, res) => res.status(301).redirect("/projects/gynäkologie"));
 app.get("/projects/gyn%C3%A4kologie", (req, res) => {
     res.render("gyno.ejs", {
         env: LOAD_LEVEL,
@@ -640,7 +655,7 @@ app.get("/projects/gyn%C3%A4kologie", (req, res) => {
     });
 });
 
-app.get("/donate", (req, res) => res.redirect("/spenden"));
+app.get("/donate", (req, res) => res.status(301).redirect("/spenden"));
 app.get("/spenden", (req, res) => {
     res.render("donate.ejs", {
         env: LOAD_LEVEL,
@@ -745,7 +760,7 @@ app.get("/newsletter/abmelden", (req, res) => {
     });
 });
 
-app.get("/gallery/:id", (req, res) => res.redirect("/galerie/" + req.params.id));
+app.get("/gallery/:id", (req, res) => res.status(301).redirect("/galerie/" + req.params.id));
 app.get("/galerie/:id", async (req, res) => {
     let result = await db.getGalleyWhereTitle(req.params.id)
         .catch(() => res.redirect("/"));

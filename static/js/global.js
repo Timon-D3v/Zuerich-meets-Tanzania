@@ -52,7 +52,6 @@ f_a_f.click(() => {
 	f_a_h.prop("checked") ? f_a_h.prop("checked", false) : undefined;
 });
 
-
 nav_desktop_l.forEach((elm, i) => {
 	gsap.set(nav_desktop_elm[i], {x: "-50%"});
 	elm.click((e) => {

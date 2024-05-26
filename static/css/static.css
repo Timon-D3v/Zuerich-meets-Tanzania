@@ -555,6 +555,96 @@ label.static-checkbox.uiverse.hirachy-class {
     margin: 5vh 0;
 }
 
+.iframe-efr {
+    margin: var(--basic-margin);
+    width: calc(100% - 10vw);
+    min-height: 75vh;
+    margin-top: 5vh;
+}
+
+.tanzania_history {
+    display: flex;
+    align-items: stretch;
+}
+
+.tanzania_history > .time {
+    position: relative;
+    width: 20px;
+    background-image: url("../img/svg/background_history.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 5vh 2.5vw;
+    border-radius: 10px;
+}
+
+.tanzania_history > .time.geo {
+    filter: hue-rotate(222deg);
+}
+
+.tanzania_history > .time.info {
+    filter: hue-rotate(137deg);
+}
+
+.tanzania_history > .content {
+    width: calc(100% - 10vw - 20px);
+    margin: 5vh 5vw;
+    margin-left: 0;
+}
+
+.tanzania_history_img {
+    width: 100%;
+    max-height: 40vh;
+    object-fit: contain;
+    margin-left: 2.5vw;
+}
+
+.blog_half {
+    display: grid;
+    place-items: center;
+    grid-template-rows: 1fr;
+    grid-template-columns: 47.5% 47.5%;
+    width: 90%;
+    gap: 5%;
+    margin: 2.5vh 5%;
+}
+
+.blog_half > img {
+    margin-left: 0;
+}
+
+.blog_half > ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.text.tanzania_history {
+    padding: 0;
+}
+
+.tanzania-vergleich {
+    width: 100%;
+    display: flex;
+    gap: 2.5vw;
+    align-items: stretch;
+}
+
+.tanzania-vergleich > .schweiz {
+    flex-grow: 1;
+}
+
+.tanzania-vergleich > .tanzania {
+    flex-grow: 1;
+}
+
+.tanzania_flags {
+    max-height: 20vw;
+    object-fit: contain;
+    filter: none !important;
+}
+
 @media screen and  (min-width: 1200px) {}
 
 @media screen and  (min-width: 1000px) and (max-width: 1199px) {}
@@ -572,6 +662,38 @@ label.static-checkbox.uiverse.hirachy-class {
         width: 100%;
         margin-bottom: 80px;
     }
+
+    .tanzania_history > .time {
+        width: 10px;
+        border-radius: 5px;
+    }
+
+    .blog_half {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5vh;
+        margin: 2.5vh 10%;
+        width: 80%;
+    }
+
+    .blog_half > img {
+        margin: 2.5vh 0;
+    }
+
+    .tanzania-vergleich {
+        flex-direction: column;
+        gap: 2.5vh;
+        align-items: center;
+    }
+
+    .tanzania-vergleich .schweiz,
+    .tanzania-vergleich .tanzania {
+        width: 100%;
+    }
+    
+    .tanzania_big_title {
+        word-wrap: break-word;
+    }
 }
 
 @media screen and (max-width: 575px) {
@@ -584,6 +706,38 @@ label.static-checkbox.uiverse.hirachy-class {
     .you .dynamic {
         width: 100%;
         margin-bottom: 80px;
+    }
+
+    .tanzania_history > .time {
+        width: 10px;
+        border-radius: 5px;
+    }
+
+    .blog_half {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5vh;
+        margin: 2.5vh 10%;
+        width: 80%;
+    }
+
+    .blog_half > img {
+        margin: 2.5vh 0;
+    }
+
+    .tanzania-vergleich {
+        flex-direction: column;
+        gap: 2.5vh;
+        align-items: center;
+    }
+
+    .tanzania-vergleich .schweiz,
+    .tanzania-vergleich .tanzania {
+        width: 100%;
+    }
+    
+    .tanzania_big_title {
+        word-wrap: break-word;
     }
 }
 
