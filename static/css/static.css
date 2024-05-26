@@ -645,6 +645,19 @@ label.static-checkbox.uiverse.hirachy-class {
     filter: none !important;
 }
 
+.kardio-imgs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 5vw;
+    margin: 0 5vw;
+}
+
+.kardio-img {
+    height: 35vh;
+    object-fit: contain;
+}
+
 @media screen and  (min-width: 1200px) {}
 
 @media screen and  (min-width: 1000px) and (max-width: 1199px) {}

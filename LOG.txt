@@ -173,4 +173,12 @@ Time spent: 6h; Time worked: 6h;
 
 7.5.24 - 13.5.24
 Hauptsächlich erarbeitet, dass man Blogpost zusammenführen kann.
-Time spent: 9h, Time worked: 5h;
+Time spent: 9h; Time worked: 5h;
+
+17.5.24 - 26.5.24
+Zwei Seiten hinzugefügt (Factsheet Tanzania und Erfolgsrechnung). AUsserdem viel ausserhalb vom programmieren erledigt (Blogs posten etc.).
+Time spent: 22h; Time worked: 20h;
+
+26.5.24
+Weitere zwei Seiten erstellt (Kardiologie & Chirurgie).
+Time spent: 1h; Time worked: 1h;

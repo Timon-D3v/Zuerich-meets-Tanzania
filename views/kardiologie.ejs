@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <style type="text/css">
+            @media screen and (min-width: 1000px) {
+                .hero-img {
+                    filter: brightness(0.75);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <main>
+            <%- include("./snippets/hero.ejs", {
+                img_alt: "Ein Bild des Teams der Kardiologie",
+                img_path: "/img/content/kardiologie1.jpg",
+                title: kardiologie.titel,
+                subtitle: "",
+                cta_text: "",
+                cta_link: ""
+            }) %>
+            <h1 class="title margin-t-5vh w1000 w1200"><%= kardiologie.titel %></h1>
+            <p class="text"><%- kardiologie.abs1 %></p>
+            <p class="text"><%- kardiologie.abs2 %></p>
+            <p class="text"><%- kardiologie.abs3 %></p>
+            <div class="kardio-imgs">
+                <img class="kardio-img" src="/img/content/kardiologie1.jpg">
+                <img class="kardio-img" src="/img/content/kardiologie2.png">
+            </div>
+            <p class="text"><%- kardiologie.abs4 %></p>
+            <p class="text"><%- kardiologie.abs5 %></p>
+            <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
+        </main>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>

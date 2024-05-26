@@ -13,8 +13,10 @@ import fs from "fs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import * as db from "./backend/db/db.zmt.js";
+import KARDIOLOGIE from "./backend/constants/kardiologie.js";
 import MEDUCATION from "./backend/constants/meducation.js";
 import BEGINNING from "./backend/constants/beginning.js";
+import CHIRURGIE from "./backend/constants/chirurgie.js";
 import TANZANIA from "./backend/constants/tanzania.js";
 import STATUTEN from "./backend/constants/statuten.js";
 import VORSTAND from "./backend/constants/vorstand.js";
@@ -575,6 +577,38 @@ app.get("/tanzania", (req, res) => {
         js: req.query.js,
         toRealDate,
         tanzania: TANZANIA
+    });
+});
+
+app.get("/chirurgie", (req, res) => {
+    res.render("chirurgie.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: CHIRURGIE.aktualisiert,
+        title: CHIRURGIE.titel,
+        desc: CHIRURGIE.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        toRealDate,
+        chirurgie: CHIRURGIE
+    });
+});
+
+app.get("/kardiologie", (req, res) => {
+    res.render("kardiologie.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + '://' + req.get('host'),
+        date: KARDIOLOGIE.aktualisiert,
+        title: KARDIOLOGIE.titel,
+        desc: KARDIOLOGIE.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        toRealDate,
+        kardiologie: KARDIOLOGIE
     });
 });
 
