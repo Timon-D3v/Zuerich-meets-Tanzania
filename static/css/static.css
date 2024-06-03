@@ -655,6 +655,7 @@ label.static-checkbox.uiverse.hirachy-class {
 
 .kardio-img {
     height: 35vh;
+    max-width: calc(100% - 10vw);
     object-fit: contain;
 }
 

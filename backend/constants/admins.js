@@ -69,10 +69,10 @@ const ABOUT_US = {
             name: "Tina",
             family_name: "Steiner",
             picture: "https://ik.imagekit.io/zmt/users/tina",
-            job: "Songwe Secondary School",
-            motivation: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
+            job: "Englisch Lehrerin",
+            motivation: "Ich bekam 2012 einen Anruf von meinem Mann (Christoph Meier), welcher gerade 3 Wochen in Afrika war, um einem Freund bei chirurgischen Eingriffen zu helfen. Der Empfang war äusserst schlecht aber es war deutlich zu erkennen, dass er total happy, aufgeregt und begeistert war. \"Es ist so wunderbar da Tina, dass muss ich dir zeigen!\" Kaum in Zürich gelandet, hatten wir schon gefühlte tausend Ideen, wie wir versuchen könnten mitzuhelfen. Mit der Begeisterung und den Gedanken, Gutes tun zu können, stieg auch in mir der Enthusiasmus  dieses Projekt zu verwirklichen. Nach einer Freinacht wussten wir genau, wie wir starten wollen und \"off we went.\" Namen wie Laszlo Vereb oder Eliane Häusermann (auch heute noch top engagierte Vorstandsmitglieder), waren von Anfang an ganz oben auf der Teilnehmer Liste und schon bald, war das erste Team vollständig und ohne ganz genau zu wissen was uns erwartet, aber trotzdem gut organisiert, machten wir uns mit unzähligen Hockeytaschen, vollgestopft mit Ops Material, Schoggi, Plüschtieren und Schulmaterial auf die spannende Reise nach Tanzania.<br>Meine Motivation ist es da in der Schweiz, wie auch in Afrika, den weniger gut situierten Menschen zu helfen. Es zeigt mir persönlich immer wieder auf, dass nichts als selbstverständlich erachtet werden darf im Leben. Es ist eine grosse Freude zu sehen, wie sich dieses Projekt dank vieler engagierter Menschen immer weiter entwickelt.",
             position: "",
-            picture2: false
+            picture2: true
         }
     ]
 };

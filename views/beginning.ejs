@@ -9,12 +9,27 @@
             env: env,
             sitetype: sitetype
         }) %>
+        <style type="text/css">
+            @media screen and (min-width: 1000px) {
+                .hero-img {
+                    filter: brightness(0.75);
+                }
+            }
+        </style>
     </head>
     <body>
         <%- include("./snippets/header.ejs") %>
         <%- include("./snippets/nav.ejs") %>
         <main>
-            <h1 class="title beginning"><%- text.title %></h1>
+            <%- include("./snippets/hero.ejs", {
+                img_alt: "Ein Bild, dass den Anfang darstellen soll.",
+                img_path: "/img/stock/beginning.jpg",
+                title: text.title,
+                subtitle: "",
+                cta_text: "",
+                cta_link: ""
+            }) %>
+            <h1 class="title margin-t-5vh w1000 w1200"><%- text.title %></h1>
             <p class="text-beginning"><%- text.abs1 %></p>
             <p class="text-beginning"><%- text.abs2 %></p>
             <p class="text-beginning"><%- text.abs3 %></p>

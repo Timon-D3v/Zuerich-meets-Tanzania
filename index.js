@@ -27,6 +27,8 @@ import BACKUP from "./backend/constants/backup.js";
 import HERO from "./backend/constants/heropage.js";
 import VISION from "./backend/constants/vision.js";
 import EMAILS from "./backend/constants/emails.js";
+import MBUZI from "./backend/constants/mbuzi.js";
+import GV from "./backend/constants/gv.js";
 
 
 
@@ -406,7 +408,7 @@ app.get("/", async (req, res) => {
     res.render("index.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: "Sun Jan 21 2024 22:43:11 GMT+0100 (Mitteleuropäische Normalzeit)",
         title: "Home",
         desc: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren. Eine bunt zusammengemischte Truppe engagierter, hilfsbereiter Leute. Erfahre auf dieser Seite mehr über unser Team, unsere Freunde in Mbalizi und unsere Partner.",
@@ -431,7 +433,7 @@ app.get("/login", async (req, res) => {
     res.render("login.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: "Thu Feb 22 2024 20:36:37 GMT+0100 (Mitteleuropäische Normalzeit)",
         title: "Login",
         desc: "Hier können sich Mitglieder und Verwalter einloggen oder neu registrieren.",
@@ -446,7 +448,7 @@ app.get("/shop", async (req, res) => {
     res.render("shop.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: "Fri Feb 23 2024 21:15:35 GMT+0100 (Mitteleuropäische Normalzeit)",
         title: "Shop",
         desc: "Auf dieser Seite können Sie direkt zum Unikat Höngg weiter um die einzigartigen Unikate zu kaufen, die beim Kauf den Verein unterstützen.",
@@ -465,7 +467,7 @@ app.get("/profile", async (req, res) => {
     res.render("profile.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: "Sat Feb 24 2024 10:53:44 GMT+0100 (Mitteleuropäische Normalzeit)",
         title: req.session.user.username,
         desc: "Dein Profil und alle Einstellungen auf einer Seite.",
@@ -482,7 +484,7 @@ app.get("/contact", (req, res) => {
     res.render("contact.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: "Sat Mar 23 2024 14:22:59 GMT+0100 (Mitteleuropäische Normalzeit)",
         title: "Kontakt",
         desc: "Über diese Seite kannst du uns ganz einfach kontaktieren, indem du uns eine E-Mail schreibst. Wir geben unser Bestes, so schnell wie möglich zu antworten.",
@@ -498,7 +500,7 @@ app.get("/vorstand", (req, res) => {
     res.render("vorstand.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: VORSTAND.aktualisiert,
         title: "Vorstand",
         desc: VORSTAND.beschreibung,
@@ -519,7 +521,7 @@ app.get("/vision", (req, res) => {
     res.render("vision.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: VISION.datum,
         title: "Vision",
         desc: VISION.beschreibung,
@@ -552,7 +554,7 @@ app.get("/Wie%20alles%20begann", (req, res) => {
     res.render("beginning.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: BEGINNING.datum,
         title: BEGINNING.title,
         desc: BEGINNING.beschreibung,
@@ -568,7 +570,7 @@ app.get("/tanzania", (req, res) => {
     res.render("tanzania.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: TANZANIA.datum,
         title: TANZANIA.title,
         desc: TANZANIA.beschreibung,
@@ -580,11 +582,12 @@ app.get("/tanzania", (req, res) => {
     });
 });
 
-app.get("/chirurgie", (req, res) => {
+app.get("/chirurgie", (req, res) => res.status(301).redirect("/projects/chirurgie"));
+app.get("/projects/chirurgie", (req, res) => {
     res.render("chirurgie.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: CHIRURGIE.aktualisiert,
         title: CHIRURGIE.titel,
         desc: CHIRURGIE.beschreibung,
@@ -596,11 +599,12 @@ app.get("/chirurgie", (req, res) => {
     });
 });
 
-app.get("/kardiologie", (req, res) => {
+app.get("/kardiologie", (req, res) => res.status(301).redirect("/projects/kardiologie"));
+app.get("/projects/kardiologie", (req, res) => {
     res.render("kardiologie.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: KARDIOLOGIE.aktualisiert,
         title: KARDIOLOGIE.titel,
         desc: KARDIOLOGIE.beschreibung,
@@ -617,7 +621,7 @@ app.get("/statuten", (req, res) => {
     res.render("statuten.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: STATUTEN.aktualisiert,
         title: "Statuten",
         desc: "Die Stauten des Vereins",
@@ -629,12 +633,28 @@ app.get("/statuten", (req, res) => {
     });
 });
 
+app.get("/imprint", (req, res) => res.status(301).redirect("/impressum"));
+app.get("/impressum", (req, res) => {
+    res.render("quellenangabe.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: "Mon Jun 03 2024 18:28:26 GMT+0200 (Mitteleuropäische Sommerzeit)",
+        title: "Quellenangabe",
+        desc: "Hier findest du alle Quellenangaben zu den Bildern auf dieser Webseite.",
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        toRealDate
+    });
+});
+
 app.get("/income-statement", (req, res) => res.status(301).redirect("/erfolgsrechnung"));
 app.get("/erfolgsrechnung", (req, res) => {
     res.render("erfolgsrechnung.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: STATUTEN.aktualisiert,
         title: "Erfolgsrechnung",
         desc: "Die Erfolgsrechnung und Bilanz des Vereins",
@@ -652,7 +672,7 @@ app.get("/projects/meducation", (req, res) => {
     res.render("meducation.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: MEDUCATION.aktualisiert,
         title: "Meducation",
         desc: MEDUCATION.beschreibung,
@@ -660,6 +680,40 @@ app.get("/projects/meducation", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         meducation: MEDUCATION,
+        toRealDate
+    });
+});
+
+app.get("/mbuzi", (req, res) => res.status(301).redirect("/projects/mbuzi"));
+app.get("/projects/mbuzi", (req, res) => {
+    res.render("mbuzi.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: MBUZI.aktualisiert,
+        title: MBUZI.titel,
+        desc: MBUZI.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        mbuzi: MBUZI,
+        toRealDate
+    });
+});
+
+app.get("/gv", (req, res) => res.status(301).redirect("/generalversammlung"));
+app.get("/generalversammlung", (req, res) => {
+    res.render("gv.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: GV.aktualisiert,
+        title: GV.titel,
+        desc: GV.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        gv: GV,
         toRealDate
     });
 });
@@ -677,7 +731,7 @@ app.get("/projects/gyn%C3%A4kologie", (req, res) => {
     res.render("gyno.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: GYNO.aktualisiert,
         title: "Meducation",
         desc: GYNO.beschreibung,
@@ -731,7 +785,7 @@ app.get("/pay", async (req, res) => {
     if (q.t === "membership") {
         if (!req.session?.user?.valid) return res.redirect("/login?redir=/spenden");
         if (req.session.user.type === "member" || req.session.user.type === "admin") return res.redirect("/?js=infoField(`Du bist schon ein Mitglied`);nofunction");
-        link = await buyMembership(req.session.user, q.key, req.protocol + '://' + req.get('host'));
+        link = await buyMembership(req.session.user, q.key, req.protocol + "://" + req.get("host"));
     };
 
     res.redirect(303, link);
@@ -784,7 +838,7 @@ app.get("/newsletter/abmelden", (req, res) => {
     res.render("newsletter_abmeldung.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: "Sun May 05 2024 15:20:55 GMT+0200 (Mitteleuropäische Sommerzeit)",
         title: "Abmelden",
         desc: "Hier kannst du dich von unserem Newsletter abmelden.",
@@ -802,7 +856,7 @@ app.get("/galerie/:id", async (req, res) => {
     result ? res.render("gallery.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: result.date,
         title: result.title,
         desc: result.subtitle + " | Uploaded by " + result.author,
@@ -822,7 +876,7 @@ app.get("/blog/:id", async (req, res) => {
     result ? res.render("blog.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
-        origin_url: req.protocol + '://' + req.get('host'),
+        origin_url: req.protocol + "://" + req.get("host"),
         date: "Mon Feb 12 2024 16:40:44 GMT+0100 (Mitteleuropäische Normalzeit)",
         title: result.title,
         desc: result.preview + " | Written by " + result.author,
@@ -836,7 +890,7 @@ app.get("/blog/:id", async (req, res) => {
 app.get("/private/:id", async (req, res) => {
     if (!req.session.user) return res.redirect("/login?redir=/private/" + req.params.id);
     if (req.session.user.type !== "admin") return res.redirect("/");
-    let url = req.protocol + '://' + req.get('host');
+    let url = req.protocol + "://" + req.get("host");
     switch (req.params.id) {
         case "management":
             let users = await db.getAllUsers();
@@ -882,7 +936,7 @@ app.get("/private/:id", async (req, res) => {
 });
 
 app.get("/*", (req, res) => {
-    let url = req.protocol + '://' + req.get('host');
+    let url = req.protocol + "://" + req.get("host");
     res.status(404).render("errors/error404.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -1145,7 +1199,7 @@ app.post("/post/getPaymentLink", async (req, res) => {
     if (isNaN(req.body.amount)) return res.end();
     let key = timon.randomString(256);
     payment_keys.push(key);
-    res.json({link: `${req.protocol}://${req.get('host')}/pay?key=${key}&a=${req.body.amount}&t=${req.body.type}`});
+    res.json({link: `${req.protocol}://${req.get("host")}/pay?key=${key}&a=${req.body.amount}&t=${req.body.type}`});
 });
 
 app.post("/post/stripe/webhook", bodyParser.raw({type: 'application/json'}), async (req, res) => {

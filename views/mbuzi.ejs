@@ -22,16 +22,19 @@
         <%- include("./snippets/nav.ejs") %>
         <main>
             <%- include("./snippets/hero.ejs", {
-                img_alt: "Finanzen",
-                img_path: "/img/stock/erfolgsrechnung.jpg",
-                title: "Erfolgsrechnung",
+                img_alt: "Eine Ziege",
+                img_path: "/img/stock/mbuzi.jpg",
+                title: "Mbuzi",
                 subtitle: "",
                 cta_text: "",
                 cta_link: ""
             }) %>
-            <iframe class="iframe-efr" src="https://ik.imagekit.io/zmt/pdf/erfolgsrechnung/Bilanz.pdf"></iframe>
-            <iframe class="iframe-efr" src="https://ik.imagekit.io/zmt/pdf/erfolgsrechnung/Erfolgsrechnung Mitgliederkonto.pdf"></iframe>
-            <iframe class="iframe-efr" src="https://ik.imagekit.io/zmt/pdf/erfolgsrechnung/Erfolgsrechnung Spendenkonto.pdf"></iframe>
+            <h1 class="title margin-t-5vh w1000 w1200"><%- mbuzi.titel %></h1>
+            <div class="kardio-imgs">
+                <img class="kardio-img" src="/img/regular/mbuzi.jpg">
+            </div>
+            <p class="text"><%- mbuzi.abs1 %></p>
+            <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>
         <%- include("./snippets/footer.ejs", {
             origin_url: origin_url,

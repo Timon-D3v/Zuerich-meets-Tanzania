@@ -21,7 +21,15 @@
         <%- include("./snippets/header.ejs") %>
         <%- include("./snippets/nav.ejs") %>
         <main>
-            <h1 class="title vision">Vision</h1>
+            <%- include("./snippets/hero.ejs", {
+                img_alt: "Ein Bild getrieben von Vision und Begeisterung",
+                img_path: "/img/stock/vision.jpg",
+                title: "Vision",
+                subtitle: "",
+                cta_text: "",
+                cta_link: ""
+            }) %>
+            <h1 class="title margin-t-5vh w1000 w1200">Vision</h1>
             <div class="news vision">
                 <div class="news-div vision">
                     <p class="vision-text">
