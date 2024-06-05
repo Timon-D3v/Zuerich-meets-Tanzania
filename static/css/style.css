@@ -69,6 +69,7 @@
     --green: #40b959;
     --dark-green: #015019;
     --violett: #673ab7;
+    --success: var(--green);
 }
 
 :root[data-theme="light"] {

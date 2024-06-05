@@ -995,12 +995,16 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/post/newsletter/signUp", async (req, res) => {
+    const emails = await db.getAllNewsletterEmails();
+    if (emails.includes(req.body.email)) {
+        return res.json({status: "Du bist schon angemeldet."});
+    };
     let result = await db.newsletterSignUp(req.body)
         .catch(error => {
             console.error("An Error occurred:", error);
             return "No connection to database";
         });
-    res.send({status: result});
+    res.json({status: result});
 });
 
 app.post("/post/newsletter/signUp/logedIn", async (req, res) => {

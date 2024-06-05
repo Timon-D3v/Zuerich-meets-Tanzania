@@ -173,15 +173,6 @@ function newsletterSignUp (e) {
 	let res = validateNewsletterForm();
 	if (res.error === 0) {
 		sendNewsletter(res.data);
-		errField.html("Deine Anmeldung war erfolgreich!")
-			.css({
-				display: "block",
-				color: "var(--c-accent-500)"
-			});
-		setTimeout(() => errField.css({
-			display: "none",
-			color: "var(--c-secondary-600)"
-		}), 5000);
 	} else if (res.error === 1) {
 		errField.html("Du musst deinen Vornamen angeben.")
 			.css("display", "block");
@@ -284,12 +275,11 @@ async function sendNewsletter (data) {
 		.html("Es ist ein unerwarteter Fehler aufgetreten, bitte versuche es in einigen Sekunden erneut...")
 	);
 	res = await res.json();
-	res.status !== "Alles in Ordnung" ? () => {
-		$("#newsletter-form-error").css("display", "block")
-			.html("Es ist ein unerwarteter Fehler aufgetreten, bitte versuche es in einigen Sekunden erneut...");
-		console.error("An Error occured:", res.status);
-	} :
-	undefined;
+	if (res.status !== "Alles in Ordnung") {
+		errorField(res.status);
+	} else {
+		successField("Du hast dich erfolgreich für den Newsletter angemeldet.");
+	}
 };
 
 async function getBlogTitle (num) {

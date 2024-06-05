@@ -383,3 +383,13 @@ export async function mergeBlogs (number, title, description, author, img, alt) 
         };
     };
 };
+
+export async function getAllNewsletterEmails (email) {
+    let query = "SELECT email FROM `zmt`.`newsletter`;";
+    let [result] = await pool.query(query)
+        .catch(() => []);
+    result.forEach((element, i) => {
+        result[i] = element.email;
+    });
+    return result;
+};
