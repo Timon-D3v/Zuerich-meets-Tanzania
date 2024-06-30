@@ -23,7 +23,7 @@
     "mysql2": "^3.9.8",
     "node-mailjet": "^6.0.5",
     "stripe": "^15.8.0",
-    "timonjs": "^0.0.14"
+    "timonjs": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.1"

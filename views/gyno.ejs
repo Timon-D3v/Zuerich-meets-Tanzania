@@ -10,6 +10,24 @@
             sitetype: sitetype
         }) %>
         <style type="text/css">
+            .hero-img {
+                object-position: top;
+            }
+
+            .blog_half {
+                display: grid;
+                place-items: center;
+                grid-template-rows: 1fr;
+                grid-template-columns: 47.5% 47.5%;
+                width: 90%;
+                gap: 5%;
+                margin: 2.5vh 5%;
+            }
+
+            .blog_half > img {
+                width: 100%;
+            }
+
             @media screen and (min-width: 1000px) {
                 .hero-img {
                     filter: brightness(0.75);
@@ -23,7 +41,7 @@
         <main>
             <%- include("./snippets/hero.ejs", {
                 img_alt: "Ein Bild des Teams",
-                img_path: "/img/stock/gyno.jpg",
+                img_path: "/img/content/gyno_1_2.jpg",
                 title: gyno.titel,
                 subtitle: "",
                 cta_text: "",
@@ -33,6 +51,10 @@
             <p class="text"><%= gyno.abs1 %></p>
             <p class="text"><%= gyno.abs2 %></p>
             <p class="text"><%= gyno.abs3 %></p>
+            <p class="blog_half">
+                <img src="/img/content/gyno_3.jpg" alt="Das Logo von twenty4forty">
+                <img src="/img/content/gyno_2.jpg" alt="Eine Ultraschall Untersuchung">
+            </p>
             <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>
         <%- include("./snippets/footer.ejs", {

@@ -1258,7 +1258,7 @@ app.post("/post/stripe/webhook", bodyParser.raw({type: 'application/json'}), asy
             break;
     };
 
-    res.json({received: true});
+    res.status(200).json({received: true});
 });
 
 app.post("/post/getMyBills", async (req, res) => {
