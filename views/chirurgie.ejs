@@ -9,11 +9,16 @@
             env: env,
             sitetype: sitetype
         }) %>
+        <link rel="stylesheet" href="/css/blog.css">
         <style type="text/css">
             @media screen and (min-width: 1000px) {
                 .hero-img {
                     filter: brightness(0.75);
                 }
+            }
+
+            .text {
+                padding: 1.5vh 5vw !important;
             }
         </style>
     </head>
@@ -23,18 +28,88 @@
         <main>
             <%- include("./snippets/hero.ejs", {
                 img_alt: "Ein Chirurg",
-                img_path: "/img/stock/chirurgie.jpg",
+                img_path: "https://ik.imagekit.io/zmt/assets/chirurgie/all.jpg",
                 title: chirurgie.titel,
                 subtitle: "",
                 cta_text: "",
                 cta_link: ""
             }) %>
-            <h1 class="title margin-t-5vh w1000 w1200"><%= chirurgie.titel %></h1>
-            <p class="text"><%= chirurgie.abs1 %></p>
-            <p class="text"><%= chirurgie.abs2 %></p>
-            <p class="text"><%= chirurgie.abs3 %></p>
-            <p class="text"><%= chirurgie.abs4 %></p>
-            <p class="text"><%= chirurgie.abs5 %></p>
+            <h1 class="title margin-t-5vh w1000 w1200"><%- chirurgie.titel %></h1>
+            <p class="text" style="padding-top: 5vh;"><%- chirurgie.abs1 %></p>
+            <p class="text"><%- chirurgie.abs2 %></p>
+            <p class="text"><%- chirurgie.abs3 %></p>
+            <p class="text"><%- chirurgie.abs4 %></p>
+            <p class="text"><%- chirurgie.abs5 %></p>
+            <div id="auto_2sEoxiGTrPjpesOgDrbZ0G21xwZ">
+                <div class="blog_carousel auto_WoLa23K35nRBifyMLvQNobETRnU">
+                    <div class="blog_c-main auto_G07iFxmgpSZfYFkFyi5qW5fZazN">
+                        <img class="auto_O9osRXOeDfy8xi3RtA68VBymS5Y" id="auto_O9osRXOeDfy8xi3RtA68VBymS5Y" src="https://ik.imagekit.io/zmt/assets/chirurgie/arzt1.JPG" alt="Keine Beschreibung für dieses Bild...">
+                        <img class="auto_qzLIL1djHbKD66Txb6q5PxOZKAr" id="auto_qzLIL1djHbKD66Txb6q5PxOZKAr" src="https://ik.imagekit.io/zmt/assets/chirurgie/arzt2.JPG" alt="Keine Beschreibung für dieses Bild...">
+                        <img class="auto_AJvIrRaJBkRuXO9HNjI0KFDnbyL" id="auto_AJvIrRaJBkRuXO9HNjI0KFDnbyL" src="https://ik.imagekit.io/zmt/assets/chirurgie/arzt3.JPG" alt="Keine Beschreibung für dieses Bild...">
+                        <img class="auto_cOrQvm7BhrAOmehJCIprY9ramKd" id="auto_cOrQvm7BhrAOmehJCIprY9ramKd" src="https://ik.imagekit.io/zmt/assets/chirurgie/arzt4.JPG" alt="Keine Beschreibung für dieses Bild...">
+                        <img class="auto_k86cHqOnE2oE4ZFCTwaJ1eq5zt2" id="auto_k86cHqOnE2oE4ZFCTwaJ1eq5zt2" src="https://ik.imagekit.io/zmt/assets/chirurgie/arzt5.JPG" alt="Keine Beschreibung für dieses Bild...">
+                    </div>
+                    <button class="blog_carousel_next" id="blog_carousel_next_auto_Rui8UQNeD3dTKCxSu6ifmBh4S0u" type="button"></button>
+                    <button class="blog_carousel_prev" id="blog_carousel_prev_auto_WPSbKaotXVocfME2Hj5nax9abU7" type="button"></button>
+                    <div class="blog_c-ruler auto_8bK8T1eC4Nq2lwf98epvA8z9mIL">
+                        <img class="auto_O9osRXOeDfy8xi3RtA68VBymS5Y" id="auto_O9osRXOeDfy8xi3RtA68VBymS5Y" src="https://ik.imagekit.io/zmt/assets/chirurgie/arzt1.JPG" alt="Keine Beschreibung für dieses Bild...">
+                        <img class="auto_qzLIL1djHbKD66Txb6q5PxOZKAr" id="auto_qzLIL1djHbKD66Txb6q5PxOZKAr" src="https://ik.imagekit.io/zmt/assets/chirurgie/arzt2.JPG" alt="Keine Beschreibung für dieses Bild...">
+                        <img class="auto_AJvIrRaJBkRuXO9HNjI0KFDnbyL" id="auto_AJvIrRaJBkRuXO9HNjI0KFDnbyL" src="https://ik.imagekit.io/zmt/assets/chirurgie/arzt3.JPG" alt="Keine Beschreibung für dieses Bild...">
+                        <img class="auto_cOrQvm7BhrAOmehJCIprY9ramKd" id="auto_cOrQvm7BhrAOmehJCIprY9ramKd" src="https://ik.imagekit.io/zmt/assets/chirurgie/arzt4.JPG" alt="Keine Beschreibung für dieses Bild...">
+                        <img class="auto_k86cHqOnE2oE4ZFCTwaJ1eq5zt2" id="auto_k86cHqOnE2oE4ZFCTwaJ1eq5zt2" src="https://ik.imagekit.io/zmt/assets/chirurgie/arzt5.JPG" alt="Keine Beschreibung für dieses Bild...">
+                    </div>
+                    <script>
+                        $(".blog_c-ruler.auto_8bK8T1eC4Nq2lwf98epvA8z9mIL").html($(".blog_c-main.auto_G07iFxmgpSZfYFkFyi5qW5fZazN").html());
+
+                        const arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU = [
+                            $(".auto_O9osRXOeDfy8xi3RtA68VBymS5Y"),
+                            $(".auto_qzLIL1djHbKD66Txb6q5PxOZKAr"),
+                            $(".auto_AJvIrRaJBkRuXO9HNjI0KFDnbyL"),
+                            $(".auto_cOrQvm7BhrAOmehJCIprY9ramKd"),
+                            $(".auto_k86cHqOnE2oE4ZFCTwaJ1eq5zt2"),
+                        ];
+
+                        document.querySelector(".blog_c-ruler.auto_8bK8T1eC4Nq2lwf98epvA8z9mIL").querySelectorAll("img").forEach(elm => elm.src += "?tr=w-100,h-100");
+
+                        let current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN = 1;
+
+                        arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU[current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN - 1].toggleClass("active");
+
+                        function next_auto_w0GnwoQIhxg2L49VDJtrMHyizRV () {
+                            current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN + 1 > arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU.length ?
+                            current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN = 1 :
+                            current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN++;
+                            current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN === 1 ?
+                            arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU[arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU.length - 1].toggleClass("active") :
+                            arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU[current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN - 2].toggleClass("active");
+                            arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU[current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN - 1].toggleClass("active");
+                        };
+
+                        function prev_auto_nV10lOxn77JwKoc8DC54sLo9OI8 () {
+                            current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN - 1 === 0 ?
+                            current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN = arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU.length :
+                            current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN--;
+                            current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN === arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU.length ?
+                            arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU[0].toggleClass("active") :
+                            arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU[current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN].toggleClass("active");
+                            arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU[current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN - 1].toggleClass("active");
+                        };
+
+                        function to_auto_K3OF8fRDy5k3sS5RIqcdG9UkSmw (i) {
+                            arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU[current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN - 1].toggleClass("active");
+                            arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU[i - 1].toggleClass("active");
+                            current_auto_Jv2O3P3Ctu256L4P9vuJme2K6uN = i;
+                        };
+
+                        $("#blog_carousel_next_auto_Rui8UQNeD3dTKCxSu6ifmBh4S0u").click(next_auto_w0GnwoQIhxg2L49VDJtrMHyizRV);
+                        $("#blog_carousel_prev_auto_WPSbKaotXVocfME2Hj5nax9abU7").click(prev_auto_nV10lOxn77JwKoc8DC54sLo9OI8);
+
+                        arr_auto_S8ReTRagaJsHLH97wiLKYX9dHqU.forEach((elm, i) => {
+                            elm.eq(1).click(() => to_auto_K3OF8fRDy5k3sS5RIqcdG9UkSmw (i + 1));
+                        });
+                    </script>
+                </div>
+            </div>
             <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>
         <%- include("./snippets/footer.ejs", {
