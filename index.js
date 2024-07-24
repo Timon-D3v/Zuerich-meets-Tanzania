@@ -28,6 +28,7 @@ import HERO from "./backend/constants/heropage.js";
 import VISION from "./backend/constants/vision.js";
 import EMAILS from "./backend/constants/emails.js";
 import MBUZI from "./backend/constants/mbuzi.js";
+import ZMT from "./backend/constants/zmt.js";
 import GV from "./backend/constants/gv.js";
 
 
@@ -491,6 +492,23 @@ app.get("/contact", (req, res) => {
         sitetype: "contact",
         user: req.session.user,
         js: req.query.js
+    });
+});
+
+app.get("/zmt", (req, res) => res.status(301).redirect("/zurich-meets-tanzania"));
+app.get("/zurich-meets-tanzania", (req, res) => {
+    res.render("zmt.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: ZMT.aktualisiert,
+        title: ZMT.titel,
+        desc: ZMT.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        zmt: ZMT,
+        toRealDate
     });
 });
 
