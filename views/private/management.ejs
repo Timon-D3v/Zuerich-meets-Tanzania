@@ -83,6 +83,54 @@
                     <button type="submit" class="basic-button">Submit</button>
                 </form>
             </div>
+            <div class="team-management container">
+                <h1 class="basic-title">Team Erstellen</h1>
+                <p class="basic-text">Hier kann ein neues Team erstellt werden</p>
+                <label for="team_name" class="basic-label">Leitsatz für das Team</label>
+                <input type="text" class="basic-input" id="team-m-leitsatz">
+                <label for="team_desc" class="basic-label">Kurze Beschreibung</label>
+                <input type="text" class="basic-input" id="team-m-beschreibung">
+                <label for="team-m-img" class="basic-label">Bild</label>
+                <input type="file" class="basic-input" id="team-m-img" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
+                <p class="basic-text">Mitglieder können nach dem Erstellen eines Team hinzugefügt werden.</p>
+                <button type="submit" class="basic-button" id="team-m-submit">Erstellen</button>
+            </div>
+            <div class="team-management container">
+                <h1 class="basic-title">Mitglied hinzufügen</h1>
+                <p class="basic-text">Hier kann ein Mitglied zum Team hinzugefügt werden</p>
+
+                <label for="team_name" class="basic-label">Benutzername</label>
+                <input type="text" class="basic-input" id="team-m-username">
+                <!-- Damit bekomme ich Vor-/Nachnamen und das erste Bild -->
+
+                <label for="team_name" class="basic-label">Job</label>
+                <input type="text" class="basic-input" id="team-m-job">
+                
+                <label for="team_name" class="basic-label">Motivation / Leitsatz</label>
+                <input type="text" class="basic-input" id="team-m-motivation">
+
+                <button type="submit" class="basic-button" id="team-m-add">Hinzufügen</button>
+                <script>
+                    getElm("team-m-add").click(async () => {
+                        const username = getElm("team-m-username");
+                        const job = getElm("team-m-job");
+                        const motivation = getElm("team-m-motivation");
+
+                        if (username.valIsEmpty() || job.valIsEmpty() || motivation.valIsEmpty()) {
+                            alert("Bitte fülle alle Felder aus");
+                            return;
+                        }
+
+                        const res = await post("/post/addTeamMember", {
+                            username: username.val(),
+                            job: job.val(),
+                            motivation: motivation.val()
+                        });
+
+                        alert(res.valid ? "Erfolgreich hinzugefügt" : "Mitglied konnte nicht hinzugefügt werden");
+                    });
+                </script>
+            </div>
             <div class="hero-management container">
                 <h1 class="basic-title">Neues Homepage Bild hochladen</h1>
                 <label for="hero_img_upload" id="picture_overlay">

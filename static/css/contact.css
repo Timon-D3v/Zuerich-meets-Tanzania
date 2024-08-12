@@ -118,6 +118,10 @@ footer {
     background-color: #4a2984;
 }
 
+*::selection, *::marker {
+    background-color: #4ab5a3cc;
+}
+
 @media screen and (max-width: 575px) {
     .contact-names {
         display: flex;

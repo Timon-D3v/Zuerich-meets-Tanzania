@@ -31,17 +31,17 @@
         <%- include("./snippets/nav.ejs") %>
         <main>
             <%- include("./snippets/hero.ejs", {
-                img_alt: "Ein Bild des Teams",
-                img_path: vorstand.bildURL,
-                title: "Der Vorstand",
-                subtitle: vorstand.leitsatz,
+                img_alt: "",
+                img_path: team.bild,
+                title: "Unser aktuelles Team",
+                subtitle: team.leitsatz,
                 cta_text: "",
                 cta_link: ""
             }) %>
-            <h1 class="title margin-t-5vh w1000 w1200">Der Vorstand</h1>
-            <p class="text"><%= vorstand.text %></p>
+            <h1 class="title margin-t-5vh w1000 w1200">Unser aktuelles Team</h1>
+            <p class="text"><%= team.text %></p>
             <%- include("./snippets/teamMember.ejs", {
-                members: member_list
+                members: team.members
             }); %>
             <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>

@@ -18,6 +18,7 @@ import MEDUCATION from "./backend/constants/meducation.js";
 import BEGINNING from "./backend/constants/beginning.js";
 import CHIRURGIE from "./backend/constants/chirurgie.js";
 import TANZANIA from "./backend/constants/tanzania.js";
+import FINANZEN from "./backend/constants/finanzen.js";
 import STATUTEN from "./backend/constants/statuten.js";
 import VORSTAND from "./backend/constants/vorstand.js";
 import GYNO from "./backend/constants/gynäkologie.js";
@@ -363,6 +364,18 @@ function sendMailCode (email, user) {
     return code;
 };
 
+async function sendContactMail (body) {
+    const { header, footer } = EMAILS;
+    const data = {
+        Subject: createMailSubject(body),
+        TextPart: createMailText(body),
+        HTMLPart: header + "<p>" + createMailText(body).replaceAll("\n", "<br>") + "</p>" + footer,
+        CustomID: "Contact Form"
+    };
+    const result = await sendMail("info@zurich-meets-tanzania.com", data);
+    return result.response.status;
+};
+
 
 
 app.use(express.static("./static"));
@@ -531,6 +544,23 @@ app.get("/vorstand", (req, res) => {
     });
 });
 
+app.get("/team", async (req, res) => {
+    const TEAM = await db.getCurrentTeamInfo();
+    res.render("team.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: TEAM.aktualisiert,
+        title: "Aktuelles Team",
+        desc: "Hier findest du alle Informationen über das aktuelle Team von zurich meets tanzania.",
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        team: TEAM,
+        toRealDate
+    });
+});
+
 app.get("/leitideen", (req, res) => res.status(301).redirect("/vision"));
 app.get("/ideen", (req, res) => res.status(301).redirect("/vision"));
 app.get("/idee", (req, res) => res.status(301).redirect("/vision"));
@@ -631,6 +661,22 @@ app.get("/projects/kardiologie", (req, res) => {
         js: req.query.js,
         toRealDate,
         kardiologie: KARDIOLOGIE
+    });
+});
+
+app.get("/finanzen", (req, res) => {
+    res.render("finanzen.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: FINANZEN.aktualisiert,
+        title: FINANZEN.titel,
+        desc: FINANZEN.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        toRealDate,
+        finanzen: FINANZEN
     });
 });
 
@@ -1158,22 +1204,8 @@ app.post("/post/changeHeroImg", async (req, res) => {
 });
 
 app.post("/post/sendMail", async (req, res) => {
-    let token;
-    LOAD_LEVEL === "prod" ?
-    token = process.env.POSTMAIL_TOKEN :
-    token = process.env.POSTMAIL_TEST_TOKEN;
-    let data = new URLSearchParams();
-    let text = createMailText(req.body);
-    let subject = createMailSubject(req.body);
-    data.append("access_token", token);
-    data.append("subject", subject);
-    data.append("text", text);
-    let result = await fetch("https://postmail.invotes.com/send", {
-        method: "POST",
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: data
-    });
-    if (result.status === 200) return res.json({res: "Die E-Mail wurde erfolgreich verschickt."}).status(200);
+    const result = await sendContactMail(req.body);
+    if (result === 200) return res.json({res: "Die E-Mail wurde erfolgreich verschickt."}).status(200);
     else return res.json({res: "Die E-Mail konnte nicht verschickt werden, versuche es in einigen Sekunden noch einmal."}).status(500);
 });
 
@@ -1328,6 +1360,48 @@ app.post("/newsletter/submitCode", (req, res) => {
         message = err.message;
     };
     res.json({status, message});
+});
+
+app.post("/post/createTeam", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    
+    const { leitsatz, beschreibung, base64 } = req.body;
+
+    const { path } = await imagekitUpload(base64, timon.randomString(32), "/current-team/");
+
+    let result = await db.createTeam(Date(), leitsatz, beschreibung, path)
+        .catch(err => {
+            console.error(err);
+            return false;
+        });
+
+    res.json({valid: result});
+});
+
+app.post("/post/addTeamMember", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+
+    const { username, job, motivation } = req.body;
+    const user = await db.getAccount(username);
+    const { name, family_name, picture } = user[0];
+
+    const data = {
+        name,
+        family_name,
+        picture,
+        job,
+        motivation,
+        position: "",
+        picture2: false
+    };
+    
+    const result = await db.addTeamMember(data)
+        .catch(err => {
+            console.error(err);
+            return false;
+        });
+
+    res.json({valid: result});
 });
 
 

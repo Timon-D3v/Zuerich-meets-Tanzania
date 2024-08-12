@@ -118,6 +118,31 @@ merge_blogs_btn.click(async () => {
 	else console.error("Unbekannter Fehler");
 });
 
+getElm("team-m-submit").click(async () => {
+	const leitsatz = getElm("team-m-leitsatz");
+	const beschreibung = getElm("team-m-beschreibung");
+
+	if (leitsatz.valIsEmpty() || beschreibung.valIsEmpty()) {
+		alert("Bitte fülle alle Felder aus");
+		return;
+	}
+
+	const base64 = await getElm("team-m-img").getImgBase64();
+	
+	if (base64 === undefined) {
+		alert("Bitte wähle ein Bild aus");
+		return;
+	}
+
+	const res = await post("/post/createTeam", {
+		leitsatz: leitsatz.val(),
+		beschreibung: beschreibung.val(),
+		base64
+	});
+
+	alert(res.valid ? "Team wurde erstellt" : "Team konnte nicht erstellt werden");
+});
+
 $(pdf).click(() => toggleDivs(pdf, s_pdf, s_img));
 $(s_btn).click(() => toggleDivs(s_btn, s_btn_menu, h_btn_menu));
 

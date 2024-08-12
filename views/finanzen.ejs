@@ -14,15 +14,6 @@
                 .hero-img {
                     filter: brightness(0.75);
                 }
-                
-                h1.hero-title,
-                p.hero-subtitle {
-                    color: var(--c-text-50) !important;
-                }
-                
-                h1.hero-title::after {
-                    background-color: var(--c-text-50) !important;
-                }
             }
         </style>
     </head>
@@ -31,18 +22,23 @@
         <%- include("./snippets/nav.ejs") %>
         <main>
             <%- include("./snippets/hero.ejs", {
-                img_alt: "Ein Bild des Teams",
-                img_path: vorstand.bildURL,
-                title: "Der Vorstand",
-                subtitle: vorstand.leitsatz,
+                img_alt: "Ein Bild der 10'000 Schilling Banknote aus Tanzania",
+                img_path: "/img/stock/banknote.jpg",
+                title: finanzen.titel,
+                subtitle: "",
                 cta_text: "",
                 cta_link: ""
             }) %>
-            <h1 class="title margin-t-5vh w1000 w1200">Der Vorstand</h1>
-            <p class="text"><%= vorstand.text %></p>
-            <%- include("./snippets/teamMember.ejs", {
-                members: member_list
-            }); %>
+            <h1 class="title margin-t-5vh w1000 w1200"><%= finanzen.titel %></h1>
+            <p class="text"><%- finanzen.pre %></p>
+            <h1 style="padding: 0 5%; margin: 0 !important;"><%- finanzen.h1 %></h1>
+            <p class="text"><%- finanzen.abs2 %></p>
+            <h1 style="padding: 0 5%; margin: 0 !important;"><%- finanzen.h2 %></h1>
+            <p class="text"><%- finanzen.abs2 %></p>
+            <h1 style="padding: 0 5%; margin: 0 !important;"><%- finanzen.h3 %></h1>
+            <p class="text"><%- finanzen.abs3 %></p>
+            <h1 style="padding: 0 5%; margin: 0 !important;"><%- finanzen.h4 %></h1>
+            <p class="text"><%- finanzen.abs4 %></p>
             <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>
         <%- include("./snippets/footer.ejs", {

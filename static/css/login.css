@@ -248,6 +248,10 @@ main {
     margin-right: 0.25em;
 }
 
+*::selection, *::marker {
+    background-color: #1f9d39cc;
+}
+
 @media screen and (min-width: 575px) and (max-width: 749px) {
     .blog_c-main,
     .blog_carousel {

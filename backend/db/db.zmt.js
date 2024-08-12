@@ -384,7 +384,7 @@ export async function mergeBlogs (number, title, description, author, img, alt) 
     };
 };
 
-export async function getAllNewsletterEmails (email) {
+export async function getAllNewsletterEmails () {
     let query = "SELECT email FROM `zmt`.`newsletter`;";
     let [result] = await pool.query(query)
         .catch(() => []);
@@ -392,4 +392,27 @@ export async function getAllNewsletterEmails (email) {
         result[i] = element.email;
     });
     return result;
+};
+
+export async function getCurrentTeamInfo () {
+    let query = "SELECT * FROM `zmt`.`team` ORDER BY `id` DESC LIMIT 1;";
+    let [result] = await pool.query(query)
+        .catch(() => []);
+    return result[0];
+};
+
+export async function createTeam (date, spruch, desc, img) {
+    let query = "INSERT INTO `zmt`.`team` (`aktualisiert`, `leitsatz`, `text`, `bild`, `members`) VALUES (?, ?, ?, ?, ?);";
+    await pool.query(query, [date, spruch, desc, img, JSON.stringify([])]);
+    return true;
+}
+
+export async function addTeamMember (user) {
+    let query = "SELECT * FROM `zmt`.`team` ORDER BY `id` DESC LIMIT 1;";
+    let [result] = await pool.query(query);
+    let team = result[0].members;
+    team.push(user);
+    query = "UPDATE `zmt`.`team` SET `members` = ? WHERE (`id` = ?);";
+    await pool.query(query, [JSON.stringify(team), result[0].id]);
+    return true;
 };
