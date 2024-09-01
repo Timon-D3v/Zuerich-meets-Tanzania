@@ -1,19 +1,14 @@
-const picture = $("#blog_footer_img");
-
 async function getBlogAuthorImg () {
-    let name = picture.attr("alt").split(" ");
-    let url = window.location.origin + "/post/getAuthorPicture?name=" 
-        + name[0] + "&family_name=" + name[1];
+    const img = getElm("blog_footer_img");
+    const name = img.alt.split(" ");
+
+    let url = "/post/getAuthorPicture?name=" + name[0] + "&family_name=" + name[1];
+
     name.slice(2).forEach(elm => {
         url += " " + elm;
     });
-    let res = await fetch(url, {
-        method: "POST",
-		headers: {"Content-Type": "application/json"},
-        mode: "cors",
-        cache: "default"
-    });
-    res = await res.json();
-    picture.attr("src", res.picture);
-};
+
+    const { picture } = await post(url);
+    img.src = picture;
+}
 getBlogAuthorImg();

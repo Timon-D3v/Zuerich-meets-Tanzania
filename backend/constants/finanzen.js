@@ -23,7 +23,7 @@
 const FINANZEN = {
     beschreibung: "Alles über die Finanzen von zurich meets tanzania.",
     aktualisiert: "Mon Aug 12 2024 11:27:18 GMT+0200 (Mitteleuropäische Sommerzeit)",
-    titel: "Finanzen",
+    titel: "Finanzierung",
     h1: "1.	Vereinsmitgliedschaft",
     h2: "2.	Medizinische Einsätze",
     h3: "3.	Spenden",

@@ -356,21 +356,21 @@ export async function deleteLastXPosts (x) {
     return result;
 };
 
-export async function mergeBlogs (number, title, description, author, img, alt) {
+export async function mergeBlogs (number, title, description, team, img, alt) {
     try {
         const json = {
             alt: [alt],
             img: [img]
         };
-        const comment = "Zusammengefügt";
-        const tag = "Blog";
         let content = "";
         const blogs = await getLastXPosts(number);
         for (let i = 0; i < blogs.length; i++) {
             content += blogs[blogs.length - 1 - i].content;
         };
+        content += "<div class=\"blog_line\"></div><br><h1 class=\"title\">Das Team</h1>";
+        content += team;
         await deleteLastXPosts(number);
-        await createPost(title, author, description, content, tag, json, comment);
+        await createPost(title, "Das ZMT Team", description, content, "Blog", json, "Zusammengefügt");
         return {
             status: 200,
             message: "Das hat geklappt! Die Blogs sind jetzt zusammengefügt."

@@ -25,11 +25,13 @@ import GYNO from "./backend/constants/gynäkologie.js";
 import ABOUT_US from "./backend/constants/admins.js";
 import DONATE from "./backend/constants/spenden.js";
 import BACKUP from "./backend/constants/backup.js";
+import BAJAJI from "./backend/constants/bajaji.js";
 import HERO from "./backend/constants/heropage.js";
 import VISION from "./backend/constants/vision.js";
 import EMAILS from "./backend/constants/emails.js";
 import MBUZI from "./backend/constants/mbuzi.js";
 import ZMT from "./backend/constants/zmt.js";
+import TMZ from "./backend/constants/tmz.js";
 import GV from "./backend/constants/gv.js";
 
 
@@ -409,6 +411,17 @@ app.use((req, res, next) => {
 });
 app.use(cors());
 
+if (LOAD_LEVEL === "prod") {
+    app.use((req, res, next) => {
+        const get = req.get.bind(req);
+        req.get = query => {
+            if (query === "host") return "www.zurich-meets-tanzania.com";
+            return get(query);
+        };
+        next();
+    });
+};
+
 
 
 
@@ -452,6 +465,7 @@ app.get("/login", async (req, res) => {
         title: "Login",
         desc: "Hier können sich Mitglieder und Verwalter einloggen oder neu registrieren.",
         sitetype: "login",
+        user: null,
         js: req.query.js,
         redir: redir
     });
@@ -521,6 +535,23 @@ app.get("/zurich-meets-tanzania", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         zmt: ZMT,
+        toRealDate
+    });
+});
+
+app.get("/tmz", (req, res) => res.status(301).redirect("/tanzania-meets-zurich"));
+app.get("/tanzania-meets-zurich", (req, res) => {
+    res.render("tmz.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: TMZ.aktualisiert,
+        title: TMZ.titel,
+        desc: TMZ.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        tmz: TMZ,
         toRealDate
     });
 });
@@ -644,6 +675,23 @@ app.get("/projects/chirurgie", (req, res) => {
         js: req.query.js,
         toRealDate,
         chirurgie: CHIRURGIE
+    });
+});
+
+app.get("/bajaji", (req, res) => res.status(301).redirect("/projects/bajaji"));
+app.get("/projects/bajaji", (req, res) => {
+    res.render("bajaji.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: BAJAJI.aktualisiert,
+        title: BAJAJI.titel,
+        desc: BAJAJI.beschreibung,
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        toRealDate,
+        bajaji: BAJAJI
     });
 });
 
@@ -912,6 +960,14 @@ app.get("/newsletter/abmelden", (req, res) => {
     });
 });
 
+app.get("/chunks/team/getCurrentTeam", async (req, res) => {
+    if (req?.session?.user?.type !== "admin") return res.redirect("/");
+    const team = await db.getCurrentTeamInfo();
+    res.render("./snippets/teamMember.ejs", {
+        members: team.members
+    });
+});
+
 app.get("/gallery/:id", (req, res) => res.status(301).redirect("/galerie/" + req.params.id));
 app.get("/galerie/:id", async (req, res) => {
     let result = await db.getGalleyWhereTitle(req.params.id)
@@ -1029,8 +1085,8 @@ app.post("/post/login", async (req, res) => {
     if (result.valid) {
         req.session.user = result;
         req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
-        res.redirect(req.body.redir);
-    } else res.send({message: error || "Dein Passwort ist falsch."});
+        res.json({ valid: true });
+    } else res.json({ valid: false, message: error || "Dein Passwort ist falsch." });
 });
 
 app.post("/post/signUp", async (req, res) => {
@@ -1042,12 +1098,12 @@ app.post("/post/signUp", async (req, res) => {
         data.picture = data.picture.path;
     };
     let result = await db.createAccount(data.username, data.password, data.name, data.family_name, data.email, data.picture, data.phone)
-        .catch(err => res.json({message: err}));
+        .catch(err => res.json({ valid: false, message: err }));
     if (result.username) {
         req.session.user = result;
         req.session.user.valid = true;
         req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
-        res.redirect(req.body.redir);
+        res.json({ valid: true });
     };
 });
 
@@ -1109,9 +1165,9 @@ app.post("/post/blog", async (req, res) => {
 });
 
 app.post("/post/mergeBlogs", async (req, res) => {
-    const { number, title, description, author, base64, alt } = req.body;
+    const { number, title, description, team, base64, alt } = req.body;
     const { path } = await imagekitUpload(base64, alt + timon.randomString(32), "/blog/");
-    const result = await db.mergeBlogs(number, title, description, author, path, alt);
+    const result = await db.mergeBlogs(number, title, description, team, path, alt);
     res.json(result);
 });
 
@@ -1205,8 +1261,10 @@ app.post("/post/changeHeroImg", async (req, res) => {
 
 app.post("/post/sendMail", async (req, res) => {
     const result = await sendContactMail(req.body);
-    if (result === 200) return res.json({res: "Die E-Mail wurde erfolgreich verschickt."}).status(200);
-    else return res.json({res: "Die E-Mail konnte nicht verschickt werden, versuche es in einigen Sekunden noch einmal."}).status(500);
+
+    if (result === 200) return res.json({res: "Die E-Mail wurde erfolgreich verschickt.", status: 200}).status(200);
+
+    return res.json({res: "Die E-Mail konnte nicht verschickt werden, versuche es in einigen Sekunden noch einmal.", status: 500}).status(500);
 });
 
 app.post("/post/makeAdmin", async (req, res) => {
@@ -1251,7 +1309,7 @@ app.post("/post/gallery/getLinks/:num", async (req, res) => {
 
 app.post("/post/getPaymentLink", async (req, res) => {
     if (isNaN(req.body.amount)) return res.end();
-    let key = timon.randomString(256);
+    const key = timon.randomString(256);
     payment_keys.push(key);
     res.json({link: `${req.protocol}://${req.get("host")}/pay?key=${key}&a=${req.body.amount}&t=${req.body.type}`});
 });

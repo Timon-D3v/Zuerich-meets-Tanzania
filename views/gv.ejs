@@ -46,14 +46,14 @@
                         <img class="auto_dI8GVStdW8YbshBE8MnwEdEv2UY" id="auto_dI8GVStdW8YbshBE8MnwEdEv2UY" src="/img/content/gv_4.jpg" alt="Keine Beschreibung für dieses Bild...">
                     </div>
                     <script>
-                        $(".blog_c-ruler.auto_CJYzo2DbhsMAqwDirINoh0rSNUD").html($(".blog_c-main.auto_ZkaKjESpdoYFWrzdVswqJ15vEDy").html());
+                        getQuery(".blog_c-ruler.auto_CJYzo2DbhsMAqwDirINoh0rSNUD").get(0).html(getQuery(".blog_c-main.auto_ZkaKjESpdoYFWrzdVswqJ15vEDy").get(0).html());
 
                         const arr_auto_ByYLKCElQFcZ60FPcnMRJ5x2FL7 = [
-                            $(".auto_vGYGfK3qxjJU5Ho00fxdd0dO8eS"),
-                            $(".auto_m3dYokkc8IeKZvyi9V7MPDQNhpc"),
-                            $(".auto_l6HT0nmdztJJVYRR6QjEmWD9g0d"),
-                            $(".auto_Yc1Fe6eWonBt0kzQu38P4dki9Fh"),
-                            $(".auto_dI8GVStdW8YbshBE8MnwEdEv2UY"),
+                            getQuery(".auto_vGYGfK3qxjJU5Ho00fxdd0dO8eS"),
+                            getQuery(".auto_m3dYokkc8IeKZvyi9V7MPDQNhpc"),
+                            getQuery(".auto_l6HT0nmdztJJVYRR6QjEmWD9g0d"),
+                            getQuery(".auto_Yc1Fe6eWonBt0kzQu38P4dki9Fh"),
+                            getQuery(".auto_dI8GVStdW8YbshBE8MnwEdEv2UY"),
                         ];
 
                         let current_auto_8MLQ6KS5Xjzw0LMeQN7JyFYcZYr = 1;
@@ -86,11 +86,11 @@
                             current_auto_8MLQ6KS5Xjzw0LMeQN7JyFYcZYr = i;
                         };
 
-                        $("#blog_carousel_next_auto_4tsIZtZRUrnDaYLFak6dgkKLtkS").click(next_auto_CaFJOVmBjhxCxSaVaI0AitdLbU4);
-                        $("#blog_carousel_prev_auto_Q9QmsckzYSOxGbpIVwVzoQFN18C").click(prev_auto_BzNFdXkvFiKOrDjjh9Qs3FSS7aD);
+                        getElm("blog_carousel_next_auto_4tsIZtZRUrnDaYLFak6dgkKLtkS").click(next_auto_CaFJOVmBjhxCxSaVaI0AitdLbU4);
+                        getElm("blog_carousel_prev_auto_Q9QmsckzYSOxGbpIVwVzoQFN18C").click(prev_auto_BzNFdXkvFiKOrDjjh9Qs3FSS7aD);
 
                         arr_auto_ByYLKCElQFcZ60FPcnMRJ5x2FL7.forEach((elm, i) => {
-                            elm.eq(1).click(() => to_auto_RtYj6hr7lOnBa8pPoSDsnSpgDmU(i + 1));
+                            elm.get(1).click(() => to_auto_RtYj6hr7lOnBa8pPoSDsnSpgDmU(i + 1));
                         });
                     </script>
                 </div>

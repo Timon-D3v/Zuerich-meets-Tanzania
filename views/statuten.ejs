@@ -47,9 +47,9 @@
             <%- elm %>
             <% }); %>
             <script>
-                $("main h1").addClass("title");
-                $("main p").addClass("text");
-                $("main h1").eq(0).removeClass("title");
+                getQuery("main h1").addClass("title");
+                getQuery("main p").addClass("text");
+                getQuery("main h1").get(0).removeClass("title");
             </script>
             <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>

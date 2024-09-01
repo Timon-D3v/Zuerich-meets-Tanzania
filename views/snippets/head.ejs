@@ -13,7 +13,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <meta name="Owner" content="Präsident Dr. Stefan Christen (Innere Medizin / Kardiologie)" contact="info@zurich-meets-tanzania.com">
         <meta name="Manager" content="Secretariat Webdesign Sara Pieretti" contact="info@zurich-meets-tanzania.com">
-        <meta name="Developer" content="Timon Fiedler" contact="fiedlertimon@gmail.com">
+        <meta name="Developer" content="Timon Fiedler" contact="info@timondev.com">
         <meta name="Contact page" content="https://www.timondev.com">
         <meta name="Last modified" content="<%= date.toString() %>">
         <meta name="description" content="<%= desc %>">
@@ -27,11 +27,11 @@
         <meta property="og:description" content="<%= desc %>">
         <meta property="og:image" content="/img/logo.png">
         <meta property="og:image:type" content="image/png">
-        <link rel="icon" type="image/png" href="/img/logo.png">
+        <link rel="icon" type="image/ico" href="/img/logo.ico">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><%
         if (sitetype !== "error") { %>
-        <link rel="stylesheet" href="/css/style.min.css"><% };
+        <link rel="stylesheet" href="/css/style.css"><% };
         if (sitetype === "private") { %>
         <link rel="stylesheet" href="/css/private.css"><% }
         else if (sitetype === "blog") { %>
@@ -41,9 +41,8 @@
         <link rel="stylesheet" href="/css/static.css"><% };
         if (sitetype !== "error") { %>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap">
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/timonjs@1.0.3/dist/timon.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/timonjs@1.0.5/dist/timon.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-        <script type="text/javascript" src="/js/global.js" defer></script><% }; 
-        if (sitetype !== "login" && user?.darkmode) { %>
-        <script type="text/javascript" defer>$(document).ready(() => $("#darkmode").click());</script><% }; %>
+        <script type="text/javascript" src="/js/global.min.js" defer></script><% };
+        if (user?.valid) { %>
+        <script type="text/javascript">sessionStorage.setItem("theme", "<%= user.darkmode ? 'dark' : 'light' %>")</script><% }; %>

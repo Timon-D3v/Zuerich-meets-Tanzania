@@ -1,139 +1,115 @@
-const login = $(".login"),
-    signUp = $(".sign-up"),
-    password = $("#password"),
-    new_password = $("#new_password"),
-    eye = $("#show_password"),
-    new_eye = $("#show_new_password"),
-    submit = $("#submit_login"),
-    new_submit = $("#submit_sign_up"),
-    username = $("#username"),
-    new_username = $("#new_username"),
-    first_name = $("#name"),
-    family_name = $("#family_name"),
-    email = $("#email"),
-    phone = $("#phone"),
-    file = $("#file"),
-    error = $("#error"),
-    error_field = $(".error");
+const password = getElm("password");
+const new_password = getElm("new_password");
+const eye = getElm("show_password");
+const new_eye = getElm("show_new_password");
+const new_submit = getElm("submit_sign_up");
+const file = getElm("file");
 
 
 eye.click(() => {
-    password.attr("type") === "text" ?
+    password.type === "text" ?
     openEyes(password, eye) :
     closeEyes(password, eye);
 });
 
 new_eye.click(() => {
-    new_password.attr("type") === "text" ?
+    new_password.type === "text" ?
     openEyes(new_password, new_eye) :
     closeEyes(new_password, new_eye);
 });
 
-file.change(async () => {
-    $(".file").html("<img alt='Dein Bild' src='" + await toBase64(file.prop('files')[0]) + "'>");
+file.on("change", async () => {
+    getQuery(".file").get(0).html("<img alt='Dein Bild' src='" + await file.getImgBase64() + "'>");
 });
 
-submit.click(validateAccount);
+getElm("submit_login").click(validateAccount);
 new_submit.click(addAccount);
-$(".login_switch").click(toggleForms);
+getQuery(".login_switch").click(toggleForms);
 
 function openEyes (p, e) {
-    p.attr("type", "password");
-    e.attr("src", "/img/svg/eye.svg");
+    p.type = "password";
+    e.src = "/img/svg/eye.svg";
 };
 
 function closeEyes (p, e) {
-    p.attr("type", "text");
-    e.attr("src", "/img/svg/eye_closed.svg");
+    p.type = "text";
+    e.src = "/img/svg/eye_closed.svg";
 };
 
 async function validateAccount (e) {
     e.preventDefault();
-    let u = username.val(),
-        p = password.val(),
-        r = $("#redir").attr("redirect");
-    if (u === "" || p === "") return;
-    let res = await fetch(window.location.origin + "/post/login", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        mode: "cors",
-        cache: "default",
-        body: JSON.stringify({
-            username: u,
-            password: p,
-            redir: r
-        })
-    })
-    .catch(err => {
-        error.html(err);
-        showErrorField();
+
+    const username = getElm("username");
+    const redir = getElm("redir").getAttribute("redirect");
+    
+    if (username.valIsEmpty() || password.valIsEmpty()) errorField("Bitte fülle alle Felder aus.");
+
+    const result = await post("/post/login", {
+        username: username.val(),
+        password: password.val()
+    }).catch(err => {
+        console.error(err);
+        errorField(err.message);
+        return { valid: false };
     });
-    if (res.ok && res.redirected) window.location.href = res.url;
-    else {
-        res = await res.json();
-        error.html(res.message);
-        showErrorField();
-    };
+
+    if (result?.valid) return window.location.href = redir;
+
+    errorField(result.message);
 };
 
 async function addAccount (e) {
     e.preventDefault();
-    new_submit.attr("disabled", true);
-    let u = new_username.val(),
-        p = new_password.val(),
-        n = first_name.val(),
-        f = family_name.val(),
-        m = email.val(),
-        t = phone.val(),
-        i = file.prop('files')[0],
-        r = $("#redir").attr("redirect");
-    if (u === "" || p === "" || n === "" || f === "" || m === "") return;
-    t === "" ? t = "Keine Nummer" : t = t.toString();
-    i ? i = await toBase64Max1MB(i) : i = "/img/svg/personal.svg";
-    let res = await fetch(window.location.origin + "/post/signUp", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        mode: "cors",
-        cache: "default",
-        body: JSON.stringify({
-            username: u,
-            password: p,
-            name: n,
-            family_name: f,
-            email: m,
-            picture: i,
-            phone: t,
-            redir: r
-        })
-    })
-    .catch(err => {
-        error.html(err);
-        console.error(err)
-        showErrorField();
-    });
-    if (res.ok && res.redirected) window.location.href = res.url;
-    else {
-        new_submit.attr("disabled", false);
-        res = await res.json();
-        console.error(res.message);
-        error.html(res.message);
-        showErrorField();
-    };
-};
 
-function showErrorField () {
-    gsap.set(error_field, {opacity: 1, display: "block"});
-    setTimeout(() => {
-        gsap.to(error_field, {opacity: 0, duration: 5, ease: "power2.in", display: "none"});
-    }, 5000);
+    new_submit.disabled = true;
+
+    const username = getElm("new_username");
+    const name = getElm("name");
+    const family_name = getElm("family_name");
+    const email = getElm("email");
+    const phone = getElm("phone");
+    const redir = getElm("redir").getAttribute("redirect");
+
+    const empty = [username, name, family_name, email, new_password].filter(e => e.valIsEmpty());
+
+    if (empty.length > 0) return errorField("Bitte fülle alle Pflichtfelder aus.");
+
+    let base64 = "ERROR";
+    try {
+        if (file.files.length === 0) throw new Error("Kein Bild ausgewählt.");
+        base64 = await toBase64Max1MB(file.file());
+    } catch (err) {
+        base64 = "/img/svg/personal.svg"
+    }
+
+    if (base64 === "ERROR") base64 = "/img/svg/personal.svg";
+    
+    const result = await post("/post/signUp", {
+        username: username.val(),
+        password: new_password.val(),
+        name: name.val(),
+        family_name: family_name.val(),
+        email: email.val(),
+        picture: base64,
+        phone: phone.valIsEmpty() ? "Keine Nummer" : phone.val()
+    }).catch(err => {
+        console.error(err);
+        errorField(err.message);
+        return { valid: false };
+    });
+
+    if (result?.valid) return window.location.href = redir;
+
+    new_submit.disabled = false;
+    errorField(result.message);
 };
 
 function toggleForms () {
-    login.toggleClass("flex");
-    signUp.toggleClass("flex");
+    getQuery(".login").toggleClass("flex");
+    getQuery(".sign-up").toggleClass("flex");
 };
 
-$(".h-t-b-m").remove();
-$(".h-n-b").remove();
-$(window).off("resize");
-clearInterval(interval_setCssVariables);
+getQuery(".h-t-b-m").get(0).remove();
+getQuery(".h-n-b").get(0).remove();
+clearInterval(i);
+window.removeEventListener("resize", typeof V === "undefined" ? setCssVariables : V);

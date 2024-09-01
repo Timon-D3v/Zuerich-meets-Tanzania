@@ -9,6 +9,7 @@
             env: env,
             sitetype: sitetype
         }) %>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="/css/blog.css">
     </head>
     <body>
@@ -434,12 +435,12 @@
                     container.append(b2);
                     container.append(ruler);
                     let script = document.createElement("script");
-                    let scriptHTML = `$(".blog_c-ruler.${ids[4]}").html($(".blog_c-main.${ids[1]}").html());\n\n`;
+                    let scriptHTML = `getQuery(".blog_c-ruler.${ids[4]}").get(0).html(getQuery(".blog_c-main.${ids[1]}").get(0).html());\n\n`;
                     scriptHTML += `const arr_${ids[5]} = [\n`;
                     img_arr.forEach((elm, i) => {
-                        scriptHTML += `    $(".${ids[i + 10]}"),\n`;
+                        scriptHTML += `    getQuery(".${ids[i + 10]}"),\n`;
                     });
-                    scriptHTML += `];\n\ndocument.querySelector(".blog_c-ruler.${ids[4]}").querySelectorAll("img").forEach(elm => elm.src += "?tr=w-100,h-100");`
+                    scriptHTML += `];\n\ngetQuery(".blog_c-ruler.${ids[4]}").get(0).getQuery("img").forEach(elm => elm.src += "?tr=w-100,h-100");`
                     scriptHTML += `\n\nlet current_${ids[6]} = 1;\n\narr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n\n`;
                     scriptHTML += `function next_${ids[7]} () {\n    current_${ids[6]} + 1 > arr_${ids[5]}.length ?\n    current_${ids[6]} = 1 :\n    current_${ids[6]}++;\n    `;
                     scriptHTML += `current_${ids[6]} === 1 ?\n    arr_${ids[5]}[arr_${ids[5]}.length - 1].toggleClass("active") :\n    `;
@@ -447,8 +448,8 @@
                     scriptHTML += `function prev_${ids[8]} () {\n    current_${ids[6]} - 1 === 0 ?\n    current_${ids[6]} = arr_${ids[5]}.length :\n    `
                     scriptHTML += `current_${ids[6]}--;\n    current_${ids[6]} === arr_${ids[5]}.length ?\n    arr_${ids[5]}[0].toggleClass("active") :\n    arr_${ids[5]}[current_${ids[6]}].toggleClass("active");\n    `
                     scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\nfunction to_${ids[9]} (i) {\n    arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n    `
-                    scriptHTML += `arr_${ids[5]}[i - 1].toggleClass("active");\n    current_${ids[6]} = i;\n};\n\n$("#${b1id}").click(next_${ids[7]});\n`
-                    scriptHTML += `$("#${b2id}").click(prev_${ids[8]});\n\narr_${ids[5]}.forEach((elm, i) => {\n    elm.eq(1).click(() => to_${ids[9]} (i + 1));\n});`;
+                    scriptHTML += `arr_${ids[5]}[i - 1].toggleClass("active");\n    current_${ids[6]} = i;\n};\n\ngetElm("${b1id}").click(next_${ids[7]});\n`
+                    scriptHTML += `getElm("${b2id}").click(prev_${ids[8]});\n\narr_${ids[5]}.forEach((elm, i) => {\n    elm.get(1).click(() => to_${ids[9]} (i + 1));\n});`;
                     script.innerHTML = scriptHTML;
                     container.append(script);
                     let dummy = document.createElement("div");

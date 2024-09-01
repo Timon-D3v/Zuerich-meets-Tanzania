@@ -59,7 +59,7 @@
                     <input type="text" class="basic-input" id="news_text" name="text" required>
                     <label for="news_pdf" class="basic-label">PDF oder Bild (Auswählen für PDF)</label>
                     <input type="checkbox" id="news_pdf" name="pdf" class="basic-checkbox">
-                    <div id="show_pdf">
+                    <div id="show_pdf" style="display: none;">
                         <label for="news_pdf_src" class="basic-label">Dateiname mit .pdf Endung hochgeladen auf imagekit unter dem Ordner pdf (Bsp: meinPDF.pdf)</label>
                         <input type="text" class="basic-input" id="news_pdf_src" name="pdf_src">
                     </div>
@@ -80,7 +80,7 @@
                         <input type="text" class="basic-input" id="news_btn_link" name="btn_link">
                     </div>
                     <div id="show_nothing" class="invisible"></div>
-                    <button type="submit" class="basic-button">Submit</button>
+                    <button type="submit" class="basic-button">Veröffentlichen</button>
                 </form>
             </div>
             <div class="team-management container">
@@ -110,26 +110,6 @@
                 <input type="text" class="basic-input" id="team-m-motivation">
 
                 <button type="submit" class="basic-button" id="team-m-add">Hinzufügen</button>
-                <script>
-                    getElm("team-m-add").click(async () => {
-                        const username = getElm("team-m-username");
-                        const job = getElm("team-m-job");
-                        const motivation = getElm("team-m-motivation");
-
-                        if (username.valIsEmpty() || job.valIsEmpty() || motivation.valIsEmpty()) {
-                            alert("Bitte fülle alle Felder aus");
-                            return;
-                        }
-
-                        const res = await post("/post/addTeamMember", {
-                            username: username.val(),
-                            job: job.val(),
-                            motivation: motivation.val()
-                        });
-
-                        alert(res.valid ? "Erfolgreich hinzugefügt" : "Mitglied konnte nicht hinzugefügt werden");
-                    });
-                </script>
             </div>
             <div class="hero-management container">
                 <h1 class="basic-title">Neues Homepage Bild hochladen</h1>
@@ -160,9 +140,8 @@
             <div class="container">
                 <h1 class="basic-title">Blogs zusammenfügen</h1>
                 <input type="number" class="basic-input" id="merge_blogs" placeholder="Anzahl Blogs" min="2" max="100">
-                <input type="text" class="basic-input" id="merge_blogs_title" placeholder="Neuer Titel">
+                <input type="text" class="basic-input" id="merge_blogs_title" placeholder="Zusammenfassender Titel">
                 <input type="text" class="basic-input" id="merge_blogs_desc" placeholder="Kurze Beschreibung">
-                <input type="text" class="basic-input" id="merge_blogs_author" placeholder="Autor">
                 <label for="merge_blogs_basic_img" class="basic-label">Titelbild aussuchen</label>
                 <label for="merge_blogs_basic_img" id="merge_blogs_picture_overlay" style="height: 35vh; width: 60%; margin: 6vh 20%;">
                     <div class="custom-file-upload" style="max-height: 35vh; box-sizing: border-box; max-width: 60vw;">

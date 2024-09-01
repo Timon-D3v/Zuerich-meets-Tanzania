@@ -3,5 +3,5 @@
                 <h1 class="hero-title"><%- title %></h1>
                 <p class="hero-subtitle"><%- subtitle %></p>
                 <% if (cta_text !== "") { %><button class="hero-cta"><%= cta_text %></button>
-                <script>$(".hero-cta").click(() => {window.location.href = "<%= cta_link %>"});</script><% }; %>
+                <script>getQuery(".hero-cta").click(() => {window.location.href = "<%= cta_link %>"});</script><% }; %>
             </div>

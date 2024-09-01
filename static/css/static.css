@@ -560,6 +560,7 @@ label.static-checkbox.uiverse.hirachy-class {
     width: calc(100% - 10vw);
     min-height: 75vh;
     margin-top: 5vh;
+    border: none;
 }
 
 .tanzania_history {

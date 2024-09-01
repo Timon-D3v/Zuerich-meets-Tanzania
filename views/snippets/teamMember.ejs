@@ -22,11 +22,13 @@
                 }); %>
             </ul>
             <script>
-                let team_member_previews = $(".team-member .member .preview");
+                let team_member_previews = getQuery(".team-member .member .preview");
 
                 for (let i = 0; i < team_member_previews.length; i++) {
-                    team_member_previews.eq(i).click(() => {
-                        let parent = team_member_previews.eq(i).parent();
+                    team_member_previews.get(i).click(() => {
+                        let parent = team_member_previews.get(i).parentElement;
+                        if (parent.id === "") parent.id = randomString(32);
+                        parent = getElm(parent.id);
                         parent.hasClass("open") ?
                         parent.removeClass("open") :
                         parent.addClass("open");

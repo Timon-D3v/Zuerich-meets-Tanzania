@@ -1,91 +1,83 @@
-const showroom = $(".gallery-show"),
-    cinema = $(".gallery-cinema"),
-    showroom_img = $(".gallery-big"),
-    showroom_vid = $(".gallery-big-vid"),
-    gallery_next = $(".gallery-next"),
-    gallery_prev = $(".gallery-prev"),
-    gallery_next_vid = $(".gallery-next-vid"),
-    gallery_prev_vid = $(".gallery-prev-vid"),
-    device_width = window.innerWidth;
+const showroom = getQuery(".gallery-show");
+const cinema = getQuery(".gallery-cinema");
+const showroom_img = getQuery(".gallery-big").get(0);
+const showroom_vid = getQuery(".gallery-big-vid").get(0);
 
-var close_showroom = true,
-    gallery_current = document.getElementById("gallery_0"),
-    close_cinema = true,
-    cinema_current = document.getElementById("galleryvid_0");
+let close_showroom = true;
+let close_cinema = true;
+let gallery_current = getElm("gallery_0");
+let cinema_current = getElm("galleryvid_0");
 
-$(".gallery-container").click(e => {
+getQuery(".gallery-container").click(e => {
     showroom.show();
-    let {alt, src} = e.currentTarget.querySelector(".gallery-img");
-    showroom_img.attr({
-        alt,
-        src: src.replace("?tr=w-200,h-200", "")
-                .replace(`?tr=w-${device_width.toString()}`, "")
-    });
-    gallery_next.off("click");
-    gallery_prev.off("click");
-    gallery_next.click(() => moveGallery(1));
-    gallery_prev.click(() => moveGallery(-1));
+
+    const {alt, src} = e.currentTarget.getQuery(".gallery-img").get(0);
+
+    showroom_img.alt = alt;
+    showroom_img.src = src.replace("?tr=w-200,h-200", "").replace(`?tr=w-${window.innerWidth}`, "");
 });
 
-$(".gallery-container-vid").click(e => {
+getQuery(".gallery-next").click(() => moveGallery(1));
+getQuery(".gallery-prev").click(() => moveGallery(-1));
+
+getQuery(".gallery-container-vid").click(e => {
     cinema.show();
-    let {alt, src} = e.currentTarget.querySelector(".gallery-vid");
-    showroom_vid.attr({
-        alt,
-        src
-    });
-    gallery_next_vid.off("click");
-    gallery_prev_vid.off("click");
-    gallery_next_vid.click(() => moveCinema(1));
-    gallery_prev_vid.click(() => moveCinema(-1));
+    showroom_vid.src = e.currentTarget.getQuery(".gallery-vid").get(0).src;
 });
 
-showroom.click(e => {
+getQuery(".gallery-next-vid").click(() => moveCinema(1));
+getQuery(".gallery-prev-vid").click(() => moveCinema(-1));
+
+showroom.click(() => {
     if (close_showroom) showroom.hide();
 });
 
-cinema.click(e => {
+cinema.click(() => {
     if (close_cinema) cinema.hide();
 });
 
 addEventListener("DOMContentLoaded", () => {
-    getQuery(".gallery")[0].querySelectorAll("img").forEach(async elm => {
+    getQuery(".gallery").get(0).getQuery(".gallery-img").forEach(elm => {
         let img = new Image();
-        img.src = elm.src.replace("?tr=w-200,h-200", `?tr=w-${device_width.toString()}`);
+        img.src = elm.src.replace("?tr=w-200,h-200", `?tr=w-${window.innerWidth}`);
         img.onload = () => elm.src = img.src;
     });
 });
 
 function moveGallery (direction) {
     close_showroom = false;
+
     let id = gallery_current.id.split("_");
     id[0] += "_";
     id[1] = +id[1] + 1 * direction;
-    if (id[1] < 0) id[1] = $(".gallery-img").length - 1;
-    if (id[1] === $(".gallery-img").length) id[1] = 0;
-    gallery_current = document.getElementById(id[0] + id[1].toString());
-    let {alt, src} = gallery_current.querySelector(".gallery-img");
-    showroom_img.attr({
-        alt,
-        src: src.replace("?tr=w-200,h-200", "")
-                .replace(`?tr=w-${device_width.toString()}`, "")
-    });
+
+    if (id[1] < 0) id[1] = getQuery(".gallery-img").length - 1;
+    if (id[1] === getQuery(".gallery-img").length) id[1] = 0;
+
+    gallery_current = getElm(id[0] + id[1]);
+
+    const {alt, src} = gallery_current.getQuery(".gallery-img").get(0);
+
+    showroom_img.alt = alt;
+    showroom_img.src = src.replace("?tr=w-200,h-200", "").replace(`?tr=w-${window.innerWidth}`, "");
+    
     setTimeout(() => close_showroom = true, 100);
 };
 
 function moveCinema (direction) {
     close_cinema = false;
-    let id = cinema_current.id.split("_");
+
+    const id = cinema_current.id.split("_");
+
     id[0] += "_";
     id[1] = +id[1] + 1 * direction;
-    if (id[1] < 0) id[1] = $(".gallery-vid").length - 1;
-    if (id[1] === $(".gallery-vid").length) id[1] = 0;
-    cinema_current = document.getElementById(id[0] + id[1].toString());
-    let {alt, src, type} = cinema_current.querySelector(".gallery-vid");
-    showroom_vid.attr({
-        alt,
-        src,
-        type
-    });
+
+    if (id[1] < 0) id[1] = getQuery(".gallery-vid").length - 1;
+    if (id[1] === getQuery(".gallery-vid").length) id[1] = 0;
+
+    cinema_current = getElm(id[0] + id[1]);
+    
+    showroom_vid.src = cinema_current.getQuery(".gallery-vid").get(0).src;
+
     setTimeout(() => close_cinema = true, 100);
 };

@@ -30,6 +30,7 @@ form.sign-up h1 {
     text-transform: uppercase;
     margin: 0;
     font-size: 3em;
+    color: var(--c-text-950)
 }
 
 label {
@@ -40,66 +41,28 @@ label {
     margin-top: 10px;
 }
 
-#new_username,
-#name,
-#family_name,
-#email,
-#phone,
-#file, 
-#new_password,
-#password,
-#username {
+input {
     margin-left: 10px;
     border-radius: 10px;
     border: none;
     width: 85%;
     height: 100%;
     background-color: transparent;
+    color: var(--c-text-950)
 }
 
-#new_username::placeholder,
-#name::placeholder,
-#family_name::placeholder,
-#email::placeholder,
-#phone::placeholder,
-#file::placeholder, 
-#new_password::placeholder,
-#password::placeholder,
-#username::placeholder {
+input::placeholder {
     font-family: "Titillium Web", sans-serif;
     font-size: 1rem;
+    color: var(--c-text-950)
 }
 
-#new_username:focus,
-#name:focus,
-#family_name:focus,
-#email:focus,
-#phone:focus,
-#file:focus, 
-#new_password:focus,
-#password:focus,
-#username:focus {
+input:focus {
     outline: none;
 }
 
-#new_username:autofill,
-#name:autofill,
-#family_name:autofill,
-#email:autofill,
-#phone:autofill,
-#file:autofill, 
-#new_password:autofill,
-#password:autofill,
-#username:autofill,
-#new_username:-webkit-autofill,
-#name:-webkit-autofill,
-#family_name:-webkit-autofill,
-#email:-webkit-autofill,
-#phone:-webkit-autofill,
-#file:-webkit-autofill, 
-#new_password:-webkit-autofill,
-#password:-webkit-autofill,
-#username:-webkit-autofill {
+input:autofill,
+input:-webkit-autofill {
     background-color: transparent !important;
 }
 
@@ -180,6 +143,10 @@ button {
     align-items: center;
 }
 
+.switch > p {
+    color: var(--c-text-950)
+}
+
 .login_switch {
     background-color: transparent;
     border: none;
@@ -250,6 +217,11 @@ main {
 
 *::selection, *::marker {
     background-color: #1f9d39cc;
+}
+
+.login img,
+.sign-up img {
+    filter: none !important;
 }
 
 @media screen and (min-width: 575px) and (max-width: 749px) {

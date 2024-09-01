@@ -1,41 +1,29 @@
-const profile_dashboard_buttons = [
-    $("#profile_dashboard_btn1"),
-    $("#profile_dashboard_btn2"),
-    $("#profile_dashboard_btn3")
-],
-profile_dashboard_content = [
-        $(".dynamic .settings"),
-        $(".dynamic .preferences"),
-        $(".dynamic .membership")
-],
-eye = $("#show_password"),
-password = $("#password"),
-username = $("#username"),
-given_name = $("#name"),
-family_name = $("#family_name"),
-email = $("#email"),
-phone = $("#phone"),
-submit_changes = $("#profile-settings-input-submit"),
-change_picture = $("#edit_picture"),
-picture_overlay = $("#picture_overlay"),
-file = $("#file_upload"),
-preview_file = $("#file_preview"),
-submit_file = $("#file_submit"),
-newsletterBtn = $("#notifications_newsletter"),
-newsletterSelect = document.getElementById("newsletterSignUpOption"),
-close_picture_overlay = $("#close_picture_overlay"),
-get_member = $("#get_member"),
-invoice_append = $("#invoice_append");
-const default_val = {
-    username: username.attr("placeholder"),
-    password: password.val(),
-    given_name: given_name.attr("placeholder"),
-    family_name: family_name.attr("placeholder"),
-    email: email.attr("placeholder"),
-    phone: phone.attr("placeholder"),
-};
+const eye = getElm("show_password"),
+password = getElm("password"),
+username = getElm("username"),
+given_name = getElm("name"),
+family_name = getElm("family_name"),
+email = getElm("email"),
+phone = getElm("phone"),
+submit_changes = getElm("profile-settings-input-submit"),
+change_picture = getElm("edit_picture"),
+picture_overlay = getElm("picture_overlay"),
+file = getElm("file_upload"),
+preview_file = getElm("file_preview"),
+submit_file = getElm("file_submit"),
+newsletterBtn = getElm("notifications_newsletter"),
+newsletterSelect = getElm("newsletterSignUpOption"),
+close_picture_overlay = getElm("close_picture_overlay"),
+get_member = getElm("get_member");
 
-profile_dashboard_buttons.forEach((elm, i) => {
+
+for (let i = 0; i < 3; i++) {
+    const elm = getElm("profile_dashboard_btn" + (i + 1));
+    const profile_dashboard_content = [
+        getQuery(".dynamic .settings"),
+        getQuery(".dynamic .preferences"),
+        getQuery(".dynamic .membership")
+    ];
     elm.click(() => {
         colorizePDButtons(elm);
         profile_dashboard_content.forEach(elm => {
@@ -43,10 +31,10 @@ profile_dashboard_buttons.forEach((elm, i) => {
         });
         profile_dashboard_content[i].addClass("active");
     });
-});
+}
 
 eye.click(() => {
-    password.attr("type") === "text" ?
+    password.type === "text" ?
     openEyes(password, eye) :
     closeEyes(password, eye);
 });
@@ -65,24 +53,18 @@ eye.click(() => {
 }));
 
 submit_changes.click(async () => {
-    let data = default_val;
-    if (username.val() !== "") data.username = username.val();
-    if (password.val() !== "") data.password = password.val();
-    if (given_name.val() !== "") data.given_name = given_name.val();
-    if (family_name.val() !== "") data.family_name = family_name.val();
-    if (email.val() !== "") data.email = email.val();
-    if (phone.val() !== "") data.phone = phone.val();
-    let res = await fetch(window.location.origin + "/post/updateProfile", {
-        method: "POST",
-		headers: {"Content-Type": "application/json"},
-        mode: "cors",
-        cache: "default",
-        body: JSON.stringify(data)
+    const result = await post("/post/updateProfile", {
+        username: username.valIsEmpty() ? username.placeholder : username.val(),
+        password: password.valIsEmpty() ? password.placeholder : password.val(),
+        given_name: given_name.valIsEmpty() ? given_name.placeholder : given_name.val(),
+        family_name: family_name.valIsEmpty() ? family_name.placeholder : family_name.val(),
+        email: email.valIsEmpty() ? email.placeholder : email.val(),
+        phone: phone.valIsEmpty() ? phone.placeholder : phone.val()
     });
-    res = await res.json();
-    if (res.res === "No Error") window.location.href = window.location.origin 
-        + window.location.pathname + "?js=showCommitFeedback";
-    showNegativeCommitFeedback("Fehler beim senden.");
+
+    if (result.res === "No Error") window.location.href = ORIGIN + window.location.pathname + "?js=successField";
+
+    errorField("Fehler beim senden.");
 });
 
 change_picture.click(() => {
@@ -93,7 +75,7 @@ change_picture.click(() => {
 close_picture_overlay.click(() => change_picture.click());
 
 file.on("input", async () => {
-    preview_file.attr("src", await toBase64Max1MB(file[0].files[0]));
+    preview_file.src = await toBase64Max1MB(file.file());
     submit_file.addClass("flex");
 });
 
@@ -105,146 +87,94 @@ submit_file.click(async () => {
 
 if (JSON.stringify(get_member) !== "{}") {
     get_member.click(async () => {
-        const res = await post("/post/getPaymentLink", {
-            amount: 40,
-            type: "membership"
-        });
-        window.location.href = res.link;
+        window.location.href = ORIGIN + "/spenden?js=donate_toggleForms";
     });
 } else {
     getMyBills();
 };
 
-$("#preferences_darkmode").click(preferences_toggleDarkmode);
-$("#notifications_newsletter").click(handleNewsletterCalling);
-
-function showCommitFeedback () {
-    let p = document.createElement("p");
-    p.innerHTML = "<img alt='Achtung' src='/img/svg/alert.svg'> Einstellungen aktualisiert";
-    p.classList.add("no-error");
-    $("main").append(p);
-    gsap.set(p, {opacity: 1, display: "block"});
-    setTimeout(() => {
-        gsap.to(p, {opacity: 0, duration: 5, ease: "power2.in", display: "none"});
-    }, 5000);
-};
-
-function showNegativeCommitFeedback (msg) {
-    let p = document.createElement("p");
-    p.innerHTML = "<img alt='Achtung' src='/img/svg/alert.svg'> " + msg;
-    p.classList.add("error");
-    $("main").append(p);
-    gsap.set(p, {opacity: 1, display: "block"});
-    setTimeout(() => {
-        gsap.to(p, {opacity: 0, duration: 5, ease: "power2.in", display: "none"});
-    }, 5000);
-};
+getElm("preferences_darkmode").click(preferences_toggleDarkmode);
+newsletterBtn.click(handleNewsletterCalling);
 
 function colorizePDButtons (btn) {
-    profile_dashboard_buttons.forEach(elm => {
-        elm.removeClass("active");
-    });
+    for (let i = 0; i < 3; i++) {
+        getElm("profile_dashboard_btn" + (i + 1)).removeClass("active");
+    }
     btn.addClass("active");
 };
 
 function openEyes (p, e) {
-    p.attr("type", "password");
-    e.attr("src", "/img/svg/eye.svg");
+    p.type = "password";
+    e.src = "/img/svg/eye.svg";
 };
 
 function closeEyes (p, e) {
-    p.attr("type", "text");
-    e.attr("src", "/img/svg/eye_closed.svg");
+    p.type = "text";
+    e.src = "/img/svg/eye_closed.svg";
 };
 
 function checkDefaultProfileVal () {
+    const valid = element => element.placeholder === element.val() || element.valIsEmpty();
+
     if (
-        (default_val.username === username.val() ||
-        username.val() === "") &&
-        (default_val.password === password.val() ||
-        password.val() === "") &&
-        (default_val.given_name === given_name.val() ||
-        given_name.val() === "") &&
-        (default_val.family_name === family_name.val() ||
-        family_name.val() === "") &&
-        (default_val.email === email.val() ||
-        email.val() === "") &&
-        (default_val.phone === phone.val() ||
-        phone.val() === "")
+        valid(username) &&
+        valid(password) &&
+        valid(given_name) &&
+        valid(family_name) &&
+        valid(email) &&
+        valid(phone)
     ) return false;
+
     return true;
 };
 
 async function sendNewProfilePicture () {
-    let res = await fetch(window.location.origin + "/post/changePicture", {
-        method: "POST",
-		headers: {"Content-Type": "application/json"},
-        mode: "cors",
-        cache: "default",
-        body: JSON.stringify({
-            base64: preview_file.attr("src")
-        })
+    const result = await post("/post/changePicture", {
+        base64: preview_file.src
     });
-    res = await res.json();
-    if (res.res === "No Error") window.location.href = window.location.origin 
-        + window.location.pathname + "?js=showCommitFeedback";
-    showNegativeCommitFeedback("Fehler beim hochladen des Bildes.")
+    if (result.res === "No Error") window.location.href = ORIGIN + window.location.pathname + "?js=successField";
+
+    errorField("Fehler beim hochladen des Bildes.")
 };
 
 function preferences_toggleDarkmode () {
-    fetch(window.location.origin + "/post/toggleDarkmode", {
-        method: "POST",
-		headers: {"Content-Type": "application/json"},
-        mode: "cors",
-        cache: "default"
-    });
+    post("/post/toggleDarkmode");
     setTheme();
 };
 
 async function checkNewsletter () {
-    let res = await fetch(window.location.origin + "/post/newsletter/check", {
-        method: "POST",
-		headers: {"Content-Type": "application/json"},
-        mode: "cors",
-        cache: "default"
-    });
-    res = await res.json();
-    if (res.check) newsletterBtn.attr("checked", true);
+    const result = await post("/post/newsletter/check");
+    if (result.check) newsletterBtn.checked = true;
 };
 checkNewsletter();
 
 async function submitNewsletter () {
     if (newsletterSelect.value === "") return newsletter_noGender();
-    let res = await fetch(window.location.origin + "/post/newsletter/signUp/logedIn", {
-        method: "POST",
-		headers: {"Content-Type": "application/json"},
-        mode: "cors",
-        cache: "default",
-        body: JSON.stringify({
-            gender: newsletterSelect.value
-        })
+
+    const result = await post("/post/newsletter/signUp/logedIn", {
+        gender: newsletterSelect.value
     });
-    res = await res.json();
-    return res.status;
+
+    return result.status;
 };
 
 async function getMyBills () {
     const bills = await post("/post/getMyBills");
     bills.forEach(bill => {
-        const tr = document.createElement("tr");
-        const id = document.createElement("td");
-        const abo = document.createElement("td");
-        const price = document.createElement("td");
-        const status = document.createElement("td");
-        const link = document.createElement("td");
-        const file = document.createElement("td");
-        const stripe = document.createElement("a");
-        const pdf = document.createElement("a");
-        const img = document.createElement("img");
+        const tr = createElm("tr");
+        const id = createElm("td");
+        const abo = createElm("td");
+        const price = createElm("td");
+        const status = createElm("td");
+        const link = createElm("td");
+        const file = createElm("td");
+        const stripe = createElm("a");
+        const pdf = createElm("a");
+        const img = createElm("img");
 
         img.alt = "Download";
         img.src = "/img/svg/download.svg";
-        pdf.appendChild(img)
+        pdf.append(img)
         stripe.innerHTML = "Zu Stripe";
         pdf.target = "_blank";
         stripe.target = "_blank";
@@ -254,30 +184,25 @@ async function getMyBills () {
         abo.innerHTML = "Mitgliedschaft";
         price.innerHTML = "40 CHF";
         status.innerHTML = "Bezahlt";
-        link.appendChild(stripe);
-        file.appendChild(pdf);
+        link.append(stripe);
+        file.append(pdf);
         tr.append(id, abo, price, status, link, file);
-        invoice_append.append(tr);
+        getElm("invoice_append").append(tr);
     });
 };
 
 function cancelNewsletter () {
-    fetch(window.location.origin + "/post/newsletter/signOff", {
-        method: "POST",
-		headers: {"Content-Type": "application/json"},
-        mode: "cors",
-        cache: "default"
-    });
+    post("/post/newsletter/signOff");
 };
 
 function newsletter_noGender () {
     alert("Du musst eine Anrede wählen.");
     console.warn("Du musst eine Anrede wählen.");
-    document.getElementById("notifications_newsletter").checked = false;
+    newsletterBtn.checked = false;
 };
 
 function handleNewsletterCalling () {
-    if (document.getElementById("notifications_newsletter").checked) submitNewsletter();
+    if (newsletterBtn.checked) submitNewsletter();
     else cancelNewsletter();
 };
 
