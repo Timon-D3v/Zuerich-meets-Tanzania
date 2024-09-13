@@ -70,6 +70,7 @@ const stripe = new Stripe(
 );
 const payment_keys = [];
 const newsletter_code = [];
+const recovery_code = [];
 
 
 
@@ -364,6 +365,64 @@ function sendMailCode (email, user) {
     sendMail(email, data);
 
     return code;
+};
+
+function sendRecoveryCode (email, user) {
+    let { anschrift, anschrift_html } = EMAILS;
+    const { header, newsletter, grüsse_html, footer } = EMAILS;
+
+    anschrift = anschrift.replace("___ANREDE___", "Liebe(r)");
+    anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe(r)");
+
+    anschrift = anschrift.replace("___GENDER___", user.name);
+    anschrift_html = anschrift_html.replace("___GENDER___", user.name);
+
+    anschrift = anschrift.replace("___NACHNAME___", user.family_name);
+    anschrift_html = anschrift_html.replace("___NACHNAME___", user.family_name);
+
+    const code = timon.randomString(16);
+    const text = "Dein Code lautet: " + code;
+
+    const data = {
+        Subject: "Passwort zurücksetzen",
+        TextPart: anschrift + text + EMAILS.grüsse,
+        HTMLPart: header + anschrift_html + newsletter.substring(0,304) + text + "</p>" + grüsse_html + footer,
+        CustomID: "Passwort zurücksetzen"
+    };
+    sendMail(email, data);
+
+    return code;
+};
+
+async function sendRecoveryPassword (email) {
+    let { anschrift, anschrift_html } = EMAILS;
+    const { header, newsletter, grüsse_html, footer } = EMAILS;
+
+    const [ user ] = await db.getAccount(email);
+
+    const { id, name, family_name, phone } = user;
+
+    anschrift = anschrift.replace("___ANREDE___", "Liebe(r)");
+    anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe(r)");
+
+    anschrift = anschrift.replace("___GENDER___", user.name);
+    anschrift_html = anschrift_html.replace("___GENDER___", user.name);
+
+    anschrift = anschrift.replace("___NACHNAME___", user.family_name);
+    anschrift_html = anschrift_html.replace("___NACHNAME___", user.family_name);
+
+    const code = timon.randomString(32);
+    const text = "Dein neues Passwort lautet: " + code;
+
+    db.updateProfile(id, email, code, name, family_name, email, phone);
+
+    const data = {
+        Subject: "Neues Passwort",
+        TextPart: anschrift + text + EMAILS.grüsse,
+        HTMLPart: header + anschrift_html + newsletter.substring(0,304) + text + "</p>" + grüsse_html + footer,
+        CustomID: "Neues Passwort"
+    };
+    sendMail(email, data);
 };
 
 async function sendContactMail (body) {
@@ -900,6 +959,10 @@ app.get("/pay", async (req, res) => {
         link = await buyMembership(req.session.user, q.key, req.protocol + "://" + req.get("host"));
     };
 
+    if (req.session?.user?.valid) {
+        link += "?prefilled_email=" + req.session.user.email;
+    }
+
     res.redirect(303, link);
 });
 
@@ -1097,7 +1160,10 @@ app.post("/post/signUp", async (req, res) => {
         data.picture = await imagekitUpload(data.picture, data.username + "_" + timon.randomString(32), "/users/");
         data.picture = data.picture.path;
     };
-    let result = await db.createAccount(data.username, data.password, data.name, data.family_name, data.email, data.picture, data.phone)
+    // The project started with the login being a username. This changed all the way in in September 2024
+    /* Since the username was used like the users ID on the webpage, it would be to time consuming to change everything to the email and 
+       therefore we decided to just automatically set the username to the same value as the email. */
+    let result = await db.createAccount(data.email /* This was the username */, data.password, data.name, data.family_name, data.email, data.picture, data.phone, data.address)
         .catch(err => res.json({ valid: false, message: err }));
     if (result.username) {
         req.session.user = result;
@@ -1194,10 +1260,10 @@ app.post("/post/getAuthorPicture", async (req, res) => {
 app.post("/post/updateProfile", async (req, res) => {
     if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
     let b = req.body;
-    let result = await db.updateProfile(req.session.user.id, b.username, b.password, b.given_name, b.family_name, b.email, b.phone)
+    let result = await db.updateProfile(req.session.user.id, b.email, b.password, b.given_name, b.family_name, b.email, b.phone)
         .catch(() => {return "No connection to database"});
     if (result === "No Error") {
-        req.session.user.username = b.username;
+        req.session.user.username = b.email;
         req.session.user.password = b.password;
         req.session.user.name = b.given_name;
         req.session.user.family_name = b.family_name;
@@ -1276,7 +1342,7 @@ app.post("/post/makeAdmin", async (req, res) => {
 
 app.post("/post/deleteAdmin", async (req, res) => {
     if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
-    if (req.body.username === "Timon" || req.body.username === "Sara Pieretti") return res.json({good: false});
+    if (["Timon", "Sara Pieretti", "fiedlertimon@gmail.com", "sara.pieretti@bluewin.ch"].includes(req.body.username)) return res.json({good: false});
     let result = await db.deleteAdmin(req.body.username)
         .catch(() => {return false});
     res.json({good: result});
@@ -1391,6 +1457,11 @@ app.post("/newsletter/requestCode", async (req, res) => {
             code,
             email: req.body.email
         });
+        setTimeout(() => {
+            newsletter_code.forEach((obj, i) => {
+                if (obj.email === req.body.email) newsletter_code.splice(i, 1);
+            });
+        }, 24 * 60 * 60 * 1000); // 24 hours
         status = 200;
     } catch (err) {
         console.error(err);
@@ -1460,6 +1531,93 @@ app.post("/post/addTeamMember", async (req, res) => {
         });
 
     res.json({valid: result});
+});
+
+app.post("/post/updateGallery", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+
+    const { title, data } = req.body;
+
+    const [ gallery ] = await db.getGalleyWhereTitle(title)
+        .catch(() => "Not found");
+    
+    if (gallery === "Not found") return res.json({ error: "Not found" });
+
+    gallery.date = Date().toString();
+
+    for (let i = 0; i < data.img.length; i++) {
+        const { path } = await imagekitUpload(data.img[i].src, data.img[i].alt + "___" + timon.randomString(32), "/gallery/");
+        gallery.img.arr.push({
+            src: path,
+            alt: data.img[i].alt
+        });
+    }
+
+    for (let i = 0; i < data.vid.length; i++) {
+        const src = await saveVideo(data.img[i].src, data.img[i].type);
+        gallery.img.vid.push({
+            src,
+            alt: data.img[i].alt
+        });
+    }
+
+    const result = await db.updateGallery(title, gallery);
+
+    return res.json({ status: result });
+});
+
+app.post("/post/recoveryRequest", async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await db.getAccount(email);
+
+        if (user.length === 0) return res.json({ status: "Diese E-Mail existiert nicht."});
+
+        const code = sendRecoveryCode(email, user[0]);
+
+        recovery_code.push({
+            email,
+            code
+        });
+
+        setTimeout(() => {
+            recovery_code.forEach((obj, i) => {
+                if (obj.email === email) recovery_code.splice(i, 1);
+            });
+        }, 24 * 60 * 60 * 1000); // 24 hours
+
+        res.json({ status: 200 });
+    } catch (error) {
+        console.error(error);
+        res.json({ status: 500 });
+    };
+});
+
+app.post("/post/recoverySubmit", async (req, res) => {
+    try {
+        const { email, code } = req.body;
+
+        let found = false;
+        let valid = false;
+
+        recovery_code.forEach((obj, i) => {
+            if (obj.email === email) {
+                found = true;
+            };
+            if (obj.email === email && obj.code === code) {
+                valid = true;
+            };
+        });
+
+        if (!found) return res.json({ status: 501, message: "Diese E-Mail existiert nicht." });
+        if (!valid) return res.json({ status: 501, message: "Der Code ist falsch." });
+
+        sendRecoveryPassword(email);
+        res.json({ status: 200 });
+    } catch (error) {
+        console.error(error);
+        res.json({ status: 500 });
+    };
 });
 
 

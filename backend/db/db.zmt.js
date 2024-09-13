@@ -101,9 +101,9 @@ export async function getAccountWithId (id) {
     return result;
 };
 
-export async function createAccount (username, password, name, family_name, email, picture, phone) {
-    let query = "INSERT INTO `zmt`.`users` (`username`, `password`, `name`, `family_name`, `email`, `picture`, `phone`, `type`) VALUES (?, ?, ?, ?, ?, ?, ?, 'user');"
-    await pool.query(query, [username, password, name, family_name, email, picture, phone]);
+export async function createAccount (username, password, name, family_name, email, picture, phone, address) {
+    let query = "INSERT INTO `zmt`.`users` (`username`, `password`, `name`, `family_name`, `email`, `picture`, `phone`, `type`, `address`) VALUES (?, ?, ?, ?, ?, ?, ?, 'user', ?);"
+    await pool.query(query, [username, password, name, family_name, email, picture, phone, address]);
     let [result] = await getAccount(username);
     await createDarkmodeRow(result.id);
     return result;
@@ -170,7 +170,7 @@ export async function submitNews (text, img_path, img_alt, img_pos, btn, btn_tex
 };
 
 export async function getAllUsers () {
-    let query = "SELECT username, name, family_name, email, phone, type FROM `zmt`.`users`;";
+    let query = "SELECT username, name, family_name, email, phone, type, address FROM `zmt`.`users`;";
     let [result] = await pool.query(query)
         .catch(err => {throw new Error("Something went wrong");});
     return result;
@@ -415,4 +415,16 @@ export async function addTeamMember (user) {
     query = "UPDATE `zmt`.`team` SET `members` = ? WHERE (`id` = ?);";
     await pool.query(query, [JSON.stringify(team), result[0].id]);
     return true;
+};
+
+export async function updateGallery (title, gallery) {
+    let query = "UPDATE `zmt`.`gallery` SET `date` = ?, `img` = ? WHERE (`title` = ?);";
+    let status = "OK";
+    try {
+        await pool.query(query, [gallery.date, JSON.stringify(gallery.img), title]);
+    } catch (e) {
+        console.error(e);
+        status = "Not OK";
+    };
+    return status
 };

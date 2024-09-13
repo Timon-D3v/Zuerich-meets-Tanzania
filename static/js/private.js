@@ -62,6 +62,43 @@ getElm("gallery_img_upload_submit").click(async () => {
     alert("Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut.");
 });
 
+getElm("gallery_update_submit").click(async e => {
+    e.preventDefault();
+
+    const title = getElm("gallery_update_title");
+
+    if (title.valIsEmpty()) return alert("Fülle alle Felder aus.");
+
+    const data = {img: [], vid: []};
+
+    const files = getElm("gallery_update").files;
+
+    if (files.length === 0) return alert("Keine Bilder hochgeladen.");
+
+    for (let i = 0; i < files.length; i++) {
+        const obj = {
+            alt: title.val() + `_${i}_updated_${Date.now()}`,
+            src: await toBase64(files[i])
+        };
+
+        if (files[i].type.startsWith("video/")) {
+            obj.type = files[i].type;
+            data.vid.push(obj);
+        } else {
+            data.img.push(obj);
+        };
+    };
+
+    const res = await post("/post/updateGallery", {
+        title: title.val(),
+        data
+    });
+
+    res.status === "OK" ?
+    alert("Galerie erfolgreich hochgeladen.") :
+    alert("Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut.");
+});
+
 getElm("merge_blogs_btn").click(async () => {
     let team = await fetch(ORIGIN + "/chunks/team/getCurrentTeam", {
         method: "GET"

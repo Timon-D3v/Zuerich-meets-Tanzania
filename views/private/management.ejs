@@ -17,10 +17,11 @@
         <main>
             <div class="general container">
                 <h1 class="basic-title">Webseiten</h1>
-                <p class="basic-text"><a class="basic-link" href="https://analytics.google.com/analytics/web/">Google Analytics</a></p>
-                <p class="basic-text"><a class="basic-link" href="https://www.google.com/adsense">Google Adsense</a></p>
-                <p class="basic-text"><a class="basic-link" href="https://imagekit.io/dashboard/media-library">ImageKit</a></p>
                 <p class="basic-text"><a class="basic-link" href="/private/writeBlog">Zum Blog Builder</a></p>
+                <p class="basic-text"><a class="basic-link" href="https://analytics.google.com/analytics/web/">Google Analytics</a></p>
+                <p class="basic-text"><a class="basic-link" href="https://dashboard.stripe.com/dashboard">Stripe</a></p>
+                <p class="basic-text"><a class="basic-link" href="https://imagekit.io/dashboard/media-library">ImageKit</a></p>
+                <p class="basic-text"><a class="basic-link" href="https://app.mailjet.com/dashboard">Mailjet</a></p>
                 <div class="table-container">
                     <table>
                         <tr>
@@ -52,7 +53,7 @@
                 </div>
             </div>
             <div class="news-management container">
-                <h1 class="basic-title">News Verwaltung</h1>
+                <h1 class="basic-title">Verwaltung Aktuelles</h1>
                 <p class="basic-text">Hier können News verteilt werden.</p>
                 <form id="news_form" action="/post/submitNews" method="POST">
                     <label for="news_text" class="basic-label">Text</label>
@@ -99,7 +100,7 @@
                 <h1 class="basic-title">Mitglied hinzufügen</h1>
                 <p class="basic-text">Hier kann ein Mitglied zum Team hinzugefügt werden</p>
 
-                <label for="team_name" class="basic-label">Benutzername</label>
+                <label for="team_name" class="basic-label">E-Mail</label>
                 <input type="text" class="basic-input" id="team-m-username">
                 <!-- Damit bekomme ich Vor-/Nachnamen und das erste Bild -->
 
@@ -128,13 +129,13 @@
             </div>
             <div class="container">
                 <label for="make-admin" class="basic-label">Zum Admin ernennen:</label>
-                <p class="basic-text">Gib einen Benutzernamen ein um ihn zum Admin zu ernennen.</p>
-                <input type="text" class="basic-input" id="make-admin" placeholder="Benutzername">
+                <p class="basic-text">Gib eine E-Mail-Adresse ein um ihn zum Admin zu ernennen.</p>
+                <input type="text" class="basic-input" id="make-admin" placeholder="E-Mail">
                 <button type="button" id="submit-make-admin" class="basic-button">Ernennen</button>
                 <br>
                 <label for="delete-admin" class="basic-label">Adminrechte entfernen:</label>
-                <p class="basic-text">Gib einen Benutzernamen ein um ihm die Adminrechte zu entfernen.</p>
-                <input type="text" class="basic-input" id="delete-admin" placeholder="Benutzername">
+                <p class="basic-text">Gib eine E-Mail-Adresse ein um ihm die Adminrechte zu entfernen.</p>
+                <input type="text" class="basic-input" id="delete-admin" placeholder="E-Mail">
                 <button type="button" id="submit-delete-admin" class="basic-button">Entfernen</button>
             </div>
             <div class="container">
@@ -175,28 +176,43 @@
                 <input type="text" class="basic-input" id="gallery_subtitle" placeholder="Beschreibung" required>
                 <button type="button" id="gallery_img_upload_submit" class="basic-button">Hochladen</button>
             </div>
+            <div class="container">
+                <h1 class="basic-title">Bildergalerie ergänzen</h1>
+                <label for="gallery_update" id="picture_overlay">
+                    <div class="custom-file-upload">
+                        <div class="icon">
+                            <img alt="Eine Datei" src="/img/svg/file.svg">
+                        </div>
+                        <div class="text">
+                            <span>Klicken um Bilder hochzuladen</span>
+                        </div>
+                    </div>
+                </label>
+                <input style="display: none;" type="file" id="gallery_update" multiple accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico, video/mp4, video/quicktime">
+                <input type="text" class="basic-input" id="gallery_update_title" placeholder="Titel" required>
+                <button type="button" id="gallery_update_submit" class="basic-button">Aktualisieren</button>
+            </div>
             <div class="user-management container">
-                <h1 class="basic-title">Benutzerliste</h1>
+                <h1 class="basic-title">Mitgliederliste</h1>
                 <div class="table-container">
                     <table>
                         <tr>
-                            <th>Benutzername</th>
+                            <th>E-Mail</th>
                             <th>Vorname</th>
                             <th>Nachname</th>
-                            <th>E-Mail</th>
+                            <th>Adresse</th>
                             <th>Telefonnummer</th>
-                            <th>Typ</th>
                         </tr><%
-                        all_users.forEach(user => { %>
+                        all_users.forEach(user => {
+                        if (user.type === "member") { %>
                         <tr>
-                            <td><%= user.username %></td>
+                            <td><%= user.email %></td>
                             <td><%= user.name %></td>
                             <td><%= user.family_name %></td>
-                            <td><%= user.email %></td>
+                            <td><%= user.address %></td>
                             <td><%= user.phone %></td>
-                            <td><%= user.type %></td>
                         </tr>
-                        <% }) %>
+                        <% };}); %>
                     </table>
                 </div>
                 <h1 class="basic-title">Newsletterliste</h1>
@@ -218,26 +234,27 @@
                         <% }) %>
                     </table>
                 </div>
-                <h1 class="basic-title">Mitgliederliste</h1>
+                <h1 class="basic-title">Benutzerliste</h1>
                 <div class="table-container">
                     <table>
                         <tr>
-                            <th>Benutzername</th>
+                            <th>E-Mail</th>
                             <th>Vorname</th>
                             <th>Nachname</th>
-                            <th>E-Mail</th>
+                            <th>Adresse</th>
                             <th>Telefonnummer</th>
+                            <th>Typ</th>
                         </tr><%
-                        all_users.forEach(user => {
-                        if (user.type === "member") { %>
+                        all_users.forEach(user => { %>
                         <tr>
-                            <td><%= user.username %></td>
+                            <td><%= user.email %></td>
                             <td><%= user.name %></td>
                             <td><%= user.family_name %></td>
-                            <td><%= user.email %></td>
+                            <td><%= user.address %></td>
                             <td><%= user.phone %></td>
+                            <td><%= user.type %></td>
                         </tr>
-                        <% };}); %>
+                        <% }) %>
                     </table>
                 </div>
             </div>

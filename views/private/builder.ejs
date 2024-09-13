@@ -26,7 +26,8 @@
             <h1>Erstmal ein paar allgemeine Daten:</h1>
             <input type="text" id="basic_title" placeholder="Titel für den Blogpost" class="basic-input">
             <input type="text" id="basic_preview" placeholder="Kurze Zusammenfassung" class="basic-input">
-            <input type="text" id="basic_comment" placeholder="Privater Kommentar (Nur für Verwalter sichtbar, optional)" class="basic-input">
+            <!-- This is not needed anymore since blogs can be merged and therefore grouping different blogs in the database is not needed -->
+            <input style="display: none;" type="text" id="basic_comment" placeholder="Privater Kommentar (Nur für Verwalter sichtbar, optional)" class="basic-input"> 
             <input type="text" id="basic_author" placeholder="Autor" class="basic-input">
             <label for="basic_img" class="basic-label">Titelbild aussuchen</label>
             <label for="basic_img" id="picture_overlay" style="height: 35vh; width: 60%; margin: 6vh 20%;">

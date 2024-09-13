@@ -11,7 +11,8 @@ header {
 }
 
 form.login,
-form.sign-up {
+form.sign-up,
+form.password-recovery {
     display: none;
     flex-direction: column;
     gap: 1vh;
@@ -25,7 +26,8 @@ form.sign-up {
 }
 
 form.login h1,
-form.sign-up h1 {
+form.sign-up h1,
+form.password-recovery h1 {
     text-align: center;
     text-transform: uppercase;
     margin: 0;
@@ -95,7 +97,8 @@ button {
 }
 
 #submit_login,
-#submit_sign_up {
+#submit_sign_up,
+#submit_recovery {
     align-self: flex-end;
     margin: 20px 0 10px 0;
     background-color: #151717;
@@ -110,7 +113,8 @@ button {
 }
 
 #submit_login:hover,
-#submit_sign_up:hover {
+#submit_sign_up:hover,
+#submit_recovery:hover {
     background-color: #252727;
 }
 
@@ -147,7 +151,8 @@ button {
     color: var(--c-text-950)
 }
 
-.login_switch {
+.login_switch,
+#recovery_switch {
     background-color: transparent;
     border: none;
     color: var(--violett);
@@ -224,6 +229,18 @@ main {
     filter: none !important;
 }
 
+.password-forgotten {
+    margin: 0;
+    text-align: right;
+    padding-right: 1rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.password-forgotten:hover {
+    color: var(--text-800);
+}
+
 @media screen and (min-width: 575px) and (max-width: 749px) {
     .blog_c-main,
     .blog_carousel {
@@ -235,7 +252,8 @@ main {
     }
 
     form.login,
-    form.sign-up {
+    form.sign-up,
+    form.password-recovery {
         width: 100%;
         max-width: unset;
     }
@@ -252,7 +270,8 @@ main {
     }
 
     form.login,
-    form.sign-up {
+    form.sign-,
+    form.password-recovery {
         width: 100%;
         max-width: unset;
     }
@@ -269,7 +288,8 @@ main {
     }
 
     form.login,
-    form.sign-up {
+    form.sign-up,
+    form.password-recovery {
         width: 100%;
         max-width: unset;
     }

@@ -13,3 +13,6 @@ CREATE TABLE `zmt`.`users` (
 
 ALTER TABLE `zmt`.`users` 
 CHANGE COLUMN `picture` `picture` VARCHAR(512) NULL DEFAULT '\"/img/svg/personal.svg\"' ;
+
+ALTER TABLE `zmt`.`users` 
+ADD COLUMN `address` VARCHAR(512) NULL AFTER `type`;

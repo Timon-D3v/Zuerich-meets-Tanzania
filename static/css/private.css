@@ -175,6 +175,7 @@ tr:nth-child(even) {
 
 .basic-title {
     text-align: center;
+    font-size: 2.5rem;
 }
 
 .basic-checkbox {

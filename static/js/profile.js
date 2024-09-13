@@ -1,6 +1,5 @@
 const eye = getElm("show_password"),
 password = getElm("password"),
-username = getElm("username"),
 given_name = getElm("name"),
 family_name = getElm("family_name"),
 email = getElm("email"),
@@ -40,7 +39,6 @@ eye.click(() => {
 });
 
 [
-    username,
     password,
     given_name,
     family_name,
@@ -54,7 +52,6 @@ eye.click(() => {
 
 submit_changes.click(async () => {
     const result = await post("/post/updateProfile", {
-        username: username.valIsEmpty() ? username.placeholder : username.val(),
         password: password.valIsEmpty() ? password.placeholder : password.val(),
         given_name: given_name.valIsEmpty() ? given_name.placeholder : given_name.val(),
         family_name: family_name.valIsEmpty() ? family_name.placeholder : family_name.val(),
@@ -117,7 +114,6 @@ function checkDefaultProfileVal () {
     const valid = element => element.placeholder === element.val() || element.valIsEmpty();
 
     if (
-        valid(username) &&
         valid(password) &&
         valid(given_name) &&
         valid(family_name) &&

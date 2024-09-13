@@ -21,13 +21,14 @@
                     <div class="img">
                         <img alt="Dein Profilbild" src="<%= user.picture + "?timestamp=" + Date().toString() %>">
                         <button type="button" class="edit_picture" id="edit_picture">
-                            <img alt="Ein Stift zum beartbeiten" src="/img/svg/pen.svg">
+                            <img alt="Ein Stift zum bearbeiten" src="/img/svg/pen.svg">
                         </button>
                     </div>
-                    <h2><%= user.username %></h2>
+                    <% // .replace(/([^\.\@]{10})(?=[^\.\@])/g, "$1<wbr>") === Replaces every string without a . or @ that is 10 characters long 
+                       // with a <wbr> tag that breaks the line %>
+                    <h2><%= user.name.replace(/([^\.\@]{10})(?=[^\.\@])/g, "$1<wbr>") + " " + user.family_name.replace(/([^\.\@]{10})(?=[^\.\@])/g, "$1<wbr>") %></h2>
                     <p>
-                        <%= user.name + " " + user.family_name %><br>
-                        <span>(<%= user.email %>)</span><%
+                        <%- user.email.replace(/([^\.\@]{10})(?=[^\.\@])/g, "$1<wbr>").replace(/([\.\@])/g, "<wbr>$1") %><%
                         if (user.type === "admin" || user.type === "member") {
                         %><br>
                         <br>
@@ -41,10 +42,10 @@
                         <button type="button" id="profile_dashboard_btn3" class="link">Mitgliedschaft</button>
                     </div>
                     <div class="settings active">
-                        <label for="username">Benutzername</label>
+                        <label for="username">E-Mail</label>
                         <div class="profile-settings-input">
-                            <img alt="Eine Person" src="/img/svg/personal.svg">
-                            <input type="text" autocomplete="username" id="username" placeholder="<%= user.username %>">
+                            <img alt="Eine Person" src="/img/svg/mail.svg">
+                            <input type="text" autocomplete="email" id="email" placeholder="<%= user.email %>">
                         </div>
                         <label for="password">Passwort</label>
                         <div class="profile-settings-input">
@@ -61,11 +62,6 @@
                         <div class="profile-settings-input">
                             <img alt="Eine Person" src="/img/svg/text.svg">
                             <input type="text" autocomplete="family-name" id="family_name" placeholder="<%= user.family_name %>">
-                        </div>
-                        <label for="username">E-Mail</label>
-                        <div class="profile-settings-input">
-                            <img alt="Eine Person" src="/img/svg/mail.svg">
-                            <input type="text" autocomplete="email" id="email" placeholder="<%= user.email %>">
                         </div>
                         <label for="username">Telefonnummer</label>
                         <div class="profile-settings-input">

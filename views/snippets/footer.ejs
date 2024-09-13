@@ -44,9 +44,9 @@
                 js = js.replaceAll("\"", "`");
             %>
             <script id="query_script" defer>
-                $(document).ready(() => {
+                ready(() => {
                     <%= js %>();
-                    $("#query_script").remove();
+                    getElm("query_script").remove();
                 });
             </script><%
             }; %>

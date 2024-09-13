@@ -1,16 +1,29 @@
+Bilder Mindestanforderungen Qualität weiterleiten => FHD = 1920x1080px
 
 
 
-Make a part where you can buy Tanjas book directly on the Shop page
+News Archiv
+=> Entscheiden ob News gespeichert werden oder nicht
 
 
 
-KONTAKT
-
-vereb@gmx.net
-
+nach stripe checkout wird man zu localhost 3002 weitergeleitet
+Proxy!
 
 
-ZU BESPRECHEN
 
-=> Werbung vielleicht / eher nicht
+Anleitung für basic html Elemente um news zu stylen => span für gross
+b für fett
+i für kursiv...
+
+
+
+Terminkalender auf home
+
+
+
+rename galleries => remove date
+
+
+
+Make address editable
