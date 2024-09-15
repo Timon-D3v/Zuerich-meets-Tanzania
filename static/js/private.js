@@ -208,3 +208,18 @@ getElm("team-m-add").click(async () => {
 
     alert(res.valid ? "Erfolgreich hinzugefügt" : "Mitglied konnte nicht hinzugefügt werden");
 });
+
+getElm("event_submit").click(async e => {
+    e.preventDefault();
+    const title = getElm("event_title");
+    const date = getElm("event_date");
+
+    if (title.valIsEmpty() || date.valIsEmpty()) return alert("Bitte fülle alle Felder aus.");
+
+    const res = await post("/post/addCalendarEvent", {
+        title: title.val(),
+        date: date.val()
+    });
+
+    alert(res.message);
+});

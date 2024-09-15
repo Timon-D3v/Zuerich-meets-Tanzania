@@ -1715,6 +1715,61 @@ nav .mit-bild a {
     background-color: transparent;
 }
 
+.calendar {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: var(--basic-margin);
+    border-top: 2px solid var(--text-950);
+    list-style: none;
+}
+
+.calendar-item {
+    border-bottom: 2px solid var(--text-950);
+    padding: 0 2.5vw;
+    gap: 2.5vw;
+    display: flex;
+}
+
+.calendar-marker-wrapper {
+    display: grid;
+    place-items: center;
+    width: 40px;
+}
+
+.calendar-marker {
+    background-color: var(--text-950);
+    border-radius: 50%;
+    height: 12px;
+    width: 12px;
+    aspect-ratio: 1 / 1;
+}
+
+.calendar-title {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 1.75rem;
+    letter-spacing: 0.75px;
+}
+
+.calendar-name {
+    font-weight: normal;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.calendar-more {
+    margin-top: 2.5vh;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.news-text span {
+    font-weight: bold;
+    font-size: x-large;
+}
+
 @media screen and (min-width: 1200px) {
     :root {
         --header-height: 140px;

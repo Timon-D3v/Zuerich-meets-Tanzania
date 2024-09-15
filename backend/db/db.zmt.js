@@ -116,9 +116,9 @@ export async function getPictureWithFullName (name, family_name) {
     return result;
 };
 
-export async function updateProfile (_id, username, password, name, family_name, email, phone) {
-    let query = "UPDATE `zmt`.`users` SET `username` = ?, `password` = ?, `name` = ?, `family_name` = ?, `email` = ?, `phone` = ? WHERE (`id` = '" + _id.toString() + "');";
-    await pool.query(query, [username, password, name, family_name, email, phone])
+export async function updateProfile (_id, username, password, name, family_name, email, phone, address) {
+    let query = "UPDATE `zmt`.`users` SET `username` = ?, `password` = ?, `name` = ?, `family_name` = ?, `email` = ?, `phone` = ?, `address` = ? WHERE (`id` = '" + _id.toString() + "');";
+    await pool.query(query, [username, password, name, family_name, email, phone, address])
         .catch(err => {return err, console.error(err)});
     return "No Error";
 };
@@ -428,3 +428,26 @@ export async function updateGallery (title, gallery) {
     };
     return status
 };
+
+export async function getLast5Events () {
+    return await getLastXEvents(5);
+}
+
+export async function getLastXEvents (x) {
+    let query = "SELECT title, date FROM `zmt`.`calendar` WHERE date >= CURDATE() ORDER BY date ASC LIMIT ?;";
+    let [result] = await pool.query(query, [x]);
+    result.map(event => event.date = event.date.toLocaleDateString("de-ch", {
+        weekday: "short",
+        year: "numeric",
+        month: "long",
+        day: "2-digit"
+    }));
+    return result;
+}
+
+export async function insertEvent (title, date) {
+    let query = "INSERT INTO `zmt`.`calendar` (title, date) VALUES (?, ?);";
+    let array = date.split("-");
+    await pool.query(query, [title, `${array[2]}-${array[1]}-${array[0]}`]);
+    return true;
+}

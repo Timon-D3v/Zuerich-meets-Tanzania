@@ -491,6 +491,7 @@ app.get("/", async (req, res) => {
         .catch(() => {return BACKUP.BLOGS});
     let news = await db.getNews()
         .catch(() => {return BACKUP.NEWS});
+    let events = await db.getLast5Events().catch(() => [{ title: "Keine Events gefunden", date: "" }]);
     res.render("index.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -504,7 +505,9 @@ app.get("/", async (req, res) => {
         last4blogs: blogs,
         news: news,
         member_list: ABOUT_US.TEAM,
-        hero: HERO
+        hero: HERO,
+        events,
+        toRealDate
     });
 });
 
@@ -1118,6 +1121,15 @@ app.get("/private/:id", async (req, res) => {
     };
 });
 
+app.get("/getEvents/:num", async (req, res) => {
+    const result = await db.getLastXEvents(+req.params.num).catch(err => {
+        if (err) return [{title: "Keine Events gefunden", date: "2000-01-01"}]
+    });
+    res.render("./snippets/calendar.ejs", {
+        events: result
+    });
+});
+
 app.get("/*", (req, res) => {
     let url = req.protocol + "://" + req.get("host");
     res.status(404).render("errors/error404.ejs", {
@@ -1260,7 +1272,7 @@ app.post("/post/getAuthorPicture", async (req, res) => {
 app.post("/post/updateProfile", async (req, res) => {
     if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
     let b = req.body;
-    let result = await db.updateProfile(req.session.user.id, b.email, b.password, b.given_name, b.family_name, b.email, b.phone)
+    let result = await db.updateProfile(req.session.user.id, b.email, b.password, b.given_name, b.family_name, b.email, b.phone, b.address)
         .catch(() => {return "No connection to database"});
     if (result === "No Error") {
         req.session.user.username = b.email;
@@ -1269,6 +1281,7 @@ app.post("/post/updateProfile", async (req, res) => {
         req.session.user.family_name = b.family_name;
         req.session.user.email = b.email;
         req.session.user.phone = b.phone;
+        req.session.user.address = b.address;
     };
     res.json({res: result});
 });
@@ -1601,12 +1614,8 @@ app.post("/post/recoverySubmit", async (req, res) => {
         let valid = false;
 
         recovery_code.forEach((obj, i) => {
-            if (obj.email === email) {
-                found = true;
-            };
-            if (obj.email === email && obj.code === code) {
-                valid = true;
-            };
+            if (obj.email === email) found = true;
+            if (obj.email === email && obj.code === code) valid = true;
         });
 
         if (!found) return res.json({ status: 501, message: "Diese E-Mail existiert nicht." });
@@ -1618,6 +1627,20 @@ app.post("/post/recoverySubmit", async (req, res) => {
         console.error(error);
         res.json({ status: 500 });
     };
+});
+
+app.post("/post/addCalendarEvent", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+
+    const { title, date } = req.body;
+
+    const result = await db.insertEvent(title, date)
+        .catch(err => {
+            console.error(err);
+            return false;
+        });
+
+    res.json({ message: result ? "Erfolgreich hinzugefügt" : "Das hat nicht geklappt, bitte versuche es später nochmal." });
 });
 
 

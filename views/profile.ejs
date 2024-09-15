@@ -42,9 +42,9 @@
                         <button type="button" id="profile_dashboard_btn3" class="link">Mitgliedschaft</button>
                     </div>
                     <div class="settings active">
-                        <label for="username">E-Mail</label>
+                        <label for="email">E-Mail</label>
                         <div class="profile-settings-input">
-                            <img alt="Eine Person" src="/img/svg/mail.svg">
+                            <img alt="Eine Brief" src="/img/svg/mail.svg">
                             <input type="text" autocomplete="email" id="email" placeholder="<%= user.email %>">
                         </div>
                         <label for="password">Passwort</label>
@@ -53,19 +53,24 @@
                             <input type="password" autocomplete="current-password" id="password" value="<%= user.password %>" placeholder="<%= user.password %>">
                             <img alt="Ein Auge (Zu oder offen)" src="/img/svg/eye.svg" id="show_password">
                         </div>
-                        <label for="username">Vorname</label>
+                        <label for="name">Vorname</label>
                         <div class="profile-settings-input">
-                            <img alt="Eine Person" src="/img/svg/text.svg">
+                            <img alt="Buchstaben" src="/img/svg/text.svg">
                             <input type="text" autocomplete="given-name" id="name" placeholder="<%= user.name %>">
                         </div>
-                        <label for="username">Nachname</label>
+                        <label for="family_name">Nachname</label>
                         <div class="profile-settings-input">
-                            <img alt="Eine Person" src="/img/svg/text.svg">
+                            <img alt="Buchstaben" src="/img/svg/text.svg">
                             <input type="text" autocomplete="family-name" id="family_name" placeholder="<%= user.family_name %>">
                         </div>
-                        <label for="username">Telefonnummer</label>
+                        <label for="address">Adresse</label>
                         <div class="profile-settings-input">
-                            <img alt="Eine Person" src="/img/svg/phone.svg">
+                            <img alt="Ein Standort" src="/img/svg/location.svg">
+                            <input type="text" autocomplete="address-line1" id="address" placeholder="<%= user.address %>">
+                        </div>
+                        <label for="phone">Telefonnummer</label>
+                        <div class="profile-settings-input">
+                            <img alt="Ein Telefon" src="/img/svg/phone.svg">
                             <input type="text" autocomplete="tel" id="phone" placeholder="<%= user.phone %>">
                         </div>
                         <button type="button" id="profile-settings-input-submit" class="submit">Einstellungen aktualisieren</button>

@@ -1,0 +1,15 @@
+<% for (i in events) {
+%><li class="calendar-item">
+                    <div class="calendar-marker-wrapper">
+                        <div class="calendar-marker"></div>
+                    </div>
+                    <div class="calendar-content">
+                        <h2 class="calendar-title">
+                            <span class="calendar-date"><%= events[i].date %></span>
+                            <span class="calendar-wide"> - </span>
+                            <span class="calendar-name"><%- events[i].title %></span>
+                        </h2>
+                    </div>
+                </li>
+                <% }; 
+                %><a class="calendar-more" href="#">Mehr anzeigen</a>

@@ -12,18 +12,4 @@ Proxy!
 
 
 
-Anleitung für basic html Elemente um news zu stylen => span für gross
-b für fett
-i für kursiv...
-
-
-
-Terminkalender auf home
-
-
-
 rename galleries => remove date
-
-
-
-Make address editable

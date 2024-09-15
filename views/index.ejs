@@ -9,6 +9,7 @@
             env: env,
             sitetype: sitetype
         }) %>
+        <script type="text/javascript" src="/js/calendar.js" defer></script>
     </head>
     <body>
         <%- include("./snippets/header.ejs") %>
@@ -47,6 +48,12 @@
                 pdf_src: news.pdf_src,
                 origin_url: origin_url
             }) %>
+            <h1 class="title">Terminkalender</h1>
+            <ul class="calendar">
+                <%- include("./snippets/calendar.ejs", {
+                    events
+                }); %>
+            </ul>
             <h1 class="title">Blogbeiträge</h1>
             <%- include("./snippets/blogCards.ejs", {
                 title: undefined,

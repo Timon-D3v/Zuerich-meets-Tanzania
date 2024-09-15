@@ -13,7 +13,8 @@ submit_file = getElm("file_submit"),
 newsletterBtn = getElm("notifications_newsletter"),
 newsletterSelect = getElm("newsletterSignUpOption"),
 close_picture_overlay = getElm("close_picture_overlay"),
-get_member = getElm("get_member");
+get_member = getElm("get_member"),
+address = getElm("address");
 
 
 for (let i = 0; i < 3; i++) {
@@ -43,7 +44,8 @@ eye.click(() => {
     given_name,
     family_name,
     email,
-    phone
+    phone,
+    address
 ].forEach(elm => elm.on("input", () => {
     checkDefaultProfileVal() ?
     submit_changes.addClass("active") :
@@ -56,11 +58,13 @@ submit_changes.click(async () => {
         given_name: given_name.valIsEmpty() ? given_name.placeholder : given_name.val(),
         family_name: family_name.valIsEmpty() ? family_name.placeholder : family_name.val(),
         email: email.valIsEmpty() ? email.placeholder : email.val(),
-        phone: phone.valIsEmpty() ? phone.placeholder : phone.val()
+        phone: phone.valIsEmpty() ? phone.placeholder : phone.val(),
+        address: address.valIsEmpty() ? address.placeholder : address.val()
     });
 
-    if (result.res === "No Error") window.location.href = ORIGIN + window.location.pathname + "?js=successField";
+    const redir = ORIGIN + window.location.pathname + "?js=successField(`Daten erfolgreich aktualisiert`);nofunction";
 
+    if (result.res === "No Error") window.location.href = redir;
     errorField("Fehler beim senden.");
 });
 
@@ -118,7 +122,8 @@ function checkDefaultProfileVal () {
         valid(given_name) &&
         valid(family_name) &&
         valid(email) &&
-        valid(phone)
+        valid(phone) &&
+        valid(address)
     ) return false;
 
     return true;
