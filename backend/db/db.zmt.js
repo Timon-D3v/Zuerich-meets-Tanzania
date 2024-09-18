@@ -119,7 +119,7 @@ export async function getPictureWithFullName (name, family_name) {
 export async function updateProfile (_id, username, password, name, family_name, email, phone, address) {
     let query = "UPDATE `zmt`.`users` SET `username` = ?, `password` = ?, `name` = ?, `family_name` = ?, `email` = ?, `phone` = ?, `address` = ? WHERE (`id` = '" + _id.toString() + "');";
     await pool.query(query, [username, password, name, family_name, email, phone, address])
-        .catch(err => {return err, console.error(err)});
+        .catch(err => {console.error(err); throw new Error("Error")});
     return "No Error";
 };
 

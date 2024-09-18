@@ -270,7 +270,7 @@ main {
     }
 
     form.login,
-    form.sign-,
+    form.sign-up,
     form.password-recovery {
         width: 100%;
         max-width: unset;

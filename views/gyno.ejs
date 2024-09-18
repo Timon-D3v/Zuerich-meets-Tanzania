@@ -28,10 +28,13 @@
                 width: 100%;
             }
 
-            @media screen and (min-width: 1000px) {
-                .hero-img {
-                    filter: brightness(0.75);
-                }
+            h1.hero-title,
+            p.hero-subtitle {
+                color: var(--c-text-950)
+            }
+
+            h1.hero-title::after {
+                background-color: var(--c-text-950);
             }
         </style>
     </head>
@@ -41,9 +44,9 @@
         <main>
             <%- include("./snippets/hero.ejs", {
                 img_alt: "Ein Bild des Teams",
-                img_path: "/img/content/gyno_1_2.jpg",
+                img_path: "/img/content/gyno_hero.jpg",
                 title: gyno.titel,
-                subtitle: "",
+                subtitle: gyno.untertitel,
                 cta_text: "",
                 cta_link: ""
             }) %>
@@ -52,7 +55,7 @@
             <p class="text"><%= gyno.abs2 %></p>
             <p class="text"><%= gyno.abs3 %></p>
             <p class="blog_half">
-                <img src="/img/content/gyno_3.jpg" alt="Das Logo von twenty4forty">
+                <img src="/img/content/gyno_1_2.jpg" alt="Das Logo von twenty4forty">
                 <img src="/img/content/gyno_2.jpg" alt="Eine Ultraschall Untersuchung">
             </p>
             <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>

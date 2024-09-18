@@ -3,7 +3,7 @@
                     <h1 class="news-title">Aktuell:</h1>
                     <p class="news-text"><%- text %></p>
                     <% if (cta) { %><button class="news-cta"><%- cta_text %></button>
-                    <script>$(".news-cta").click(() => window.location.href = "<%= cta_link %>")</script><% }; %>
+                    <script>getQuery(".news-cta").click(() => window.location.href = "<%= cta_link %>")</script><% }; %>
                 </div><%
                 if (pdf) { %>
                 <iframe src="<%= "https://ik.imagekit.io/zmt/pdf/" + pdf_src %>" class="news-iframe"></iframe><% }

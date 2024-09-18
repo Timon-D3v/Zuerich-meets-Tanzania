@@ -6,10 +6,4 @@ News Archiv
 => Entscheiden ob News gespeichert werden oder nicht
 
 
-
-nach stripe checkout wird man zu localhost 3002 weitergeleitet
-Proxy!
-
-
-
 rename galleries => remove date
