@@ -321,8 +321,8 @@ img[src$=".svg"] {
     text-align: left;
     word-break: normal;
     word-wrap: break-word;
-    padding: 5vh 5vw;
-    margin: 0;
+    margin: 5vh 5vw;
+    padding: 0;
 }
 
 /*!

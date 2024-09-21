@@ -147,6 +147,26 @@ getElm("team-m-submit").click(async () => {
     alert(res.valid ? "Team wurde erstellt" : "Team konnte nicht erstellt werden");
 });
 
+getElm("delete_blog_btn").click(async () => {
+    const title = getElm("delete_blog");
+
+    if (title.valIsEmpty()) return alert("Bitte gib einen gültigen Titel ein.");
+
+    const res = await post("/post/deleteBlog", { title: title.val() });
+
+    alert(res.valid ? "Blog wurde gelöscht oder existiert nicht." : "Blog konnte nicht gelöscht werden. Bitte versuche es später erneut.");
+});
+
+getElm("delete_event_btn").click(async () => {
+    const title = getElm("delete_event");
+
+    if (title.valIsEmpty()) return alert("Bitte gib einen gültigen Titel ein.");
+
+    const res = await post("/post/deleteEvent", { title: title.val() });
+
+    alert(res.valid ? "Event wurde gelöscht oder existiert nicht." : "Event konnte nicht gelöscht werden. Bitte versuche es später erneut.");
+});
+
 pdf.click(() => toggleDivs(pdf, getElm("show_pdf"), getElm("show_img")));
 s_btn.click(() => toggleDivs(s_btn, getElm("show_btn_menu"), getElm("show_nothing")));
 

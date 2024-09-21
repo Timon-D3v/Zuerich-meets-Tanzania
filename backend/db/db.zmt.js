@@ -451,3 +451,15 @@ export async function insertEvent (title, date) {
     await pool.query(query, [title, `${array[2]}-${array[1]}-${array[0]}`]);
     return true;
 }
+
+export async function deletePost(titel) {
+    let query = "DELETE FROM `zmt`.`blog` WHERE title = ?;";
+    await pool.query(query, [titel]);
+    return true;
+}
+
+export async function deleteEvent(titel) {
+    let query = "DELETE FROM `zmt`.`calendar` WHERE title = ?;";
+    await pool.query(query, [titel]);
+    return true;
+}

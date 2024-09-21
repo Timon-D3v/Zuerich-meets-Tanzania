@@ -1079,7 +1079,7 @@ app.get("/private/:id", async (req, res) => {
     let url = req.protocol + "://" + req.get("host");
     switch (req.params.id) {
         case "management":
-            let users = await db.getAllUsers();
+            let users = await db.getAllUsers().catch(() => [{ email: "Keine Benutzer gefunden" }]);
             let newsletter = await db.getAllNewsletterSignUps();
             let passwords = {
                 gmail: process.env.PASSWORD_GMAIL_ACCOUNT,
@@ -1641,6 +1641,30 @@ app.post("/post/addCalendarEvent", async (req, res) => {
         });
 
     res.json({ message: result ? "Erfolgreich hinzugefügt" : "Das hat nicht geklappt, bitte versuche es später nochmal." });
+});
+
+app.post("/post/deleteBlog", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+
+    const result = await db.deletePost(req.body.title)
+        .catch(err => {
+            console.error(err);
+            return false;
+        });
+
+    res.json({ valid: result });
+});
+
+app.post("/post/deleteEvent", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+
+    const result = await db.deleteEvent(req.body.title)
+        .catch(err => {
+            console.error(err);
+            return false;
+        });
+
+    res.json({ valid: result });
 });
 
 
