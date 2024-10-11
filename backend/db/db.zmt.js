@@ -160,6 +160,14 @@ export async function getNews () {
     return result;
 };
 
+export async function getXNews (i) {
+    let query = "SELECT * from `zmt`.`news` ORDER BY `id` DESC LIMIT ?;";
+    let [result] = await pool.query(query, [i])
+        .catch(err => {throw new Error("Something went wrong");});
+    if (result.length === 0) throw new Error("Nothing there");
+    return result;
+};
+
 export async function submitNews (text, img_path, img_alt, img_pos, btn, btn_text, btn_link, pdf, pdf_src) {
     let query = "INSERT INTO `zmt`.`news` (`text`, `img_path`, `img_alt`, `img_pos`, `btn`, `btn_text`, `btn_link`, `pdf`, `pdf_src`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     btn === "true" ? btn = 1 : btn = 0;

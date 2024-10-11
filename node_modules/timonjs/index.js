@@ -6,4 +6,4 @@
 
 "use strict";
 
-module.exports = require('./lib/timon');
+module.exports = require("./lib/timon");

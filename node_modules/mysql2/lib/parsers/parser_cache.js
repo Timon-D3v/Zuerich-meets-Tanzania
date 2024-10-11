@@ -1,8 +1,8 @@
 'use strict';
 
-const LRU = require('lru-cache').default;
+const { createLRU } = require('lru.min');
 
-const parserCache = new LRU({
+const parserCache = createLRU({
   max: 15000,
 });
 
@@ -51,7 +51,7 @@ function getParser(type, fields, options, config, compiler) {
 }
 
 function setMaxCache(max) {
-  parserCache.max = max;
+  parserCache.resize(max);
 }
 
 function clearCache() {

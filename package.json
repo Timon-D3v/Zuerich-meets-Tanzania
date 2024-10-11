@@ -1,7 +1,7 @@
 {
   "name": "zuerich-meets-tanzania-website",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.0",
+  "description": "This is the website for the non profit organization \"zuerich - meets - tanzania\" project.",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "mysql2": "^3.9.8",
     "node-mailjet": "^6.0.5",
     "stripe": "^15.8.0",
-    "timonjs": "^1.0.0"
+    "timonjs": "^2.0.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.1"

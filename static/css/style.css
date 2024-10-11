@@ -1770,6 +1770,20 @@ nav .mit-bild a {
     font-size: x-large;
 }
 
+.news-more {
+    display: block;
+    width: 100%;
+    margin-bottom: 5vh;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.news-more.special {
+    font-size: 1rem;
+    position: relative;
+    top: -5vh;
+}
+
 @media screen and (min-width: 1200px) {
     :root {
         --header-height: 140px;

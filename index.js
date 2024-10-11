@@ -1130,6 +1130,31 @@ app.get("/getEvents/:num", async (req, res) => {
     });
 });
 
+app.get("/archiv/:num", async (req, res) => res.status(301).redirect("/archiv?count=" + req.params.num));
+app.get("/archive/:num", async (req, res) => res.status(301).redirect("/archiv?count=" + req.params.num));
+app.get("/archive", (req, res) => res.status(301).redirect("/archiv"));
+app.get("/archiv", async (req, res) => {
+    let count = req.query?.count;
+    if (typeof count === "undefined") count = 5;
+    if (typeof count === "string") count = Number(count);
+    const news = await db.getXNews(count)
+    .catch(() => {return BACKUP.NEWS});
+    res.render("news_archiv.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: "Fri Oct 11 2024 23:18:14 GMT+0200 (Mitteleuropäische Sommerzeit)",
+        title: "News Archiv",
+        desc: "Hier findest du alle Newsartikel, die auf dieser Webseite veröffentlicht wurden.",
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        news,
+        toRealDate,
+        count
+    });
+});
+
 app.get("/*", (req, res) => {
     let url = req.protocol + "://" + req.get("host");
     res.status(404).render("errors/error404.ejs", {

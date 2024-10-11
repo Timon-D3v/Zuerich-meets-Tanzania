@@ -7,3 +7,7 @@ News Archiv
 
 
 rename galleries => remove date
+
+
+There is an error when sending the newsletter with images
+works with pdf for some strange reason
