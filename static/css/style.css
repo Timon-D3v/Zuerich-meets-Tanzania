@@ -1036,7 +1036,7 @@ footer {
     background-color: #b6b6b6;
 }
 
-.f-input:active
+.f-input:active,
 .f-input:focus {
     background-color: #c8c8c8;
     border: 1px solid #2d2d2d;
@@ -2058,6 +2058,7 @@ nav .mit-bild a {
 
     .news > .news-div {
         height: auto;
+        min-height: unset;
     }
 
     .news-img {
@@ -2109,6 +2110,7 @@ nav .mit-bild a {
 
     .news > .news-div {
         height: auto;
+        min-height: unset;
     }
 
     .news-img {
@@ -2175,6 +2177,7 @@ nav .mit-bild a {
 
     .news > .news-div {
         height: auto;
+        min-height: unset;
     }
 
     .news-img {
