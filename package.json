@@ -1,6 +1,6 @@
 {
   "name": "zuerich-meets-tanzania-website",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "This is the website for the non profit organization \"zuerich - meets - tanzania\" project.",
   "type": "module",
   "main": "index.js",
