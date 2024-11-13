@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("./snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.1.3/build/umd/index.min.js"></script>
+        <script type="text/javascript" src="/js/builder.js" defer></script>
+        <link rel="stylesheet" href="/css/blog.css">
+        <link rel="stylesheet" href="/css/private.css">
+    </head>
+    <body>
+        <%- include("./snippets/header.ejs") %>
+        <%- include("./snippets/nav.ejs") %>
+        <div class="builder-layout">
+            <section>
+                <button type="button" class="add-item-btn" id="add-general">
+                    <h1>Allgemeine Informationen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="add-title">
+                    <h1>Titel hinzufügen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="add-subtitle">
+                    <h1>Untertitel hinzufügen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="add-text">
+                    <h1>Text hinzufügen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="add-text-picture">
+                    <h1>Halb Text, Halb Bild</h1>
+                    <p>Bild links</p>
+                </button>
+                <button type="button" class="add-item-btn" id="add-picture-text">
+                    <h1>Halb Bild, Halb Text</h1>
+                    <p>Bild rechts</p>
+                </button>
+                <button type="button" class="add-item-btn" id="add-picture">
+                    <h1>Bild hinzufügen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="add-multiple-pictures">
+                    <h1>Mehrere Bilder hinzufügen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="add-line">
+                    <h1>Trennlinie hinzufügen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="done">
+                    <h1>Abschliessen</h1>
+                </button>
+                <button type="button" class="floating-edit-btn" id="edit-current-element">
+                    <img src="/img/svg/pen.svg" alt="Bearbeiten" title="Bearbeiten">
+                </button>
+                <button type="button" class="floating-edit-btn" id="delete-current-element">
+                    <img src="/img/svg/trash.svg" alt="Löschen" title="Löschen">
+                </button>
+            </section>
+            <main>
+                <%- include("./snippets/hero.ejs", {
+                    img_alt: "Testbild",
+                    img_path: "/img/stock/echse.jpg",
+                    title: "Vorschau",
+                    subtitle: "Du befindest dich im Blog Builder",
+                    cta_text: "",
+                    cta_link: "",
+                    origin_url
+                }) %>
+                <div id="content">
+                    <h1 id="id1" class="blog_title">Das ist ein Titel</h1>
+                    <h2 id="id2" class="blog_subtitle">Das ist ein Untertitel</h2>
+                    <p id="id3" class="blog_text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet repudiandae adipisci a architecto obcaecati ipsa reiciendis quia maxime, unde ipsam ad cum minima harum rerum voluptatum? Blanditiis commodi fuga sit?</p>
+                </div>
+            </main>
+        </div>
+        <%- include("./snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>

@@ -13,7 +13,8 @@ const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PW,
-    database: process.env.MYSQL_DB
+    database: process.env.MYSQL_DB,
+    port: process.env.MYSQL_PORT
 }).promise();
 
 
@@ -470,4 +471,22 @@ export async function deleteEvent(titel) {
     let query = "DELETE FROM `zmt`.`calendar` WHERE title = ?;";
     await pool.query(query, [titel]);
     return true;
+}
+
+export async function putBlogPost(title, data) {
+    let query = "INSERT INTO `zmt`.`blogs` (`title`, `data`) VALUES (?, ?);";
+    await pool.query(query, [title, JSON.stringify(data)]);
+    return true;
+}
+
+export async function getBlogPost(title) {
+    let query = "SELECT * FROM `zmt`.`blogs` WHERE title = ?;";
+    let [result] = await pool.query(query, [title]);
+    return result;
+}
+
+export async function getLastXBlogPosts(x) {
+    let query = "SELECT * FROM `zmt`.`blogs` ORDER BY `id` DESC LIMIT ?;";
+    let [result] = await pool.query(query, [x]);
+    return result;
 }

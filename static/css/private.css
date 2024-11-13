@@ -246,3 +246,146 @@ tr:nth-child(even) {
     font-weight: 400;
     color: #e8e8e8;
 }
+
+.builder-layout {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 1fr;
+}
+
+.builder-layout > section::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: var(--header-height);
+}
+
+.builder-layout > section {
+    background-color: var(--background-200);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.add-item-btn {
+    background-color: var(--secondary-500);
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.add-item-btn:hover {
+    background-color: var(--secondary-400);
+}
+
+.add-item-btn:active {
+    background-color: var(--secondary-300);
+}
+
+.add-item-btn h1 {
+    font-size: 2em;
+}
+
+.add-item-btn p {
+    font-size: 1.2em;
+}
+
+.hero-subtitle {
+    padding: 0;
+}
+
+.blog_title {
+    font-size: 2em;
+}
+
+.blog_subtitle {
+    font-size: 1.5em;
+}
+
+#content > *:hover {
+    cursor: grab;
+    border: dashed 4px var(--text-950);
+    box-sizing: border-box;
+}
+
+#content > .active {
+    cursor: auto;
+    border: solid 4px var(--text-950);
+    box-sizing: border-box;
+}
+
+#content:has(.draggable-source--is-dragging) {
+    cursor: grabbing;
+}
+
+.draggable-source--is-dragging {
+    border: solid 4px var(--text-950) !important;
+    box-sizing: border-box;
+}
+
+.draggable-mirror {
+    display: none;
+}
+
+.floating-edit-btn {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    height: 70px;
+    width: 70px;
+    aspect-ratio: 1/1;
+    transition: all 0.3s;
+    background-color: var(--secondary-500);
+    border: none;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    box-shadow: 0px 0px 10px 1px #575655;
+    z-index: 205;
+    cursor: pointer;
+}
+
+.floating-edit-btn > img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    object-position: center;
+}
+
+#delete-current-element {
+    bottom: 110px
+}
+
+.floating-edit-btn:hover {
+    background-color: var(--secondary-400);
+}
+
+.floating-edit-btn:active {
+    background-color: var(--secondary-300);
+}
+
+.upload-hero-img-field {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-400);
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+}
+
+.upload-hero-img {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}

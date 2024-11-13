@@ -1155,6 +1155,108 @@ app.get("/archiv", async (req, res) => {
     });
 });
 
+// TEST
+app.get("/test", (req, res) => {
+    res.render("__test.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: "Wed Nov 13 2024 21:17:52 GMT+0100 (Mitteleuropäische Normalzeit)",
+        title: "Test",
+        desc: "Test",
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js
+    });
+});
+let blogs = [];
+app.post("/test/saveBlog", async (req, res) => {
+    const object = req.body.json;
+    const fileArray = [];
+
+    const saveImg = obj => {
+        if (obj.tagName === "IMG") {
+            fileArray.push({
+                id: obj.attributes.id,
+                alt: obj.attributes.alt,
+                base64: obj.attributes.src
+            });
+        }
+
+        if (Array.isArray(obj?.children)) {
+            obj.children.forEach(elm => {
+                saveImg(elm);
+            });
+        }
+    };
+
+    await saveImg(object.html);
+
+    const { path } = await imagekitUpload(object.hero.src, object.hero.title + `___${timon.randomString(32)}`, "/blog/");
+    object.hero.src = path;
+
+    let json = JSON.stringify(object);
+
+    for (let i = 0; i < fileArray.length; i++) {
+        const { path } = await imagekitUpload(fileArray[i].base64, fileArray[i].alt + "___" +  fileArray[i].id, "/blog/");
+
+        const done = json.split("data:")[0];
+        const rest = json.replace(done, "");
+
+        const base64 = rest.split("\"")[0];
+        const todo = rest.replace(base64, "");
+
+        json = done + path + todo;
+    }
+
+    blogs.push(json);
+
+    const raw = JSON.parse(json);
+
+    const result = await db.putBlogPost(raw.hero.title, raw).catch(err => {
+        console.error(err);
+        return false;
+    });
+
+    if (result) return res.json({ ok: true, message: "Das hat geklappt." });
+    
+    res.json({ ok: false, message: "Etwas hat nicht geklappt. Bitte versuche es später erneut." });
+});
+
+app.get("/test/getBlog", async (req, res) => {
+    const [blog] = await db.getLastXBlogPosts(1);
+
+    console.log(blog);
+
+    res.render("test_blog.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: blog.data.date,
+        title: blog.title,
+        desc: blog.data.hero.subtitle,
+        sitetype: "blog",
+        user: req.session.user,
+        js: req.query.js,
+        blog: JSON.stringify(blog.data)
+    });
+});
+
+app.get("/datenschutz", (req, res) => {
+    res.render("datenschutz.ejs", {
+        env: LOAD_LEVEL,
+        url: req.url,
+        origin_url: req.protocol + "://" + req.get("host"),
+        date: "Sun Oct 13 2024 21:17:52 GMT+0100 (Mitteleuropäische Normalzeit)",
+        title: "Datenschutz",
+        desc: "Datenschutz",
+        sitetype: "static",
+        user: req.session.user,
+        js: req.query.js,
+        toRealDate
+    });
+});
+
 app.get("/*", (req, res) => {
     let url = req.protocol + "://" + req.get("host");
     res.status(404).render("errors/error404.ejs", {
