@@ -917,6 +917,7 @@ app.get("/projects/gyn%C3%A4kologie", (req, res) => {
     });
 });
 
+app.get("/mitglied-und-spenden", (req, res) => res.status(301).redirect("/spenden"));
 app.get("/donate", (req, res) => res.status(301).redirect("/spenden"));
 app.get("/spenden", (req, res) => {
     res.render("donate.ejs", {
@@ -1169,7 +1170,7 @@ app.get("/test", (req, res) => {
         js: req.query.js
     });
 });
-let blogs = [];
+
 app.post("/test/saveBlog", async (req, res) => {
     const object = req.body.json;
     const fileArray = [];
@@ -1209,8 +1210,6 @@ app.post("/test/saveBlog", async (req, res) => {
         json = done + path + todo;
     }
 
-    blogs.push(json);
-
     const raw = JSON.parse(json);
 
     const result = await db.putBlogPost(raw.hero.title, raw).catch(err => {
@@ -1225,8 +1224,6 @@ app.post("/test/saveBlog", async (req, res) => {
 
 app.get("/test/getBlog", async (req, res) => {
     const [blog] = await db.getLastXBlogPosts(1);
-
-    console.log(blog);
 
     res.render("test_blog.ejs", {
         env: LOAD_LEVEL,
