@@ -17,7 +17,7 @@
         <main><% 
             const jsonBlog = JSON.parse(blog); %>
             <pre class="invisible" id="raw">
-                <%- blog %>
+                <%= blog %>
             </pre>
             <%- include("./snippets/hero.ejs", {
                 img_alt: jsonBlog.hero.alt,

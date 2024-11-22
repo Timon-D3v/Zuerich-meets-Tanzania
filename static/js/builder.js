@@ -26,6 +26,7 @@ sortable.on("sortable:start", e => {
 
     elements.forEach(element => {
         element.classList.remove("active");
+        element.innerHTML = markdownToHtml(element.innerHTML);
         element.contentEditable = false;
     });
 
@@ -254,9 +255,10 @@ edit_btn.click(async () => {
     switch (current_element.tagName) {
         case "P":
             current_element.contentEditable = true;
+            current_element.innerText = HTMLToMarkdown(current_element.innerHTML);
             break;
         case "H1" || "H2":
-            current_element.innerHTML = await prompt("Bearbeite den Text wie nötig.", current_element.innerHTML);
+            current_element.innerHTML = await prompt("Bearbeite den Text wie nötig.", HTMLToMarkdown(current_element.innerHTML));
             break;
         case "IMG":
             handleImgEdit(current_element);
@@ -353,6 +355,23 @@ function handleImgEdit(element) {
 
     input.click();
 }
+
+function markdownToHtml(text) {
+    return text
+        .replace(/\*\*\*(.{1,})\*\*\*/gm, "<b>$1</b>")
+        .replace(/\_\_\_(.{1,})\_\_\_/gm, "<i>$1</i>")
+        .replace(/\+\+\+(.{1,})\+\+\+/gm, "<u>$1</u>")
+        .replace(/\{\[(.{1,})\]\((.{1,})\)}/gm, "<a href='$2' target='_blank'>$1</a>");
+}
+
+function HTMLToMarkdown(text) {
+    return text
+        .replace(/<b>(.{1,})<\/b>/gm, "***$1***")
+        .replace(/<i>(.{1,})<\/i>/gm, "___$1___")
+        .replace(/<u>(.{1,})<\/u>/gm, "+++")
+        .replace(/<a href='(.{1,})' target='_blank'>(.{1,})<\/a>/gm, "{[$2]($1)}");
+}
+
 
 async function addImg(type) {
     const input = createElm("input");
