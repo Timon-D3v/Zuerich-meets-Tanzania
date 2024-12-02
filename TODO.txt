@@ -5,11 +5,3 @@ News Archiv
 
 There is an error when sending the newsletter with images
 works with pdf for some strange reason
-
-
-
-Overflow auto on the blogpreviews in index.ejs
-
-
-
-Add a feedback when submitting a blog post

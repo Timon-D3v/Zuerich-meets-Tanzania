@@ -12,9 +12,19 @@
         }) %>
         <script type="text/javascript" src="/js/calendar.js" defer></script>
     </head>
-    <body>
-        <%- include("./snippets/header.ejs") %>
-        <%- include("./snippets/nav.ejs") %>
+    <body><%
+        let link_mitglied;
+        if (typeof user !== "undefined" && user !== null) {
+            user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
+        } else {
+            link_mitglied = "/login";
+        }; %>
+       <%- include("./snippets/header.ejs", {
+            link_mitglied
+        }) %>
+        <%- include("./snippets/nav.ejs", {
+            link_mitglied
+        }) %>
         <main>
             <%- include("./snippets/hero.ejs", {
                 img_alt: "Das Titelbild unserer Seite",
@@ -24,13 +34,7 @@
                 cta_text: hero.button_text,
                 cta_link: hero.link,
                 origin_url
-            }) %><%
-            let link_mitglied;
-            if (typeof user !== "undefined" && user !== null) {
-                user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
-            } else {
-                link_mitglied = "/login";
-            }; %>
+            }) %>
             <h1 class="title w-575 w575">Spenden</h1>
             <div class="mobile-donation">
                 <a class="cta-btn flex" href="/spenden">Spenden</a>
@@ -61,16 +65,16 @@
                 title: undefined,
                 rows: 2,
                 img: [
-                    last4blogs[0].img.img[0],
-                    last4blogs[1].img.img[0],
-                    last4blogs[2].img.img[0],
-                    last4blogs[3].img.img[0]
+                    last4blogs[0].data.hero.src,
+                    last4blogs[1].data.hero.src,
+                    last4blogs[2].data.hero.src,
+                    last4blogs[3].data.hero.src
                 ],
                 img_alt: [
-                    last4blogs[0].img.alt[0],
-                    last4blogs[1].img.alt[0],
-                    last4blogs[2].img.alt[0],
-                    last4blogs[3].img.alt[0]
+                    last4blogs[0].data.hero.alt,
+                    last4blogs[1].data.hero.alt,
+                    last4blogs[2].data.hero.alt,
+                    last4blogs[3].data.hero.alt
                 ],
                 subtitle: [
                     last4blogs[0].title, 
@@ -79,10 +83,10 @@
                     last4blogs[3].title
                 ],
                 desc: [
-                    last4blogs[0].preview, 
-                    last4blogs[1].preview, 
-                    last4blogs[2].preview, 
-                    last4blogs[3].preview
+                    last4blogs[0].data.hero.subtitle, 
+                    last4blogs[1].data.hero.subtitle,
+                    last4blogs[2].data.hero.subtitle,
+                    last4blogs[3].data.hero.subtitle
                 ],
                 origin_url: origin_url
             }) %>

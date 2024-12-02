@@ -11,19 +11,60 @@
             sitetype: sitetype
         }) %>
     </head>
-    <body>
-        <%- include("./snippets/header.ejs") %>
-        <%- include("./snippets/nav.ejs") %>
-        <main>
+    <body><%
+        let link_mitglied;
+        if (typeof user !== "undefined" && user !== null) {
+            user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
+        } else {
+            link_mitglied = "/login";
+        }; %>
+       <%- include("./snippets/header.ejs", {
+            link_mitglied
+        }) %>
+        <%- include("./snippets/nav.ejs", {
+            link_mitglied
+        }) %>
+        <main><% 
+            const jsonBlog = JSON.parse(blog); %>
+            <pre class="invisible" id="raw">
+                <%= blog %>
+            </pre>
             <%- include("./snippets/hero.ejs", {
-                img_alt: blog.img.alt[0],
-                img_path: blog.img.img[0],
-                title: title,
-                subtitle: blog.preview,
+                img_alt: jsonBlog.hero.alt,
+                img_path: jsonBlog.hero.src,
+                title: jsonBlog.hero.title,
+                subtitle: jsonBlog.hero.subtitle,
                 cta_text: "",
                 cta_link: origin_url
             }) %>
-            <%- blog.content %>
+            <script>
+                function jsonToElm(options) {
+                    const element = document.createElement(options.tagName)
+
+                    for (let attr in options.attributes) {
+                        element.setAttribute(attr, options.attributes[attr])
+                    }
+
+                    for (let child of options.children) {
+                        if (child.tagName === "___text___") {
+                            element.appendChild(document.createTextNode(child.content));
+                            continue;
+                        }
+
+                        element.appendChild(jsonToElm(child));
+                    }
+
+                    return element
+                }
+
+                document.querySelector("main").appendChild(
+                    jsonToElm(
+                        JSON.parse(
+                            document.getElementById("raw").innerText
+                        ).html
+                    )
+                );
+            </script>
             <div class="blog_line"></div>
             <div class="blog_footer">
                 <%
@@ -73,10 +114,10 @@
                     };
                     return `${day}. ${month} ${year} um ${time}`;
                 };%>
-                <img id="blog_footer_img" src="/img/svg/personal.svg" alt="<%= blog.author %>">
+                <img id="blog_footer_img" src="/img/svg/personal.svg" alt="<%= jsonBlog.author %>">
                 <div>
-                    <p>Autor: <%= blog.author %></p>
-                    <p>Gepostet am <%= toRealDate(blog.date) %></p>
+                    <p>Autor: <%= jsonBlog.author %></p>
+                    <p>Gepostet am <%= toRealDate(jsonBlog.date) %></p>
                 </div>
             </div>
         </main>

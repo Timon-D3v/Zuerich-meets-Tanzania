@@ -12,3 +12,8 @@ async function getBlogAuthorImg () {
     img.src = picture;
 }
 getBlogAuthorImg();
+
+const editThisBlog = createElm("a");
+editThisBlog._text("Bearbeiten");
+editThisBlog.href = window.location.href.replace(/\/blog/, "/private/blog");
+getQuery(".f-l-social").get(0).append(editThisBlog);

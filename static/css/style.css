@@ -1292,6 +1292,7 @@ p.news-a-t {
     font-size: 20px;
     text-align: center;
     padding: 0 5vw;
+    overflow: auto;
 }
 
 :root[data-theme="dark"] .blog-cards-part-div {

@@ -1,3 +1,6 @@
+on(document, "DOMContentLoaded", () => {
+    setTimeout(() => {
+
 const content = getElm("content");
 const edit_btn = getElm("edit-current-element");
 const delete_btn = getElm("delete-current-element");
@@ -232,7 +235,7 @@ getElm("done").click(async () =>{
 
     getQuery(".blog_carousel img").forEach(e => e.removeClass("active"));
 
-    json.hero.src = await hero_img.getImgBase64();
+    json.hero.src = hero_img.src.includes("https://ik.imagekit.io/zmt/blog") ? hero_img.src : await hero_img.getImgBase64();
 
     getElm("done").disabled = true;
 
@@ -240,8 +243,11 @@ getElm("done").click(async () =>{
 
     json.date = Date();
 
-    const response = await post("/test/saveBlog", {
-        json
+    const url = edit_btn.data("data-blog-is-new") === "true" ? "/post/blog" : "/post/blog/update";
+
+    const response = await post(url, {
+        json,
+        originalName: edit_btn.data("data-blog-original-name")
     });
 
     if (response.ok) return alert("Das hat geklappt, der Blog ist jetzt online und du kannst den Builder verlassen.");
@@ -400,4 +406,5 @@ async function addImg(type) {
     });
 
     input.click();
-}
+}}, 500);
+});

@@ -13,7 +13,7 @@
                     if (typeof user !== "undefined" && user !== null) {
                         user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/spenden?js=membership_click#scrollToDonate";
                     } else {
-                        link_mitglied = "/spenden?js=membership_click#scrollToDonate";
+                        link_mitglied = "/signup";
                     }; %>
                     <div class="h-t-b-btn">
                         <a class="t-mitglied-btn" href="<%= link_mitglied %>">Mitglied werden</a>

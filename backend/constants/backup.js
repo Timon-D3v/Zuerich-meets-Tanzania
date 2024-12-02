@@ -1,24 +1,60 @@
 const BACKUP = {
     BLOGS: [
         {
+            id: 1,
             title: "Fehler",
-            preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-            img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (1).jpg"]},
+            data: {
+                date: "Mon Dec 02 2024 16:53:44 GMT+0100 (Central European Standard Time)",
+                hero: {
+                    alt: "Das Bild zeigt ein Fehlersymbol.",
+                    src: "/img/backup/blogerror (1).jpg",
+                    title: "Fehler",
+                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können..."
+                },
+                html: null
+            }
         },
         {
+            id: 2,
             title: "Fehler",
-            preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-            img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (2).jpg"]},
+            data: {
+                date: "Mon Dec 02 2024 16:53:44 GMT+0100 (Central European Standard Time)",
+                hero: {
+                    alt: "Das Bild zeigt ein Fehlersymbol.",
+                    src: "/img/backup/blogerror (2).jpg",
+                    title: "Fehler",
+                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können..."
+                },
+                html: null
+            }
         },
         {
+            id: 3,
             title: "Fehler",
-            preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-            img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (3).jpg"]},
+            data: {
+                date: "Mon Dec 02 2024 16:53:44 GMT+0100 (Central European Standard Time)",
+                hero: {
+                    alt: "Das Bild zeigt ein Fehlersymbol.",
+                    src: "/img/backup/blogerror (3).jpg",
+                    title: "Fehler",
+                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können..."
+                },
+                html: null
+            }
         },
         {
+            id: 4,
             title: "Fehler",
-            preview: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
-            img: {alt: ["Das Bild zeigt ein Fehlersymbol"], img: ["/img/backup/blogerror (4).jpg"]},
+            data: {
+                date: "Mon Dec 02 2024 16:53:44 GMT+0100 (Central European Standard Time)",
+                hero: {
+                    alt: "Das Bild zeigt ein Fehlersymbol.",
+                    src: "/img/backup/blogerror (4).jpg",
+                    title: "Fehler",
+                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können..."
+                },
+                html: null
+            }
         }
     ],
     NEWS: {

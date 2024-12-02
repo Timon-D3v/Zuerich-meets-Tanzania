@@ -487,11 +487,12 @@ if (LOAD_LEVEL === "prod") {
 
 app.get("/home", (req, res) => res.status(301).redirect("/"));
 app.get("/", async (req, res) => {
-    let blogs = await db.getLastXPosts(4)
+    let blogs = await db.getLastXBlogs(4)
         .catch(() => {return BACKUP.BLOGS});
     let news = await db.getNews()
         .catch(() => {return BACKUP.NEWS});
-    let events = await db.getLast5Events().catch(() => [{ title: "Keine Events gefunden", date: "" }]);
+    let events = await db.getLast5Events()
+        .catch(() => [{ title: "Keine Events gefunden", date: "" }]);
     res.render("index.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -1057,21 +1058,50 @@ app.get("/galerie/:id", async (req, res) => {
 });
 
 app.get("/blog/:id", async (req, res) => {
-    let result = await db.getPostWhereTitle(req.params.id)
-        .catch(() => res.redirect("/"));
-    result = result?.[0];
-    result ? res.render("blog.ejs", {
-        env: LOAD_LEVEL,
-        url: req.url,
-        origin_url: req.protocol + "://" + req.get("host"),
-        date: "Mon Feb 12 2024 16:40:44 GMT+0100 (Mitteleuropäische Normalzeit)",
-        title: result.title,
-        desc: result.preview + " | Written by " + result.author,
-        sitetype: "blog",
-        user: req.session.user,
-        js: req.query.js,
-        blog: result
-    }) : res.redirect("/");
+    try {
+        const [blog] = await db.getBlogWhereTitle(req.params.id);
+
+        res.render("blog.ejs", {
+            env: LOAD_LEVEL,
+            url: req.url,
+            origin_url: req.protocol + "://" + req.get("host"),
+            date: blog.data.date,
+            title: blog.title,
+            desc: blog.data.hero.subtitle,
+            sitetype: "blog",
+            user: req.session.user,
+            js: req.query.js,
+            blog: JSON.stringify(blog.data)
+        });
+    } catch (error) {
+        console.error(error);
+        return res.redirect("/");
+    }
+});
+
+app.get("/private/blog/:id", async (req, res) => {
+    if (!req.session.user) return res.redirect("/login?redir=/private/blog/" + req.params.id);
+    if (req.session.user.type !== "admin") return res.redirect("/");
+
+    try {
+        const [blog] = await db.getBlogWhereTitle(req.params.id);
+
+        res.render("private/editBlog.ejs", {
+            env: LOAD_LEVEL,
+            url: req.url,
+            origin_url: req.protocol + "://" + req.get("host"),
+            date: blog.data.date,
+            title: blog.title,
+            desc: blog.data.hero.subtitle,
+            sitetype: "private",
+            user: req.session.user,
+            js: req.query.js,
+            blog: JSON.stringify(blog.data)
+        });
+    } catch (error) {
+        console.error(error);
+        return res.redirect("/");
+    }
 });
 
 app.get("/private/:id", async (req, res) => {
@@ -1116,6 +1146,19 @@ app.get("/private/:id", async (req, res) => {
                 js: req.query.js
             });
             break;
+        case "createBlog":
+            res.render("private/createBlog.ejs", {
+                env: LOAD_LEVEL,
+                url: req.url,
+                origin_url: url,
+                date: "Tue Nov 26 2024 08:34:49 GMT+0100 (Mitteleuropäische Normalzeit)",
+                title: "Blog Erstellen",
+                desc: "Hier können die Mitglieder des Vereins Blogposts erstellen.",
+                sitetype: "private",
+                user: req.session.user,
+                js: req.query.js
+            });
+            break;
         default:
             res.redirect("/error404");
             break;
@@ -1153,89 +1196,6 @@ app.get("/archiv", async (req, res) => {
         news,
         toRealDate,
         count
-    });
-});
-
-// TEST
-app.get("/test", (req, res) => {
-    res.render("__test.ejs", {
-        env: LOAD_LEVEL,
-        url: req.url,
-        origin_url: req.protocol + "://" + req.get("host"),
-        date: "Wed Nov 13 2024 21:17:52 GMT+0100 (Mitteleuropäische Normalzeit)",
-        title: "Test",
-        desc: "Test",
-        sitetype: "static",
-        user: req.session.user,
-        js: req.query.js
-    });
-});
-
-app.post("/test/saveBlog", async (req, res) => {
-    const object = req.body.json;
-    const fileArray = [];
-
-    const saveImg = obj => {
-        if (obj.tagName === "IMG") {
-            fileArray.push({
-                id: obj.attributes.id,
-                alt: obj.attributes.alt,
-                base64: obj.attributes.src
-            });
-        }
-
-        if (Array.isArray(obj?.children)) {
-            obj.children.forEach(elm => {
-                saveImg(elm);
-            });
-        }
-    };
-
-    await saveImg(object.html);
-
-    const { path } = await imagekitUpload(object.hero.src, object.hero.title + `___${timon.randomString(32)}`, "/blog/");
-    object.hero.src = path;
-
-    let json = JSON.stringify(object);
-
-    for (let i = 0; i < fileArray.length; i++) {
-        const { path } = await imagekitUpload(fileArray[i].base64, fileArray[i].alt + "___" +  fileArray[i].id, "/blog/");
-
-        const done = json.split("data:")[0];
-        const rest = json.replace(done, "");
-
-        const base64 = rest.split("\"")[0];
-        const todo = rest.replace(base64, "");
-
-        json = done + path + todo;
-    }
-
-    const raw = JSON.parse(json);
-
-    const result = await db.putBlogPost(raw.hero.title, raw).catch(err => {
-        console.error(err);
-        return false;
-    });
-
-    if (result) return res.json({ ok: true, message: "Das hat geklappt." });
-    
-    res.json({ ok: false, message: "Etwas hat nicht geklappt. Bitte versuche es später erneut." });
-});
-
-app.get("/test/getBlog", async (req, res) => {
-    const [blog] = await db.getLastXBlogPosts(1);
-
-    res.render("test_blog.ejs", {
-        env: LOAD_LEVEL,
-        url: req.url,
-        origin_url: req.protocol + "://" + req.get("host"),
-        date: blog.data.date,
-        title: blog.title,
-        desc: blog.data.hero.subtitle,
-        sitetype: "blog",
-        user: req.session.user,
-        js: req.query.js,
-        blog: JSON.stringify(blog.data)
     });
 });
 
@@ -1357,16 +1317,131 @@ app.post("/post/newsletter/check", async (req, res) => {
 });
 
 app.post("/post/blog", async (req, res) => {
-    let b = req.body;
-    let result = await db.createPost(b.title, b.author, b.preview, b.content, "Blog", b.img, b.comment)
-        .catch(error => {
-            console.error("An Error occurred:", error);
-            return "No connection to database";
-        });
-    res.send({status: result});
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+
+    const object = req.body.json;
+    const fileArray = [];
+
+    const saveImg = obj => {
+        if (obj.tagName === "IMG") {
+            fileArray.push({
+                id: obj.attributes.id,
+                alt: obj.attributes.alt,
+                base64: obj.attributes.src
+            });
+        }
+
+        if (Array.isArray(obj?.children)) {
+            obj.children.forEach(elm => {
+                saveImg(elm);
+            });
+        }
+    };
+
+    await saveImg(object.html);
+
+    if (object.hero.src.includes("data:image")) {
+
+        const { path } = await imagekitUpload(object.hero.src, object.hero.title + `___${timon.randomString(32)}`, "/blog/");
+        object.hero.src = path;
+
+    }
+
+    let json = JSON.stringify(object);
+
+    for (let i = 0; i < fileArray.length; i++) {
+        if (!fileArray[i].base64.includes("data:image")) continue;
+
+        const { path } = await imagekitUpload(fileArray[i].base64, fileArray[i].alt + "___" +  fileArray[i].id, "/blog/");
+
+        const done = json.split("data:")[0];
+        const rest = json.replace(done, "");
+
+        const base64 = rest.split("\"")[0];
+        const todo = rest.replace(base64, "");
+
+        json = done + path + todo;
+    }
+
+    const raw = JSON.parse(json);
+
+    const result = await db.putBlogPost(raw.hero.title, raw).catch(err => {
+        console.error(err);
+        return false;
+    });
+
+    if (result) return res.json({ ok: true, message: "Das hat geklappt." });
+    
+    res.json({ ok: false, message: "Etwas hat nicht geklappt. Bitte versuche es später erneut." });
 });
 
+app.post("/post/blog/update", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+
+    const object = req.body.json;
+    const fileArray = [];
+
+    const saveImg = obj => {
+        if (obj.tagName === "IMG") {
+            fileArray.push({
+                id: obj.attributes.id,
+                alt: obj.attributes.alt,
+                base64: obj.attributes.src
+            });
+        }
+
+        if (Array.isArray(obj?.children)) {
+            obj.children.forEach(elm => {
+                saveImg(elm);
+            });
+        }
+    };
+
+    await saveImg(object.html);
+
+    if (object.hero.src.includes("data:image")) {
+
+        const { path } = await imagekitUpload(object.hero.src, object.hero.title + `___${timon.randomString(32)}`, "/blog/");
+        object.hero.src = path;
+
+    }
+
+    let json = JSON.stringify(object);
+
+    for (let i = 0; i < fileArray.length; i++) {
+        if (!fileArray[i].base64.includes("data:image")) continue;
+
+        const { path } = await imagekitUpload(fileArray[i].base64, fileArray[i].alt + "___" +  fileArray[i].id, "/blog/");
+
+        const done = json.split("data:")[0];
+        const rest = json.replace(done, "");
+
+        const base64 = rest.split("\"")[0];
+        const todo = rest.replace(base64, "");
+
+        json = done + path + todo;
+    }
+
+    const raw = JSON.parse(json);
+
+    const result = await db.updateBlogPost(req.body.originalName, raw.hero.title, raw).catch(err => {
+        console.error(err);
+        return false;
+    });
+
+    if (result) return res.json({ ok: true, message: "Das hat geklappt." });
+    
+    res.json({ ok: false, message: "Etwas hat nicht geklappt. Bitte versuche es später erneut." });
+});
+
+/**
+ * @deprecated
+ */
 app.post("/post/mergeBlogs", async (req, res) => {
+
+    return res.json({error: "501: Deprecated"});
+
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
     const { number, title, description, team, base64, alt } = req.body;
     const { path } = await imagekitUpload(base64, alt + timon.randomString(32), "/blog/");
     const result = await db.mergeBlogs(number, title, description, team, path, alt);
@@ -1374,7 +1449,7 @@ app.post("/post/mergeBlogs", async (req, res) => {
 });
 
 app.post("/post/blog/getLinks/:num", async (req, res) => {
-    let response = await db.getLastXPostLinks(req.params.num)
+    let response = await db.getLastXBlogLinks(req.params.num)
         .catch(() => {return "No connection to database"});
     typeof response !== "string" ? res.send({title: response}) : res.end();
 });
@@ -1770,7 +1845,7 @@ app.post("/post/addCalendarEvent", async (req, res) => {
 app.post("/post/deleteBlog", async (req, res) => {
     if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
 
-    const result = await db.deletePost(req.body.title)
+    const result = await db.deleteBlog(req.body.title)
         .catch(err => {
             console.error(err);
             return false;

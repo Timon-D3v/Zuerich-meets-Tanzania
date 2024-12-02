@@ -34,8 +34,19 @@ export async function getPost () {
     return result;
 };
 
+/**
+ * @deprecated
+ */
 export async function getPostWhereTitle (title) {
     let query = "SELECT * FROM `zmt`.`blog` WHERE title = ?;";
+    let [result] = await pool.query(query, [title])
+        .catch(() => {throw new Error("Fehler");});
+    if (result == []) throw new Error("Seite nicht vorhanden (404)");
+    return result;
+};
+
+export async function getBlogWhereTitle (title) {
+    let query = "SELECT * FROM `zmt`.`blogs` WHERE title = ?;";
     let [result] = await pool.query(query, [title])
         .catch(() => {throw new Error("Fehler");});
     if (result == []) throw new Error("Seite nicht vorhanden (404)");
@@ -64,6 +75,9 @@ export async function newsletterCheck (email) {
     return check;
 };
 
+/**
+ * @deprecated
+ */
 export async function getLastXPosts (x) {
     let query = "SELECT * from `zmt`.`blog` ORDER BY `id` DESC LIMIT " + x + ";";
     let [result] = await pool.query(query)
@@ -72,12 +86,30 @@ export async function getLastXPosts (x) {
     return result;
 };
 
+export async function getLastXBlogs (x) {
+    let query = "SELECT * from `zmt`.`blogs` ORDER BY `id` DESC LIMIT " + x + ";";
+    let [result] = await pool.query(query)
+        .catch(() => {throw new Error("Fehler");});
+    if (result.length !== x) throw new Error("Nicht die gewünschte Anzahl Elemente");
+    return result;
+};
+
+/**
+ * @deprecated
+ */
 export async function getLastXPostLinks (x) {
     let query = "SELECT title from `zmt`.`blog` ORDER BY `id` DESC LIMIT " + x.toString() + ";";
     let [result] = await pool.query(query)
         .catch(() => {throw new Error("Fehler");});
     return result;
 };
+
+export async function getLastXBlogLinks(x) {
+    let query = "SELECT title from `zmt`.`blogs` ORDER BY `id` DESC LIMIT " + x.toString() + ";";
+    let [result] = await pool.query(query)
+        .catch(() => {throw new Error("Fehler");});
+    return result;
+}
 
 export async function validateAccount (username, password) {
     let [account] = await getAccount(username)
@@ -461,8 +493,17 @@ export async function insertEvent (title, date) {
     return true;
 }
 
+/**
+ * @deprecated
+ */
 export async function deletePost(titel) {
     let query = "DELETE FROM `zmt`.`blog` WHERE title = ?;";
+    await pool.query(query, [titel]);
+    return true;
+}
+
+export async function deleteBlog(titel) {
+    let query = "DELETE FROM `zmt`.`blogs` WHERE title = ?;";
     await pool.query(query, [titel]);
     return true;
 }
@@ -476,6 +517,12 @@ export async function deleteEvent(titel) {
 export async function putBlogPost(title, data) {
     let query = "INSERT INTO `zmt`.`blogs` (`title`, `data`) VALUES (?, ?);";
     await pool.query(query, [title, JSON.stringify(data)]);
+    return true;
+}
+
+export async function updateBlogPost(originalName, title, data) {
+    let query = "UPDATE `zmt`.`blogs` SET `title` = ?, `data` = ? WHERE (`title` = ?);";
+    await pool.query(query, [title, JSON.stringify(data), originalName]);
     return true;
 }
 

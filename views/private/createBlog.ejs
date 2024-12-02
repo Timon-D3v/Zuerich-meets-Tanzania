@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de-ch" data-theme="light">
     <head>
-        <%- include("./snippets/head.ejs", {
+        <%- include("../snippets/head.ejs", {
             title: title,
             date: date,
             desc: desc,
@@ -15,8 +15,8 @@
         <link rel="stylesheet" href="/css/private.css">
     </head>
     <body>
-        <%- include("./snippets/header.ejs") %>
-        <%- include("./snippets/nav.ejs") %>
+        <%- include("../snippets/header.ejs") %>
+        <%- include("../snippets/nav.ejs") %>
         <div class="builder-layout">
             <section>
                 <button type="button" class="add-item-btn" id="add-general">
@@ -51,7 +51,7 @@
                 <button type="button" class="add-item-btn" id="done">
                     <h1>Abschliessen</h1>
                 </button>
-                <button type="button" class="floating-edit-btn" id="edit-current-element">
+                <button type="button" class="floating-edit-btn" id="edit-current-element" data-blog-is-new="true" data-blog-original-name="NONE">
                     <img src="/img/svg/pen.svg" alt="Bearbeiten" title="Bearbeiten">
                 </button>
                 <button type="button" class="floating-edit-btn" id="delete-current-element">
@@ -59,7 +59,7 @@
                 </button>
             </section>
             <main>
-                <%- include("./snippets/hero.ejs", {
+                <%- include("../snippets/hero.ejs", {
                     img_alt: "Testbild",
                     img_path: "/img/stock/echse.jpg",
                     title: "Vorschau",
@@ -75,7 +75,7 @@
                 </div>
             </main>
         </div>
-        <%- include("./snippets/footer.ejs", {
+        <%- include("../snippets/footer.ejs", {
             origin_url: origin_url,
             js: js
         }) %>

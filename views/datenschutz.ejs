@@ -40,9 +40,19 @@
             }
         </style>
     </head>
-    <body>
-        <%- include("./snippets/header.ejs") %>
-        <%- include("./snippets/nav.ejs") %>
+    <body><%
+        let link_mitglied;
+        if (typeof user !== "undefined" && user !== null) {
+            user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
+        } else {
+            link_mitglied = "/login";
+        }; %>
+       <%- include("./snippets/header.ejs", {
+            link_mitglied
+        }) %>
+        <%- include("./snippets/nav.ejs", {
+            link_mitglied
+        }) %>
         <main>
             <%- include("./snippets/datenschutzerklaerung.ejs"); %>
             <script>
