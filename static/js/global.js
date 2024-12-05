@@ -340,6 +340,7 @@ on(window, "resize", setCssVariables);
 [darkmodeButton1, darkmodeButton2].forEach(e => e.click(setTheme)); 
 
 initTheme();
+timonjs_message();
 
 var i = setInterval(setCssVariables, 1000);
 

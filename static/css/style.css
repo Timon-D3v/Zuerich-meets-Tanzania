@@ -1390,6 +1390,7 @@ p.news-a-t {
 .news-text {
     word-break: normal;
     word-wrap: normal;
+    padding: 0;
 }
 
 #error_field,
@@ -1766,9 +1767,10 @@ nav .mit-bild a {
     text-align: center;
 }
 
-.news-text span {
+.news-content-title {
     font-weight: bold;
     font-size: x-large;
+    padding: 0;
 }
 
 .news-more {

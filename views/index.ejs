@@ -40,19 +40,9 @@
                 <a class="cta-btn flex" href="/spenden">Spenden</a>
                 <a class="cta-btn flex" href="https://www.unikat-hoengg.ch">Shop</a>
                 <a class="cta-btn flex" href="<%= link_mitglied %>">Mitglied werden</a>
-            </div>
-            <%- include("./snippets/news.ejs", {
-                text: news.text,
-                img_path: news.img_path,
-                img_alt: news.img_alt,
-                img_pos: news.img_pos,
-                cta: news.btn,
-                cta_text: news.btn_text,
-                cta_link: news.btn_link,
-                pdf: news.pdf,
-                pdf_src: news.pdf_src,
-                origin_url: origin_url
-            }) %>
+            </div><% 
+            news.isArchiv = false; %>
+            <%- include("./snippets/news.ejs", news) %>
             <a class="news-more special" href="/archiv">Mehr anzeigen</a>
             <h1 class="title">Terminkalender</h1>
             <ul class="calendar">

@@ -1,12 +1,85 @@
-<div class="news" id="scroll_to_news">
-                <div class="news-div">
-                    <h1 class="news-title"><%- typeof news_title === "string" ? news_title : "Aktuell:" %></h1>
-                    <p class="news-text"><%- text %></p>
-                    <% if (cta) { %><button class="news-cta"><%- cta_text %></button>
-                    <script>getQuery(".news-cta").click(() => window.location.href = "<%= cta_link %>")</script><% }; %>
-                </div><%
-                if (pdf) { %>
-                <iframe src="<%= "https://ik.imagekit.io/zmt/pdf/" + pdf_src %>" class="news-iframe"></iframe><% }
-                else { %>
-                <img class="news-img news-<%= img_pos %>" alt="<%= img_alt %>" src="<%= img_path %>"><% }; %>
-            </div>
+<div class="news news-id-<%= id %>" id="scroll_to_news">
+    <pre id="pre-news-<%= id %>" data-news-id="<%= id %>" class="invisible"><%- JSON.stringify(html) %></pre><%
+    function toRealDate (date) {
+        date = date.toString();
+        let time = date.slice(16, 24);
+        let day = date.slice(8, 10);
+        let year = date.slice(11, 15);
+        let month = date.slice(4, 7);
+        switch (month) {
+            case "Jan":
+                month = "Januar";
+                break;
+            case "Feb":
+                month = "Februar";
+                break;
+            case "Mar":
+                month = "März";
+                break;
+            case "Apr":
+                month = "April";
+                break;
+            case "May":
+                month = "Mai";
+                break;
+            case "Jun":
+                month = "Juni";
+                break;
+            case "Jul":
+                month = "Juli";
+                break;
+            case "Aug":
+                month = "August";
+                break;
+            case "Sep":
+                month = "September";
+                break;
+            case "Oct":
+                month = "Oktober";
+                break;
+            case "Nov":
+                month = "November";
+                break;
+            case "Dec":
+                month = "Dezember";
+                break;
+        };
+        return `${day}. ${month} ${year} um ${time}`;
+    };%>
+    <script>
+        function jsonToElm(options) {
+            const element = document.createElement(options.tagName)
+
+            for (let attr in options.attributes) {
+                element.setAttribute(attr, options.attributes[attr])
+            }
+
+            if (options.tagName === "H1") {
+                element.dataset.date = "<%= toRealDate(date).split(` um `)[0] %>";
+            }
+
+            for (let child of options.children) {
+                if (child.tagName === "___text___") {
+                    element.appendChild(document.createTextNode(child.content));
+                    continue;
+                }
+
+                element.appendChild(jsonToElm(child));
+            }
+
+            return element
+        }
+        getQuery(".news-id-<%= id %>").get(0).append(
+            jsonToElm(
+                JSON.parse(
+                    getElm("pre-news-<%= id %>").text()
+                )
+            )
+        );
+    </script><%
+    if (type === "iframe") { %>
+    <iframe src="<%= src %>" class="news-iframe"></iframe><% }
+    else { %>
+    <img class="news-img news-<%= position %>" src="<%= src %>"><% 
+    }; %>
+</div>

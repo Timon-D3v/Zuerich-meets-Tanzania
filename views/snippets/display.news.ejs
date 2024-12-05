@@ -1,0 +1,12 @@
+<div class="news" id="scroll_to_news">
+                <div class="news-div">
+                    <h1 class="news-title"><%- typeof news_title === "string" ? news_title : "Aktuell:" %></h1>
+                    <p class="news-text"><%- text %></p>
+                    <% if (cta) { %><button class="news-cta"><%- cta_text %></button>
+                    <script>getQuery(".news-cta").click(() => window.location.href = "<%= cta_link %>")</script><% }; %>
+                </div><%
+                if (pdf) { %>
+                <iframe src="<%= "https://ik.imagekit.io/zmt/pdf/" + pdf_src %>" class="news-iframe"></iframe><% }
+                else { %>
+                <img class="news-img news-<%= img_pos %>" alt="<%= img_alt %>" src="<%= img_path %>"><% }; %>
+            </div>

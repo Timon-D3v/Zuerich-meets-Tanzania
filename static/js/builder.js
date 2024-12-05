@@ -263,7 +263,10 @@ edit_btn.click(async () => {
             current_element.contentEditable = true;
             current_element.innerText = HTMLToMarkdown(current_element.innerHTML);
             break;
-        case "H1" || "H2":
+        case "H1":
+            current_element.innerHTML = await prompt("Bearbeite den Text wie nötig.", HTMLToMarkdown(current_element.innerHTML));
+            break;
+        case "H2":
             current_element.innerHTML = await prompt("Bearbeite den Text wie nötig.", HTMLToMarkdown(current_element.innerHTML));
             break;
         case "IMG":

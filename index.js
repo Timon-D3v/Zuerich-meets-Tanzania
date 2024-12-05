@@ -17,6 +17,7 @@ import KARDIOLOGIE from "./backend/constants/kardiologie.js";
 import MEDUCATION from "./backend/constants/meducation.js";
 import BEGINNING from "./backend/constants/beginning.js";
 import CHIRURGIE from "./backend/constants/chirurgie.js";
+import TEMPLATE from "./backend/constants/templates.js";
 import TANZANIA from "./backend/constants/tanzania.js";
 import FINANZEN from "./backend/constants/finanzen.js";
 import STATUTEN from "./backend/constants/statuten.js";
@@ -1159,6 +1160,36 @@ app.get("/private/:id", async (req, res) => {
                 js: req.query.js
             });
             break;
+        case "createNews":
+            res.render("private/createNews.ejs", {
+                env: LOAD_LEVEL,
+                url: req.url,
+                origin_url: url,
+                date: "Tue Dec 03 2024 07:43:18 GMT+0100 (Mitteleuropäische Normalzeit)",
+                title: "News Erstellen",
+                desc: "Hier können die Mitglieder des Vereins News erstellen.",
+                sitetype: "private",
+                user: req.session.user,
+                js: req.query.js,
+                news: TEMPLATE.NEWS
+            });
+            break;
+        case "editNews":
+            const news = await db.getNews()
+                .catch(() => BACKUP.NEWS);
+            res.render("private/editNews.ejs", {
+                env: LOAD_LEVEL,
+                url: req.url,
+                origin_url: url,
+                date: "Wed Dec 04 2024 10:43:01 GMT+0100 (Mitteleuropäische Normalzeit)",
+                title: "News Bearbeiten",
+                desc: "Hier können die Mitglieder des Vereins News bearbeiten.",
+                sitetype: "private",
+                user: req.session.user,
+                js: req.query.js,
+                news
+            });
+            break;
         default:
             res.redirect("/error404");
             break;
@@ -1182,7 +1213,7 @@ app.get("/archiv", async (req, res) => {
     if (typeof count === "undefined") count = 5;
     if (typeof count === "string") count = Number(count);
     const news = await db.getXNews(count)
-    .catch(() => {return BACKUP.NEWS});
+    .catch(() => {return [BACKUP.NEWS]});
     res.render("news_archiv.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -1435,7 +1466,7 @@ app.post("/post/blog/update", async (req, res) => {
 });
 
 /**
- * @deprecated
+ * @deprecated - edit your blog instead
  */
 app.post("/post/mergeBlogs", async (req, res) => {
 
@@ -1505,7 +1536,13 @@ app.post("/post/toggleDarkmode", async (req, res) => {
     res.end();
 });
 
+/**
+ * @deprecated - use /post/news instead
+ */
 app.post("/post/submitNews", async (req, res) => {
+    
+    return res.json({error: "501: Deprecated"});
+
     if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
     let b = req.body,
         status = 200;
@@ -1526,9 +1563,77 @@ app.post("/post/submitNews", async (req, res) => {
         console.error(err);
         status = 500;
     };
+
+    // NOTE: The submitNews function does not work like this anymore.
     await db.submitNews(b.text, img_path.path, b.img_alt, b.img_pos, b.btn, b.btn_text, b.btn_link, b.pdf, b.pdf_src)
         .catch(err => status = err);
     res.json({res: status});
+});
+
+app.post("/post/news", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+
+    try {
+        const { newsletter, src, html, type, isBase64, pos } = req.body;
+        let path = src;
+
+        if (newsletter) {
+            const recipients = await db.getAllNewsletterSignUps();
+
+            let text = "";
+
+            html.children.forEach(element => {
+                if (element.tagName === "P") text += element.children[0]?.content + " ";
+            });
+
+            if (text === "") {
+                html.children.forEach(element => {
+                    if (element.tagName === "H2") text += element.children[0]?.content + " ";
+                });
+            }
+
+            if (text.length > 100) text = text.slice(0, 150) + "...";
+            
+            sendNewsletterEmail(recipients, EMAILS.newsletterSubject, text);
+        }
+
+        if (isBase64) {
+            const result = await imagekitUpload(src, type + "___NEWS___" + timon.randomString(32), "/news/");
+            path = result.path;
+        }
+
+        const result = await db.submitNews(html, type, path, pos);
+
+        if (result) return res.json({ ok: true, message: "Das hat geklappt." });
+    
+        throw new Error();
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, message: "Etwas hat nicht geklappt. Bitte versuche es später erneut." });
+    }
+});
+
+app.post("/post/news/update", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+
+    try {
+        const { src, html, type, isBase64, id, pos } = req.body;
+        let path = src;
+
+        if (isBase64) {
+            const result = await imagekitUpload(src, type + "___NEWS___" + timon.randomString(32), "/news/");
+            path = result.path;
+        }
+
+        const result = await db.updateNews(html, type, path, pos, id);
+
+        if (result) return res.json({ ok: true, message: "Das hat geklappt." });
+    
+        throw new Error("Updating the news failed.");
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, message: "Etwas hat nicht geklappt. Bitte versuche es später erneut." });
+    }
 });
 
 app.post("/post/changeHeroImg", async (req, res) => {

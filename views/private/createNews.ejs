@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de-ch" data-theme="light">
+    <head>
+        <%- include("../snippets/head.ejs", {
+            title: title,
+            date: date,
+            desc: desc,
+            url: url,
+            env: env,
+            sitetype: sitetype
+        }) %>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.1.3/build/umd/index.min.js"></script>
+        <script type="text/javascript" src="/js/news.builder.js" defer></script>
+        <link rel="stylesheet" href="/css/blog.css">
+        <link rel="stylesheet" href="/css/private.css">
+    </head>
+    <body>
+        <%- include("../snippets/header.ejs") %>
+        <%- include("../snippets/nav.ejs") %>
+        <div class="builder-layout">
+            <section>
+                <button type="button" class="add-item-btn" id="add-title">
+                    <h1>Titel hinzufügen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="add-text">
+                    <h1>Text hinzufügen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="add-picture">
+                    <h1>Bild auswählen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="add-pdf">
+                    <h1>PDF auswählen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="add-btn">
+                    <h1>Button hinzufügen</h1>
+                </button>
+                <button type="button" class="add-item-btn" id="done">
+                    <h1>Abschliessen</h1>
+                </button>
+                <button type="button" class="floating-edit-btn" id="edit-current-element" data-news-is-new="true" data-news-id="NONE">
+                    <img src="/img/svg/pen.svg" alt="Bearbeiten" title="Bearbeiten">
+                </button>
+                <button type="button" class="floating-edit-btn" id="delete-current-element">
+                    <img src="/img/svg/trash.svg" alt="Löschen" title="Löschen">
+                </button>
+            </section>
+            <main>
+                <%- include("../snippets/display.news.ejs", {
+                    text: news.text,
+                    img_path: news.img_path,
+                    img_alt: news.img_alt,
+                    img_pos: news.img_pos,
+                    cta: news.btn,
+                    cta_text: news.btn_text,
+                    cta_link: news.btn_link,
+                    pdf: news.pdf,
+                    pdf_src: news.pdf_src,
+                    origin_url: origin_url
+                }) %>
+            </main>
+        </div>
+        <%- include("../snippets/footer.ejs", {
+            origin_url: origin_url,
+            js: js
+        }) %>
+    </body>
+</html>

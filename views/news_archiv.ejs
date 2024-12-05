@@ -25,20 +25,9 @@
             link_mitglied
         }) %>
         <main><% 
-            news.forEach((element, i) => { %>
-            <%- include("./snippets/news.ejs", {
-                news_title: toRealDate(element.date).split(" um ")[0],
-                text: element.text,
-                img_path: element.img_path,
-                img_alt: element.img_alt,
-                img_pos: element.img_pos,
-                cta: element.btn,
-                cta_text: element.btn_text,
-                cta_link: element.btn_link,
-                pdf: element.pdf,
-                pdf_src: element.pdf_src,
-                origin_url: origin_url
-            }) %><%
+            news.forEach((element, i) => {
+                element.isArchiv = true; %>
+            <%- include("./snippets/news.ejs", element) %><%
             if (count > 5 && i === news.length - 5) { %>
             <div id="scroll_to_last_entry"></div>
             <% }
@@ -53,6 +42,14 @@
                 if (count > 5 && getQuery("main").get(0).childrenCount() > 5) {
                     scrollToQuery("#scroll_to_last_entry");
                 };
+
+                on(document, "DOMContentLoaded", () => {
+                    getQuery("h1").forEach(element => {
+                        if (typeof element.dataset?.date === "string") {
+                            element.innerText = element.dataset.date;
+                        }
+                    });
+                });
             </script>
         </main>
         <%- include("./snippets/footer.ejs", {

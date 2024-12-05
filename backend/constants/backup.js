@@ -9,10 +9,11 @@ const BACKUP = {
                     alt: "Das Bild zeigt ein Fehlersymbol.",
                     src: "/img/backup/blogerror (1).jpg",
                     title: "Fehler",
-                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können..."
+                    subtitle:
+                        "Sieht so aus, als würden wir keine Verbindung herstellen können...",
                 },
-                html: null
-            }
+                html: null,
+            },
         },
         {
             id: 2,
@@ -23,10 +24,11 @@ const BACKUP = {
                     alt: "Das Bild zeigt ein Fehlersymbol.",
                     src: "/img/backup/blogerror (2).jpg",
                     title: "Fehler",
-                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können..."
+                    subtitle:
+                        "Sieht so aus, als würden wir keine Verbindung herstellen können...",
                 },
-                html: null
-            }
+                html: null,
+            },
         },
         {
             id: 3,
@@ -37,10 +39,11 @@ const BACKUP = {
                     alt: "Das Bild zeigt ein Fehlersymbol.",
                     src: "/img/backup/blogerror (3).jpg",
                     title: "Fehler",
-                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können..."
+                    subtitle:
+                        "Sieht so aus, als würden wir keine Verbindung herstellen können...",
                 },
-                html: null
-            }
+                html: null,
+            },
         },
         {
             id: 4,
@@ -51,23 +54,38 @@ const BACKUP = {
                     alt: "Das Bild zeigt ein Fehlersymbol.",
                     src: "/img/backup/blogerror (4).jpg",
                     title: "Fehler",
-                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können..."
+                    subtitle:
+                        "Sieht so aus, als würden wir keine Verbindung herstellen können...",
                 },
-                html: null
-            }
-        }
+                html: null,
+            },
+        },
     ],
     NEWS: {
-        text: "Keine Neuigkeiten",
-        img_path: "/img/stock/zebra.jpg",
-        img_alt: "Drei Zebras",
-        img_pos: "left",
-        btn: false,
-        btn_text: undefined,
-        btn_link: undefined,
-        pdf: false,
-        pdf_src: undefined
-    }
-}
+        id: "error",
+        html: {
+            tagName: "DIV",
+            children: [
+                {
+                    tagName: "H1",
+                    children: [{ content: "Aktuell:", tagName: "___text___" }],
+                    attributes: { class: "news-title" },
+                },
+                {
+                    tagName: "P",
+                    children: [
+                        { content: "Keine Neuigkeiten", tagName: "___text___" },
+                    ],
+                    attributes: { class: "news-text", tabindex: "0" },
+                },
+            ],
+            attributes: { class: "news-div", tabindex: "0" },
+        },
+        type: "img",
+        src: "/img/stock/zebra.jpg",
+        position: "left",
+        date: new Date(),
+    },
+};
 
 export default BACKUP;

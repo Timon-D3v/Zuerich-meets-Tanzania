@@ -309,13 +309,15 @@ tr:nth-child(even) {
     font-size: 1.5em;
 }
 
-#content > *:hover {
+#content > *:hover,
+.news-div > *:hover:not(h1.news-title) {
     cursor: grab;
     border: dashed 4px var(--text-950);
     box-sizing: border-box;
 }
 
-#content > .active {
+#content > .active,
+.news-div > .active {
     cursor: auto;
     border: solid 4px var(--text-950);
     box-sizing: border-box;

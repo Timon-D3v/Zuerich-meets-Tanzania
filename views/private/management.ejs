@@ -17,11 +17,6 @@
         <main>
             <div class="general container">
                 <h1 class="basic-title">Webseiten</h1>
-                <p class="basic-text"><a class="basic-link" href="/private/createBlog">Zum Blog Builder</a></p>
-                <p class="basic-text"><a class="basic-link" href="https://analytics.google.com/analytics/web/">Google Analytics</a></p>
-                <p class="basic-text"><a class="basic-link" href="https://dashboard.stripe.com/dashboard">Stripe</a></p>
-                <p class="basic-text"><a class="basic-link" href="https://imagekit.io/dashboard/media-library">ImageKit</a></p>
-                <p class="basic-text"><a class="basic-link" href="https://app.mailjet.com/dashboard">Mailjet</a></p>
                 <div class="table-container">
                     <table>
                         <tr>
@@ -30,29 +25,40 @@
                             <th>Passwort</th>
                         </tr>
                         <tr>
-                            <td>Google</td>
+                            <td><a class="basic-link" href="https://analytics.google.com/analytics/web/">Google Analytics</a></td>
                             <td>zuerich.meets.tanzania@gmail.com</td>
                             <td><%= passwords.gmail %></td>
                         </tr>
                         <tr>
-                            <td>ImageKit</td>
+                            <td><a class="basic-link" href="https://imagekit.io/dashboard/media-library">ImageKit</a></td>
                             <td>zuerich.meets.tanzania@gmail.com</td>
                             <td><%= passwords.imagekit %></td>
                         </tr>
                         <tr>
-                            <td>Stripe</td>
+                            <td><a class="basic-link" href="https://dashboard.stripe.com/dashboard">Stripe</a></td>
                             <td>info@zurich-meets-tanzania.com</td>
                             <td><%= passwords.stripe %></td>
                         </tr>
                         <tr>
-                            <td>Mailjet</td>
+                            <td><a class="basic-link" href="https://app.mailjet.com/dashboard">Mailjet</a></td>
                             <td>info@zurich-meets-tanzania.com</td>
                             <td><%= passwords.mailjet %></td>
+                        </tr>
+                        <tr>
+                            <th style="border-right: 0;"></th>
+                            <th style="border-right: 0; border-left: 0; text-align: center;">Verwaltungsseiten</th>
+                            <th style="border-left: 0;"></th>
+                        </tr>
+                        <tr>
+                            <td><a class="basic-link" href="/private/createBlog">Zum Blog Builder</a></td>
+                            <td><a class="basic-link" href="/private/createNews">Zum News Builder</a></td>
+                            <td><a class="basic-link" href="/private/editNews">News Bearbeiten</a></td>
                         </tr>
                     </table>
                 </div>
             </div>
-            <div class="news-management container">
+            <div class="invisible"></div>
+            <div class="news-management invisible">
                 <h1 class="basic-title">Verwaltung Aktuelles</h1>
                 <p class="basic-text">Hier können News verteilt werden.</p>
                 <form id="news_form" action="/post/submitNews" method="POST">
@@ -87,9 +93,9 @@
             <div class="team-management container">
                 <h1 class="basic-title">Team Erstellen</h1>
                 <p class="basic-text">Hier kann ein neues Team erstellt werden</p>
-                <label for="team_name" class="basic-label">Leitsatz für das Team</label>
+                <label for="team-m-leitsatz" class="basic-label">Leitsatz für das Team</label>
                 <input type="text" class="basic-input" id="team-m-leitsatz">
-                <label for="team_desc" class="basic-label">Kurze Beschreibung</label>
+                <label for="team-m-beschreibung" class="basic-label">Kurze Beschreibung</label>
                 <input type="text" class="basic-input" id="team-m-beschreibung">
                 <label for="team-m-img" class="basic-label">Bild</label>
                 <input type="file" class="basic-input" id="team-m-img" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
@@ -100,14 +106,14 @@
                 <h1 class="basic-title">Mitglied hinzufügen</h1>
                 <p class="basic-text">Hier kann ein Mitglied zum Team hinzugefügt werden</p>
 
-                <label for="team_name" class="basic-label">E-Mail</label>
+                <label for="team-m-username" class="basic-label">E-Mail</label>
                 <input type="text" class="basic-input" id="team-m-username">
                 <!-- Damit bekomme ich Vor-/Nachnamen und das erste Bild -->
 
-                <label for="team_name" class="basic-label">Job</label>
+                <label for="team-m-job" class="basic-label">Job</label>
                 <input type="text" class="basic-input" id="team-m-job">
                 
-                <label for="team_name" class="basic-label">Motivation / Leitsatz</label>
+                <label for="team-m-motivation" class="basic-label">Motivation / Leitsatz</label>
                 <input type="text" class="basic-input" id="team-m-motivation">
 
                 <button type="submit" class="basic-button" id="team-m-add">Hinzufügen</button>
@@ -138,7 +144,8 @@
                 <input type="text" class="basic-input" id="delete-admin" placeholder="E-Mail">
                 <button type="button" id="submit-delete-admin" class="basic-button">Entfernen</button>
             </div>
-            <div class="container invisible">
+            <div class="invisible"></div>
+            <div class="invisible">
                 <h1 class="basic-title">Blogs zusammenfügen</h1>
                 <input type="number" class="basic-input" id="merge_blogs" placeholder="Anzahl Blogs" min="2" max="100">
                 <input type="text" class="basic-input" id="merge_blogs_title" placeholder="Zusammenfassender Titel">
@@ -201,7 +208,7 @@
                 <h1 class="basic-title">Neues Event hinzufügen</h1>
                 <label for="event_title" class="basic-label">Titel</label>
                 <input type="text" class="basic-input" id="event_title" placeholder="Titel" required>
-                <label for="event_data" class="basic-label">Datum (dd-mm-yyyy, Beispiel: 31-08-2024)</label>
+                <label for="event_date" class="basic-label">Datum (dd-mm-yyyy, Beispiel: 31-08-2024)</label>
                 <input type="text" class="basic-input" id="event_date" placeholder="Datum" required>
                 <button type="button" class="basic-button" id="event_submit">Hinzufügen</button>
             </div>
