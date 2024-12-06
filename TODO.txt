@@ -7,10 +7,3 @@ There is an error when sending the newsletter with images
 works with pdf for some strange reason
 
 shop btn: wir haben uns dagegen entschieden, ist aber kein problem => Dann Aber text
-
-
-Aktuelles Team verändern => auch möglichkeit für import in blog (btn für das?)
-
-Terminkalender bearbeiten
-
-Markdown erklärung
