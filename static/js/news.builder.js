@@ -212,17 +212,17 @@ function jsonToElm(options) {
 
 function markdownToHtml(text) {
     return text
-        .replace(/\*\*\*(.{1,})\*\*\*/gm, "<b>$1</b>")
-        .replace(/\_\_\_(.{1,})\_\_\_/gm, "<i>$1</i>")
-        .replace(/\+\+\+(.{1,})\+\+\+/gm, "<u>$1</u>")
-        .replace(/\{\[(.{1,})\]\((.{1,})\)}/gm, "<a href='$2' target='_blank'>$1</a>");
+        .replace(/\*\*\*([^\*]{1,})\*\*\*/gm, "<b>$1</b>")
+        .replace(/\_\_\_([^\_]{1,})\_\_\_/gm, "<i>$1</i>")
+        .replace(/\+\+\+([^\+]{1,})\+\+\+/gm, "<u>$1</u>")
+        .replace(/\{\[([^\]]+)\]\(([^)]+)\)\}/gm, "<a href='$2' target='_blank'>$1</a>");
 }
 
 function HTMLToMarkdown(text) {
     return text
-        .replace(/<b>(.{1,})<\/b>/gm, "***$1***")
-        .replace(/<i>(.{1,})<\/i>/gm, "___$1___")
-        .replace(/<u>(.{1,})<\/u>/gm, "+++")
-        .replace(/<a href='(.{1,})' target='_blank'>(.{1,})<\/a>/gm, "{[$2]($1)}");
+        .replace(/<b>((?:(?!<\/b>).)+)<\/b>/gm, "***$1***")
+        .replace(/<i>((?:(?!<\/b>).)+)<\/i>/gm, "___$1___")
+        .replace(/<u>((?:(?!<\/b>).)+)<\/u>/gm, "+++$1+++")
+        .replace(/<a href='([^']*)' target='_blank'>(.*?)<\/a>/gm, "{[$2]($1)}");
 }}, 500);
 });

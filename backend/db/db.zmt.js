@@ -454,12 +454,29 @@ export async function createTeam (date, spruch, desc, img) {
 export async function addTeamMember (user) {
     let query = "SELECT * FROM `zmt`.`team` ORDER BY `id` DESC LIMIT 1;";
     let [result] = await pool.query(query);
-    let team = result[0].members;
+    let team = result[0]?.members || [];
     team.push(user);
     query = "UPDATE `zmt`.`team` SET `members` = ? WHERE (`id` = ?);";
     await pool.query(query, [JSON.stringify(team), result[0].id]);
     return true;
 };
+
+export async function removeTeamMember (username) {
+    let query = "SELECT * FROM `zmt`.`team` ORDER BY `id` DESC LIMIT 1;";
+    let [result] = await pool.query(query);
+    let team = result[0]?.members || [];
+    let length = team.length;
+    for (let i = 0; i < team.length; i++) {
+        if (team[i].username === username) {
+            team.splice(i, 1);
+            break;
+        };
+    }
+    if (length === team.length) return false;
+    query = "UPDATE `zmt`.`team` SET `members` = ? WHERE (`id` = ?);";
+    await pool.query(query, [JSON.stringify(team), result[0].id]);
+    return true;
+}
 
 export async function updateGallery (title, gallery) {
     let query = "UPDATE `zmt`.`gallery` SET `date` = ?, `img` = ? WHERE (`title` = ?);";

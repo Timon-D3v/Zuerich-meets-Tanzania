@@ -76,7 +76,7 @@ const recovery_code = [];
 
 
 async function imagekitUpload (base64, name, folder) {
-    let res, fileName = name.replace(/[:\/\\<>{}?]/g, "_").replaceAll(" ", "_");
+    let res, fileName = name.replace(/[:\/\\<>{}?()]/g, "_").replaceAll(" ", "_");
     imagekit.upload({
         file: base64,
         fileName,
@@ -1829,9 +1829,10 @@ app.post("/post/addTeamMember", async (req, res) => {
 
     const { username, job, motivation } = req.body;
     const user = await db.getAccount(username);
-    const { name, family_name, picture } = user[0];
+    const { name, family_name, picture, email } = user[0];
 
     const data = {
+        username: email,
         name,
         family_name,
         picture,
@@ -1848,6 +1849,19 @@ app.post("/post/addTeamMember", async (req, res) => {
         });
 
     res.json({valid: result});
+});
+
+app.post("/post/removeTeamMember", async (req, res) => {
+    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+
+    try {
+        const result = await db.removeTeamMember(req.body.username);
+
+        res.json({valid: result});
+    } catch (error) {
+        console.error(error);
+        res.json({valid: false});
+    }
 });
 
 app.post("/post/updateGallery", async (req, res) => {

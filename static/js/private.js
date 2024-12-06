@@ -53,7 +53,7 @@ getElm("gallery_img_upload_submit").click(async () => {
     };
     const res = await post("/post/createGallery", {
         title,
-        subtitle,
+        subtitle: markdownToHtml(subtitle),
         author,
         img
     });
@@ -139,8 +139,8 @@ getElm("team-m-submit").click(async () => {
     }
 
     const res = await post("/post/createTeam", {
-        leitsatz: leitsatz.val(),
-        beschreibung: beschreibung.val(),
+        leitsatz: markdownToHtml(leitsatz.val()),
+        beschreibung: markdownToHtml(beschreibung.val()),
         base64
     });
 
@@ -162,7 +162,7 @@ getElm("delete_event_btn").click(async () => {
 
     if (title.valIsEmpty()) return alert("Bitte gib einen gültigen Titel ein.");
 
-    const res = await post("/post/deleteEvent", { title: title.val() });
+    const res = await post("/post/deleteEvent", { title: markdownToHtml(title.val()) });
 
     alert(res.valid ? "Event wurde gelöscht oder existiert nicht." : "Event konnte nicht gelöscht werden. Bitte versuche es später erneut.");
 });
@@ -222,11 +222,24 @@ getElm("team-m-add").click(async () => {
 
     const res = await post("/post/addTeamMember", {
         username: username.val(),
-        job: job.val(),
-        motivation: motivation.val()
+        job: markdownToHtml(job.val()),
+        motivation: markdownToHtml(motivation.val())
     });
 
     alert(res.valid ? "Erfolgreich hinzugefügt" : "Mitglied konnte nicht hinzugefügt werden");
+});
+
+getElm("team-m-remove").click(async () => {
+    const username = getElm("team-m-username-remove");
+
+    if (username.valIsEmpty()) {
+        alert("Bitte gib einen gültigen Benutzernamen ein");
+        return;
+    }
+
+    const res = await post("/post/removeTeamMember", { username: username.val() });
+
+    alert(res.valid ? "Erfolgreich entfernt" : "Mitglied konnte nicht entfernt werden");
 });
 
 getElm("event_submit").click(async e => {
@@ -237,9 +250,25 @@ getElm("event_submit").click(async e => {
     if (title.valIsEmpty() || date.valIsEmpty()) return alert("Bitte fülle alle Felder aus.");
 
     const res = await post("/post/addCalendarEvent", {
-        title: title.val(),
+        title: markdownToHtml(title.val()),
         date: date.val()
     });
 
     alert(res.message);
 });
+
+function markdownToHtml(text) {
+    return text
+        .replace(/\*\*\*([^\*]{1,})\*\*\*/gm, "<b>$1</b>")
+        .replace(/\_\_\_([^\_]{1,})\_\_\_/gm, "<i>$1</i>")
+        .replace(/\+\+\+([^\+]{1,})\+\+\+/gm, "<u>$1</u>")
+        .replace(/\{\[([^\]]+)\]\(([^)]+)\)\}/gm, "<a href='$2' target='_blank'>$1</a>");
+}
+
+function HTMLToMarkdown(text) {
+    return text
+        .replace(/<b>((?:(?!<\/b>).)+)<\/b>/gm, "***$1***")
+        .replace(/<i>((?:(?!<\/b>).)+)<\/i>/gm, "___$1___")
+        .replace(/<u>((?:(?!<\/b>).)+)<\/u>/gm, "+++$1+++")
+        .replace(/<a href='([^']*)' target='_blank'>(.*?)<\/a>/gm, "{[$2]($1)}");
+}

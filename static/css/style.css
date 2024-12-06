@@ -1761,6 +1761,11 @@ nav .mit-bild a {
     font-weight: 600;
 }
 
+.calendar-name > a {
+    font-family: inherit;
+    font-weight: inherit;
+}
+
 .calendar-more {
     margin-top: 2.5vh;
     font-size: 1rem;
