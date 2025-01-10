@@ -35,71 +35,62 @@ import ZMT from "./backend/constants/zmt.js";
 import TMZ from "./backend/constants/tmz.js";
 import GV from "./backend/constants/gv.js";
 
-
-
 const LOAD_LEVEL = "dev"; // Possible Values: "dev" or "prod"
 
-
-
-const app = express();/*
+const app = express(); /*
 const https_options = {
     key: fs.readFileSync("./cert/private.key.pem"),
     cert: fs.readFileSync("./cert/domain.cert.pem"),
     ca: fs.readFileSync("./cert/intermediate.cert.pem"),
 };*/
 
-
-
 app.set("view engine", "ejs");
 dotenv.config();
-
-
 
 const imagekit = new ImageKit({
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
     privateKey: process.env.IMAGEKIT_SECRET_KEY,
-    urlEndpoint: "https://ik.imagekit.io/zmt/"
+    urlEndpoint: "https://ik.imagekit.io/zmt/",
 });
 const mailjet = new Mailjet({
     apiKey: process.env.MAILJET_PUBLIC_KEY,
-    apiSecret: process.env.MAILJET_PRIVAT_KEY
+    apiSecret: process.env.MAILJET_PRIVAT_KEY,
 });
-const stripe = new Stripe(
-    LOAD_LEVEL === "prod" ?
-    process.env.STRIPE_PRIVATE_KEY :
-    process.env.STRIPE_PRIVATE_KEY_TEST    
-);
+const stripe = new Stripe(LOAD_LEVEL === "prod" ? process.env.STRIPE_PRIVATE_KEY : process.env.STRIPE_PRIVATE_KEY_TEST);
 const payment_keys = [];
 const newsletter_code = [];
 const recovery_code = [];
 
-
-
-async function imagekitUpload (base64, name, folder) {
-    let res, fileName = name.replace(/[:\/\\<>{}?()]/g, "_").replaceAll(" ", "_");
-    imagekit.upload({
-        file: base64,
-        fileName,
-        folder: folder,
-        useUniqueFileName: false
-    },
-    (err, result) => {
-        err ? res = err : res = result;
-    });
+async function imagekitUpload(base64, name, folder) {
+    let res,
+        fileName = name.replace(/[:\/\\<>{}?()]/g, "_").replaceAll(" ", "_");
+    imagekit.upload(
+        {
+            file: base64,
+            fileName,
+            folder: folder,
+            useUniqueFileName: false,
+        },
+        (err, result) => {
+            err ? (res = err) : (res = result);
+        },
+    );
     let path = "https://ik.imagekit.io/zmt" + folder + fileName;
     return {
         path,
-        res
+        res,
     };
-};
+}
 
-function toRealDate (date) {return timon.toDateString(new Date(date))};
+function toRealDate(date) {
+    return timon.toDateString(new Date(date));
+}
 
-function createMailSubject (obj) {
+function createMailSubject(obj) {
     return obj.author_name + " schreibt über Webseitenformular";
-};
+}
 
-function createMailText (obj) {
+function createMailText(obj) {
     let date = toRealDate(Date());
     let divider = "----------------------------------------------";
     let address = `${obj.author_name} ${obj.author_family_name} hat diese E-Mail hinterlegt: ${obj.author_email}`;
@@ -107,11 +98,9 @@ function createMailText (obj) {
     let footer2 = "Timon Fiedler ist nicht verantwortlich für eventuellen Spam oder andere Fehler, die durch den Endnutzer entstehen.";
     let part2 = `${divider}\n\n${obj.message}\n\n${divider}\n${address}\n${divider}\n\n${footer1}\n${footer2}`;
     return `${obj.author_name} ${obj.author_family_name} schreibt am ${date}: \n${part2}`;
-};
+}
 
-
-
-async function stripe_c_s_created (subscription_id, period_start, period_end, customer_id, start_date, status) {
+async function stripe_c_s_created(subscription_id, period_start, period_end, customer_id, start_date, status) {
     try {
         await db.createTempPayment(subscription_id, period_start, period_end, customer_id, start_date, status);
     } catch (err) {
@@ -121,46 +110,34 @@ async function stripe_c_s_created (subscription_id, period_start, period_end, cu
             Subject: "Kritischer Fehler",
             TextPart: "Ein kritischer Fehler ist aufgetreten\n\n" + message.replace("<br>", "\n") + err.message,
             HTMLPart: "<h1>Ein kritischer Fehler ist aufgetreten</h1><br><br><p>" + message + err.message + "</p>",
-            CustomID: timon.randomString(32)
+            CustomID: timon.randomString(32),
         });
-    };
-};
+    }
+}
 
-async function stripe_c_s_updated (subscription_id, period_start, period_end, status) {
+async function stripe_c_s_updated(subscription_id, period_start, period_end, status) {
     try {
         const member = await db.getMemberWithSubscriptionId(subscription_id);
-        const data = [
-            period_start,
-            period_end,
-            status
-        ];
+        const data = [period_start, period_end, status];
 
         if (member.length > 0) {
             member = member[0];
-            const update = [
-                db.updateMemberPeriodStart,
-                db.updateMemberPeriodEnd,
-                db.updateMemberStatus
-            ];
+            const update = [db.updateMemberPeriodStart, db.updateMemberPeriodEnd, db.updateMemberStatus];
 
             data.forEach(async (set, i) => {
                 if (typeof set !== "undefined") await update[i](subscription_id, set);
             });
         } else {
-            const update = [
-                db.updateTempSubscriptionPeriodStart,
-                db.updateTempSubscriptionPeriodEnd,
-                db.updateTempSubscriptionStatus
-            ];
+            const update = [db.updateTempSubscriptionPeriodStart, db.updateTempSubscriptionPeriodEnd, db.updateTempSubscriptionStatus];
 
             data.forEach(async (set, i) => {
                 try {
                     if (typeof set !== "undefined") await update[i](subscription_id, set);
                 } catch (err) {
                     console.error("Error:", err);
-                };
+                }
             });
-        };
+        }
     } catch (err) {
         const message = "Beim Erneuern des Abos eines Benutzers ist ein kritischer Fehler aufgetreten. Bitte sofort überprüfen (lassen).<br><br>Weitere Informationen:";
         timon.errorLog(err.message);
@@ -168,12 +145,12 @@ async function stripe_c_s_updated (subscription_id, period_start, period_end, st
             Subject: "Kritischer Fehler",
             TextPart: "Ein kritischer Fehler ist aufgetreten\n\n" + message.replace("<br>", "\n") + err.message,
             HTMLPart: "<h1>Ein kritischer Fehler ist aufgetreten</h1><br><br><p>" + message + err.message + "</p>",
-            CustomID: timon.randomString(32)
+            CustomID: timon.randomString(32),
         });
-    };
-};
+    }
+}
 
-async function stripe_c_s_deleted (subscription_id) {
+async function stripe_c_s_deleted(subscription_id) {
     try {
         const [member] = await db.getMemberWithSubscriptionId(subscription_id);
         const user_id = member.user_id;
@@ -186,12 +163,12 @@ async function stripe_c_s_deleted (subscription_id) {
             Subject: "Kritischer Fehler",
             TextPart: "Ein kritischer Fehler ist aufgetreten\n\n" + message.replace("<br>", "\n") + err.message,
             HTMLPart: "<h1>Ein kritischer Fehler ist aufgetreten</h1><br><br><p>" + message + err.message + "</p>",
-            CustomID: timon.randomString(32)
+            CustomID: timon.randomString(32),
         });
-    };
-};
+    }
+}
 
-async function stripe_i_p_success (customer_id, pdf, url) {
+async function stripe_i_p_success(customer_id, pdf, url) {
     try {
         const session = await db.getSubscriptionIdWithCustomerId(customer_id);
         let subscription_id;
@@ -200,97 +177,101 @@ async function stripe_i_p_success (customer_id, pdf, url) {
             subscription_id = subscription_id.subscription_id;
         } else {
             subscription_id = session.sub_id;
-        };
+        }
         await db.addInvoiceToDatabase(subscription_id, pdf, url);
     } catch (err) {
         timon.errorLog(err);
-    };
-};
+    }
+}
 
-async function buyMembership (user, key, url) {
+async function buyMembership(user, key, url) {
     try {
         const session = await stripe.checkout.sessions.create({
-            line_items: [{
-                price: LOAD_LEVEL === "prod" ? 
-                    process.env.STRIPE_PRICE_MEMBERSHIP :
-                    process.env.STRIPE_PRICE_MEMBERSHIP_TEST,
-                quantity: 1
-            }],
+            line_items: [
+                {
+                    price: LOAD_LEVEL === "prod" ? process.env.STRIPE_PRICE_MEMBERSHIP : process.env.STRIPE_PRICE_MEMBERSHIP_TEST,
+                    quantity: 1,
+                },
+            ],
             mode: "subscription",
             success_url: `${url}/return`,
-            cancel_url: `${url}/spenden`
+            cancel_url: `${url}/spenden`,
         });
 
-        await db.linkUserWithSession(user, session.id, key)
+        await db.linkUserWithSession(user, session.id, key);
 
         return session.url;
     } catch (err) {
         timon.log(err.message);
         return `/spenden?js=errorField`;
-    };
-};
+    }
+}
 
-async function saveVideo (base64, type) {
-    type === "video/mp4" ?
-    type = ".mp4" :
-    type = ".mov";
+async function saveVideo(base64, type) {
+    type === "video/mp4" ? (type = ".mp4") : (type = ".mov");
     const video = path.resolve(dirname(fileURLToPath(import.meta.url)), `./static/vid/${timon.randomString(32) + type}`);
-    fs.writeFile(video, base64.split(';base64,').pop(), "base64", err => {
-        if (err) console.error('Error saving video:', err);
+    fs.writeFile(video, base64.split(";base64,").pop(), "base64", (err) => {
+        if (err) console.error("Error saving video:", err);
     });
     return video;
-};
+}
 
 async function downloadFileAsBase64(fileUrl) {
     return new Promise((resolve, reject) => {
-        https.get(fileUrl, function(response) {
-            const chunks = [];
-    
-            response.on('data', function(chunk) {
-                chunks.push(chunk);
-            });
-    
-            response.on('end', function() {
-                const buffer = Buffer.concat(chunks);
-                const base64String = buffer.toString('base64');
-                
-                resolve(base64String);
-            });
-        }).on('error', function(err) {
-            reject(err);
-        });
-    });
-};
+        https
+            .get(fileUrl, function (response) {
+                const chunks = [];
 
-async function sendMail (email, data, files = [], test = false) {
+                response.on("data", function (chunk) {
+                    chunks.push(chunk);
+                });
+
+                response.on("end", function () {
+                    const buffer = Buffer.concat(chunks);
+                    const base64String = buffer.toString("base64");
+
+                    resolve(base64String);
+                });
+            })
+            .on("error", function (err) {
+                reject(err);
+            });
+    });
+}
+
+async function sendMail(email, data, files = [], test = false) {
     try {
         const { Subject, TextPart, HTMLPart, CustomID } = data;
-        const req = await mailjet.post("send", {version: "v3.1"}).request({
-            Messages: [{
-                From: {
-                    Email: EMAILS.sender_email,
-                    Name: EMAILS.sender_name
+        const req = await mailjet.post("send", { version: "v3.1" }).request({
+            Messages: [
+                {
+                    From: {
+                        Email: EMAILS.sender_email,
+                        Name: EMAILS.sender_name,
+                    },
+                    To: [
+                        {
+                            Email: email,
+                        },
+                    ],
+                    Subject,
+                    TextPart,
+                    HTMLPart,
+                    CustomID,
+                    Attachments: files,
                 },
-                To: [{
-                    Email: email
-                }],
-                Subject,
-                TextPart,
-                HTMLPart,
-                CustomID,
-                Attachments: files
-            }],
-            SandboxMode: test
+            ],
+            SandboxMode: test,
         });
         return req;
     } catch (err) {
         console.error(err.message);
         return err;
-    };
-};
+    }
+}
 
-function sendNewsletterEmail (recipients, subject, text, files = []) {
-    recipients.forEach(recipient => {
+function sendNewsletterEmail(recipients, subject, text, files = []) {
+    recipients.forEach((recipient) => {
         let { anschrift, anschrift_html } = EMAILS;
         const { header, newsletter, grüsse_html, footer } = EMAILS;
 
@@ -312,7 +293,7 @@ function sendNewsletterEmail (recipients, subject, text, files = []) {
 
             anschrift = anschrift.replace("___GENDER___", recipient.vorname);
             anschrift_html = anschrift_html.replace("___GENDER___", recipient.vorname);
-        };
+        }
 
         anschrift = anschrift.replace("___NACHNAME___", recipient.nachname);
         anschrift_html = anschrift_html.replace("___NACHNAME___", recipient.nachname);
@@ -321,13 +302,13 @@ function sendNewsletterEmail (recipients, subject, text, files = []) {
             Subject: subject,
             TextPart: anschrift + text + EMAILS.grüsse,
             HTMLPart: header + anschrift_html + newsletter + text + "</p>" + grüsse_html + footer,
-            CustomID: "Newsletter"
+            CustomID: "Newsletter",
         };
         sendMail(recipient.email, data, files);
     });
-};
+}
 
-function sendMailCode (email, user) {
+function sendMailCode(email, user) {
     let { anschrift, anschrift_html } = EMAILS;
     const { header, newsletter, grüsse_html, footer } = EMAILS;
 
@@ -349,7 +330,7 @@ function sendMailCode (email, user) {
 
         anschrift = anschrift.replace("___GENDER___", user.vorname);
         anschrift_html = anschrift_html.replace("___GENDER___", user.vorname);
-    };
+    }
 
     anschrift = anschrift.replace("___NACHNAME___", user.nachname);
     anschrift_html = anschrift_html.replace("___NACHNAME___", user.nachname);
@@ -360,15 +341,15 @@ function sendMailCode (email, user) {
     const data = {
         Subject: "Newsletter Abmeldung",
         TextPart: anschrift + text + EMAILS.grüsse,
-        HTMLPart: header + anschrift_html + newsletter.substring(0,304) + text + "</p>" + grüsse_html + footer,
-        CustomID: "Newsletter Abmeldung"
+        HTMLPart: header + anschrift_html + newsletter.substring(0, 304) + text + "</p>" + grüsse_html + footer,
+        CustomID: "Newsletter Abmeldung",
     };
     sendMail(email, data);
 
     return code;
-};
+}
 
-function sendRecoveryCode (email, user) {
+function sendRecoveryCode(email, user) {
     let { anschrift, anschrift_html } = EMAILS;
     const { header, newsletter, grüsse_html, footer } = EMAILS;
 
@@ -387,19 +368,19 @@ function sendRecoveryCode (email, user) {
     const data = {
         Subject: "Passwort zurücksetzen",
         TextPart: anschrift + text + EMAILS.grüsse,
-        HTMLPart: header + anschrift_html + newsletter.substring(0,304) + text + "</p>" + grüsse_html + footer,
-        CustomID: "Passwort zurücksetzen"
+        HTMLPart: header + anschrift_html + newsletter.substring(0, 304) + text + "</p>" + grüsse_html + footer,
+        CustomID: "Passwort zurücksetzen",
     };
     sendMail(email, data);
 
     return code;
-};
+}
 
-async function sendRecoveryPassword (email) {
+async function sendRecoveryPassword(email) {
     let { anschrift, anschrift_html } = EMAILS;
     const { header, newsletter, grüsse_html, footer } = EMAILS;
 
-    const [ user ] = await db.getAccount(email);
+    const [user] = await db.getAccount(email);
 
     const { id, name, family_name, phone } = user;
 
@@ -420,48 +401,50 @@ async function sendRecoveryPassword (email) {
     const data = {
         Subject: "Neues Passwort",
         TextPart: anschrift + text + EMAILS.grüsse,
-        HTMLPart: header + anschrift_html + newsletter.substring(0,304) + text + "</p>" + grüsse_html + footer,
-        CustomID: "Neues Passwort"
+        HTMLPart: header + anschrift_html + newsletter.substring(0, 304) + text + "</p>" + grüsse_html + footer,
+        CustomID: "Neues Passwort",
     };
     sendMail(email, data);
-};
+}
 
-async function sendContactMail (body) {
+async function sendContactMail(body) {
     const { header, footer } = EMAILS;
     const data = {
         Subject: createMailSubject(body),
         TextPart: createMailText(body),
         HTMLPart: header + "<p>" + createMailText(body).replaceAll("\n", "<br>") + "</p>" + footer,
-        CustomID: "Contact Form"
+        CustomID: "Contact Form",
     };
     const result = await sendMail("info@zurich-meets-tanzania.com", data);
     return result.response.status;
-};
-
-
+}
 
 app.use(express.static("./static"));
-app.use(express.urlencoded({
-    extended: true,
-    limit: "10000mb"
-}));
+app.use(
+    express.urlencoded({
+        extended: true,
+        limit: "10000mb",
+    }),
+);
 app.use((req, res, next) => {
     if (req.originalUrl === "/post/stripe/webhook") {
         next();
     } else {
-        express.json({limit: "10000mb"})(req, res, next);
+        express.json({ limit: "10000mb" })(req, res, next);
     }
 });
-app.use(session({
-    secret: process.env.SESSION_SECRET_KEY,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: false,
-        maxAge: 432000000
-    }
-}));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET_KEY,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            secure: false,
+            maxAge: 432000000,
+        },
+    }),
+);
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use((req, res, next) => {
     if (req.originalUrl === "/post/stripe/webhook") {
         next();
@@ -474,26 +457,23 @@ app.use(cors());
 if (LOAD_LEVEL === "prod") {
     app.use((req, res, next) => {
         const get = req.get.bind(req);
-        req.get = query => {
+        req.get = (query) => {
             if (query === "host") return "www.zurich-meets-tanzania.com";
             return get(query);
         };
         next();
     });
-};
-
-
-
-
+}
 
 app.get("/home", (req, res) => res.status(301).redirect("/"));
 app.get("/", async (req, res) => {
-    let blogs = await db.getLastXBlogs(4)
-        .catch(() => {return BACKUP.BLOGS});
-    let news = await db.getNews()
-        .catch(() => {return BACKUP.NEWS});
-    let events = await db.getLast5Events()
-        .catch(() => [{ title: "Keine Events gefunden", date: "" }]);
+    let blogs = await db.getLastXBlogs(4).catch(() => {
+        return BACKUP.BLOGS;
+    });
+    let news = await db.getNews().catch(() => {
+        return BACKUP.NEWS;
+    });
+    let events = await db.getLast5Events().catch(() => [{ title: "Keine Events gefunden", date: "" }]);
     res.render("index.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -509,7 +489,7 @@ app.get("/", async (req, res) => {
         member_list: ABOUT_US.TEAM,
         hero: HERO,
         events,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -531,7 +511,7 @@ app.get("/login", async (req, res) => {
         sitetype: "login",
         user: null,
         js: req.query.js,
-        redir: redir
+        redir: redir,
     });
 });
 
@@ -546,7 +526,7 @@ app.get("/shop", async (req, res) => {
         desc: "Auf dieser Seite können Sie direkt zum Unikat Höngg weiter um die einzigartigen Unikate zu kaufen, die beim Kauf den Verein unterstützen.",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js
+        js: req.query.js,
     });
 });
 
@@ -565,7 +545,7 @@ app.get("/profile", async (req, res) => {
         desc: "Dein Profil und alle Einstellungen auf einer Seite.",
         sitetype: "profile",
         user: req.session.user,
-        js: req.query.js
+        js: req.query.js,
     });
 });
 
@@ -582,7 +562,7 @@ app.get("/contact", (req, res) => {
         desc: "Über diese Seite kannst du uns ganz einfach kontaktieren, indem du uns eine E-Mail schreibst. Wir geben unser Bestes, so schnell wie möglich zu antworten.",
         sitetype: "contact",
         user: req.session.user,
-        js: req.query.js
+        js: req.query.js,
     });
 });
 
@@ -599,7 +579,7 @@ app.get("/zurich-meets-tanzania", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         zmt: ZMT,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -616,7 +596,7 @@ app.get("/tanzania-meets-zurich", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         tmz: TMZ,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -635,7 +615,7 @@ app.get("/vorstand", (req, res) => {
         js: req.query.js,
         member_list: ABOUT_US.TEAM,
         vorstand: VORSTAND,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -652,7 +632,7 @@ app.get("/team", async (req, res) => {
         user: req.session.user,
         js: req.query.js,
         team: TEAM,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -673,7 +653,7 @@ app.get("/vision", (req, res) => {
         js: req.query.js,
         toRealDate,
         text: VISION.text,
-        bild: VISION.bild
+        bild: VISION.bild,
     });
 });
 
@@ -705,7 +685,7 @@ app.get("/Wie%20alles%20begann", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         toRealDate,
-        text: BEGINNING
+        text: BEGINNING,
     });
 });
 
@@ -721,7 +701,7 @@ app.get("/tanzania", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         toRealDate,
-        tanzania: TANZANIA
+        tanzania: TANZANIA,
     });
 });
 
@@ -738,7 +718,7 @@ app.get("/projects/chirurgie", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         toRealDate,
-        chirurgie: CHIRURGIE
+        chirurgie: CHIRURGIE,
     });
 });
 
@@ -755,7 +735,7 @@ app.get("/projects/bajaji", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         toRealDate,
-        bajaji: BAJAJI
+        bajaji: BAJAJI,
     });
 });
 
@@ -772,7 +752,7 @@ app.get("/projects/kardiologie", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         toRealDate,
-        kardiologie: KARDIOLOGIE
+        kardiologie: KARDIOLOGIE,
     });
 });
 
@@ -788,7 +768,7 @@ app.get("/finanzen", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         toRealDate,
-        finanzen: FINANZEN
+        finanzen: FINANZEN,
     });
 });
 
@@ -805,7 +785,7 @@ app.get("/statuten", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         statuten: STATUTEN.data,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -821,7 +801,7 @@ app.get("/impressum", (req, res) => {
         sitetype: "static",
         user: req.session.user,
         js: req.query.js,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -836,7 +816,7 @@ app.get("/erfolgsrechnung", (req, res) => {
         desc: "Die Erfolgsrechnung und Bilanz des Vereins",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js
+        js: req.query.js,
     });
 });
 
@@ -856,7 +836,7 @@ app.get("/projects/meducation", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         meducation: MEDUCATION,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -873,7 +853,7 @@ app.get("/projects/mbuzi", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         mbuzi: MBUZI,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -890,7 +870,7 @@ app.get("/generalversammlung", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         gv: GV,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -915,7 +895,7 @@ app.get("/projects/gyn%C3%A4kologie", (req, res) => {
         user: req.session.user,
         js: req.query.js,
         gyno: GYNO,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -932,7 +912,7 @@ app.get("/spenden", (req, res) => {
         sitetype: "static",
         user: req.session.user,
         js: req.query.js,
-        donate: DONATE
+        donate: DONATE,
     });
 });
 
@@ -941,19 +921,7 @@ app.get("/pay", async (req, res) => {
     const types = ["membership", "onetime"];
     const amount = Number(q.a);
     if (!payment_keys.includes(q.key) || isNaN(amount) || !types.includes(q.t)) return res.redirect("/");
-    const links = LOAD_LEVEL === "prod" ? [
-        DONATE.ZAHLUNG.linkX,
-        DONATE.ZAHLUNG.link50,
-        DONATE.ZAHLUNG.link80,
-        DONATE.ZAHLUNG.link120,
-        DONATE.ZAHLUNG.member
-    ] : [
-        DONATE.ZAHLUNG.dev.linkX,
-        DONATE.ZAHLUNG.dev.link50,
-        DONATE.ZAHLUNG.dev.link80,
-        DONATE.ZAHLUNG.dev.link120,
-        DONATE.ZAHLUNG.dev.member
-    ];
+    const links = LOAD_LEVEL === "prod" ? [DONATE.ZAHLUNG.linkX, DONATE.ZAHLUNG.link50, DONATE.ZAHLUNG.link80, DONATE.ZAHLUNG.link120, DONATE.ZAHLUNG.member] : [DONATE.ZAHLUNG.dev.linkX, DONATE.ZAHLUNG.dev.link50, DONATE.ZAHLUNG.dev.link80, DONATE.ZAHLUNG.dev.link120, DONATE.ZAHLUNG.dev.member];
     let link = links[0];
     if (amount === 50) link = links[1];
     else if (amount === 80) link = links[2];
@@ -963,7 +931,7 @@ app.get("/pay", async (req, res) => {
         if (!req.session?.user?.valid) return res.redirect("/login?redir=/spenden");
         if (req.session.user.type === "member" || req.session.user.type === "admin") return res.redirect("/?js=infoField(`Du bist schon ein Mitglied`);nofunction");
         link = await buyMembership(req.session.user, q.key, req.protocol + "://" + req.get("host"));
-    };
+    }
 
     // if (req.session?.user?.valid) {
     //     link += "?prefilled_email=" + req.session.user.email;
@@ -984,12 +952,12 @@ app.get("/return", async (req, res) => {
             id: user.id === user_details.user_id,
             username: user.username === user_details.username,
             password: user.password === user_details.user_password,
-            key: payment_keys.includes(user_details.pay_key)
+            key: payment_keys.includes(user_details.pay_key),
         };
 
         for (const property in auth) {
             if (auth[property] === false) throw new Error(`Dein ${property} stimmt nicht mit denjenigen auf der Bestellung überein.`);
-        };
+        }
 
         const session = await stripe.checkout.sessions.retrieve(user_details.session_id);
         const subscription_id = session.subscription;
@@ -1000,7 +968,7 @@ app.get("/return", async (req, res) => {
             if (admin === 0) {
                 req.session.user.type = "member";
                 await db.addMemberWithUserId(user.id);
-            };
+            }
             await db.createMember(user.id, subscription_id, result.customer_id, result.status, result.period_start, result.period_end, result.start_date, admin);
             await db.updateMemberStatus(subscription_id, "paid");
             return res.redirect(`/profile?js=successField(\`Die Zahlung war erfolgreich. Danke, dass du ein Mitglied von Zurich meets Tanzania bist!\`);nofunction`);
@@ -1008,10 +976,10 @@ app.get("/return", async (req, res) => {
             throw new Error("Die Zahlung steht noch offen. Bitte beende deine Zahlung ordnungsgemäss.");
         } else if (session.status === "expired") {
             throw new Error("Die Zahlung hat zu lange gedauert, bitte versuche es erneut...");
-        };
+        }
     } catch (err) {
         return res.redirect(`/spenden?js=errorField(\`${err.message}\`);nofunction`);
-    };
+    }
     res.redirect("/");
 });
 
@@ -1025,7 +993,7 @@ app.get("/newsletter/abmelden", (req, res) => {
         desc: "Hier kannst du dich von unserem Newsletter abmelden.",
         sitetype: "newsletter",
         user: req.session.user,
-        js: undefined
+        js: undefined,
     });
 });
 
@@ -1033,29 +1001,30 @@ app.get("/chunks/team/getCurrentTeam", async (req, res) => {
     if (req?.session?.user?.type !== "admin") return res.redirect("/");
     const team = await db.getCurrentTeamInfo();
     res.render("./snippets/teamMember.ejs", {
-        members: team.members
+        members: team.members,
     });
 });
 
 app.get("/gallery/:id", (req, res) => res.status(301).redirect("/galerie/" + req.params.id));
 app.get("/galerie/:id", async (req, res) => {
-    let result = await db.getGalleyWhereTitle(req.params.id)
-        .catch(() => res.redirect("/"));
+    let result = await db.getGalleyWhereTitle(req.params.id).catch(() => res.redirect("/"));
     result = result?.[0];
-    result ? res.render("gallery.ejs", {
-        env: LOAD_LEVEL,
-        url: req.url,
-        origin_url: req.protocol + "://" + req.get("host"),
-        date: result.date,
-        title: result.title,
-        desc: result.subtitle + " | Uploaded by " + result.author,
-        sitetype: "gallery",
-        user: req.session.user,
-        js: req.query.js,
-        img: result.img,
-        subtitle: result.subtitle,
-        toRealDate
-    }) : res.redirect("/");
+    result
+        ? res.render("gallery.ejs", {
+              env: LOAD_LEVEL,
+              url: req.url,
+              origin_url: req.protocol + "://" + req.get("host"),
+              date: result.date,
+              title: result.title,
+              desc: result.subtitle + " | Uploaded by " + result.author,
+              sitetype: "gallery",
+              user: req.session.user,
+              js: req.query.js,
+              img: result.img,
+              subtitle: result.subtitle,
+              toRealDate,
+          })
+        : res.redirect("/");
 });
 
 app.get("/blog/:id", async (req, res) => {
@@ -1072,7 +1041,7 @@ app.get("/blog/:id", async (req, res) => {
             sitetype: "blog",
             user: req.session.user,
             js: req.query.js,
-            blog: JSON.stringify(blog.data)
+            blog: JSON.stringify(blog.data),
         });
     } catch (error) {
         console.error(error);
@@ -1097,7 +1066,7 @@ app.get("/private/blog/:id", async (req, res) => {
             sitetype: "private",
             user: req.session.user,
             js: req.query.js,
-            blog: JSON.stringify(blog.data)
+            blog: JSON.stringify(blog.data),
         });
     } catch (error) {
         console.error(error);
@@ -1117,7 +1086,8 @@ app.get("/private/:id", async (req, res) => {
                 gmail: process.env.PASSWORD_GMAIL_ACCOUNT,
                 imagekit: process.env.PASSWORD_IMAGEKIT_ACCOUNT,
                 stripe: process.env.PASSWORD_STRIPE_ACCOUNT,
-                mailjet: process.env.PASSWORD_MAILJET_ACCOUNT
+                mailjet: process.env.PASSWORD_MAILJET_ACCOUNT,
+                infomaniak: process.env.PASSWORD_INFOMANIAK_ACCOUNT,
             };
             res.render("private/management.ejs", {
                 env: LOAD_LEVEL,
@@ -1131,7 +1101,7 @@ app.get("/private/:id", async (req, res) => {
                 js: req.query.js,
                 all_users: users,
                 all_newsletter: newsletter,
-                passwords: passwords
+                passwords: passwords,
             });
             break;
         case "writeBlog":
@@ -1144,7 +1114,7 @@ app.get("/private/:id", async (req, res) => {
                 desc: "Hier können die Mitglieder des Vereins Blogposts erstellen.",
                 sitetype: "private",
                 user: req.session.user,
-                js: req.query.js
+                js: req.query.js,
             });
             break;
         case "createBlog":
@@ -1157,7 +1127,7 @@ app.get("/private/:id", async (req, res) => {
                 desc: "Hier können die Mitglieder des Vereins Blogposts erstellen.",
                 sitetype: "private",
                 user: req.session.user,
-                js: req.query.js
+                js: req.query.js,
             });
             break;
         case "createNews":
@@ -1171,12 +1141,11 @@ app.get("/private/:id", async (req, res) => {
                 sitetype: "private",
                 user: req.session.user,
                 js: req.query.js,
-                news: TEMPLATE.NEWS
+                news: TEMPLATE.NEWS,
             });
             break;
         case "editNews":
-            const news = await db.getNews()
-                .catch(() => BACKUP.NEWS);
+            const news = await db.getNews().catch(() => BACKUP.NEWS);
             res.render("private/editNews.ejs", {
                 env: LOAD_LEVEL,
                 url: req.url,
@@ -1187,21 +1156,21 @@ app.get("/private/:id", async (req, res) => {
                 sitetype: "private",
                 user: req.session.user,
                 js: req.query.js,
-                news
+                news,
             });
             break;
         default:
             res.redirect("/error404");
             break;
-    };
+    }
 });
 
 app.get("/getEvents/:num", async (req, res) => {
-    const result = await db.getLastXEvents(+req.params.num).catch(err => {
-        if (err) return [{title: "Keine Events gefunden", date: "2000-01-01"}]
+    const result = await db.getLastXEvents(+req.params.num).catch((err) => {
+        if (err) return [{ title: "Keine Events gefunden", date: "2000-01-01" }];
     });
     res.render("./snippets/calendar.ejs", {
-        events: result
+        events: result,
     });
 });
 
@@ -1212,8 +1181,9 @@ app.get("/archiv", async (req, res) => {
     let count = req.query?.count;
     if (typeof count === "undefined") count = 5;
     if (typeof count === "string") count = Number(count);
-    const news = await db.getXNews(count)
-    .catch(() => {return [BACKUP.NEWS]});
+    const news = await db.getXNews(count).catch(() => {
+        return [BACKUP.NEWS];
+    });
     res.render("news_archiv.ejs", {
         env: LOAD_LEVEL,
         url: req.url,
@@ -1226,7 +1196,7 @@ app.get("/archiv", async (req, res) => {
         js: req.query.js,
         news,
         toRealDate,
-        count
+        count,
     });
 });
 
@@ -1241,7 +1211,7 @@ app.get("/datenschutz", (req, res) => {
         sitetype: "static",
         user: req.session.user,
         js: req.query.js,
-        toRealDate
+        toRealDate,
     });
 });
 
@@ -1255,23 +1225,18 @@ app.get("/*", (req, res) => {
         title: "Seite nicht gefunden",
         desc: `Wir konnten die Seite ${url}${req.url} leider nicht finden...`,
         sitetype: "error",
-        user: req.session.user
+        user: req.session.user,
     });
 });
-
-
-
-
 
 app.post("/post/login", async (req, res) => {
     let username = req.body.username,
         password = req.body.password,
         error;
-    let result = await db.validateAccount(username, password)
-        .catch(err => {
-            error = err.message;
-            return {valid: false};
-        });
+    let result = await db.validateAccount(username, password).catch((err) => {
+        error = err.message;
+        return { valid: false };
+    });
     if (result.valid) {
         req.session.user = result;
         req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
@@ -1282,88 +1247,88 @@ app.post("/post/login", async (req, res) => {
 app.post("/post/signUp", async (req, res) => {
     let data = req.body;
     let users = await db.getAccount(data.username);
-    if (users.length > 0) return res.json({message:"Dieser Benutzername ist schon vergeben."});
+    if (users.length > 0) return res.json({ message: "Dieser Benutzername ist schon vergeben." });
     if (data.picture !== "/img/svg/personal.svg") {
         data.picture = await imagekitUpload(data.picture, data.username + "_" + timon.randomString(32), "/users/");
         data.picture = data.picture.path;
-    };
+    }
     // The project started with the login being a username. This changed all the way in in September 2024
     /* Since the username was used like the users ID on the webpage, it would be to time consuming to change everything to the email and 
        therefore we decided to just automatically set the username to the same value as the email. */
-    let result = await db.createAccount(data.email /* This was the username */, data.password, data.name, data.family_name, data.email, data.picture, data.phone, data.address)
-        .catch(err => res.json({ valid: false, message: err }));
+    let result = await db.createAccount(data.email /* This was the username */, data.password, data.name, data.family_name, data.email, data.picture, data.phone, data.address).catch((err) => res.json({ valid: false, message: err }));
     if (result.username) {
         req.session.user = result;
         req.session.user.valid = true;
         req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
         res.json({ valid: true });
-    };
+    }
 });
 
 app.post("/logout", (req, res) => {
-    if (req.session?.user) req.session.destroy(err => {
-        if (err) return res.status(500).json({status: 500});
-    });
-    res.status(200).json({status: 200});
+    if (req.session?.user)
+        req.session.destroy((err) => {
+            if (err) return res.status(500).json({ status: 500 });
+        });
+    res.status(200).json({ status: 200 });
 });
 
 app.post("/post/newsletter/signUp", async (req, res) => {
     const emails = await db.getAllNewsletterEmails();
     if (emails.includes(req.body.email)) {
-        return res.json({status: "Du bist schon angemeldet."});
-    };
-    let result = await db.newsletterSignUp(req.body)
-        .catch(error => {
-            console.error("An Error occurred:", error);
-            return "No connection to database";
-        });
-    res.json({status: result});
-});
-
-app.post("/post/newsletter/signUp/logedIn", async (req, res) => {
-    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
-    let result = await db.newsletterSignUp({
-        gender: req.body.gender,
-        vorname: req.session.user.name,
-        nachname: req.session.user.family_name,
-        email: req.session.user.email
-    })
-    .catch(error => {
+        return res.json({ status: "Du bist schon angemeldet." });
+    }
+    let result = await db.newsletterSignUp(req.body).catch((error) => {
         console.error("An Error occurred:", error);
         return "No connection to database";
     });
-    res.json({status: result});
+    res.json({ status: result });
+});
+
+app.post("/post/newsletter/signUp/logedIn", async (req, res) => {
+    if (!req.session?.user?.valid) return res.json({ error: "501: Forbidden" });
+    let result = await db
+        .newsletterSignUp({
+            gender: req.body.gender,
+            vorname: req.session.user.name,
+            nachname: req.session.user.family_name,
+            email: req.session.user.email,
+        })
+        .catch((error) => {
+            console.error("An Error occurred:", error);
+            return "No connection to database";
+        });
+    res.json({ status: result });
 });
 
 app.post("/post/newsletter/signOff", async (req, res) => {
-    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    if (!req.session?.user?.valid) return res.json({ error: "501: Forbidden" });
     db.newsletterSignOff(req.session.user.email);
     res.end();
 });
 
 app.post("/post/newsletter/check", async (req, res) => {
-    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    if (!req.session?.user?.valid) return res.json({ error: "501: Forbidden" });
     let result = await db.newsletterCheck(req.session.user.email);
-    res.json({check: result});
+    res.json({ check: result });
 });
 
 app.post("/post/blog", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
 
     const object = req.body.json;
     const fileArray = [];
 
-    const saveImg = obj => {
+    const saveImg = (obj) => {
         if (obj.tagName === "IMG") {
             fileArray.push({
                 id: obj.attributes.id,
                 alt: obj.attributes.alt,
-                base64: obj.attributes.src
+                base64: obj.attributes.src,
             });
         }
 
         if (Array.isArray(obj?.children)) {
-            obj.children.forEach(elm => {
+            obj.children.forEach((elm) => {
                 saveImg(elm);
             });
         }
@@ -1372,10 +1337,8 @@ app.post("/post/blog", async (req, res) => {
     await saveImg(object.html);
 
     if (object.hero.src.includes("data:image")) {
-
         const { path } = await imagekitUpload(object.hero.src, object.hero.title + `___${timon.randomString(32)}`, "/blog/");
         object.hero.src = path;
-
     }
 
     let json = JSON.stringify(object);
@@ -1383,12 +1346,12 @@ app.post("/post/blog", async (req, res) => {
     for (let i = 0; i < fileArray.length; i++) {
         if (!fileArray[i].base64.includes("data:image")) continue;
 
-        const { path } = await imagekitUpload(fileArray[i].base64, fileArray[i].alt + "___" +  fileArray[i].id, "/blog/");
+        const { path } = await imagekitUpload(fileArray[i].base64, fileArray[i].alt + "___" + fileArray[i].id, "/blog/");
 
         const done = json.split("data:")[0];
         const rest = json.replace(done, "");
 
-        const base64 = rest.split("\"")[0];
+        const base64 = rest.split('"')[0];
         const todo = rest.replace(base64, "");
 
         json = done + path + todo;
@@ -1396,33 +1359,33 @@ app.post("/post/blog", async (req, res) => {
 
     const raw = JSON.parse(json);
 
-    const result = await db.putBlogPost(raw.hero.title, raw).catch(err => {
+    const result = await db.putBlogPost(raw.hero.title, raw).catch((err) => {
         console.error(err);
         return false;
     });
 
     if (result) return res.json({ ok: true, message: "Das hat geklappt." });
-    
+
     res.json({ ok: false, message: "Etwas hat nicht geklappt. Bitte versuche es später erneut." });
 });
 
 app.post("/post/blog/update", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
 
     const object = req.body.json;
     const fileArray = [];
 
-    const saveImg = obj => {
+    const saveImg = (obj) => {
         if (obj.tagName === "IMG") {
             fileArray.push({
                 id: obj.attributes.id,
                 alt: obj.attributes.alt,
-                base64: obj.attributes.src
+                base64: obj.attributes.src,
             });
         }
 
         if (Array.isArray(obj?.children)) {
-            obj.children.forEach(elm => {
+            obj.children.forEach((elm) => {
                 saveImg(elm);
             });
         }
@@ -1431,10 +1394,8 @@ app.post("/post/blog/update", async (req, res) => {
     await saveImg(object.html);
 
     if (object.hero.src.includes("data:image")) {
-
         const { path } = await imagekitUpload(object.hero.src, object.hero.title + `___${timon.randomString(32)}`, "/blog/");
         object.hero.src = path;
-
     }
 
     let json = JSON.stringify(object);
@@ -1442,12 +1403,12 @@ app.post("/post/blog/update", async (req, res) => {
     for (let i = 0; i < fileArray.length; i++) {
         if (!fileArray[i].base64.includes("data:image")) continue;
 
-        const { path } = await imagekitUpload(fileArray[i].base64, fileArray[i].alt + "___" +  fileArray[i].id, "/blog/");
+        const { path } = await imagekitUpload(fileArray[i].base64, fileArray[i].alt + "___" + fileArray[i].id, "/blog/");
 
         const done = json.split("data:")[0];
         const rest = json.replace(done, "");
 
-        const base64 = rest.split("\"")[0];
+        const base64 = rest.split('"')[0];
         const todo = rest.replace(base64, "");
 
         json = done + path + todo;
@@ -1455,13 +1416,13 @@ app.post("/post/blog/update", async (req, res) => {
 
     const raw = JSON.parse(json);
 
-    const result = await db.updateBlogPost(req.body.originalName, raw.hero.title, raw).catch(err => {
+    const result = await db.updateBlogPost(req.body.originalName, raw.hero.title, raw).catch((err) => {
         console.error(err);
         return false;
     });
 
     if (result) return res.json({ ok: true, message: "Das hat geklappt." });
-    
+
     res.json({ ok: false, message: "Etwas hat nicht geklappt. Bitte versuche es später erneut." });
 });
 
@@ -1469,10 +1430,9 @@ app.post("/post/blog/update", async (req, res) => {
  * @deprecated - edit your blog instead
  */
 app.post("/post/mergeBlogs", async (req, res) => {
+    return res.json({ error: "501: Deprecated" });
 
-    return res.json({error: "501: Deprecated"});
-
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
     const { number, title, description, team, base64, alt } = req.body;
     const { path } = await imagekitUpload(base64, alt + timon.randomString(32), "/blog/");
     const result = await db.mergeBlogs(number, title, description, team, path, alt);
@@ -1480,13 +1440,14 @@ app.post("/post/mergeBlogs", async (req, res) => {
 });
 
 app.post("/post/blog/getLinks/:num", async (req, res) => {
-    let response = await db.getLastXBlogLinks(req.params.num)
-        .catch(() => {return "No connection to database"});
-    typeof response !== "string" ? res.send({title: response}) : res.end();
+    let response = await db.getLastXBlogLinks(req.params.num).catch(() => {
+        return "No connection to database";
+    });
+    typeof response !== "string" ? res.send({ title: response }) : res.end();
 });
 
 app.post("/post/upload/imagekit", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
     req.body.img.forEach(async (element, i) => {
         await imagekitUpload(element, req.body.alt[i].replaceAll(" ", "-") + "___" + req.body.suffix[i], "/blog/");
     });
@@ -1494,16 +1455,18 @@ app.post("/post/upload/imagekit", async (req, res) => {
 });
 
 app.post("/post/getAuthorPicture", async (req, res) => {
-    let response = await db.getPictureWithFullName(req.query?.name, req.query?.family_name)
-        .catch(() => {return "/img/svg/personal.svg"});
+    let response = await db.getPictureWithFullName(req.query?.name, req.query?.family_name).catch(() => {
+        return "/img/svg/personal.svg";
+    });
     res.send(response[0]);
 });
 
 app.post("/post/updateProfile", async (req, res) => {
-    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    if (!req.session?.user?.valid) return res.json({ error: "501: Forbidden" });
     let b = req.body;
-    let result = await db.updateProfile(req.session.user.id, b.email, b.password, b.given_name, b.family_name, b.email, b.phone, b.address)
-        .catch(() => {return "No connection to database"});
+    let result = await db.updateProfile(req.session.user.id, b.email, b.password, b.given_name, b.family_name, b.email, b.phone, b.address).catch(() => {
+        return "No connection to database";
+    });
     if (result === "No Error") {
         req.session.user.username = b.email;
         req.session.user.password = b.password;
@@ -1512,25 +1475,26 @@ app.post("/post/updateProfile", async (req, res) => {
         req.session.user.email = b.email;
         req.session.user.phone = b.phone;
         req.session.user.address = b.address;
-    };
-    res.json({res: result});
+    }
+    res.json({ res: result });
 });
 
 app.post("/post/changePicture", async (req, res) => {
-    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    if (!req.session?.user?.valid) return res.json({ error: "501: Forbidden" });
     let path = req.session.user.picture.replace("https://ik.imagekit.io/zmt/users/", "");
     if (req.session.user.picture === "/img/svg/personal.svg") path = req.session.user.username + "_" + timon.randomString(32);
     let img = await imagekitUpload(req.body.base64, path, "/users/");
-    let result = await db.updateProfilePicture(req.session.user.username, img.path)
-        .catch(() => {return "No connection to database"});
+    let result = await db.updateProfilePicture(req.session.user.username, img.path).catch(() => {
+        return "No connection to database";
+    });
     if (result === "No Error") {
         req.session.user.picture = img.path;
-    };
-    res.json({res: result});
+    }
+    res.json({ res: result });
 });
 
 app.post("/post/toggleDarkmode", async (req, res) => {
-    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    if (!req.session?.user?.valid) return res.json({ error: "501: Forbidden" });
     db.toggleDarkmode(req.session.user.username);
     req.session.user.darkmode < 1 ? req.session.user.darkmode++ : req.session.user.darkmode--;
     res.end();
@@ -1540,10 +1504,9 @@ app.post("/post/toggleDarkmode", async (req, res) => {
  * @deprecated - use /post/news instead
  */
 app.post("/post/submitNews", async (req, res) => {
-    
-    return res.json({error: "501: Deprecated"});
+    return res.json({ error: "501: Deprecated" });
 
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
     let b = req.body,
         status = 200;
     let img_path = await imagekitUpload(b.img, b.img_alt.replaceAll(" ", "_"), "/news/");
@@ -1553,25 +1516,24 @@ app.post("/post/submitNews", async (req, res) => {
         file_arr.push({
             ContentType: "application/pdf",
             Filename: b.pdf_src,
-            Base64Content: file
+            Base64Content: file,
         });
-    };
+    }
     try {
         const recipients = await db.getAllNewsletterSignUps();
         sendNewsletterEmail(recipients, EMAILS.newsletterSubject, b.text, file_arr);
     } catch (err) {
         console.error(err);
         status = 500;
-    };
+    }
 
     // NOTE: The submitNews function does not work like this anymore.
-    await db.submitNews(b.text, img_path.path, b.img_alt, b.img_pos, b.btn, b.btn_text, b.btn_link, b.pdf, b.pdf_src)
-        .catch(err => status = err);
-    res.json({res: status});
+    await db.submitNews(b.text, img_path.path, b.img_alt, b.img_pos, b.btn, b.btn_text, b.btn_link, b.pdf, b.pdf_src).catch((err) => (status = err));
+    res.json({ res: status });
 });
 
 app.post("/post/news", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
 
     try {
         const { newsletter, src, html, type, isBase64, pos } = req.body;
@@ -1582,18 +1544,18 @@ app.post("/post/news", async (req, res) => {
 
             let text = "";
 
-            html.children.forEach(element => {
+            html.children.forEach((element) => {
                 if (element.tagName === "P") text += element.children[0]?.content + " ";
             });
 
             if (text === "") {
-                html.children.forEach(element => {
+                html.children.forEach((element) => {
                     if (element.tagName === "H2") text += element.children[0]?.content + " ";
                 });
             }
 
             if (text.length > 100) text = text.slice(0, 150) + "...";
-            
+
             sendNewsletterEmail(recipients, EMAILS.newsletterSubject, text);
         }
 
@@ -1605,7 +1567,7 @@ app.post("/post/news", async (req, res) => {
         const result = await db.submitNews(html, type, path, pos);
 
         if (result) return res.json({ ok: true, message: "Das hat geklappt." });
-    
+
         throw new Error();
     } catch (error) {
         console.error(error);
@@ -1614,7 +1576,7 @@ app.post("/post/news", async (req, res) => {
 });
 
 app.post("/post/news/update", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
 
     try {
         const { src, html, type, isBase64, id, pos } = req.body;
@@ -1628,7 +1590,7 @@ app.post("/post/news/update", async (req, res) => {
         const result = await db.updateNews(html, type, path, pos, id);
 
         if (result) return res.json({ ok: true, message: "Das hat geklappt." });
-    
+
         throw new Error("Updating the news failed.");
     } catch (error) {
         console.error(error);
@@ -1637,81 +1599,81 @@ app.post("/post/news/update", async (req, res) => {
 });
 
 app.post("/post/changeHeroImg", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
     let status = await imagekitUpload(req.body.base64, "hero", "/assets/");
-    res.json({res: status});
+    res.json({ res: status });
 });
 
 app.post("/post/sendMail", async (req, res) => {
     const result = await sendContactMail(req.body);
 
-    if (result === 200) return res.json({res: "Die E-Mail wurde erfolgreich verschickt.", status: 200}).status(200);
+    if (result === 200) return res.json({ res: "Die E-Mail wurde erfolgreich verschickt.", status: 200 }).status(200);
 
-    return res.json({res: "Die E-Mail konnte nicht verschickt werden, versuche es in einigen Sekunden noch einmal.", status: 500}).status(500);
+    return res.json({ res: "Die E-Mail konnte nicht verschickt werden, versuche es in einigen Sekunden noch einmal.", status: 500 }).status(500);
 });
 
 app.post("/post/makeAdmin", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
-    let result = await db.makeAdmin(req.body.username)
-        .catch(() => {return false});
-    res.json({good: result});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
+    let result = await db.makeAdmin(req.body.username).catch(() => {
+        return false;
+    });
+    res.json({ good: result });
 });
 
 app.post("/post/deleteAdmin", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
-    if (["Timon", "Sara Pieretti", "fiedlertimon@gmail.com", "sara.pieretti@bluewin.ch"].includes(req.body.username)) return res.json({good: false});
-    let result = await db.deleteAdmin(req.body.username)
-        .catch(() => {return false});
-    res.json({good: result});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
+    if (["Timon", "Sara Pieretti", "fiedlertimon@gmail.com", "sara.pieretti@bluewin.ch"].includes(req.body.username)) return res.json({ good: false });
+    let result = await db.deleteAdmin(req.body.username).catch(() => {
+        return false;
+    });
+    res.json({ good: result });
 });
 
 app.post("/post/createGallery", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
     let b = req.body,
         img = b.img;
     for (let i = 0; i < img.arr.length; i++) {
-        let {path} = await imagekitUpload(img.arr[i].src, img.arr[i].alt + "___" + timon.randomString(32), `/gallery/`);
+        let { path } = await imagekitUpload(img.arr[i].src, img.arr[i].alt + "___" + timon.randomString(32), `/gallery/`);
         img.arr[i].src = path;
-    };
+    }
     for (let i = 0; i < img.vid.length; i++) {
         img.vid[i].src = await saveVideo(img.vid[i].src, img.vid[i].type);
-    };
-    let result = await db.createGallery(b.title, b.subtitle, b.author, img)
-        .catch(err => {return err});
+    }
+    let result = await db.createGallery(b.title, b.subtitle, b.author, img).catch((err) => {
+        return err;
+    });
     if (result === undefined) result = "OK";
-    res.json({error: result});
+    res.json({ error: result });
 });
 
 app.post("/post/gallery/getLinks/:num", async (req, res) => {
-    let response = await db.getLastXGalleryLinks(req.params.num)
-        .catch(() => {return "No connection to database"});
-    typeof response !== "string" ?
-    res.json({title: response}) :
-    res.json({error: response});
+    let response = await db.getLastXGalleryLinks(req.params.num).catch(() => {
+        return "No connection to database";
+    });
+    typeof response !== "string" ? res.json({ title: response }) : res.json({ error: response });
 });
 
 app.post("/post/getPaymentLink", async (req, res) => {
     if (isNaN(req.body.amount)) return res.end();
     const key = timon.randomString(256);
     payment_keys.push(key);
-    res.json({link: `${req.protocol}://${req.get("host")}/pay?key=${key}&a=${req.body.amount}&t=${req.body.type}`});
+    res.json({ link: `${req.protocol}://${req.get("host")}/pay?key=${key}&a=${req.body.amount}&t=${req.body.type}` });
 });
 
-app.post("/post/stripe/webhook", bodyParser.raw({type: 'application/json'}), async (req, res) => {
+app.post("/post/stripe/webhook", bodyParser.raw({ type: "application/json" }), async (req, res) => {
     let event;
-    const endpointSecret = LOAD_LEVEL === "prod" ?
-        process.env.STRIPE_ENDPOINT_SECRET :
-        process.env.STRIPE_ENDPOINT_SECRET_TEST;
+    const endpointSecret = LOAD_LEVEL === "prod" ? process.env.STRIPE_ENDPOINT_SECRET : process.env.STRIPE_ENDPOINT_SECRET_TEST;
 
     // Verify the event came from Stripe
     try {
-      const sig = req.headers['stripe-signature'];
-      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+        const sig = req.headers["stripe-signature"];
+        event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
     } catch (err) {
-      console.error(`Error: ${err.message}`);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
-    };
-  
+        console.error(`Error: ${err.message}`);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
     // Handle event
     switch (event.type) {
         case "customer.subscription.created":
@@ -1747,20 +1709,20 @@ app.post("/post/stripe/webhook", bodyParser.raw({type: 'application/json'}), asy
         default:
             console.warn(`Unhandled event type ${event.type}`);
             break;
-    };
+    }
 
-    res.status(200).json({received: true});
+    res.status(200).json({ received: true });
 });
 
 app.post("/post/getMyBills", async (req, res) => {
-    if (!req.session?.user?.valid) return res.json({error: "501: Forbidden"});
+    if (!req.session?.user?.valid) return res.json({ error: "501: Forbidden" });
     try {
         const member = await db.getMemberWithUserId(req.session.user.id);
         const bills = await db.getBills(member?.subscription_id);
         res.json(bills);
     } catch (error) {
-        res.json({error});
-    };
+        res.json({ error });
+    }
 });
 
 app.post("/newsletter/requestCode", async (req, res) => {
@@ -1772,20 +1734,23 @@ app.post("/newsletter/requestCode", async (req, res) => {
         const code = sendMailCode(req.body.email, user[0]);
         newsletter_code.push({
             code,
-            email: req.body.email
+            email: req.body.email,
         });
-        setTimeout(() => {
-            newsletter_code.forEach((obj, i) => {
-                if (obj.email === req.body.email) newsletter_code.splice(i, 1);
-            });
-        }, 24 * 60 * 60 * 1000); // 24 hours
+        setTimeout(
+            () => {
+                newsletter_code.forEach((obj, i) => {
+                    if (obj.email === req.body.email) newsletter_code.splice(i, 1);
+                });
+            },
+            24 * 60 * 60 * 1000,
+        ); // 24 hours
         status = 200;
     } catch (err) {
         console.error(err);
         status = 500;
         message = err.message;
-    };
-    res.json({status, message});
+    }
+    res.json({ status, message });
 });
 
 app.post("/newsletter/submitCode", (req, res) => {
@@ -1796,7 +1761,7 @@ app.post("/newsletter/submitCode", (req, res) => {
             if (obj.email === req.body.email && obj.code === req.body.code) {
                 status = 200;
                 newsletter_code.splice(i, 1);
-            };
+            }
         });
         if (status !== 200) throw new Error("Bitte gib einen gültigen Code ein, dieser stimmt nicht.");
         db.deleteNewsletterSignUpWithEmail(req.body.email);
@@ -1804,28 +1769,27 @@ app.post("/newsletter/submitCode", (req, res) => {
         console.error(err);
         status = 500;
         message = err.message;
-    };
-    res.json({status, message});
+    }
+    res.json({ status, message });
 });
 
 app.post("/post/createTeam", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
-    
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
+
     const { leitsatz, beschreibung, base64 } = req.body;
 
     const { path } = await imagekitUpload(base64, timon.randomString(32), "/current-team/");
 
-    let result = await db.createTeam(Date(), leitsatz, beschreibung, path)
-        .catch(err => {
-            console.error(err);
-            return false;
-        });
+    let result = await db.createTeam(Date(), leitsatz, beschreibung, path).catch((err) => {
+        console.error(err);
+        return false;
+    });
 
-    res.json({valid: result});
+    res.json({ valid: result });
 });
 
 app.post("/post/addTeamMember", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
 
     const { username, job, motivation } = req.body;
     const user = await db.getAccount(username);
@@ -1839,39 +1803,37 @@ app.post("/post/addTeamMember", async (req, res) => {
         job,
         motivation,
         position: "",
-        picture2: false
+        picture2: false,
     };
-    
-    const result = await db.addTeamMember(data)
-        .catch(err => {
-            console.error(err);
-            return false;
-        });
 
-    res.json({valid: result});
+    const result = await db.addTeamMember(data).catch((err) => {
+        console.error(err);
+        return false;
+    });
+
+    res.json({ valid: result });
 });
 
 app.post("/post/removeTeamMember", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
 
     try {
         const result = await db.removeTeamMember(req.body.username);
 
-        res.json({valid: result});
+        res.json({ valid: result });
     } catch (error) {
         console.error(error);
-        res.json({valid: false});
+        res.json({ valid: false });
     }
 });
 
 app.post("/post/updateGallery", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
 
     const { title, data } = req.body;
 
-    const [ gallery ] = await db.getGalleyWhereTitle(title)
-        .catch(() => "Not found");
-    
+    const [gallery] = await db.getGalleyWhereTitle(title).catch(() => "Not found");
+
     if (gallery === "Not found") return res.json({ error: "Not found" });
 
     gallery.date = Date().toString();
@@ -1880,7 +1842,7 @@ app.post("/post/updateGallery", async (req, res) => {
         const { path } = await imagekitUpload(data.img[i].src, data.img[i].alt + "___" + timon.randomString(32), "/gallery/");
         gallery.img.arr.push({
             src: path,
-            alt: data.img[i].alt
+            alt: data.img[i].alt,
         });
     }
 
@@ -1888,7 +1850,7 @@ app.post("/post/updateGallery", async (req, res) => {
         const src = await saveVideo(data.img[i].src, data.img[i].type);
         gallery.img.vid.push({
             src,
-            alt: data.img[i].alt
+            alt: data.img[i].alt,
         });
     }
 
@@ -1902,26 +1864,29 @@ app.post("/post/recoveryRequest", async (req, res) => {
         const { email } = req.body;
         const user = await db.getAccount(email);
 
-        if (user.length === 0) return res.json({ status: "Diese E-Mail existiert nicht."});
+        if (user.length === 0) return res.json({ status: "Diese E-Mail existiert nicht." });
 
         const code = sendRecoveryCode(email, user[0]);
 
         recovery_code.push({
             email,
-            code
+            code,
         });
 
-        setTimeout(() => {
-            recovery_code.forEach((obj, i) => {
-                if (obj.email === email) recovery_code.splice(i, 1);
-            });
-        }, 24 * 60 * 60 * 1000); // 24 hours
+        setTimeout(
+            () => {
+                recovery_code.forEach((obj, i) => {
+                    if (obj.email === email) recovery_code.splice(i, 1);
+                });
+            },
+            24 * 60 * 60 * 1000,
+        ); // 24 hours
 
         res.json({ status: 200 });
     } catch (error) {
         console.error(error);
         res.json({ status: 500 });
-    };
+    }
 });
 
 app.post("/post/recoverySubmit", async (req, res) => {
@@ -1944,50 +1909,43 @@ app.post("/post/recoverySubmit", async (req, res) => {
     } catch (error) {
         console.error(error);
         res.json({ status: 500 });
-    };
+    }
 });
 
 app.post("/post/addCalendarEvent", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
 
     const { title, date } = req.body;
 
-    const result = await db.insertEvent(title, date)
-        .catch(err => {
-            console.error(err);
-            return false;
-        });
+    const result = await db.insertEvent(title, date).catch((err) => {
+        console.error(err);
+        return false;
+    });
 
     res.json({ message: result ? "Erfolgreich hinzugefügt" : "Das hat nicht geklappt, bitte versuche es später nochmal." });
 });
 
 app.post("/post/deleteBlog", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
 
-    const result = await db.deleteBlog(req.body.title)
-        .catch(err => {
-            console.error(err);
-            return false;
-        });
+    const result = await db.deleteBlog(req.body.title).catch((err) => {
+        console.error(err);
+        return false;
+    });
 
     res.json({ valid: result });
 });
 
 app.post("/post/deleteEvent", async (req, res) => {
-    if (req.session?.user?.type !== "admin") return res.json({error: "501: Forbidden"});
+    if (req.session?.user?.type !== "admin") return res.json({ error: "501: Forbidden" });
 
-    const result = await db.deleteEvent(req.body.title)
-        .catch(err => {
-            console.error(err);
-            return false;
-        });
+    const result = await db.deleteEvent(req.body.title).catch((err) => {
+        console.error(err);
+        return false;
+    });
 
     res.json({ valid: result });
 });
-
-
-
-
 
 app.listen(8080, () => {
     console.log("Server listens on localhost:8080");

@@ -18,14 +18,15 @@
             }
         </style>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
@@ -45,18 +46,18 @@
                 <div class="news-div vision">
                     <p class="vision-text">
                         <span class="zitat"><%- text.zitat %></span>
-                        <br>
+                        <br />
                         <span class="zitat_autor"><%- text.autor_zitat %></span>
                     </p>
                     <p class="vision-text"><%- text.abs1 %></p>
                     <p class="vision-text"><%- text.abs2 %></p>
                     <p class="vision-text">
                         <span class="zitat"><%- text.zitat2 %></span>
-                        <br>
+                        <br />
                         <span class="zitat_autor"><%- text.autor_zitat2 %></span>
                     </p>
                 </div>
-                <img class="news-img news-left vision" alt="<%- bild.beschreibung %>" src="<%- bild.url %>">
+                <img class="news-img news-left vision" alt="<%- bild.beschreibung %>" src="<%- bild.url %>" />
             </div>
             <div class="vision-wrapper">
                 <p class="vision-text"><%- text.abs3 %></p>

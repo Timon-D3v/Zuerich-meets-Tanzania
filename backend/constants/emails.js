@@ -2,21 +2,21 @@
  *
  * * Bearbeiten
  * Diese Datei darf nur von Vorstandsmitgliedern des Vereins Zurich meets Tanzania verändert werden.
- * 
+ *
  * * Wegleitung zum Bearbeiten
  * Diese Datei sollte nur von einer Person bearbeitet werden, die sich mit HTML auskennt und weiss, wo man Text ersetzten darf und wo nicht.
  * Abgesehen vom HTML kann man aber alles bearbeiten.
- * 
- * 
+ *
+ *
  * * Für HTML-Kenner
  * In der Anschrift (auch HTML) sind ___ANREDE___ und die Anderen Variablen und werden mit .replace() ersetzt.
  * Inline CSS ist erforderlich: Es sind keine <link> oder <style> Elemente erlaubt in einer E-Mail.
  * Einige CSS Optionen sind ebenfalls verboten. Dazu zählen alle Flexbox attribute, deswegen sind die Sachen auch so kompliziert mit <table> zentriert.
- * 
+ *
  * ! Die Änderungen sind erst nach einem Neustart des Servers live
- * 
- * 
-*/
+ *
+ *
+ */
 const EMAILS = {
     sender_email: "info@timondev.com",
     sender_name: "zurich meets tanzania",
@@ -96,7 +96,7 @@ const EMAILS = {
     newsletter: `<p style="font-size: 16px; color: #070d13; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; display: block; margin-block-start: 0; margin-block-end: 0; margin-inline-start: 0; margin-inline-end: 0; margin: 1em 0; word-wrap: normal; word-break: keep-all; hyphens: auto; -webkit-hyphens: auto;">
                 Wir freuen uns Ihnen mitteilen zu können, dass wir Neuigkeiten haben. Sie können sie sich gerne unter folgendem <a style="color: #c2630a; text-decoration: underline; cursor: pointer; font-size: 16px; font-family: 'Titillium Web', Helvetica, Arial, sans-serif; display: inline; word-wrap: normal; word-break: keep-all; hyphens: auto; -webkit-hyphens: auto;" href="https://zurich-meets-tanzania.com/#scroll_to_news">Link</a>
                 anschauen.<br><br>Hier ist schon eine kleine Vorschau:<br>`,
-    newsletterSubject: "Es gibt Neuigkeiten!"
+    newsletterSubject: "Es gibt Neuigkeiten!",
 };
 
 export default EMAILS;

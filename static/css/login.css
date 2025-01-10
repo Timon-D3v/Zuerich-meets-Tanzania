@@ -32,7 +32,7 @@ form.password-recovery h1 {
     text-transform: uppercase;
     margin: 0;
     font-size: 3em;
-    color: var(--c-text-950)
+    color: var(--c-text-950);
 }
 
 label {
@@ -57,7 +57,7 @@ input {
 input::placeholder {
     font-family: "Titillium Web", sans-serif;
     font-size: 1rem;
-    color: var(--c-text-950)
+    color: var(--c-text-950);
 }
 
 input:focus {
@@ -149,7 +149,7 @@ button {
 }
 
 .switch > p {
-    color: var(--c-text-950)
+    color: var(--c-text-950);
 }
 
 .login_switch,
@@ -221,7 +221,8 @@ main {
     margin-right: 0.25em;
 }
 
-*::selection, *::marker {
+*::selection,
+*::marker {
     background-color: #1f9d39cc;
 }
 

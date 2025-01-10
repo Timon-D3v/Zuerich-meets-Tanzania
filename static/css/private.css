@@ -86,7 +86,8 @@ table {
     overflow-x: auto;
 }
 
-td, th {
+td,
+th {
     border: 1px solid var(--text-950);
     text-align: left;
     padding: 8px;
@@ -362,7 +363,7 @@ tr:nth-child(even) {
 }
 
 #delete-current-element {
-    bottom: 110px
+    bottom: 110px;
 }
 
 .floating-edit-btn:hover {

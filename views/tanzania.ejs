@@ -28,7 +28,8 @@
                 overflow-x: auto;
             }
 
-            td, th {
+            td,
+            th {
                 border: 1px solid var(--text-950);
                 text-align: left;
                 padding: 8px;
@@ -51,14 +52,15 @@
             }
         </style>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
@@ -73,59 +75,39 @@
                 cta_text: "",
                 cta_link: ""
             }) %>
-            <script>document.querySelector(".hero-img").style.filter = "none";</script>
+            <script>
+                document.querySelector(".hero-img").style.filter = "none";
+            </script>
             <div class="tanzania_history">
                 <div class="time"></div>
                 <div class="content">
                     <h1 class="title">Tanzania kurze Geschichte</h1>
                     <ul>
-                        <li>
-                            Vor etwa 4000 Jahren Migration von Bantus „Menschen“ aus dem Kongogebiet nach Ost- und Südafrika
-                        </li>
-                        <li>
-                            8. Bis 9. Jahrhundert  Bevölkerung vor allem entlang der Küstenregion  (Swahili arabisch sawāḥilī „Küstenbewohner“)
-                        </li>
-                        <li>
-                            1498 Anspruch Portugals auf die Küste und Zanzibar durch Vasco da Gama
-                        </li>
-                        <li>
-                            1698 bis 1861 Sultanat von Oman, Hauptsitz Zanzibar
-                        </li>
-                        <li>
-                            1885-1918 Kolonie Deutsch-Ostafrika Bei einem Aufstand gegen die Kolonialherren im Maji-Maji-Krieg (1905-1907) kommen schätzungsweise zwischen 200.000 und 300.000 Menschen durch Kämpfe oder Hunger ums Leben.
-                        </li>
+                        <li>Vor etwa 4000 Jahren Migration von Bantus „Menschen“ aus dem Kongogebiet nach Ost- und Südafrika</li>
+                        <li>8. Bis 9. Jahrhundert Bevölkerung vor allem entlang der Küstenregion (Swahili arabisch sawāḥilī „Küstenbewohner“)</li>
+                        <li>1498 Anspruch Portugals auf die Küste und Zanzibar durch Vasco da Gama</li>
+                        <li>1698 bis 1861 Sultanat von Oman, Hauptsitz Zanzibar</li>
+                        <li>1885-1918 Kolonie Deutsch-Ostafrika Bei einem Aufstand gegen die Kolonialherren im Maji-Maji-Krieg (1905-1907) kommen schätzungsweise zwischen 200.000 und 300.000 Menschen durch Kämpfe oder Hunger ums Leben.</li>
                     </ul>
-                    <img class="tanzania_history_img" src="/img/content/tanzania_1.jpg">
-                    <p class="text">
-                        Bundespräsident Steinmeier besucht im November 2023 den Ort Songea im Süden des Landes um sich für vergangenes Unrecht zu entschuldigen (etwa zur gleichen Zeit weilt König Charles in Kenya, vermeidet allerdings eine konkrete Entschuldigung)
-                    </p>
+                    <img class="tanzania_history_img" src="/img/content/tanzania_1.jpg" />
+                    <p class="text">Bundespräsident Steinmeier besucht im November 2023 den Ort Songea im Süden des Landes um sich für vergangenes Unrecht zu entschuldigen (etwa zur gleichen Zeit weilt König Charles in Kenya, vermeidet allerdings eine konkrete Entschuldigung)</p>
                     <div class="blog_half">
                         <ul>
-                            <li>
-                                1919 Versaillervertrag, Tanganjika geht an Grossbritannien
-                            </li>
-                            <li>
-                                1946 wird Tanganjika britisches Treuhandgebiet der UN
-                            </li>
-                            <li>
-                                1954 Julius Nyerere gründet die Tanganjika African National Union (TANU) und erreicht 1961 dessen Unabhängigkeit
-                            </li>
-                            <li>
-                                1964 Vereinigung Zanzibars zur Republik Tanzania (Tanganjika Zanzibar), Julius Nyerere wird erster Präsident (bis 1985)
-                            </li>
-                            <li>
-                                2021 stirbt Präsident John Magufuli wahrscheinlich an Covid, Nachfolgerin wird dessen Vizepräsidentin Samia Suluhu Hassan
-                            </li>
+                            <li>1919 Versaillervertrag, Tanganjika geht an Grossbritannien</li>
+                            <li>1946 wird Tanganjika britisches Treuhandgebiet der UN</li>
+                            <li>1954 Julius Nyerere gründet die Tanganjika African National Union (TANU) und erreicht 1961 dessen Unabhängigkeit</li>
+                            <li>1964 Vereinigung Zanzibars zur Republik Tanzania (Tanganjika Zanzibar), Julius Nyerere wird erster Präsident (bis 1985)</li>
+                            <li>2021 stirbt Präsident John Magufuli wahrscheinlich an Covid, Nachfolgerin wird dessen Vizepräsidentin Samia Suluhu Hassan</li>
                         </ul>
-                        <img class="tanzania_history_img" src="/img/content/tanzania_2.jpg">
+                        <img class="tanzania_history_img" src="/img/content/tanzania_2.jpg" />
                     </div>
                     <div class="blog_half">
-                        <img class="tanzania_history_img" src="/img/content/tanzania_3.jpg">
+                        <img class="tanzania_history_img" src="/img/content/tanzania_3.jpg" />
                         <p class="text tanzania_history">Samia Suluhu Hassan (geboren am 27. Januar 1960 damals noch im Sultanat Sansibar) und seit März 2021 erste Frau und 6. Präsidentin von Tanzania.</p>
                     </div>
                     <div class="blog_half">
                         <p class="text tanzania_history">Februar 24 Präsidentin Hassan überreichte dem Papst im Vatikan die Nachbildung einer sansibarischen Tür als Ausdruck der lokalen Handwerkskunst. Der Papst revanchiert sich mit einer Bronzeskulptur, die den Titel „Dialog zwischen den Generationen“ trägt.</p>
-                        <img class="tanzania_history_img" src="/img/content/tanzania_4.jpg">
+                        <img class="tanzania_history_img" src="/img/content/tanzania_4.jpg" />
                     </div>
                 </div>
             </div>
@@ -134,26 +116,20 @@
                 <div class="content">
                     <h1 class="title">Tanzania Geographie</h1>
                     <div class="blog_half">
-                        <img class="tanzania_history_img" src="/img/content/tanzania_5.jpg">
+                        <img class="tanzania_history_img" src="/img/content/tanzania_5.jpg" />
                         <p class="text tanzania_history">Tanzania liegt südlich des Äquators im östlichen Afrika und ist bekannt und gekennzeichnet durch Inseln, Seen, Berge und Parks:</p>
                     </div>
                     <ul>
                         <li>
                             Zanzibar (mit den beiden Inseln Pemba & Unguja), bekannt als Gewürzinsel (Pfeffer, Vanille, Nelken, Muskatnuss)
-                            <br>
+                            <br />
                             Mafia Island ein Tauchparadies
                         </li>
-                        <li>
-                            Victoriasee der drittgrösste See der Welt 1858 «entdeckt» und benannt von John Hanning Speke (britischer Afrikaforscher) nach dessen Königin. Tanganjikasee grösstes Süsswasserreservoir Afrikas und das zweitgrösste der Welt, mit einer Tiefe von 1470 m auch der zweit tiefste See der Welt (jeweils nach dem Baikalsee)
-                        </li>
-                        <li>
-                            „Der“ Kilimanjaro (eigentlich bezieht sich der Begriff auf das ganz Massiv) wurde im Jahre 1886 von Königin Victoria an ihren Enkel, den späteren deutschen Kaiser Wilhelm II. geschenkt. Der Kibo ist mit 5895m der höchste Berg des Kilimanjaromassivs und zählt zu den Seven Summits (dem jeweils höchsten Berg der sieben Kontinente)
-                        </li>
-                        <li>
-                            Die Serengeti einer der insgesamt 22 Nationalparks welche zusammen ca. 11 Prozent der Landfläche ausmachen. Seit 1929 ist er ein game reserve, seit 1951 ein Reservat und weist eine Fläche von 14'763 Quadratkilometern auf.
-                        </li>
+                        <li>Victoriasee der drittgrösste See der Welt 1858 «entdeckt» und benannt von John Hanning Speke (britischer Afrikaforscher) nach dessen Königin. Tanganjikasee grösstes Süsswasserreservoir Afrikas und das zweitgrösste der Welt, mit einer Tiefe von 1470 m auch der zweit tiefste See der Welt (jeweils nach dem Baikalsee)</li>
+                        <li>„Der“ Kilimanjaro (eigentlich bezieht sich der Begriff auf das ganz Massiv) wurde im Jahre 1886 von Königin Victoria an ihren Enkel, den späteren deutschen Kaiser Wilhelm II. geschenkt. Der Kibo ist mit 5895m der höchste Berg des Kilimanjaromassivs und zählt zu den Seven Summits (dem jeweils höchsten Berg der sieben Kontinente)</li>
+                        <li>Die Serengeti einer der insgesamt 22 Nationalparks welche zusammen ca. 11 Prozent der Landfläche ausmachen. Seit 1929 ist er ein game reserve, seit 1951 ein Reservat und weist eine Fläche von 14'763 Quadratkilometern auf.</li>
                     </ul>
-                    <div class="table-container" style="margin-top: 0 !important;">
+                    <div class="table-container" style="margin-top: 0 !important">
                         <table>
                             <thead>
                                 <th>Rang</th>
@@ -204,15 +180,13 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>
-                                        Quelle: <a href="https://www.citypopulation.de/de/tanzania/cities/">citypopulation.de</a>
-                                    </td>
+                                    <td>Quelle: <a href="https://www.citypopulation.de/de/tanzania/cities/">citypopulation.de</a></td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
-                    <h2 class="subtitle" style="padding-left: 10vw; margin-top: 0 !important;">Vergleich</h2>
-                    <div class="table-container" style="margin-top: 0 !important;">
+                    <h2 class="subtitle" style="padding-left: 10vw; margin-top: 0 !important">Vergleich</h2>
+                    <div class="table-container" style="margin-top: 0 !important">
                         <table>
                             <thead>
                                 <th>Kategorie</th>
@@ -223,10 +197,10 @@
                                 <tr>
                                     <td>Flagge</td>
                                     <td>
-                                        <img src="/img/svg/flag_tanzania.svg" class="tanzania_flags">
+                                        <img src="/img/svg/flag_tanzania.svg" class="tanzania_flags" />
                                     </td>
                                     <td>
-                                        <img src="/img/svg/flag_switzerland.svg" class="tanzania_flags">
+                                        <img src="/img/svg/flag_switzerland.svg" class="tanzania_flags" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -269,9 +243,7 @@
                                 <tr>
                                     <td></td>
                                     <td></td>
-                                    <td>
-                                        Quelle: <a href="https://www.laenderdaten.info/laendervergleich.php?country1=TZA&country2=CHE">laenderdaten.info</a>
-                                    </td>
+                                    <td>Quelle: <a href="https://www.laenderdaten.info/laendervergleich.php?country1=TZA&country2=CHE">laenderdaten.info</a></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -282,9 +254,9 @@
                 <div class="time info"></div>
                 <div class="content">
                     <h1 class="title tanzania_big_title">Allgemeine Reiseinformationen zu Tanzania</h1>
-                    <div class="flex" style="flex-wrap: wrap; gap: 5vw; justify-content: space-evenly;">
+                    <div class="flex" style="flex-wrap: wrap; gap: 5vw; justify-content: space-evenly">
                         <div>
-                            <h2 class="subtitle" style="text-align: center;">Allgemein</h2>
+                            <h2 class="subtitle" style="text-align: center">Allgemein</h2>
                             <ul>
                                 <li>
                                     <a href="https://www.eda.admin.ch/eda/de/home/vertretungen-und-reisehinweise/tansania.html">Allgemeine Reisehinweise</a>
@@ -295,7 +267,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h2 class="subtitle" style="text-align: center;">Reisen (Registrierung)</h2>
+                            <h2 class="subtitle" style="text-align: center">Reisen (Registrierung)</h2>
                             <ul>
                                 <li>
                                     <a href="https://www.eda.admin.ch/eda/de/home/leben-im-ausland/schweizerinnen-und-schweizer-im-ausland/dienstleistungen-schweiz-ausland/itineris.html">Registrierung von Auslandreisen nach Tanzania</a>
@@ -303,7 +275,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h2 class="subtitle" style="text-align: center;">Impfungen</h2>
+                            <h2 class="subtitle" style="text-align: center">Impfungen</h2>
                             <ul>
                                 <li>
                                     <a href="https://www.bag.admin.ch/bag/de/home/gesund-leben/gesundheitsfoerderung-und-praevention/impfungen-prophylaxe/reiseimpfungen.html">Bundesamt für Gesundheit</a>

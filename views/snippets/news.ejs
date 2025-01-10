@@ -1,5 +1,6 @@
 <div class="news news-id-<%= id %>" id="scroll_to_news">
-    <pre id="pre-news-<%= id %>" data-news-id="<%= id %>" class="invisible"><%- JSON.stringify(html) %></pre><%
+    <pre id="pre-news-<%= id %>" data-news-id="<%= id %>" class="invisible"><%- JSON.stringify(html) %></pre>
+    <%
     function toRealDate (date) {
         date = date.toString();
         let time = date.slice(16, 24);
@@ -48,10 +49,10 @@
     };%>
     <script>
         function jsonToElm(options) {
-            const element = document.createElement(options.tagName)
+            const element = document.createElement(options.tagName);
 
             for (let attr in options.attributes) {
-                element.setAttribute(attr, options.attributes[attr])
+                element.setAttribute(attr, options.attributes[attr]);
             }
 
             if (options.tagName === "H1") {
@@ -67,19 +68,16 @@
                 element.appendChild(jsonToElm(child));
             }
 
-            return element
+            return element;
         }
-        getQuery(".news-id-<%= id %>").get(0).append(
-            jsonToElm(
-                JSON.parse(
-                    getElm("pre-news-<%= id %>").text()
-                )
-            )
-        );
-    </script><%
+        getQuery(".news-id-<%= id %>")
+            .get(0)
+            .append(jsonToElm(JSON.parse(getElm("pre-news-<%= id %>").text())));
+    </script>
+    <%
     if (type === "iframe") { %>
-    <iframe src="<%= src %>" class="news-iframe"></iframe><% }
+    <iframe src="<%= src %>" class="news-iframe"></iframe
+    ><% }
     else { %>
-    <img class="news-img news-<%= position %>" src="<%= src %>"><% 
-    }; %>
+    <img class="news-img news-<%= position %>" src="<%= src %>" /><% }; %>
 </div>

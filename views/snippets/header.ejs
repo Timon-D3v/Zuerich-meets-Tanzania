@@ -1,60 +1,55 @@
 <header>
-            <a class="logo" href="/">
-                <img class="logo-img" alt="Logo" src="/img/logo.svg">
-                <span class="logo-span">
-                    <span class="line header_fat">zurich</span>
-                    <span class="line">meets</span>
-                    <span class="line header_fat">tanzania</span>
-                </span>
-            </a>
-            <div class="h-c">
-                <div class="h-t-b"><%
-                    let link_mitglied;
-                    if (typeof user !== "undefined" && user !== null) {
-                        user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/spenden?js=membership_click#scrollToDonate";
-                    } else {
-                        link_mitglied = "/signup";
-                    }; %>
-                    <div class="h-t-b-btn">
-                        <a class="t-mitglied-btn" href="<%= link_mitglied %>">Mitglied werden</a>
-                        <a class="t-spenden-btn" href="/spenden">Spenden</a>
-                        <a class="t-kontakt-btn" href="/contact">Kontakt</a>
-                        <a class="t-shop-btn" href="https://shop.unikat-hoengg.ch/produkte/zurichmeetstanzania-60?d=1">Shop</a>
-                    </div>
-                    <div class="h-t-b-ico">
-                        <a class="h-t-b-link" href="<%= link_mitglied %>">
-                            <img class="h-t-b-img" alt="Mitglied werden" src="/img/svg/member.svg">
-                        </a>
-                        <a class="h-t-b-link" href="/spenden">
-                            <img class="h-t-b-img" alt="Spenden" src="/img/svg/spenden.svg">
-                        </a>
-                        <a class="h-t-b-link" href="/contact">
-                            <img class="h-t-b-img" alt="Kontaktiere uns." src="/img/svg/contact.svg">
-                        </a>
-                        <a class="h-t-b-link" href="https://shop.unikat-hoengg.ch/produkte/zurichmeetstanzania-60?d=1">
-                            <img class="h-t-b-img" alt="Shop" src="/img/svg/shop.svg">
-                        </a>
-                    </div>
-                    <div class="h-t-b-m">
-                        <button id="menu" class="hamburger hamburger--spin" type="button">
-                            <span class="hamburger-box">
-                                <span class="hamburger-inner"></span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                <div class="h-n-b">
-                    <a class="h-n-b-e" href ="#" id="h-n-b-e-1">Verein</a>
-                    <a class="h-n-b-e" href ="#" id="h-n-b-e-2">Projekte</a>
-                    <a class="h-n-b-e" href ="#" id="h-n-b-e-3">Blogs</a>
-                    <a class="h-n-b-e" href ="#" id="h-n-b-e-4">Bilder</a>
-                    <a class="h-n-b-e" href ="#" id="h-n-b-e-5">Weiteres</a>
-                    <label for="darkmode" class="uiverse ui-switch">
-                        <input id="darkmode" name="darkmode" type="checkbox" class="uiverse">
-                        <div class="uiverse slider">
-                            <div class="uiverse circle"></div>
-                        </div>
-                    </label>
-                </div>
+    <a class="logo" href="/">
+        <img class="logo-img" alt="Logo" src="/img/logo.svg" />
+        <span class="logo-span">
+            <span class="line header_fat">zurich</span>
+            <span class="line">meets</span>
+            <span class="line header_fat">tanzania</span>
+        </span>
+    </a>
+    <div class="h-c">
+        <div class="h-t-b">
+            <% let link_mitglied; if (typeof user !== "undefined" && user !== null) { user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/spenden?js=membership_click#scrollToDonate"; } else { link_mitglied = "/signup"; }; %>
+            <div class="h-t-b-btn">
+                <a class="t-mitglied-btn" href="<%= link_mitglied %>">Mitglied werden</a>
+                <a class="t-spenden-btn" href="/spenden">Spenden</a>
+                <a class="t-kontakt-btn" href="/contact">Kontakt</a>
+                <a class="t-shop-btn" href="https://shop.unikat-hoengg.ch/produkte/zurichmeetstanzania-60?d=1">Shop</a>
             </div>
-        </header>
+            <div class="h-t-b-ico">
+                <a class="h-t-b-link" href="<%= link_mitglied %>">
+                    <img class="h-t-b-img" alt="Mitglied werden" src="/img/svg/member.svg" />
+                </a>
+                <a class="h-t-b-link" href="/spenden">
+                    <img class="h-t-b-img" alt="Spenden" src="/img/svg/spenden.svg" />
+                </a>
+                <a class="h-t-b-link" href="/contact">
+                    <img class="h-t-b-img" alt="Kontaktiere uns." src="/img/svg/contact.svg" />
+                </a>
+                <a class="h-t-b-link" href="https://shop.unikat-hoengg.ch/produkte/zurichmeetstanzania-60?d=1">
+                    <img class="h-t-b-img" alt="Shop" src="/img/svg/shop.svg" />
+                </a>
+            </div>
+            <div class="h-t-b-m">
+                <button id="menu" class="hamburger hamburger--spin" type="button">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+        </div>
+        <div class="h-n-b">
+            <a class="h-n-b-e" href="#" id="h-n-b-e-1">Verein</a>
+            <a class="h-n-b-e" href="#" id="h-n-b-e-2">Projekte</a>
+            <a class="h-n-b-e" href="#" id="h-n-b-e-3">Blogs</a>
+            <a class="h-n-b-e" href="#" id="h-n-b-e-4">Bilder</a>
+            <a class="h-n-b-e" href="#" id="h-n-b-e-5">Weiteres</a>
+            <label for="darkmode" class="uiverse ui-switch">
+                <input id="darkmode" name="darkmode" type="checkbox" class="uiverse" />
+                <div class="uiverse slider">
+                    <div class="uiverse circle"></div>
+                </div>
+            </label>
+        </div>
+    </div>
+</header>

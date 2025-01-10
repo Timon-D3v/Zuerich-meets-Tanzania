@@ -11,24 +11,23 @@
             sitetype: sitetype
         }) %>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
             link_mitglied
         }) %>
-        <main><% 
-            news.forEach((element, i) => {
-                element.isArchiv = true; %>
-            <%- include("./snippets/news.ejs", element) %><%
-            if (count > 5 && i === news.length - 5) { %>
+        <main>
+            <% news.forEach((element, i) => { element.isArchiv = true; %>
+            <%- include("./snippets/news.ejs", element) %><% if (count > 5 && i === news.length - 5) { %>
             <div id="scroll_to_last_entry"></div>
             <% }
             }); %>
@@ -41,10 +40,10 @@
 
                 if (count > 5 && getQuery("main").get(0).childrenCount() > 5) {
                     scrollToQuery("#scroll_to_last_entry");
-                };
+                }
 
                 on(document, "DOMContentLoaded", () => {
-                    getQuery("h1").forEach(element => {
+                    getQuery("h1").forEach((element) => {
                         if (typeof element.dataset?.date === "string") {
                             element.innerText = element.dataset.date;
                         }

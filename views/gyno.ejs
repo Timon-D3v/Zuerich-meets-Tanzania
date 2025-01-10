@@ -31,7 +31,7 @@
 
             h1.hero-title,
             p.hero-subtitle {
-                color: var(--c-text-950)
+                color: var(--c-text-950);
             }
 
             h1.hero-title::after {
@@ -39,14 +39,15 @@
             }
         </style>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
@@ -66,8 +67,8 @@
             <p class="text"><%= gyno.abs2 %></p>
             <p class="text"><%= gyno.abs3 %></p>
             <p class="blog_half">
-                <img src="/img/content/gyno_1_2.jpg" alt="Das Logo von twenty4forty">
-                <img src="/img/content/gyno_2.jpg" alt="Eine Ultraschall Untersuchung">
+                <img src="/img/content/gyno_1_2.jpg" alt="Das Logo von twenty4forty" />
+                <img src="/img/content/gyno_2.jpg" alt="Eine Ultraschall Untersuchung" />
             </p>
             <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>

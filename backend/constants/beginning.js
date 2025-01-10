@@ -2,7 +2,7 @@
  *
  * * Bearbeiten
  * Diese Datei darf nur von Vorstandsmitgliedern des Vereins Zurich meets Tanzania verändert werden.
- * 
+ *
  * * Wegleitung zum Bearbeiten
  * Grundsätzlich können alle Daten ganz normal ersetzt oder ausgetauscht werden.
  * "beschreibung" ist eine kurze Beschreibung, worum es auf der Seite geht.
@@ -15,11 +15,11 @@
  * - Ein Link kann wie folgt eingefügt werden: <a href='{{ DEIN_LINK }}'>{{ DEIN_TEXT }}</a>
  *   Ersetzte dabei {{ DEIN_LINK }} mit deinem Link und das gleiche bei {{ DEIN_TEXT }}.
  *   Der Text muss nicht mit dem Link übereinstimmen.
- * 
+ *
  * ! Die Änderungen sind erst nach einem Neustart des Servers live
- * 
- * 
-*/
+ *
+ *
+ */
 const BEGINNING = {
     beschreibung: "Auf dieser Seite kannst du die Geschichte des Vereins zurich meets tanzania lesen.",
     datum: "Sun May 05 2024 20:22:16 GMT+0200 (Mitteleuropäische Sommerzeit)",
@@ -28,9 +28,7 @@ const BEGINNING = {
     abs2: "Via E-Mail half er Andi Kemmler bei den Beurteilungen von Röntgenbildern, erteilte Vorschläge zur Therapie und gab technische Hilfe. In der Folge hatte sich diese Zusammenarbeit kontinuierlich intensiviert und verbessert, bis Andi wieder in die Schweiz zurückkehrte.",
     abs3: "2012 reiste Christoph erstmals nach Tanzania in der Absicht im Rahmen seiner Ferien dem Spital einen kurzen Besuch abzustatten. Entgegen der Planung blieb er für eine Woche im Spital und half bei Operationen mit.",
     abs4: "Nach seiner Rückkehr begeisterte er für 2013 eine Gruppe von Ärzten und Pflegepersonal aus dem Stadtspital für einen ersten gemeinsamen Einsatz. Was anfänglich als vor allem chirurgisch traumatologisch fokussiertes Projekt begann weitete sich immer mehr zu einem umfänglichen medizinischen Vorhaben aus mit den Schwerpunkten Anästhesie, Kardiologie, Gynäkologie und Geburtshilfe, Radiologie und Wundbehandlung.",
-    abs5: "Der finanzielle Support bei der Ausbildung von medizinischen Fachpersonen (<a href='/projects/meducation'>meducation</a>) ist neben unseren zwei Projekten <a href='/projects/mbuzi'>mbuzi</a> und <a href='/projects/gyn%C3%A4kologie'>twenty4forty</a> über die Jahre zu unseren Hauptanliegen geworden."
+    abs5: "Der finanzielle Support bei der Ausbildung von medizinischen Fachpersonen (<a href='/projects/meducation'>meducation</a>) ist neben unseren zwei Projekten <a href='/projects/mbuzi'>mbuzi</a> und <a href='/projects/gyn%C3%A4kologie'>twenty4forty</a> über die Jahre zu unseren Hauptanliegen geworden.",
 };
-
-
 
 export default BEGINNING;

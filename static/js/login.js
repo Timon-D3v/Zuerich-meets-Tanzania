@@ -6,28 +6,25 @@ const new_submit = getElm("submit_sign_up");
 const file = getElm("file");
 var recovery_request = false;
 
-
 eye.click(() => {
-    password.type === "text" ?
-    openEyes(password, eye) :
-    closeEyes(password, eye);
+    password.type === "text" ? openEyes(password, eye) : closeEyes(password, eye);
 });
 
 new_eye.click(() => {
-    new_password.type === "text" ?
-    openEyes(new_password, new_eye) :
-    closeEyes(new_password, new_eye);
+    new_password.type === "text" ? openEyes(new_password, new_eye) : closeEyes(new_password, new_eye);
 });
 
 file.on("change", async () => {
-    getQuery(".file").get(0).html("<img alt='Dein Bild' src='" + await file.getImgBase64() + "'>");
+    getQuery(".file")
+        .get(0)
+        .html("<img alt='Dein Bild' src='" + (await file.getImgBase64()) + "'>");
 });
 
 getElm("submit_login").click(validateAccount);
 new_submit.click(addAccount);
 getQuery(".login_switch").click(toggleForms);
 
-getElm("submit_recovery").click(async e => {
+getElm("submit_recovery").click(async (e) => {
     e.preventDefault();
 
     const mail = getElm("recovery-mail");
@@ -42,62 +39,61 @@ getElm("submit_recovery").click(async e => {
 
     const res = await post("/post/recoverySubmit", {
         email: mail.val(),
-        code: code.val()
+        code: code.val(),
     });
 
-    if (res.status === 200) return window.location = ORIGIN + "/login?js=successField(`Passwort erfolgreich zurückgesetzt.`);nofunction";
+    if (res.status === 200) return (window.location = ORIGIN + "/login?js=successField(`Passwort erfolgreich zurückgesetzt.`);nofunction");
 
     if (res.status === 501) return errorField(res.message);
 
     errorField("Etwas ist schief gelaufen...");
 });
 
-getElm("password-forgotten").click(e => {
+getElm("password-forgotten").click((e) => {
     e.preventDefault();
 
     getQuery(".login").toggleClass("flex");
     getQuery(".password-recovery").toggleClass("flex");
-
 });
 
 getElm("recovery_switch").click(() => {
     getQuery(".login").toggleClass("flex");
     getQuery(".password-recovery").toggleClass("flex");
-})
+});
 
-function openEyes (p, e) {
+function openEyes(p, e) {
     p.type = "password";
     e.src = "/img/svg/eye.svg";
-};
+}
 
-function closeEyes (p, e) {
+function closeEyes(p, e) {
     p.type = "text";
     e.src = "/img/svg/eye_closed.svg";
-};
+}
 
-async function validateAccount (e) {
+async function validateAccount(e) {
     e.preventDefault();
 
     const username = getElm("username");
     const redir = getElm("redir").getAttribute("redirect");
-    
+
     if (username.valIsEmpty() || password.valIsEmpty()) return errorField("Bitte fülle alle Pflichtfelder aus.");
 
     const result = await post("/post/login", {
         username: username.val(),
-        password: password.val()
-    }).catch(err => {
+        password: password.val(),
+    }).catch((err) => {
         console.error(err);
         errorField(err.message);
         return { valid: false };
     });
 
-    if (result?.valid) return window.location.href = redir;
+    if (result?.valid) return (window.location.href = redir);
 
     errorField(result.message);
-};
+}
 
-async function addAccount (e) {
+async function addAccount(e) {
     e.preventDefault();
 
     new_submit.disabled = true;
@@ -110,7 +106,7 @@ async function addAccount (e) {
     const location = getElm("address");
     const redir = getElm("redir").getAttribute("redirect");
 
-    const empty = [username, name, family_name, email, new_password, location].filter(e => e.valIsEmpty());
+    const empty = [username, name, family_name, email, new_password, location].filter((e) => e.valIsEmpty());
 
     if (empty.length > 0) {
         new_submit.disabled = false;
@@ -122,11 +118,11 @@ async function addAccount (e) {
         if (file.files.length === 0) throw new Error("Kein Bild ausgewählt.");
         base64 = await toBase64Max1MB(file.file());
     } catch (err) {
-        base64 = "/img/svg/personal.svg"
+        base64 = "/img/svg/personal.svg";
     }
 
     if (base64 === "ERROR") base64 = "/img/svg/personal.svg";
-    
+
     const result = await post("/post/signUp", {
         username: username.val(),
         password: new_password.val(),
@@ -135,27 +131,27 @@ async function addAccount (e) {
         email: email.val(),
         address: location.val(),
         picture: base64,
-        phone: phone.valIsEmpty() ? "Keine Nummer" : phone.val()
-    }).catch(err => {
+        phone: phone.valIsEmpty() ? "Keine Nummer" : phone.val(),
+    }).catch((err) => {
         console.error(err);
         errorField(err.message);
         return { valid: false };
     });
 
-    if (result?.valid) return window.location.href = redir;
+    if (result?.valid) return (window.location.href = redir);
 
     new_submit.disabled = false;
     errorField(result.message);
-};
+}
 
-function toggleForms () {
+function toggleForms() {
     getQuery(".login").toggleClass("flex");
     getQuery(".sign-up").toggleClass("flex");
-};
+}
 
-async function requestRecoveryCode () {
+async function requestRecoveryCode() {
     const res = await post("/post/recoveryRequest", {
-        email: getElm("recovery-mail").val()
+        email: getElm("recovery-mail").val(),
     });
 
     if (res.status !== 200) return errorField(res.status === 500 ? "Diese E-Mail ist nicht registriert." : "Etwas ist schief gelaufen...");

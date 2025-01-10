@@ -10,41 +10,25 @@
             env: env,
             sitetype: sitetype
         }) %>
-        <link rel="stylesheet" href="/css/gallery.css">
+        <link rel="stylesheet" href="/css/gallery.css" />
         <script type="text/javascript" src="/js/gallery.js" defer></script>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
             link_mitglied
         }) %>
-        <main><%
-            const randClr = () => {
-                let arr = [
-                    "--violett",
-                    "--error",
-                    "--green",
-                    "--dark-green",
-                    "--c-text-400",
-                    "--c-text-600",
-                    "--c-accent-700",
-                    "--c-primary-400",
-                    "--c-primary-700",
-                    "--c-secondary-500",
-                    "--c-secondary-700",
-                    "--c-background-400",
-                    "--c-background-800"
-                ];
-                return arr[Math.floor(Math.random() * arr.length)];
-            }; %>
+        <main>
+            <% const randClr = () => { let arr = [ "--violett", "--error", "--green", "--dark-green", "--c-text-400", "--c-text-600", "--c-accent-700", "--c-primary-400", "--c-primary-700", "--c-secondary-500", "--c-secondary-700", "--c-background-400", "--c-background-800" ]; return arr[Math.floor(Math.random() * arr.length)]; }; %>
             <div class="hero" style="min-height: 700px; background-color: var(<%= randClr() %>)">
                 <h1 class="hero-title"><%- title %></h1>
                 <p class="hero-subtitle"><%- subtitle %></p>
@@ -52,7 +36,7 @@
             <%- include("./snippets/gallery.ejs", {
                 img
             }) %>
-            <p style="text-align: right; padding: 0 5vw;">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
+            <p style="text-align: right; padding: 0 5vw">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>
         <%- include("./snippets/footer.ejs", {
             origin_url: origin_url,

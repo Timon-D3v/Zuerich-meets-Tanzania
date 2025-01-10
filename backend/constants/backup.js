@@ -9,8 +9,7 @@ const BACKUP = {
                     alt: "Das Bild zeigt ein Fehlersymbol.",
                     src: "/img/backup/blogerror (1).jpg",
                     title: "Fehler",
-                    subtitle:
-                        "Sieht so aus, als würden wir keine Verbindung herstellen können...",
+                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
                 },
                 html: null,
             },
@@ -24,8 +23,7 @@ const BACKUP = {
                     alt: "Das Bild zeigt ein Fehlersymbol.",
                     src: "/img/backup/blogerror (2).jpg",
                     title: "Fehler",
-                    subtitle:
-                        "Sieht so aus, als würden wir keine Verbindung herstellen können...",
+                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
                 },
                 html: null,
             },
@@ -39,8 +37,7 @@ const BACKUP = {
                     alt: "Das Bild zeigt ein Fehlersymbol.",
                     src: "/img/backup/blogerror (3).jpg",
                     title: "Fehler",
-                    subtitle:
-                        "Sieht so aus, als würden wir keine Verbindung herstellen können...",
+                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
                 },
                 html: null,
             },
@@ -54,8 +51,7 @@ const BACKUP = {
                     alt: "Das Bild zeigt ein Fehlersymbol.",
                     src: "/img/backup/blogerror (4).jpg",
                     title: "Fehler",
-                    subtitle:
-                        "Sieht so aus, als würden wir keine Verbindung herstellen können...",
+                    subtitle: "Sieht so aus, als würden wir keine Verbindung herstellen können...",
                 },
                 html: null,
             },
@@ -73,9 +69,7 @@ const BACKUP = {
                 },
                 {
                     tagName: "P",
-                    children: [
-                        { content: "Keine Neuigkeiten", tagName: "___text___" },
-                    ],
+                    children: [{ content: "Keine Neuigkeiten", tagName: "___text___" }],
                     attributes: { class: "news-text", tabindex: "0" },
                 },
             ],

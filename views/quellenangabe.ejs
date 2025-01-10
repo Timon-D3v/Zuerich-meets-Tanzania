@@ -26,14 +26,15 @@
             }
         </style>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
@@ -42,22 +43,35 @@
         <main>
             <h1 class="title margin-t-5vh">Quellenangabe</h1>
             <p class="text">
-                Hier finden Sie eine Liste der Quellen für die Bilder, welche wir von Unsplash bezogen haben. Sie befinden sich alle im Ordner <%= origin_url %>/img/stock/<br><br>
-                <a href="/img/stock/beginning.jpg" target="_blank">beginning.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@framesbyfin?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Heidi Fin</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/person-mit-kompass-selektive-fokusfotografie-M2Kxb80gqcc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/stock/chirurgie.jpg" target="_blank">chirurgie.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@darksidoo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">JAFAR AHMED</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/arzt-der-operiert-wird-E285pJbC4uE?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/stock/erfolgsrechnung.jpg" target="_blank">erfolgsrechnung.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@homajob?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Scott Graham</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/mann-der-auf-papier-schreibt-OQMZwNd3ThU?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/stock/gyno.jpg" target="_blank">gyno.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@lunarts?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Volodymyr Hryshchenko</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/schwangere-frau-im-blauen-kleid-mit-blisterpackung-VbOWSrrEixA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/stock/mbuzi.jpg" target="_blank">mbuzi.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@svalenas?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Sergiu Vălenaș</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/weisse-ziege-so8R5rTDTXM?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/stock/nightsky.jpg" target="_blank">nightsky.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@kaushikpanchal?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Kaushik Panchal</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/weisse-wolken-tagsuber-0juC5JIhPks?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/stock/sky.jpg" target="_blank">sky.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@felix_mittermeier?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Felix Mittermeier</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/blitzeinschlag-unter-bewolktem-himmel-WLGHjbC0Cq4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/stock/statuten.jpg" target="_blank">statuten.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@inakihxz?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Iñaki del Olmo</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/sortierte-titel-der-bucher-die-sich-in-den-regalen-stapeln-NIJuEQw0RKg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/stock/vision.jpg" target="_blank">vision.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@randytarampi?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Randy Tarampi</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/traum-grosser-text-U2eUlPEKIgU?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <br>Die folgenden Bilder wurden ebenfalls von Unsplash bezogen, sind jedoch in einem anderen Ordner:<br><br>
-                <a href="/img/backup/blogerror (1).jpg" target="_blank">blogerror (1).jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@heytowner?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">JOHN TOWNER</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/luftaufnahme-von-brown-mountains-JgOeRuGD_Y4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/backup/blogerror (2).jpg" target="_blank">blogerror (2).jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@brisch27?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Brigitta Schneiter</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/berg-in-der-nahe-eines-gewassers-foto-hXXRLtTxXCU?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/backup/blogerror (3).jpg" target="_blank">blogerror (3).jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@mischievous_penguins?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Casey Horner</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/schneebedeckter-berg-bei-dammerung-O0R5XZfKUGQ?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <a href="/img/backup/blogerror (4).jpg" target="_blank">blogerror (4).jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@john_artifexfilm?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">John Lee</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/landschaft-der-berge-oMneOBYhJxY?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br><br>
-                <br>Das Bild <a target="_blank" href="<%= origin_url %>/img/stock/banknote.jpg"><%= origin_url %>/img/stock/banknote.jpg</a> ist lizenziert von <a target="_blank" href="https://hex7ech.bazar.bg">hex7ech</a> via &copy; (<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.en" target="_blank" rel="noopener">CC BY-NC</a>)
+                Hier finden Sie eine Liste der Quellen für die Bilder, welche wir von Unsplash bezogen haben. Sie befinden sich alle im Ordner <%= origin_url %>/img/stock/<br /><br />
+                <a href="/img/stock/beginning.jpg" target="_blank">beginning.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@framesbyfin?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Heidi Fin</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/person-mit-kompass-selektive-fokusfotografie-M2Kxb80gqcc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <a href="/img/stock/chirurgie.jpg" target="_blank">chirurgie.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@darksidoo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">JAFAR AHMED</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/arzt-der-operiert-wird-E285pJbC4uE?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <a href="/img/stock/erfolgsrechnung.jpg" target="_blank">erfolgsrechnung.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@homajob?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Scott Graham</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/mann-der-auf-papier-schreibt-OQMZwNd3ThU?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <a href="/img/stock/gyno.jpg" target="_blank">gyno.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@lunarts?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Volodymyr Hryshchenko</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/schwangere-frau-im-blauen-kleid-mit-blisterpackung-VbOWSrrEixA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <a href="/img/stock/mbuzi.jpg" target="_blank">mbuzi.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@svalenas?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Sergiu Vălenaș</a> auf <a target="_blank" href="https://unsplash.com/de/fotos/weisse-ziege-so8R5rTDTXM?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a
+                ><br /><br />
+                <a href="/img/stock/nightsky.jpg" target="_blank">nightsky.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@kaushikpanchal?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Kaushik Panchal</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/weisse-wolken-tagsuber-0juC5JIhPks?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <a href="/img/stock/sky.jpg" target="_blank">sky.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@felix_mittermeier?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Felix Mittermeier</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/blitzeinschlag-unter-bewolktem-himmel-WLGHjbC0Cq4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <a href="/img/stock/statuten.jpg" target="_blank">statuten.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@inakihxz?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Iñaki del Olmo</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/sortierte-titel-der-bucher-die-sich-in-den-regalen-stapeln-NIJuEQw0RKg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <a href="/img/stock/vision.jpg" target="_blank">vision.jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@randytarampi?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Randy Tarampi</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/traum-grosser-text-U2eUlPEKIgU?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <br />Die folgenden Bilder wurden ebenfalls von Unsplash bezogen, sind jedoch in einem anderen Ordner:<br /><br />
+                <a href="/img/backup/blogerror (1).jpg" target="_blank">blogerror (1).jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@heytowner?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">JOHN TOWNER</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/luftaufnahme-von-brown-mountains-JgOeRuGD_Y4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <a href="/img/backup/blogerror (2).jpg" target="_blank">blogerror (2).jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@brisch27?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Brigitta Schneiter</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/berg-in-der-nahe-eines-gewassers-foto-hXXRLtTxXCU?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <a href="/img/backup/blogerror (3).jpg" target="_blank">blogerror (3).jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@mischievous_penguins?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Casey Horner</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/schneebedeckter-berg-bei-dammerung-O0R5XZfKUGQ?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <a href="/img/backup/blogerror (4).jpg" target="_blank">blogerror (4).jpg</a>: Foto von <a target="_blank" href="https://unsplash.com/de/@john_artifexfilm?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">John Lee</a> auf
+                <a target="_blank" href="https://unsplash.com/de/fotos/landschaft-der-berge-oMneOBYhJxY?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a><br /><br />
+                <br />Das Bild <a target="_blank" href="<%= origin_url %>/img/stock/banknote.jpg"><%= origin_url %>/img/stock/banknote.jpg</a> ist lizenziert von <a target="_blank" href="https://hex7ech.bazar.bg">hex7ech</a> via &copy; (<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.en" target="_blank" rel="noopener">CC BY-NC</a>)
             </p>
             <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>

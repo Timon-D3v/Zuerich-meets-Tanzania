@@ -12,14 +12,15 @@
         }) %>
         <script type="text/javascript" src="/js/calendar.js" defer></script>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
@@ -40,15 +41,14 @@
                 <a class="cta-btn flex" href="/spenden">Spenden</a>
                 <a class="cta-btn flex" href="https://shop.unikat-hoengg.ch/produkte/zurichmeetstanzania-60?d=1">Shop</a>
                 <a class="cta-btn flex" href="<%= link_mitglied %>">Mitglied werden</a>
-            </div><% 
+            </div>
+            <% 
             news.isArchiv = false; %>
             <%- include("./snippets/news.ejs", news) %>
             <a class="news-more special" href="/archiv">Mehr anzeigen</a>
             <h1 class="title">Terminkalender</h1>
             <ul class="calendar">
-                <%- include("./snippets/calendar.ejs", {
-                    events
-                }); %>
+                <%- include("./snippets/calendar.ejs", { events }); %>
             </ul>
             <h1 class="title">Blogbeiträge</h1>
             <%- include("./snippets/blogCards.ejs", {

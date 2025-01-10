@@ -10,38 +10,34 @@
             sitetype: sitetype
         }) %>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="/css/blog.css">
+        <link rel="stylesheet" href="/css/blog.css" />
     </head>
     <body>
         <%- include("../snippets/header.ejs") %>
         <%- include("../snippets/nav.ejs") %>
         <main>
             <h1>Blog Builder</h1>
-            <p class="basic-text">
-                Herzlich Willkommen zum Blog Builder. Benutze das Menu unten, um zu beginnen. 
-                Wähle dazu einfach das gewünschte Element aus und leg los. Wenn du einen Link erstellen möchtest, 
-                benutze diese Vorlage: &lt;a href="<i>#Dein Link#</i>"&gt;<i>#Dein anzuzeigender Text#</i>&lt;/a&gt;. Viel Erfolg!
-            </p>
+            <p class="basic-text">Herzlich Willkommen zum Blog Builder. Benutze das Menu unten, um zu beginnen. Wähle dazu einfach das gewünschte Element aus und leg los. Wenn du einen Link erstellen möchtest, benutze diese Vorlage: &lt;a href="<i>#Dein Link#</i>"&gt;<i>#Dein anzuzeigender Text#</i>&lt;/a&gt;. Viel Erfolg!</p>
             <div class="blog_line"></div>
             <h1>Erstmal ein paar allgemeine Daten:</h1>
-            <input type="text" id="basic_title" placeholder="Titel für den Blogpost" class="basic-input">
-            <input type="text" id="basic_preview" placeholder="Kurze Zusammenfassung" class="basic-input">
+            <input type="text" id="basic_title" placeholder="Titel für den Blogpost" class="basic-input" />
+            <input type="text" id="basic_preview" placeholder="Kurze Zusammenfassung" class="basic-input" />
             <!-- This is not needed anymore since blogs can be merged and therefore grouping different blogs in the database is not needed -->
-            <input style="display: none;" type="text" id="basic_comment" placeholder="Privater Kommentar (Nur für Verwalter sichtbar, optional)" class="basic-input"> 
-            <input type="text" id="basic_author" placeholder="Autor" class="basic-input">
+            <input style="display: none" type="text" id="basic_comment" placeholder="Privater Kommentar (Nur für Verwalter sichtbar, optional)" class="basic-input" />
+            <input type="text" id="basic_author" placeholder="Autor" class="basic-input" />
             <label for="basic_img" class="basic-label">Titelbild aussuchen</label>
-            <label for="basic_img" id="picture_overlay" style="height: 35vh; width: 60%; margin: 6vh 20%;">
-                <div class="custom-file-upload" style="max-height: 35vh; box-sizing: border-box; max-width: 60vw;">
+            <label for="basic_img" id="picture_overlay" style="height: 35vh; width: 60%; margin: 6vh 20%">
+                <div class="custom-file-upload" style="max-height: 35vh; box-sizing: border-box; max-width: 60vw">
                     <div class="icon">
-                        <img alt="Eine Datei" src="/img/svg/file.svg" id="hero_file_preview" style="height: 15vh;">
+                        <img alt="Eine Datei" src="/img/svg/file.svg" id="hero_file_preview" style="height: 15vh" />
                     </div>
                     <div class="text">
-                    <span>Klicken um ein neues Bild hochzuladen</span>
+                        <span>Klicken um ein neues Bild hochzuladen</span>
                     </div>
                 </div>
             </label>
-            <input style="display: none;" type="file" id="basic_img" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico">
-            <input type="text" id="basic_alt" placeholder="Beschreibe das Titelbild kurz (3-5 Wörter)" class="basic-input">
+            <input style="display: none" type="file" id="basic_img" accept="image/png, image/jpg, image/gif, image/jpeg, image/tiff, image/raw, image/bpm, image/webp, image/ico" />
+            <input type="text" id="basic_alt" placeholder="Beschreibe das Titelbild kurz (3-5 Wörter)" class="basic-input" />
             <script>
                 $("#basic_img").on("change", async (e) => {
                     data = await toBase64(e.target.files[0]);
@@ -75,7 +71,6 @@
                 $("#add_line").click(addLine);
                 $("#done").click(done);
 
-
                 const bau = $("#baustelle"),
                     pre = $("#preview"),
                     ids = [],
@@ -85,8 +80,7 @@
                     img_names = [],
                     ruler_img = [];
 
-
-                function addTitle () {
+                function addTitle() {
                     let input = document.createElement("input");
                     input.setAttribute("type", "text");
                     input.classList.add("basic-input");
@@ -102,9 +96,9 @@
                     preview.classList.add("blog_title");
                     preview.id = id + "_2";
                     pre.append(preview);
-                };
+                }
 
-                function addHalf (side_of_img) {
+                function addHalf(side_of_img) {
                     let div = document.createElement("div");
                     div.classList.add("blog_half");
                     let img = document.createElement("img");
@@ -149,7 +143,7 @@
                             img.src = await toBase64(file);
                         } else {
                             img.src = "";
-                        };
+                        }
                     });
                     bau.append(input1);
                     bau.append(input2);
@@ -160,11 +154,11 @@
                     } else {
                         $(div).append(img);
                         $(div).append(p);
-                    };
+                    }
                     pre.append(div);
-                };
+                }
 
-                function addSubtitle () {
+                function addSubtitle() {
                     let input = document.createElement("input");
                     input.setAttribute("type", "text");
                     input.placeholder = "Untertitel";
@@ -180,9 +174,9 @@
                     preview.classList.add("blog_subtitle");
                     preview.id = id + "_2";
                     pre.append(preview);
-                };
+                }
 
-                function addText () {
+                function addText() {
                     let input = document.createElement("textarea");
                     input.innerText = "Paragraf";
                     input.classList.add("basic-input");
@@ -197,9 +191,9 @@
                     preview.classList.add("blog_text");
                     preview.id = id + "_2";
                     pre.append(preview);
-                };
+                }
 
-                function addImg () {
+                function addImg() {
                     let input = document.createElement("input");
                     input.setAttribute("type", "file");
                     input.classList.add("basic-input");
@@ -216,13 +210,13 @@
                         const file = e.target.files[0];
                         if (file) {
                             const reader = new FileReader();
-                            reader.onload = function(event) {
+                            reader.onload = function (event) {
                                 preview.src = event.target.result;
                             };
                             reader.readAsDataURL(file);
                         } else {
-                            preview.src = '';
-                        };
+                            preview.src = "";
+                        }
                     });
                     pre.append(preview);
                     let alt = document.createElement("input");
@@ -234,9 +228,9 @@
                     alt.addEventListener("input", () => {
                         preview.alt = alt.value;
                     });
-                };
+                }
 
-                function addMultipleImg () {
+                function addMultipleImg() {
                     let input = document.createElement("input");
                     input.classList.add("basic-input");
                     input.setAttribute("multiple", "true");
@@ -258,27 +252,27 @@
                             for (let i = 0; i < files.length; i++) {
                                 let res = await toBase64(files[i]);
                                 arr.push(res);
-                            };
+                            }
                             carousel = await createCarouselHTML(arr);
                             preview.innerHTML = carousel[0];
                             eval(carousel[1].replace('elm.src += "?tr=w-100,h-100"', "console.log('REPLACEME')"));
                         } else {
                             preview.innerHTML = "Fehler";
-                        };
+                        }
                     });
                     pre.append(preview);
-                };
+                }
 
-                function toBase64 (file) {
+                function toBase64(file) {
                     return new Promise((resolve, reject) => {
                         const reader = new FileReader();
                         reader.onload = () => resolve(reader.result);
                         reader.onerror = reject;
                         reader.readAsDataURL(file);
                     });
-                };
+                }
 
-                function addLine () {
+                function addLine() {
                     let input = document.createElement("div");
                     input.classList.add("blog_line");
                     let id = randomId();
@@ -289,13 +283,13 @@
                     input2.classList.add("blog_line");
                     input2.id = id;
                     pre.append(input2);
-                };
+                }
 
-                function done () {
+                function done() {
                     let content = document.getElementById("preview");
                     let pics = content.querySelectorAll("img");
                     let para = content.querySelectorAll("p");
-                    pics.forEach(elm => {
+                    pics.forEach((elm) => {
                         elm.classList.remove("active");
                         img_arr.push(elm.src);
                         alt_arr.push(elm.alt);
@@ -305,52 +299,47 @@
                         if (elm.id in ruler_img) elm.src += "?tr=w-200,h-200";
                         img_names.push(elm.src);
                     });
-                    para.forEach(elm => {
+                    para.forEach((elm) => {
                         let text = elm.innerText;
                         text = text.replaceAll("&gt;", ">").replaceAll("&lt;", "<");
                         elm.innerHTML = text;
                     });
                     fetch(window.location.origin + "/post/upload/imagekit", {
                         method: "POST",
-                        headers: {"Content-Type": "application/json"},
+                        headers: { "Content-Type": "application/json" },
                         mode: "cors",
                         cache: "default",
                         body: JSON.stringify({
                             img: img_arr,
                             alt: alt_arr,
-                            suffix: img_suffix_arr
-                        })
+                            suffix: img_suffix_arr,
+                        }),
                     });
                     createBlogPost(content.innerHTML);
-                };
+                }
 
-                function randomId () {
-                    let result = 'auto_';
-                    const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                function randomId() {
+                    let result = "auto_";
+                    const char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
                     for (let i = 0; i < 27; i++) {
                         result += char.charAt(Math.floor(Math.random() * char.length));
-                    };
+                    }
                     return result;
-                };
+                }
 
-                async function createBlogPost (content) {
+                async function createBlogPost(content) {
                     const t = $("#basic_title"),
                         p = $("#basic_preview"),
                         c = $("#basic_comment"),
                         a = $("#basic_author");
-                    if (
-                        content === "" || content === undefined || content === null ||
-                        t.val() === "" || t.val() === undefined || t.val() === null ||
-                        p.val() === "" || p.val() === undefined || p.val() === null ||
-                        a.val() === "" || a.val() === undefined || a.val() === null
-                    ) {
+                    if (content === "" || content === undefined || content === null || t.val() === "" || t.val() === undefined || t.val() === null || p.val() === "" || p.val() === undefined || p.val() === null || a.val() === "" || a.val() === undefined || a.val() === null) {
                         console.error("Something is empty...");
                         return;
-                    };
+                    }
                     if (c.val() === "" || c.val() === undefined || c.val() === null) c.val("Kein Kommentar");
                     let data = {
                         img: {},
-                        alt: {}
+                        alt: {},
                     };
                     let file = document.getElementById("basic_img").files[0];
                     let hero = await toBase64(file);
@@ -358,20 +347,20 @@
                     let heroname = $("#basic_alt").val();
                     fetch(window.location.origin + "/post/upload/imagekit", {
                         method: "POST",
-                        headers: {"Content-Type": "application/json"},
+                        headers: { "Content-Type": "application/json" },
                         mode: "cors",
                         cache: "default",
                         body: JSON.stringify({
                             img: [hero],
                             alt: [heroname],
-                            suffix: [heroid]
-                        })
+                            suffix: [heroid],
+                        }),
                     });
                     await img_names.unshift("https://ik.imagekit.io/zmt/blog/" + heroname.replaceAll(" ", "-") + "___" + heroid);
                     await alt_arr.unshift(heroname);
                     fetch(window.location.origin + "/post/blog", {
                         method: "POST",
-                        headers: {"Content-Type": "application/json"},
+                        headers: { "Content-Type": "application/json" },
                         mode: "cors",
                         cache: "default",
                         body: JSON.stringify({
@@ -382,13 +371,13 @@
                             content: content,
                             img: {
                                 img: img_names,
-                                alt: alt_arr
-                            }
-                        })
+                                alt: alt_arr,
+                            },
+                        }),
                     });
-                };
+                }
 
-                function createCarouselHTML (img_arr) {
+                function createCarouselHTML(img_arr) {
                     let ids = [];
                     let container = document.createElement("div");
                     container.classList.add("blog_carousel");
@@ -421,7 +410,7 @@
                     ids.push(randomId());
                     ids.push(randomId());
                     ids.push(randomId());
-                    img_arr.forEach(elm => {
+                    img_arr.forEach((elm) => {
                         let img = document.createElement("img");
                         ids.push(randomId());
                         img.classList.add(ids[ids.length - 1]);
@@ -441,15 +430,15 @@
                     img_arr.forEach((elm, i) => {
                         scriptHTML += `    getQuery(".${ids[i + 10]}"),\n`;
                     });
-                    scriptHTML += `];\n\ngetQuery(".blog_c-ruler.${ids[4]}").get(0).getQuery("img").forEach(elm => elm.src += "?tr=w-100,h-100");`
+                    scriptHTML += `];\n\ngetQuery(".blog_c-ruler.${ids[4]}").get(0).getQuery("img").forEach(elm => elm.src += "?tr=w-100,h-100");`;
                     scriptHTML += `\n\nlet current_${ids[6]} = 1;\n\narr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n\n`;
                     scriptHTML += `function next_${ids[7]} () {\n    current_${ids[6]} + 1 > arr_${ids[5]}.length ?\n    current_${ids[6]} = 1 :\n    current_${ids[6]}++;\n    `;
                     scriptHTML += `current_${ids[6]} === 1 ?\n    arr_${ids[5]}[arr_${ids[5]}.length - 1].toggleClass("active") :\n    `;
                     scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 2].toggleClass("active");\n    arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\n`;
-                    scriptHTML += `function prev_${ids[8]} () {\n    current_${ids[6]} - 1 === 0 ?\n    current_${ids[6]} = arr_${ids[5]}.length :\n    `
-                    scriptHTML += `current_${ids[6]}--;\n    current_${ids[6]} === arr_${ids[5]}.length ?\n    arr_${ids[5]}[0].toggleClass("active") :\n    arr_${ids[5]}[current_${ids[6]}].toggleClass("active");\n    `
-                    scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\nfunction to_${ids[9]} (i) {\n    arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n    `
-                    scriptHTML += `arr_${ids[5]}[i - 1].toggleClass("active");\n    current_${ids[6]} = i;\n};\n\ngetElm("${b1id}").click(next_${ids[7]});\n`
+                    scriptHTML += `function prev_${ids[8]} () {\n    current_${ids[6]} - 1 === 0 ?\n    current_${ids[6]} = arr_${ids[5]}.length :\n    `;
+                    scriptHTML += `current_${ids[6]}--;\n    current_${ids[6]} === arr_${ids[5]}.length ?\n    arr_${ids[5]}[0].toggleClass("active") :\n    arr_${ids[5]}[current_${ids[6]}].toggleClass("active");\n    `;
+                    scriptHTML += `arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n};\nfunction to_${ids[9]} (i) {\n    arr_${ids[5]}[current_${ids[6]} - 1].toggleClass("active");\n    `;
+                    scriptHTML += `arr_${ids[5]}[i - 1].toggleClass("active");\n    current_${ids[6]} = i;\n};\n\ngetElm("${b1id}").click(next_${ids[7]});\n`;
                     scriptHTML += `getElm("${b2id}").click(prev_${ids[8]});\n\narr_${ids[5]}.forEach((elm, i) => {\n    elm.get(1).click(() => to_${ids[9]} (i + 1));\n});`;
                     script.innerHTML = scriptHTML;
                     container.append(script);
@@ -457,9 +446,9 @@
                     dummy = $(dummy);
                     dummy.append(container);
                     return [dummy.html(), scriptHTML];
-                };
+                }
             </script>
         </main>
-        <div style="height: 120px;"></div>
+        <div style="height: 120px"></div>
     </body>
 </html>

@@ -2,7 +2,7 @@
  *
  * * Bearbeiten
  * Diese Datei darf nur von Vorstandsmitgliedern des Vereins Zurich meets Tanzania verändert werden.
- * 
+ *
  * * Wegleitung zum Bearbeiten
  * Grundsätzlich können alle Daten ganz normal ersetzt oder ausgetauscht werden.
  * Titel müssen am Anfang immer ein <h1> und am Ende ein </h1>.
@@ -15,11 +15,11 @@
  * - Es dürfen keine Absätze gemacht werden, falls der Text trotzdem welche braucht kann dafür ein <br> verwendet werden.
  * - Wenn ein Gänsefüsschen benutzt werden möchte muss davor ein \ kommen, also: \"
  * - Falls ein \ benutzt werden möchte, müssen zwei davon geschrieben werden, also: \\
- * 
+ *
  * ! Die Änderungen sind erst nach einem Neustart des Servers live
- * 
- * 
-*/
+ *
+ *
+ */
 const MEDUCATION = {
     beschreibung: "Das Projekt Meducation, welches 2017 gegründet wurde, sorgt für eine gezielt Aus- und Weiterbildung des örtlichen Personals in Ifisi.",
     aktualisiert: "Wed Apr 10 2024 09:32:14 GMT+0200 (Mitteleuropäische Sommerzeit)",
@@ -39,7 +39,7 @@ const MEDUCATION = {
         ["6.", "Salma Mbuba", "2022", "certified nurse"],
         ["7.", "Lukas Mwesya", "2022", "certified nurse"],
         ["8.", "Dr. Amos Mboela", "2023", "surgery"],
-        ["9.", "Huruma Burton Mwangolela", "2023", "clinical officer"]
+        ["9.", "Huruma Burton Mwangolela", "2023", "clinical officer"],
     ],
     tabelle2: [
         ["Nummer (wird aber nicht berücksichtigt)", "Name", "Abschluss", "Fachrichtung"],
@@ -56,9 +56,7 @@ const MEDUCATION = {
         ["20.", "Raheli Saitoti", "2026", "bachelor nursing, midwife"],
         ["21.", "Benatus Nyamahanga", "2028", "bachelor radiology"],
         ["22.", "Fedrick Charles Mpalang’ombe", "2029", "bachelor radiology"],
-    ]
+    ],
 };
-
-
 
 export default MEDUCATION;

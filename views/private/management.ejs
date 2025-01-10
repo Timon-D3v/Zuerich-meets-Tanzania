@@ -45,13 +45,26 @@
                             <td><%= passwords.mailjet %></td>
                         </tr>
                         <tr>
+                            <td><a class="basic-link" href="https://manager.infomaniak.com/v3/1230655/ng/home">Mailjet</a></td>
+                            <td>zuerich.meets.tanzania@gmail.com</td>
+                            <td><%= passwords.infomaniak %></td>
+                        </tr>
+                        <tr>
                             <th style="border-right: 0;"></th>
                             <th style="border-right: 0; border-left: 0; text-align: center;">Verwaltungsseiten</th>
                             <th style="border-left: 0;"></th>
                         </tr>
                         <tr>
-                            <td><a class="basic-link" href="/private/createBlog">Zum Blog Builder</a></td>
-                            <td><a class="basic-link" href="/private/createNews">Zum News Builder</a></td>
+                            <td><a class="basic-link" href="/private/createBlog">Blog Erstellen</a></td>
+                            <td>
+                                <a class="basic-link" href="#" id="alert_blog_link">Blog Bearbeiten</a>
+                                <script>
+                                    document.getElementById("alert_blog_link").addEventListener("click", () => {
+                                        alert("Um einen Blog zu bearbeiten muss du im gewünschten Blog nach ganz unten scrollen und auf den Link 'Bearbeiten' klicken.");
+                                    });
+                                </script>
+                            </td>
+                            <td><a class="basic-link" href="/private/createNews">News Erstellen</a></td>
                             <td><a class="basic-link" href="/private/editNews">News Bearbeiten</a></td>
                         </tr>
                     </table>

@@ -40,14 +40,15 @@
             }
         </style>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
@@ -64,10 +65,10 @@
                 <a href="#scroll_to_download" id="download_datenschutz">Download</a>
             </p>
             <script>
-                getElm("download_datenschutz").click(e => {
+                getElm("download_datenschutz").click((e) => {
                     e.preventDefault();
                     download("https://ik.imagekit.io/zmt/pdf/datenschutz/Datenschutzerklaerung.pdf", "Datenschutzerklärung ZMT.pdf");
-                })
+                });
             </script>
             <p class="date" id="scroll_to_download">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>

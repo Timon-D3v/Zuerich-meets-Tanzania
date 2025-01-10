@@ -11,20 +11,22 @@
             sitetype: sitetype
         }) %>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
             link_mitglied
         }) %>
-        <main><% 
+        <main>
+            <% 
             const jsonBlog = JSON.parse(blog); %>
             <pre class="invisible" id="raw">
                 <%= blog %>
@@ -39,10 +41,10 @@
             }) %>
             <script>
                 function jsonToElm(options) {
-                    const element = document.createElement(options.tagName)
+                    const element = document.createElement(options.tagName);
 
                     for (let attr in options.attributes) {
-                        element.setAttribute(attr, options.attributes[attr])
+                        element.setAttribute(attr, options.attributes[attr]);
                     }
 
                     for (let child of options.children) {
@@ -54,66 +56,16 @@
                         element.appendChild(jsonToElm(child));
                     }
 
-                    return element
+                    return element;
                 }
 
-                document.querySelector("main").appendChild(
-                    jsonToElm(
-                        JSON.parse(
-                            document.getElementById("raw").innerText
-                        ).html
-                    )
-                );
+                document.querySelector("main").appendChild(jsonToElm(JSON.parse(document.getElementById("raw").innerText).html));
             </script>
             <div class="blog_line"></div>
-            <div class="blog_footer"><%
-                function toRealDate (date) {
-                    date = date.toString();
-                    let time = date.slice(16, 24);
-                    let day = date.slice(8, 10);
-                    let year = date.slice(11, 15);
-                    let month = date.slice(4, 7);
-                    switch (month) {
-                        case "Jan":
-                            month = "Januar";
-                            break;
-                        case "Feb":
-                            month = "Februar";
-                            break;
-                        case "Mar":
-                            month = "März";
-                            break;
-                        case "Apr":
-                            month = "April";
-                            break;
-                        case "May":
-                            month = "Mai";
-                            break;
-                        case "Jun":
-                            month = "Juni";
-                            break;
-                        case "Jul":
-                            month = "Juli";
-                            break;
-                        case "Aug":
-                            month = "August";
-                            break;
-                        case "Sep":
-                            month = "September";
-                            break;
-                        case "Oct":
-                            month = "Oktober";
-                            break;
-                        case "Nov":
-                            month = "November";
-                            break;
-                        case "Dec":
-                            month = "Dezember";
-                            break;
-                    };
-                    return `${day}. ${month} ${year} um ${time}`;
-                };%>
-                <img id="blog_footer_img" src="/img/svg/personal.svg" alt="<%= jsonBlog.author %>">
+            <div class="blog_footer">
+                <% function toRealDate (date) { date = date.toString(); let time = date.slice(16, 24); let day = date.slice(8, 10); let year = date.slice(11, 15); let month = date.slice(4, 7); switch (month) { case "Jan": month = "Januar"; break; case "Feb": month = "Februar"; break; case "Mar": month = "März"; break; case "Apr": month = "April"; break; case "May": month = "Mai"; break; case
+                "Jun": month = "Juni"; break; case "Jul": month = "Juli"; break; case "Aug": month = "August"; break; case "Sep": month = "September"; break; case "Oct": month = "Oktober"; break; case "Nov": month = "November"; break; case "Dec": month = "Dezember"; break; }; return `${day}. ${month} ${year} um ${time}`; };%>
+                <img id="blog_footer_img" src="/img/svg/personal.svg" alt="<%= jsonBlog.author %>" />
                 <div>
                     <p>Autor: <%= jsonBlog.author %></p>
                     <p>Gepostet am <%= toRealDate(jsonBlog.date) %></p>

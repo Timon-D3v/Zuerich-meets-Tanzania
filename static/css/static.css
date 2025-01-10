@@ -400,10 +400,9 @@ label.static-checkbox.uiverse.hirachy-class {
     transition: 300ms;
 }
 
-.static-checkbox.uiverse input:checked ~
-.static-checkbox-mark.uiverse {
-    background-color: #0B6E4F;
-    border-radius: .5rem;
+.static-checkbox.uiverse input:checked ~ .static-checkbox-mark.uiverse {
+    background-color: #0b6e4f;
+    border-radius: 0.5rem;
     animation: static_checkbox 0.5s ease-in-out;
 }
 
@@ -413,18 +412,16 @@ label.static-checkbox.uiverse.hirachy-class {
     display: none;
 }
 
-.static-checkbox.uiverse input:checked ~
-.static-checkbox-mark.uiverse:after {
+.static-checkbox.uiverse input:checked ~ .static-checkbox-mark.uiverse:after {
     display: block;
 }
 
-.static-checkbox.uiverse
-.static-checkbox-mark.uiverse:after {
+.static-checkbox.uiverse .static-checkbox-mark.uiverse:after {
     left: 0.45em;
     top: 0.25em;
     width: 0.25em;
     height: 0.5em;
-    border: solid #E0E0E2;
+    border: solid #e0e0e2;
     border-width: 0 0.15em 0.15em 0;
     transform: rotate(45deg);
 }
@@ -450,7 +447,7 @@ label.static-checkbox.uiverse.hirachy-class {
     background-position: center right 0.25rem;
     background-repeat: no-repeat;
     background-size: 1rem;
-    background-color: #0B6E4F;
+    background-color: #0b6e4f;
     border-radius: 0.25em;
     box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
     cursor: pointer;
@@ -483,7 +480,7 @@ label.static-checkbox.uiverse.hirachy-class {
 #newsletterSignUpOption option {
     cursor: pointer;
     color: var(--text-50);
-    background-color: #0B6E4F;
+    background-color: #0b6e4f;
 }
 
 #newsletterSignUpOption option:hover,
@@ -660,11 +657,14 @@ label.static-checkbox.uiverse.hirachy-class {
     object-fit: contain;
 }
 
-@media screen and  (min-width: 1200px) {}
+@media screen and (min-width: 1200px) {
+}
 
-@media screen and  (min-width: 1000px) and (max-width: 1199px) {}
+@media screen and (min-width: 1000px) and (max-width: 1199px) {
+}
 
-@media screen and  (min-width: 750px) and (max-width: 999px) {}
+@media screen and (min-width: 750px) and (max-width: 999px) {
+}
 
 @media screen and (min-width: 575px) and (max-width: 749px) {
     .you {
@@ -705,7 +705,7 @@ label.static-checkbox.uiverse.hirachy-class {
     .tanzania-vergleich .tanzania {
         width: 100%;
     }
-    
+
     .tanzania_big_title {
         word-wrap: break-word;
     }
@@ -750,17 +750,18 @@ label.static-checkbox.uiverse.hirachy-class {
     .tanzania-vergleich .tanzania {
         width: 100%;
     }
-    
+
     .tanzania_big_title {
         word-wrap: break-word;
     }
 }
 
-@media screen and (max-width: 260px) {}
+@media screen and (max-width: 260px) {
+}
 
 @keyframes static_checkbox {
     0% {
-        box-shadow: 0 0 0 #0B6E4F90;
+        box-shadow: 0 0 0 #0b6e4f90;
         transform: rotate(20deg);
     }
 
@@ -769,11 +770,11 @@ label.static-checkbox.uiverse.hirachy-class {
     }
 
     75% {
-        box-shadow: 0 0 0 10px #0B6E4F60;
+        box-shadow: 0 0 0 10px #0b6e4f60;
     }
 
     100% {
-        box-shadow: 0 0 0 13px #0B6E4F30;
+        box-shadow: 0 0 0 13px #0b6e4f30;
         transform: rotate(0deg);
     }
 }

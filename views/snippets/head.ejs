@@ -1,54 +1,58 @@
-<meta charset="utf-8"><% if (env === "prod") { %>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-74MV698XJC"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+<meta charset="utf-8" /><% if (env === "prod") { %>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-74MV698XJC"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
 
-            gtag('config', 'G-74MV698XJC');
-        </script><%
+    gtag("config", "G-74MV698XJC");
+</script>
+<%
         if (sitetype === "blog") { %>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4705449052912673" crossorigin="anonymous"></script><% };}; %>
-        <title><%= title %> | zurich meets tanzania</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <meta name="Owner" content="Präsident Dr. Stefan Christen (Innere Medizin / Kardiologie)" contact="info@zurich-meets-tanzania.com">
-        <meta name="Manager" content="Secretariat Webdesign Sara Pieretti" contact="info@zurich-meets-tanzania.com">
-        <meta name="Developer" content="Timon Fiedler" contact="info@timondev.com">
-        <meta name="Contact page" content="https://www.timondev.com">
-        <meta name="Last modified" content="<%= date.toString() %>">
-        <meta name="description" content="<%= desc %>">
-        <meta name="google" content="nositelinkssearchbox"><%
-        if (sitetype === "private") { %>
-        <meta name="robots" content="noindex,nofollow"><% }
-        else { %>
-        <meta name="robots" content="index,follow"><% }; %>
-        <meta property="og:title" content="<%= title %> | zurich meets tanzania">
-        <meta property="og:url" content="https://www.zurich-meets-tanzania.com/<%= url %>">
-        <meta property="og:description" content="<%= desc %>">
-        <meta property="og:image" content="/img/logo.png">
-        <meta property="og:image:type" content="image/png">
-        <link rel="icon" type="image/ico" href="/img/logo.ico">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><%
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4705449052912673" crossorigin="anonymous"></script>
+<% };}; %>
+<title><%= title %> | zurich meets tanzania</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<meta name="Owner" content="Präsident Dr. Stefan Christen (Innere Medizin / Kardiologie)" contact="info@zurich-meets-tanzania.com" />
+<meta name="Manager" content="Secretariat Webdesign Sara Pieretti" contact="info@zurich-meets-tanzania.com" />
+<meta name="Developer" content="Timon Fiedler" contact="info@timondev.com" />
+<meta name="Contact page" content="https://www.timondev.com" />
+<meta name="Last modified" content="<%= date.toString() %>" />
+<meta name="description" content="<%= desc %>" />
+<meta name="google" content="nositelinkssearchbox" /><% if (sitetype === "private") { %>
+<meta name="robots" content="noindex,nofollow" /><% } else { %>
+<meta name="robots" content="index,follow" /><% }; %>
+<meta property="og:title" content="<%= title %> | zurich meets tanzania" />
+<meta property="og:url" content="https://www.zurich-meets-tanzania.com/<%= url %>" />
+<meta property="og:description" content="<%= desc %>" />
+<meta property="og:image" content="/img/logo.png" />
+<meta property="og:image:type" content="image/png" />
+<link rel="icon" type="image/ico" href="/img/logo.ico" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><%
         if (sitetype !== "error") { %>
-        <link rel="stylesheet" href="/css/style.css"><% };
-        if (sitetype === "private") { %>
-        <link rel="stylesheet" href="/css/private.css"><% }
-        else if (sitetype === "blog") { %>
-        <link rel="stylesheet" href="/css/blog.css">
-        <script type="text/javascript" src="/js/blog.js" defer></script><% }
+<link rel="stylesheet" href="/css/style.css" /><% }; if (sitetype === "private") { %>
+<link rel="stylesheet" href="/css/private.css" /><% } else if (sitetype === "blog") { %>
+<link rel="stylesheet" href="/css/blog.css" />
+<script type="text/javascript" src="/js/blog.js" defer></script>
+<% }
         else if (sitetype === "static") { %>
-        <link rel="stylesheet" href="/css/static.css"><% };
-        if (sitetype !== "error") { %>
-        <link rel="stylesheet" href="/css/fonts.min.css">
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/timonjs@1.0.5/dist/timon.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-        <script type="text/javascript" src="/js/global.min.js" defer></script><% };
+<link rel="stylesheet" href="/css/static.css" /><% }; if (sitetype !== "error") { %>
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/timonjs@1.0.5/dist/timon.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script type="text/javascript" src="/js/global.min.js" defer></script>
+<% };
         if (user?.valid) { %>
-        <script type="text/javascript">sessionStorage.setItem("theme", "<%= user.darkmode ? 'dark' : 'light' %>")</script><% }; %>
-        <script>
-            function timonjs_message() {
-                const b = (g, a, c) => `color:${g}; font-size:${a}em; background-color:#000; font-family:Consolas, monospace; padding:0.75em ${c}; display:block;`;
-                console.log("%cCustom Coded by @timon.dev", b("#0f0", 2, "25%"));
-                console.log("%cVisit https://www.timondev.com", b("#fff", 1, "35%"))
-            }
-        </script>
+<script type="text/javascript">
+    sessionStorage.setItem("theme", "<%= user.darkmode ? 'dark' : 'light' %>");
+</script>
+<% }; %>
+<script>
+    function timonjs_message() {
+        const b = (g, a, c) => `color:${g}; font-size:${a}em; background-color:#000; font-family:Consolas, monospace; padding:0.75em ${c}; display:block;`;
+        console.log("%cCustom Coded by @timon.dev", b("#0f0", 2, "25%"));
+        console.log("%cVisit https://www.timondev.com", b("#fff", 1, "35%"));
+    }
+</script>

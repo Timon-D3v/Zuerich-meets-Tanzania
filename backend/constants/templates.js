@@ -8,6 +8,6 @@ export default {
         btn_text: undefined,
         btn_link: undefined,
         pdf: false,
-        pdf_src: undefined
-    }
-}
+        pdf_src: undefined,
+    },
+};

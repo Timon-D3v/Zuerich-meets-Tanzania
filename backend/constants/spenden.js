@@ -2,7 +2,7 @@
  *
  * * Bearbeiten
  * Diese Datei darf nur von Vorstandsmitgliedern des Vereins Zurich meets Tanzania verändert werden.
- * 
+ *
  * * Wegleitung zum Bearbeiten
  * Grundsätzlich können alle Daten ganz normal ersetzt oder ausgetauscht werden.
  * "bild" ist der Link zu einem Bild und "alt" ist eine kurze Beschreibung des Bilds.
@@ -12,11 +12,11 @@
  * - Es dürfen keine Absätze gemacht werden, falls der Text trotzdem welche braucht kann dafür ein <br> verwendet werden.
  * - Wenn ein Gänsefüsschen benutzt werden möchte muss davor ein \ kommen, also: \"
  * - Falls ein \ benutzt werden möchte, müssen zwei davon geschrieben werden, also: \\
- * 
+ *
  * ! Die Änderungen sind erst nach einem Neustart des Servers live
- * 
- * 
-*/
+ *
+ *
+ */
 const DONATE = {
     datum: "Fri Apr 19 2024 19:53:02 GMT+0200 (Mitteleuropäische Sommerzeit)",
     titel: "Ihre Unterstützung zählt",
@@ -34,8 +34,8 @@ const DONATE = {
             link120: "https://donate.stripe.com/test_3cs5mE39k2ao0LKcMU",
             linkX: "https://donate.stripe.com/test_9AQaGY11c02geCA5kt",
             member: "https://buy.stripe.com/test_7sI4iA5hsg1e3XW7sx",
-        }
-    }
-}
+        },
+    },
+};
 
 export default DONATE;

@@ -18,7 +18,9 @@
                 overflow: hidden;
             }
 
-            h1, p, a {
+            h1,
+            p,
+            a {
                 padding: 0 15vw;
                 color: #ecf3f8;
             }
@@ -32,7 +34,9 @@
                 line-break: loose;
             }
 
-            p, a, span {
+            p,
+            a,
+            span {
                 font-family: "Titillium Web", sans-serif;
                 font-size: calc(50px / (1.414 * 2));
             }
@@ -49,7 +53,9 @@
     </head>
     <body>
         <h1>Error 404 / Nicht gefunden</h1>
-        <p>Wir konnten <span><%= origin_url + url %></span> leider nicht finden...</p>
+        <p>
+            Wir konnten <span><%= origin_url + url %></span> leider nicht finden...
+        </p>
         <a href="/">Zurück zum Startbildschirm</a>
     </body>
 </html>

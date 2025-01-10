@@ -11,8 +11,8 @@
         }) %>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.1.3/build/umd/index.min.js"></script>
         <script type="text/javascript" src="/js/builder.js" defer></script>
-        <link rel="stylesheet" href="/css/blog.css">
-        <link rel="stylesheet" href="/css/private.css">
+        <link rel="stylesheet" href="/css/blog.css" />
+        <link rel="stylesheet" href="/css/private.css" />
     </head>
     <body>
         <%- include("../snippets/header.ejs") %>
@@ -55,13 +55,14 @@
                     <h1>Abschliessen</h1>
                 </button>
                 <button type="button" class="floating-edit-btn" id="edit-current-element" data-blog-is-new="false" data-blog-original-name="<%= title %>">
-                    <img src="/img/svg/pen.svg" alt="Bearbeiten" title="Bearbeiten">
+                    <img src="/img/svg/pen.svg" alt="Bearbeiten" title="Bearbeiten" />
                 </button>
                 <button type="button" class="floating-edit-btn" id="delete-current-element">
-                    <img src="/img/svg/trash.svg" alt="Löschen" title="Löschen">
+                    <img src="/img/svg/trash.svg" alt="Löschen" title="Löschen" />
                 </button>
             </section>
-            <main><% 
+            <main>
+                <% 
                 const jsonBlog = JSON.parse(blog); %>
                 <%- include("../snippets/hero.ejs", {
                     img_alt: jsonBlog.hero.alt,
@@ -76,10 +77,10 @@
                 </pre>
                 <script>
                     function jsonToElm(options) {
-                        const element = document.createElement(options.tagName)
+                        const element = document.createElement(options.tagName);
 
                         for (let attr in options.attributes) {
-                            element.setAttribute(attr, options.attributes[attr])
+                            element.setAttribute(attr, options.attributes[attr]);
                         }
 
                         for (let child of options.children) {
@@ -91,16 +92,10 @@
                             element.appendChild(jsonToElm(child));
                         }
 
-                        return element
+                        return element;
                     }
 
-                    document.querySelector("main").appendChild(
-                        jsonToElm(
-                            JSON.parse(
-                                document.getElementById("raw").innerText
-                            ).html
-                        )
-                    );
+                    document.querySelector("main").appendChild(jsonToElm(JSON.parse(document.getElementById("raw").innerText).html));
                 </script>
             </main>
         </div>

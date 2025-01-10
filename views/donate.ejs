@@ -12,14 +12,15 @@
         }) %>
         <script type="text/javascript" src="/js/donate.js" defer></script>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
@@ -44,25 +45,25 @@
                 <div class="donate-onetime active">
                     <div class="donate-amount">
                         <div class="donate-currency">CHF</div>
-                        <input type="number" name="donate50" class="donate-number" value="50" disabled>
+                        <input type="number" name="donate50" class="donate-number" value="50" disabled />
                     </div>
                     <div class="donate-amount">
                         <div class="donate-currency">CHF</div>
-                        <input type="number" name="donate80" class="donate-number" value="80" disabled>
+                        <input type="number" name="donate80" class="donate-number" value="80" disabled />
                     </div>
                     <div class="donate-amount">
                         <div class="donate-currency">CHF</div>
-                        <input type="number" name="donate120" class="donate-number" value="120" disabled>
+                        <input type="number" name="donate120" class="donate-number" value="120" disabled />
                     </div>
                     <div class="donate-amount">
                         <div class="donate-currency">CHF</div>
-                        <input type="number" id="donate_custom" class="donate-number" placeholder="___" min="1" max="100000000">
+                        <input type="number" id="donate_custom" class="donate-number" placeholder="___" min="1" max="100000000" />
                     </div>
                 </div>
                 <div class="donate-membership">
                     <div class="donate-amount">
                         <div class="donate-currency">CHF / Monat</div>
-                        <input type="number" name="donate20" class="donate-number" value="50" disabled>
+                        <input type="number" name="donate20" class="donate-number" value="50" disabled />
                     </div>
                 </div>
                 <div class="donate-btn-wrapper">

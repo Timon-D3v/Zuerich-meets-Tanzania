@@ -1,32 +1,27 @@
 const eye = getElm("show_password"),
-password = getElm("password"),
-given_name = getElm("name"),
-family_name = getElm("family_name"),
-email = getElm("email"),
-phone = getElm("phone"),
-submit_changes = getElm("profile-settings-input-submit"),
-change_picture = getElm("edit_picture"),
-picture_overlay = getElm("picture_overlay"),
-file = getElm("file_upload"),
-preview_file = getElm("file_preview"),
-submit_file = getElm("file_submit"),
-newsletterBtn = getElm("notifications_newsletter"),
-newsletterSelect = getElm("newsletterSignUpOption"),
-close_picture_overlay = getElm("close_picture_overlay"),
-get_member = getElm("get_member"),
-address = getElm("address");
-
+    password = getElm("password"),
+    given_name = getElm("name"),
+    family_name = getElm("family_name"),
+    email = getElm("email"),
+    phone = getElm("phone"),
+    submit_changes = getElm("profile-settings-input-submit"),
+    change_picture = getElm("edit_picture"),
+    picture_overlay = getElm("picture_overlay"),
+    file = getElm("file_upload"),
+    preview_file = getElm("file_preview"),
+    submit_file = getElm("file_submit"),
+    newsletterBtn = getElm("notifications_newsletter"),
+    newsletterSelect = getElm("newsletterSignUpOption"),
+    close_picture_overlay = getElm("close_picture_overlay"),
+    get_member = getElm("get_member"),
+    address = getElm("address");
 
 for (let i = 0; i < 3; i++) {
     const elm = getElm("profile_dashboard_btn" + (i + 1));
-    const profile_dashboard_content = [
-        getQuery(".dynamic .settings"),
-        getQuery(".dynamic .preferences"),
-        getQuery(".dynamic .membership")
-    ];
+    const profile_dashboard_content = [getQuery(".dynamic .settings"), getQuery(".dynamic .preferences"), getQuery(".dynamic .membership")];
     elm.click(() => {
         colorizePDButtons(elm);
-        profile_dashboard_content.forEach(elm => {
+        profile_dashboard_content.forEach((elm) => {
             elm.removeClass("active");
         });
         profile_dashboard_content[i].addClass("active");
@@ -34,23 +29,14 @@ for (let i = 0; i < 3; i++) {
 }
 
 eye.click(() => {
-    password.type === "text" ?
-    openEyes(password, eye) :
-    closeEyes(password, eye);
+    password.type === "text" ? openEyes(password, eye) : closeEyes(password, eye);
 });
 
-[
-    password,
-    given_name,
-    family_name,
-    email,
-    phone,
-    address
-].forEach(elm => elm.on("input", () => {
-    checkDefaultProfileVal() ?
-    submit_changes.addClass("active") :
-    submit_changes.removeClass("active");
-}));
+[password, given_name, family_name, email, phone, address].forEach((elm) =>
+    elm.on("input", () => {
+        checkDefaultProfileVal() ? submit_changes.addClass("active") : submit_changes.removeClass("active");
+    }),
+);
 
 submit_changes.click(async () => {
     const result = await post("/post/updateProfile", {
@@ -59,7 +45,7 @@ submit_changes.click(async () => {
         family_name: family_name.valIsEmpty() ? family_name.placeholder : family_name.val(),
         email: email.valIsEmpty() ? email.placeholder : email.val(),
         phone: phone.valIsEmpty() ? phone.placeholder : phone.val(),
-        address: address.valIsEmpty() ? address.placeholder : address.val()
+        address: address.valIsEmpty() ? address.placeholder : address.val(),
     });
 
     const redir = ORIGIN + window.location.pathname + "?js=successField(`Daten erfolgreich aktualisiert`);nofunction";
@@ -92,76 +78,69 @@ if (JSON.stringify(get_member) !== "{}") {
     });
 } else {
     getMyBills();
-};
+}
 
 getElm("preferences_darkmode").click(preferences_toggleDarkmode);
 newsletterBtn.click(handleNewsletterCalling);
 
-function colorizePDButtons (btn) {
+function colorizePDButtons(btn) {
     for (let i = 0; i < 3; i++) {
         getElm("profile_dashboard_btn" + (i + 1)).removeClass("active");
     }
     btn.addClass("active");
-};
+}
 
-function openEyes (p, e) {
+function openEyes(p, e) {
     p.type = "password";
     e.src = "/img/svg/eye.svg";
-};
+}
 
-function closeEyes (p, e) {
+function closeEyes(p, e) {
     p.type = "text";
     e.src = "/img/svg/eye_closed.svg";
-};
+}
 
-function checkDefaultProfileVal () {
-    const valid = element => element.placeholder === element.val() || element.valIsEmpty();
+function checkDefaultProfileVal() {
+    const valid = (element) => element.placeholder === element.val() || element.valIsEmpty();
 
-    if (
-        valid(password) &&
-        valid(given_name) &&
-        valid(family_name) &&
-        valid(email) &&
-        valid(phone) &&
-        valid(address)
-    ) return false;
+    if (valid(password) && valid(given_name) && valid(family_name) && valid(email) && valid(phone) && valid(address)) return false;
 
     return true;
-};
+}
 
-async function sendNewProfilePicture () {
+async function sendNewProfilePicture() {
     const result = await post("/post/changePicture", {
-        base64: preview_file.src
+        base64: preview_file.src,
     });
     if (result.res === "No Error") window.location.href = ORIGIN + window.location.pathname + "?js=successField";
 
-    errorField("Fehler beim hochladen des Bildes.")
-};
+    errorField("Fehler beim hochladen des Bildes.");
+}
 
-function preferences_toggleDarkmode () {
+function preferences_toggleDarkmode() {
     post("/post/toggleDarkmode");
     setTheme();
-};
+}
 
-async function checkNewsletter () {
+async function checkNewsletter() {
     const result = await post("/post/newsletter/check");
     if (result.check) newsletterBtn.checked = true;
-};
+}
 checkNewsletter();
 
-async function submitNewsletter () {
+async function submitNewsletter() {
     if (newsletterSelect.value === "") return newsletter_noGender();
 
     const result = await post("/post/newsletter/signUp/logedIn", {
-        gender: newsletterSelect.value
+        gender: newsletterSelect.value,
     });
 
     return result.status;
-};
+}
 
-async function getMyBills () {
+async function getMyBills() {
     const bills = await post("/post/getMyBills");
-    bills.forEach(bill => {
+    bills.forEach((bill) => {
         const tr = createElm("tr");
         const id = createElm("td");
         const abo = createElm("td");
@@ -175,7 +154,7 @@ async function getMyBills () {
 
         img.alt = "Download";
         img.src = "/img/svg/download.svg";
-        pdf.append(img)
+        pdf.append(img);
         stripe.innerHTML = "Zu Stripe";
         pdf.target = "_blank";
         stripe.target = "_blank";
@@ -190,27 +169,27 @@ async function getMyBills () {
         tr.append(id, abo, price, status, link, file);
         getElm("invoice_append").append(tr);
     });
-};
+}
 
-function cancelNewsletter () {
+function cancelNewsletter() {
     post("/post/newsletter/signOff");
-};
+}
 
-function newsletter_noGender () {
+function newsletter_noGender() {
     alert("Du musst eine Anrede wählen.");
     console.warn("Du musst eine Anrede wählen.");
     newsletterBtn.checked = false;
-};
+}
 
-function handleNewsletterCalling () {
+function handleNewsletterCalling() {
     if (newsletterBtn.checked) submitNewsletter();
     else cancelNewsletter();
-};
+}
 
-function profile_toSection (num) {
+function profile_toSection(num) {
     profile_dashboard_buttons[num - 1].click();
-};
+}
 
-function profile_toMembership () {
+function profile_toMembership() {
     profile_toSection(3);
-};
+}

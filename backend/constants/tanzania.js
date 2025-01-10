@@ -2,7 +2,7 @@
  *
  * * Bearbeiten
  * Diese Datei darf nur von Vorstandsmitgliedern des Vereins Zurich meets Tanzania verändert werden.
- * 
+ *
  * * Wegleitung zum Bearbeiten
  * Grundsätzlich können alle Daten ganz normal ersetzt oder ausgetauscht werden.
  * "beschreibung" ist eine kurze Beschreibung, worum es auf der Seite geht.
@@ -15,17 +15,15 @@
  * - Ein Link kann wie folgt eingefügt werden: <a href='{{ DEIN_LINK }}'>{{ DEIN_TEXT }}</a>
  *   Ersetzte dabei {{ DEIN_LINK }} mit deinem Link und das gleiche bei {{ DEIN_TEXT }}.
  *   Der Text muss nicht mit dem Link übereinstimmen.
- * 
+ *
  * ! Die Änderungen sind erst nach einem Neustart des Servers live
- * 
- * 
-*/
+ *
+ *
+ */
 const TANZANIA = {
     beschreibung: "Fakten über Tanzania, Geografie, Geschichte und mehr kannst du alles auf dieser Seite finden.",
     datum: "Sun May 05 2024 21:22:32 GMT+0200 (Mitteleuropäische Sommerzeit)",
     title: "Tanzania",
 };
-
-
 
 export default TANZANIA;

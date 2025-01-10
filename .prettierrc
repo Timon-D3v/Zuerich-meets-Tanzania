@@ -1,0 +1,8 @@
+{
+    "tabWidth": 4,
+    "useTabs": false,
+    "singleQuote": false,
+    "printWidth": 400,
+    "quoteProps": "consistent",
+    "plugins": ["prettier-plugin-ejs"]
+}

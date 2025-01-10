@@ -2,7 +2,6 @@ var data = "";
 const pdf = getElm("news_pdf");
 const s_btn = getElm("news_btn");
 
-
 getElm("hero_img_upload").on("change", async (e) => {
     data = await toBase64(e.target.files[0]);
     getElm("hero_file_preview").src = data;
@@ -36,40 +35,38 @@ getElm("gallery_img_upload_submit").click(async () => {
         subtitle = getElm("gallery_subtitle").val(),
         author = getElm("username").val();
     if (title === "") return alert("Fülle alle Felder aus.");
-    let img = {arr: [], vid: []};
+    let img = { arr: [], vid: [] };
     let files = getElm("gallery_img_upload").files;
     if (files.length === 0) return alert("Keine Bilder hochgeladen.");
     for (let i = 0; i < files.length; i++) {
         let obj = {
             alt: title + "_" + i,
-            src: await toBase64(files[i])
+            src: await toBase64(files[i]),
         };
         if (files[i].type.startsWith("video/")) {
             obj.type = files[i].type;
             img.vid.push(obj);
         } else {
             img.arr.push(obj);
-        };
-    };
+        }
+    }
     const res = await post("/post/createGallery", {
         title,
         subtitle: markdownToHtml(subtitle),
         author,
-        img
+        img,
     });
-    res.error === "OK" ?
-    alert("Galerie erfolgreich hochgeladen.") :
-    alert("Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut.");
+    res.error === "OK" ? alert("Galerie erfolgreich hochgeladen.") : alert("Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut.");
 });
 
-getElm("gallery_update_submit").click(async e => {
+getElm("gallery_update_submit").click(async (e) => {
     e.preventDefault();
 
     const title = getElm("gallery_update_title");
 
     if (title.valIsEmpty()) return alert("Fülle alle Felder aus.");
 
-    const data = {img: [], vid: []};
+    const data = { img: [], vid: [] };
 
     const files = getElm("gallery_update").files;
 
@@ -78,7 +75,7 @@ getElm("gallery_update_submit").click(async e => {
     for (let i = 0; i < files.length; i++) {
         const obj = {
             alt: title.val() + `_${i}_updated_${Date.now()}`,
-            src: await toBase64(files[i])
+            src: await toBase64(files[i]),
         };
 
         if (files[i].type.startsWith("video/")) {
@@ -86,22 +83,20 @@ getElm("gallery_update_submit").click(async e => {
             data.vid.push(obj);
         } else {
             data.img.push(obj);
-        };
-    };
+        }
+    }
 
     const res = await post("/post/updateGallery", {
         title: title.val(),
-        data
+        data,
     });
 
-    res.status === "OK" ?
-    alert("Galerie erfolgreich hochgeladen.") :
-    alert("Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut.");
+    res.status === "OK" ? alert("Galerie erfolgreich hochgeladen.") : alert("Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut.");
 });
 
 getElm("merge_blogs_btn").click(async () => {
     let team = await fetch(ORIGIN + "/chunks/team/getCurrentTeam", {
-        method: "GET"
+        method: "GET",
     });
 
     team = await team.text();
@@ -112,7 +107,7 @@ getElm("merge_blogs_btn").click(async () => {
         base64: await getElm("merge_blogs_basic_img").getImgBase64(),
         alt: getElm("merge_blogs_basic_alt").val(),
         number: Number(getElm("merge_blogs").val()),
-        team
+        team,
     });
 
     alert(res.message);
@@ -132,7 +127,7 @@ getElm("team-m-submit").click(async () => {
     }
 
     const base64 = await getElm("team-m-img").getImgBase64();
-    
+
     if (base64 === undefined) {
         alert("Bitte wähle ein Bild aus");
         return;
@@ -141,7 +136,7 @@ getElm("team-m-submit").click(async () => {
     const res = await post("/post/createTeam", {
         leitsatz: markdownToHtml(leitsatz.val()),
         beschreibung: markdownToHtml(beschreibung.val()),
-        base64
+        base64,
     });
 
     alert(res.valid ? "Team wurde erstellt" : "Team konnte nicht erstellt werden");
@@ -170,24 +165,21 @@ getElm("delete_event_btn").click(async () => {
 pdf.click(() => toggleDivs(pdf, getElm("show_pdf"), getElm("show_img")));
 s_btn.click(() => toggleDivs(s_btn, getElm("show_btn_menu"), getElm("show_nothing")));
 
-
-function toggleDivs (toggler, first, second) {
+function toggleDivs(toggler, first, second) {
     first.hide();
     second.hide();
     toggler.checked ? first.show() : second.show();
-};
+}
 
-async function admin_sendNews (e) {
+async function admin_sendNews(e) {
     e.preventDefault();
 
     let picture = "";
     try {
-        picture = await toBase64(
-            getElm("news_img_file").file()
-        );
+        picture = await toBase64(getElm("news_img_file").file());
     } catch (err) {
         warnLog("No image uploaded");
-    };
+    }
 
     let res = await post("/post/submitNews", {
         text: getElm("news_text").val(),
@@ -198,17 +190,15 @@ async function admin_sendNews (e) {
         btn_text: getElm("news_btn_text").val(),
         btn_link: getElm("news_btn_link").val(),
         pdf: getElm("news_pdf").checked.toString(),
-        pdf_src: getElm("news_pdf_src").val()
+        pdf_src: getElm("news_pdf_src").val(),
     });
 
     let message;
 
-    res.res === 200 ?
-    message = "Das hat geklappt. Die News sind jetzt online." :
-    message = "Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut";
+    res.res === 200 ? (message = "Das hat geklappt. Die News sind jetzt online.") : (message = "Etwas hat nicht geklappt. Versuche es in einigen Sekunden erneut");
 
     alert(message);
-};
+}
 
 getElm("team-m-add").click(async () => {
     const username = getElm("team-m-username");
@@ -223,7 +213,7 @@ getElm("team-m-add").click(async () => {
     const res = await post("/post/addTeamMember", {
         username: username.val(),
         job: markdownToHtml(job.val()),
-        motivation: markdownToHtml(motivation.val())
+        motivation: markdownToHtml(motivation.val()),
     });
 
     alert(res.valid ? "Erfolgreich hinzugefügt" : "Mitglied konnte nicht hinzugefügt werden");
@@ -242,7 +232,7 @@ getElm("team-m-remove").click(async () => {
     alert(res.valid ? "Erfolgreich entfernt" : "Mitglied konnte nicht entfernt werden");
 });
 
-getElm("event_submit").click(async e => {
+getElm("event_submit").click(async (e) => {
     e.preventDefault();
     const title = getElm("event_title");
     const date = getElm("event_date");
@@ -251,7 +241,7 @@ getElm("event_submit").click(async e => {
 
     const res = await post("/post/addCalendarEvent", {
         title: markdownToHtml(title.val()),
-        date: date.val()
+        date: date.val(),
     });
 
     alert(res.message);

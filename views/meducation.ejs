@@ -28,7 +28,8 @@
                 overflow-x: auto;
             }
 
-            td, th {
+            td,
+            th {
                 border: 1px solid var(--text-950);
                 text-align: left;
                 padding: 8px;
@@ -44,14 +45,15 @@
             }
         </style>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {
@@ -67,48 +69,46 @@
                 cta_link: ""
             }) %>
             <h1 class="title margin-t-5vh w1000 w1200"><%= meducation.titel %></h1>
-            <p class="text"><%= meducation.abs1 %><br><%= meducation.abs2 %><br><%= meducation.abs3 %><br><%= meducation.abs4 %><br><%= meducation.abs5 %></p>
+            <p class="text"><%= meducation.abs1 %><br /><%= meducation.abs2 %><br /><%= meducation.abs3 %><br /><%= meducation.abs4 %><br /><%= meducation.abs5 %></p>
             <h2 class="title">Abgeschlossene Ausbildung:</h2>
             <div class="table-container">
-                <table><%
-                meducation.tabelle1.forEach((elm, i) => { 
-                    if (i === 0) { %>
+                <table>
+                    <% meducation.tabelle1.forEach((elm, i) => { if (i === 0) { %>
                     <tr>
                         <th></th>
                         <th><%= elm[1] %></th>
                         <th><%= elm[2] %></th>
                         <th><%= elm[3] %></th>
                     </tr>
-                <%  } else { %>
+                    <%  } else { %>
                     <tr>
                         <td><%= i + "." %></td>
                         <td><%= elm[1] %></td>
                         <td><%= elm[2] %></td>
                         <td><%= elm[3] %></td>
                     </tr>
-                <%  };
+                    <%  };
                 }); %>
                 </table>
             </div>
             <h2 class="title">Ausstehende Ausbildung:</h2>
             <div class="table-container">
-                <table><%
-                meducation.tabelle2.forEach((elm, i) => { 
-                    if (i === 0) { %>
+                <table>
+                    <% meducation.tabelle2.forEach((elm, i) => { if (i === 0) { %>
                     <tr>
                         <th></th>
                         <th><%= elm[1] %></th>
                         <th><%= elm[2] %></th>
                         <th><%= elm[3] %></th>
                     </tr>
-                <%  } else { %>
+                    <%  } else { %>
                     <tr>
                         <td><%= i + "." %></td>
                         <td><%= elm[1] %></td>
                         <td><%= elm[2] %></td>
                         <td><%= elm[3] %></td>
                     </tr>
-                <%  };
+                    <%  };
                 }); %>
                 </table>
             </div>

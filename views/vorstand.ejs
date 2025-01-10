@@ -15,26 +15,27 @@
                 .hero-img {
                     filter: brightness(0.75);
                 }
-                
+
                 h1.hero-title,
                 p.hero-subtitle {
                     color: var(--c-text-50) !important;
                 }
-                
+
                 h1.hero-title::after {
                     background-color: var(--c-text-50) !important;
                 }
             }
         </style>
     </head>
-    <body><%
+    <body>
+        <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
             user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
-       <%- include("./snippets/header.ejs", {
+        <%- include("./snippets/header.ejs", {
             link_mitglied
         }) %>
         <%- include("./snippets/nav.ejs", {

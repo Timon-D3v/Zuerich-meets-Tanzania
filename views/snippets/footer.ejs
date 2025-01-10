@@ -1,54 +1,56 @@
 <footer>
-            <form class="f-news">
-                <div>
-                    <h2>Newsletter</h2>
-                    <p>Bleiben Sie über Zürich Meets Tanzania und ähnliche Projekte informiert.</p>
-                    <div class="news-a">
-                        <p class="news-a-t">Anrede:</p>
-                        <input type="checkbox" id="newsletter-anrede-herr" checked="true">
-                        <label for="newsletter-anrede-herr">Herr</label>
-                        <input type="checkbox" id="newsletter-anrede-frau">
-                        <label for="newsletter-anrede-frau">Frau</label>
-                    </div>
-                </div>
-                <div class="news-n">
-                    <input type="text" id="newsletter-vorname" autocomplete="given-name" placeholder="Vorname" class="f-input" required>
-                    <input type="text" id="newsletter-nachname" autocomplete="family-name" placeholder="Nachname" class="f-input" required>
-                </div>
-                <input type="email" id="newsletter-email" autocomplete="email" placeholder="E-Mail-Adresse" class="f-input" required>
-                    <p id="newsletter-form-error">Du hast einen Fehler gemacht</p>
-                <button type="submit" class="f-submit" id="newsletter-submit">Anmelden</button>
-            </form>
-            <div class="f-links">
-                <div class="f-l-social">
-                    <h2>Folge uns!</h2>
-                    <a href="https://www.instagram.com/zurichmeetstanzania/">Instagram</a>
-                    <a href="https://www.facebook.com/profile.php?id=100064463715451">Facebook</a>
-                    <h2>Weiteres</h2>
-                    <a href="https://shop.unikat-hoengg.ch/produkte/zurichmeetstanzania-60?d=1">Unikat Höngg</a>
-                    <a href="<% origin_url %>/private/management">Verwaltung</a>
-                </div>
-                <div class="f-l-r">
-                    <h2>Rechtliches</h2>
-                    <a href="/statuten">Statuten</a>
-                    <a href="/impressum">Quellenangabe</a>
-                    <a href="/datenschutz">Datenschutzerklärung</a>
-                    <a href="https://www.timondev.com/">Seite des Erstellers</a>
-                    <h2>Spendenkonto</h2>
-                    <a href="https://ik.imagekit.io/zmt/pdf/Rechnung%20Spendenkonto.pdf" target="_blank">IBAN: CH 20 0900 0000 6184 2154 0</a>
-                    <a href="https://ik.imagekit.io/zmt/pdf/Rechnung%20Spendenkonto.pdf" target="_blank">zurich - meets - tanzania</a>
-                    <a href="https://ik.imagekit.io/zmt/pdf/Rechnung%20Spendenkonto.pdf" target="_blank">8049 Zürich</a>
-                </div>
+    <form class="f-news">
+        <div>
+            <h2>Newsletter</h2>
+            <p>Bleiben Sie über Zürich Meets Tanzania und ähnliche Projekte informiert.</p>
+            <div class="news-a">
+                <p class="news-a-t">Anrede:</p>
+                <input type="checkbox" id="newsletter-anrede-herr" checked="true" />
+                <label for="newsletter-anrede-herr">Herr</label>
+                <input type="checkbox" id="newsletter-anrede-frau" />
+                <label for="newsletter-anrede-frau">Frau</label>
             </div>
-            <p class="f-copyright">Copyright &copy; 2024 zurich - meets - tanzania | Alle Rechte vorbehalten</p><%
+        </div>
+        <div class="news-n">
+            <input type="text" id="newsletter-vorname" autocomplete="given-name" placeholder="Vorname" class="f-input" required />
+            <input type="text" id="newsletter-nachname" autocomplete="family-name" placeholder="Nachname" class="f-input" required />
+        </div>
+        <input type="email" id="newsletter-email" autocomplete="email" placeholder="E-Mail-Adresse" class="f-input" required />
+        <p id="newsletter-form-error">Du hast einen Fehler gemacht</p>
+        <button type="submit" class="f-submit" id="newsletter-submit">Anmelden</button>
+    </form>
+    <div class="f-links">
+        <div class="f-l-social">
+            <h2>Folge uns!</h2>
+            <a href="https://www.instagram.com/zurichmeetstanzania/">Instagram</a>
+            <a href="https://www.facebook.com/profile.php?id=100064463715451">Facebook</a>
+            <h2>Weiteres</h2>
+            <a href="https://shop.unikat-hoengg.ch/produkte/zurichmeetstanzania-60?d=1">Unikat Höngg</a>
+            <a href="<% origin_url %>/private/management">Verwaltung</a>
+        </div>
+        <div class="f-l-r">
+            <h2>Rechtliches</h2>
+            <a href="/statuten">Statuten</a>
+            <a href="/impressum">Quellenangabe</a>
+            <a href="/datenschutz">Datenschutzerklärung</a>
+            <a href="https://www.timondev.com/">Seite des Erstellers</a>
+            <h2>Spendenkonto</h2>
+            <a href="https://ik.imagekit.io/zmt/pdf/Rechnung%20Spendenkonto.pdf" target="_blank">IBAN: CH 20 0900 0000 6184 2154 0</a>
+            <a href="https://ik.imagekit.io/zmt/pdf/Rechnung%20Spendenkonto.pdf" target="_blank">zurich - meets - tanzania</a>
+            <a href="https://ik.imagekit.io/zmt/pdf/Rechnung%20Spendenkonto.pdf" target="_blank">8049 Zürich</a>
+        </div>
+    </div>
+    <p class="f-copyright">Copyright &copy; 2024 zurich - meets - tanzania | Alle Rechte vorbehalten</p>
+    <%
             if (js) {
                 js = js.replaceAll("\"", "`");
             %>
-            <script id="query_script" defer>
-                ready(() => {
-                    <%= js %>();
-                    getElm("query_script").remove();
-                });
-            </script><%
+    <script id="query_script" defer>
+        ready(() => {
+            <%= js %>();
+            getElm("query_script").remove();
+        });
+    </script>
+    <%
             }; %>
-        </footer>
+</footer>
