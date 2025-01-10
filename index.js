@@ -965,9 +965,9 @@ app.get("/pay", async (req, res) => {
         link = await buyMembership(req.session.user, q.key, req.protocol + "://" + req.get("host"));
     };
 
-    if (req.session?.user?.valid) {
-        link += "?prefilled_email=" + req.session.user.email;
-    }
+    // if (req.session?.user?.valid) {
+    //     link += "?prefilled_email=" + req.session.user.email;
+    // }
 
     res.redirect(303, link);
 });

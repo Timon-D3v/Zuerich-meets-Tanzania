@@ -19,7 +19,7 @@
 const HERO = {
     title: "Medizinische Hilfe<br>in Tanzania",
     subtitle: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren.",
-    button_text: "Mehr Erfahren",
+    button_text: "",
     link: "#scroll_to_vorstand"
 };
 
