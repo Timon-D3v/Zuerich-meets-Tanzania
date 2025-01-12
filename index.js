@@ -5,6 +5,7 @@ import ImageKit from "imagekit";
 import express from "express";
 import Stripe from "stripe";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 import timon from "timonjs";
 import https from "https";
 import cors from "cors";
@@ -1252,10 +1253,11 @@ app.post("/post/signUp", async (req, res) => {
         data.picture = await imagekitUpload(data.picture, data.username + "_" + timon.randomString(32), "/users/");
         data.picture = data.picture.path;
     }
+    const hash = bcrypt.hash(data.password, 10);
     // The project started with the login being a username. This changed all the way in in September 2024
     /* Since the username was used like the users ID on the webpage, it would be to time consuming to change everything to the email and 
        therefore we decided to just automatically set the username to the same value as the email. */
-    let result = await db.createAccount(data.email /* This was the username */, data.password, data.name, data.family_name, data.email, data.picture, data.phone, data.address).catch((err) => res.json({ valid: false, message: err }));
+    let result = await db.createAccount(data.email /* This was the username */, hash, data.name, data.family_name, data.email, data.picture, data.phone, data.address).catch((err) => res.json({ valid: false, message: err }));
     if (result.username) {
         req.session.user = result;
         req.session.user.valid = true;

@@ -1,5 +1,6 @@
 import mysql from "mysql2";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -116,7 +117,7 @@ export async function validateAccount(username, password) {
         throw new Error("Keine Verbindung möglich...");
     });
     if (!account) throw new Error("Dieser Benutzername existiert nicht.");
-    if (password === account.password) account.valid = true;
+    if (await bcrypt.compare(password, account.password)) account.valid = true;
     else account.valid = false;
     return account;
 }
