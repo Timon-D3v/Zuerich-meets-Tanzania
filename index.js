@@ -1941,10 +1941,13 @@ app.post("/post/deleteEvent", async (req, res) => {
 
     const result = await db.deleteEvent(req.body.title).catch((err) => {
         console.error(err);
-        return false;
+        return {
+            valid: false,
+            found: false,
+        };
     });
 
-    res.json({ valid: result });
+    res.json(result);
 });
 
 app.listen(8080, () => {

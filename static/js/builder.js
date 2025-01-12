@@ -42,11 +42,11 @@ on(document, "DOMContentLoaded", () => {
 
             if (!title || !subtitle || !author || title === "" || subtitle === "" || author === "") return alert("Bitte fülle alle Felder aus.");
 
-            hero_title.innerHTML = title;
+            hero_title.innerHTML = title.trim();
             hero_subtitle.innerHTML = subtitle;
-            json.hero.title = title;
+            json.hero.title = title.trim();
             json.hero.subtitle = subtitle;
-            json.author = author;
+            json.author = author.trim();
 
             const result = await confirm("Möchtest du ein Bild für den Blog hinzufügen? Falls ja, wird der Bildschirm gelb. Du musst dann auf den Bildschirm klicken, um ein Bild hochzuladen.");
 

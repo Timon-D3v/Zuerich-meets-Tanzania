@@ -157,9 +157,11 @@ getElm("delete_event_btn").click(async () => {
 
     if (title.valIsEmpty()) return alert("Bitte gib einen gültigen Titel ein.");
 
-    const res = await post("/post/deleteEvent", { title: markdownToHtml(title.val()) });
+    const res = await post("/post/deleteEvent", { title: markdownToHtml(title.val().trim()) });
 
-    alert(res.valid ? "Event wurde gelöscht oder existiert nicht." : "Event konnte nicht gelöscht werden. Bitte versuche es später erneut.");
+    if (res.valid && res.found) alert("Event wurde gelöscht.");
+    else if (res.valid && !res.found) alert("Event existiert nicht.");
+    else alert("Event konnte nicht gelöscht werden. Bitte versuche es später erneut.");
 });
 
 pdf.click(() => toggleDivs(pdf, getElm("show_pdf"), getElm("show_img")));
@@ -240,7 +242,7 @@ getElm("event_submit").click(async (e) => {
     if (title.valIsEmpty() || date.valIsEmpty()) return alert("Bitte fülle alle Felder aus.");
 
     const res = await post("/post/addCalendarEvent", {
-        title: markdownToHtml(title.val()),
+        title: markdownToHtml(title.val()).trim(),
         date: date.val(),
     });
 

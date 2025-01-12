@@ -544,9 +544,19 @@ export async function deleteBlog(titel) {
 }
 
 export async function deleteEvent(titel) {
+    let query1 = "SELECT * FROM `zmt`.`calendar` WHERE title = ?;";
+    let [result] = await pool.query(query1, [titel]);
+    if (result.length === 0) return {
+        valid: true,
+        found: false,
+    };
+
     let query = "DELETE FROM `zmt`.`calendar` WHERE title = ?;";
     await pool.query(query, [titel]);
-    return true;
+    return {
+        valid: true,
+        found: true,
+    };
 }
 
 export async function putBlogPost(title, data) {

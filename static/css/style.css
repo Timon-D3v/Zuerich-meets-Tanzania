@@ -603,8 +603,14 @@ main::before {
     height: var(--header-height);
 }
 
-nav ul li > a:hover {
+nav ul li > a:hover,
+main a:hover {
     color: var(--primary-500);
+}
+
+nav ul li > a:hover::selection,
+main a:hover::selection {
+    color: var(--text-50);
 }
 
 .hero-title {
@@ -998,6 +1004,11 @@ footer {
 .f-l-r a:hover,
 .f-l-social a:hover {
     color: var(--c-background-300);
+}
+
+.f-l-r a:hover::selection,
+.f-l-social a:hover::selection {
+    color: var(--primary-900);
 }
 
 .f-news {
