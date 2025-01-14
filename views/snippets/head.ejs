@@ -1,22 +1,8 @@
-<meta charset="utf-8" /><% if (env === "prod") { %>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-74MV698XJC"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-
-    gtag("config", "G-74MV698XJC");
-</script>
-<%
-        if (sitetype === "blog") { %>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4705449052912673" crossorigin="anonymous"></script>
-<% };}; %>
+<meta charset="utf-8" />
 <title><%= title %> | zurich meets tanzania</title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <meta name="Owner" content="Präsident Dr. Stefan Christen (Innere Medizin / Kardiologie)" contact="info@zurich-meets-tanzania.com" />
-<meta name="Manager" content="Secretariat Webdesign Sara Pieretti" contact="info@zurich-meets-tanzania.com" />
+<meta name="Manager" content="Sekretariat Webdesign Sara Pieretti" contact="info@zurich-meets-tanzania.com" />
 <meta name="Developer" content="Timon Fiedler" contact="info@timondev.com" />
 <meta name="Contact page" content="https://www.timondev.com" />
 <meta name="Last modified" content="<%= date.toString() %>" />
@@ -58,3 +44,25 @@
 </script>
 <script type="text/javascript" src="/js/customNotification.js" defer></script>
 <script type="text/javascript" src="/js/executables.js" defer></script>
+<script type="text/javascript" src="/js/cookieConsent.js"></script><% if (env === "prod") { %>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        window.dataLayer.push(arguments);
+    }
+
+    gtag("js", new Date());
+    gtag("config", "G-74MV698XJC");
+    gtag("consent", "default", {
+        ad_storage: "denied",
+        analytics_storage: "denied",
+        personalization_storage: "denied",
+        functionality_storage: "granted",
+        security_storage: "granted",
+    });
+
+    document.addEventListener("cookie_consent_updated", () => {
+        gtag("consent", "update", JSON.parse(localStorage.getItem("cookie_consent_mode")));
+    });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-74MV698XJC"></script><% }; %>

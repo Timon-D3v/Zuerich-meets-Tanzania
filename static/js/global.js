@@ -29,9 +29,6 @@ getQuery(".n-t-summary").forEach((elm, i) => {
 getQuery("img").on("dragstart", () => {
     return false;
 });
-getQuery("svg").on("dragstart", () => {
-    return false;
-});
 
 newsletterMen.click(() => {
     if (newsletterWoman.checked) newsletterWoman.checked = false;

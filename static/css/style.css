@@ -1892,11 +1892,6 @@ nav .mit-bild a {
 
 .notification-closable .notification-close {
     display: block;
-    height: 1rem;
-    width: 1rem;
-    aspect-ratio: 1 / 1;
-    padding-left: 1.25rem;
-    cursor: pointer;
 }
 
 .notification-title {
@@ -1912,6 +1907,7 @@ nav .mit-bild a {
     margin: 0;
     font-size: 1rem;
     color: var(--text-50);
+    max-width: 400px;
 }
 
 .notification-wrapper.info {
@@ -1935,10 +1931,12 @@ nav .mit-bild a {
 }
 
 .notification-svg {
-    width: 100%;
-    height: 100%;
+    height: 1rem;
+    width: 1rem;
     aspect-ratio: 1 / 1;
+    padding-left: 1.25rem;
     fill: var(--secondary-500);
+    cursor: pointer;
 }
 
 .notification-svg.info:hover {
@@ -1976,6 +1974,25 @@ nav .mit-bild a {
 
 :root[data-theme="dark"] .notification-wrapper.warn .notification-img {
     filter: saturate(20);
+}
+
+.cookie-button {
+    width: 100%;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.cookie-text {
+    line-height: 1.2;
+    margin-bottom: 2rem;
+}
+
+.cookie-text a {
+    color: var(--text-50);
+}
+
+.cookie-text a:hover {
+    color: var(--primary-500);
 }
 
 @media screen and (min-width: 1200px) {
