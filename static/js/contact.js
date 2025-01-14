@@ -8,9 +8,9 @@ getElm("contact-form").on("submit", async (e) => {
         author_email: getElm("contact-email").val(),
     });
 
-    if (result.status === 500) return errorField(result.res);
+    if (result.status === 500) return errorNotification(result.res);
 
-    successField(result.res);
+    successNotification(result.res);
     getElm("contact-submit").disabled = true;
 });
 

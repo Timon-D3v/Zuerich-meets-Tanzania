@@ -48,10 +48,10 @@ submit_changes.click(async () => {
         address: address.valIsEmpty() ? address.placeholder : address.val(),
     });
 
-    const redir = ORIGIN + window.location.pathname + "?js=successField(`Daten erfolgreich aktualisiert`);nofunction";
+    const redir = ORIGIN + window.location.pathname + "?js=successNotification(`Daten erfolgreich aktualisiert`);nofunction";
 
     if (result.res === "No Error") window.location.href = redir;
-    errorField("Fehler beim senden.");
+    else errorNotification("Beim Senden ist ein Fehler aufgetreten.");
 });
 
 change_picture.click(() => {
@@ -112,9 +112,9 @@ async function sendNewProfilePicture() {
     const result = await post("/post/changePicture", {
         base64: preview_file.src,
     });
-    if (result.res === "No Error") window.location.href = ORIGIN + window.location.pathname + "?js=successField";
+    if (result.res === "No Error") return neutralNotification("Bild erfolgreich hochgeladen.");
 
-    errorField("Fehler beim hochladen des Bildes.");
+    errorNotification("Fehler beim hochladen des Bildes.");
 }
 
 function preferences_toggleDarkmode() {

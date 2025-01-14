@@ -38,7 +38,7 @@ donate_btn.click(async () => {
 
     if (typeof link === "string") return (window.location.href = link);
 
-    return errorField("Etwas hat nicht geklappt...");
+    return errorNotification("Etwas hat nicht geklappt...");
 });
 
 donate_qr_link.click(() => window.open(donate_qr_link.data("data-redir"), "_blank"));

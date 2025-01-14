@@ -29,24 +29,24 @@ getElm("submit_recovery").click(async (e) => {
 
     const mail = getElm("recovery-mail");
 
-    if (mail.valIsEmpty()) return errorField("Du musst deine E-Mail eingeben.");
+    if (mail.valIsEmpty()) return errorNotification("Du musst deine E-Mail eingeben.");
 
     if (!recovery_request) return requestRecoveryCode();
 
     const code = getElm("recovery-code");
 
-    if (code.valIsEmpty()) return errorField("Bitte gib den Code ein, der dir per E-Mail geschickt wurde.");
+    if (code.valIsEmpty()) return errorNotification("Bitte gib den Code ein, der dir per E-Mail geschickt wurde.");
 
     const res = await post("/post/recoverySubmit", {
         email: mail.val(),
         code: code.val(),
     });
 
-    if (res.status === 200) return (window.location = ORIGIN + "/login?js=successField(`Passwort erfolgreich zurückgesetzt.`);nofunction");
+    if (res.status === 200) return (window.location = ORIGIN + "/login?js=neutralNotification(`Passwort erfolgreich zurückgesetzt.`);nofunction");
 
-    if (res.status === 501) return errorField(res.message);
+    if (res.status === 501) return errorNotification(res.message);
 
-    errorField("Etwas ist schief gelaufen...");
+    errorNotification("Etwas ist schief gelaufen...");
 });
 
 getElm("password-forgotten").click((e) => {
@@ -77,20 +77,20 @@ async function validateAccount(e) {
     const username = getElm("username");
     const redir = getElm("redir").getAttribute("redirect");
 
-    if (username.valIsEmpty() || password.valIsEmpty()) return errorField("Bitte fülle alle Pflichtfelder aus.");
+    if (username.valIsEmpty() || password.valIsEmpty()) return errorNotification("Bitte fülle alle Pflichtfelder aus.");
 
     const result = await post("/post/login", {
         username: username.val(),
         password: password.val(),
     }).catch((err) => {
         console.error(err);
-        errorField(err.message);
+        errorNotification(err.message);
         return { valid: false };
     });
 
     if (result?.valid) return (window.location.href = redir);
 
-    errorField(result.message);
+    errorNotification(result.message);
 }
 
 async function addAccount(e) {
@@ -110,7 +110,7 @@ async function addAccount(e) {
 
     if (empty.length > 0) {
         new_submit.disabled = false;
-        return errorField("Bitte fülle alle Pflichtfelder aus.");
+        return errorNotification("Bitte fülle alle Pflichtfelder aus.");
     }
 
     let base64 = "ERROR";
@@ -134,14 +134,14 @@ async function addAccount(e) {
         phone: phone.valIsEmpty() ? "Keine Nummer" : phone.val(),
     }).catch((err) => {
         console.error(err);
-        errorField(err.message);
+        errorNotification(err.message);
         return { valid: false };
     });
 
     if (result?.valid) return (window.location.href = redir);
 
     new_submit.disabled = false;
-    errorField(result.message);
+    errorNotification(result.message);
 }
 
 function toggleForms() {
@@ -154,9 +154,9 @@ async function requestRecoveryCode() {
         email: getElm("recovery-mail").val(),
     });
 
-    if (res.status !== 200) return errorField(res.status === 500 ? "Diese E-Mail ist nicht registriert." : "Etwas ist schief gelaufen...");
+    if (res.status !== 200) return errorNotification(res.status === 500 ? "Diese E-Mail ist nicht registriert." : "Etwas ist schief gelaufen...");
 
-    infoField("Code gesendet!");
+    infoNotification("Code gesendet!");
     recovery_request = true;
 
     getQuery(".recovery-hidden").removeClass("invisible");

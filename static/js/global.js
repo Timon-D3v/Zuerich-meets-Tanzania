@@ -61,7 +61,7 @@ navDesktopLinks.forEach((elm, i) => {
 logouts.click(async (e) => {
     e.preventDefault();
     const res = await post("/logout");
-    res.status === 200 ? window.location.reload() : errorField();
+    res.status === 200 ? window.location.reload() : errorNotification("Das Ausloggen hat nicht geklappt...");
 });
 
 function changeTheme() {
@@ -226,9 +226,9 @@ async function sendNewsletter(data) {
         errField.show();
     });
 
-    if (result.status !== "Alles in Ordnung") return errorField(result.status);
+    if (result.status !== "Alles in Ordnung") return errorNotification(result.status);
 
-    successField("Du hast dich erfolgreich für den Newsletter angemeldet.");
+    successNotification("Du hast dich erfolgreich für den Newsletter angemeldet.");
 }
 
 function initTheme() {

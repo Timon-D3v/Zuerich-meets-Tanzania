@@ -122,7 +122,7 @@ on(document, "DOMContentLoaded", () => {
 
             getElm("done").disabled = true;
 
-            getQuery(".news-div *").forEach(element => {
+            getQuery(".news-div *").forEach((element) => {
                 if (element.contentEditable === "true") element.contentEditable = false;
             });
 

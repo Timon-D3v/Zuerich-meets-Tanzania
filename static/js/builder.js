@@ -247,7 +247,7 @@ on(document, "DOMContentLoaded", () => {
 
             getQuery(".blog_carousel img").forEach((e) => e.removeClass("active"));
 
-            getQuery(".main *").forEach(element => {
+            getQuery(".main *").forEach((element) => {
                 if (element.contentEditable === "true") element.contentEditable = false;
             });
 
