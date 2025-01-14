@@ -122,6 +122,10 @@ on(document, "DOMContentLoaded", () => {
 
             getElm("done").disabled = true;
 
+            getQuery(".news-div *").forEach(element => {
+                if (element.contentEditable === "true") element.contentEditable = false;
+            });
+
             json.html = elmToJson(content);
             const isNew = edit_btn.data("data-news-is-new") === "true";
             json.id = edit_btn.data("data-news-id");
