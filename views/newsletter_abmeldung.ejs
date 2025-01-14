@@ -85,11 +85,11 @@
         }) %>
         <main>
             <div class="wrapper">
-                <form class="email email-before" action="/newsletter/requestCode" method="post">
+                <form class="email email-before">
                     <input type="email" autocomplete="email" name="email" id="email" required placeholder="E-Mail:" />
                     <button type="submit" class="cta-btn first-btn">Code Anfordern</button>
                 </form>
-                <form class="code" style="display: none" action="/newsletter/submitCode" method="post">
+                <form class="code" style="display: none">
                     <input type="text" required placeholder="Erhaltener Code:" name="code" id="code" />
                     <button type="submit" class="cta-btn second-btn">Bestätigen</button>
                 </form>
@@ -98,27 +98,27 @@
                 const email = getElm("email");
                 const code = getElm("code");
 
-                $(".email").on("submit", async (e) => {
+                getQuery(".email").on("submit", async (e) => {
                     e.preventDefault();
                     const val = email.value;
-                    if (val === "" || val.replace("@", "").replaceAll(".", "") === val) return alert("Du musst deine E-Mail eingeben.");
+                    if (val === "" || val.replace("@", "").replaceAll(".", "") === val) return warnNotification("Du musst deine E-Mail eingeben.");
                     const res = await post("/newsletter/requestCode", { email: val });
-                    if (res.status !== 200) return alert("Etwas hat nicht geklappt: " + res.message);
-                    $(".email").removeClass("email-before");
-                    $(".first-btn").hide();
-                    $(".code").show();
+                    if (res.status !== 200) return errorNotification("Etwas hat nicht geklappt: " + res.message);
+                    getQuery(".email").removeClass("email-before");
+                    getQuery(".first-btn").hide();
+                    getQuery(".code").flex();
                 });
 
-                $(".code").on("submit", async (e) => {
+                getQuery(".code").on("submit", async (e) => {
                     e.preventDefault();
-                    if (code.value.split("").length !== 16) return alert("Bitte gib einen gültigen Code ein.");
+                    if (code.value.split("").length !== 16) return warnNotification("Bitte gib einen gültigen Code ein.");
                     const res = await post("/newsletter/submitCode", {
                         code: code.value,
                         email: email.value,
                     });
-                    if (res.status !== 200) return alert("Etwas hat nicht geklappt: " + res.message);
-                    alert("Das hat geklappt! Du wirst jetzt nicht mehr Benachrichtigt.");
-                    window.location.href = window.location.origin;
+                    if (res.status !== 200) return errorNotification("Etwas hat nicht geklappt: " + res.message);
+                    successNotification("Das hat geklappt! Du wirst jetzt nicht mehr Benachrichtigt. (Sie werden automatisch weitergeleitet)");
+                    setTimeout(() => window.location.href = window.location.origin, 5000);
                 });
             </script>
         </main>

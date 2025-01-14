@@ -475,6 +475,11 @@ label.static-checkbox.uiverse.hirachy-class {
     width: 100%;
     z-index: 100;
     pointer-events: all;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="dark"] #close_picture_overlay.active {
+    background-color: rgba(191, 191, 191, 0.5);
 }
 
 #newsletterSignUpOption option {

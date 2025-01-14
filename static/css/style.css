@@ -1856,7 +1856,7 @@ nav .mit-bild a {
     width: 100%;
     height: 100%;
     padding: max(3vh, 1rem);
-    z-index: 500;
+    z-index: 99;
     box-sizing: border-box;
     pointer-events: none;
 }

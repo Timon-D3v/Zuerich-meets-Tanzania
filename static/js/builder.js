@@ -241,7 +241,7 @@ on(document, "DOMContentLoaded", () => {
         });
 
         getElm("done").click(async () => {
-            const result = await confirm("Bist du sicher, dass alles fertig ist?");
+            const result = await confirm("Bist du sicher, dass alles fertig ist? Wenn du auf OK klickst, wird der Blog hochgeladen. Das kann aber etwas dauern, deshalb musst du unbedingt warten bis die Bestätigung kommt.");
 
             if (!result) return;
 

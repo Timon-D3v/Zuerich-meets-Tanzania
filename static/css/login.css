@@ -195,32 +195,6 @@ main {
     background-color: #4ee06b;
 }
 
-.error {
-    display: none;
-    position: fixed;
-    bottom: 5vh;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 70vw;
-    margin: 0;
-    padding: 20px;
-    background-color: var(--error);
-    box-sizing: border-box;
-    border-radius: 15px;
-    font-size: 20px;
-    line-height: 1.25;
-    z-index: 50;
-}
-
-.error > img {
-    height: 1lh;
-    aspect-ratio: 1/1;
-    object-fit: contain;
-    object-position: center;
-    transform: translateY(20%);
-    margin-right: 0.25em;
-}
-
 *::selection,
 *::marker {
     background-color: #1f9d39cc;

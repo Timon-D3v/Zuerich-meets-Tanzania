@@ -383,7 +383,7 @@ async function sendRecoveryPassword(email) {
 
     const [user] = await db.getAccount(email);
 
-    const { id, name, family_name, phone } = user;
+    const { id, name, family_name, phone, address } = user;
 
     anschrift = anschrift.replace("___ANREDE___", "Liebe(r)");
     anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe(r)");
@@ -397,7 +397,9 @@ async function sendRecoveryPassword(email) {
     const code = timon.randomString(32);
     const text = "Dein neues Passwort lautet: " + code;
 
-    db.updateProfile(id, email, code, name, family_name, email, phone);
+    const hash = await bcrypt.hash(code, 10);
+
+    db.updateProfile(id, email, hash, name, family_name, email, phone, address);
 
     const data = {
         Subject: "Neues Passwort",
@@ -1218,7 +1220,7 @@ app.post("/post/signUp", async (req, res) => {
         data.picture = await imagekitUpload(data.picture, data.username + "_" + timon.randomString(32), "/users/");
         data.picture = data.picture.path;
     }
-    const hash = bcrypt.hash(data.password, 10);
+    const hash = await bcrypt.hash(data.password, 10);
     // The project started with the login being a username. This changed all the way in in September 2024
     /* Since the username was used like the users ID on the webpage, it would be to time consuming to change everything to the email and 
        therefore we decided to just automatically set the username to the same value as the email. */
@@ -1431,6 +1433,11 @@ app.post("/post/getAuthorPicture", async (req, res) => {
 app.post("/post/updateProfile", async (req, res) => {
     if (!req.session?.user?.valid) return res.json({ error: "501: Forbidden" });
     let b = req.body;
+
+    if (b.password.trim() === "Nicht sichtbar" || b.password.trim() === "" || b.password.trim() === "**********") b.password = req.session.user.password;
+    else b.password = await bcrypt.hash(b.password, 10);
+
+
     let result = await db.updateProfile(req.session.user.id, b.email, b.password, b.given_name, b.family_name, b.email, b.phone, b.address).catch(() => {
         return "No connection to database";
     });

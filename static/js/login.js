@@ -29,13 +29,13 @@ getElm("submit_recovery").click(async (e) => {
 
     const mail = getElm("recovery-mail");
 
-    if (mail.valIsEmpty()) return errorNotification("Du musst deine E-Mail eingeben.");
+    if (mail.valIsEmpty()) return warnNotification("Du musst deine E-Mail eingeben.");
 
     if (!recovery_request) return requestRecoveryCode();
 
     const code = getElm("recovery-code");
 
-    if (code.valIsEmpty()) return errorNotification("Bitte gib den Code ein, der dir per E-Mail geschickt wurde.");
+    if (code.valIsEmpty()) return warnNotification("Bitte gib den Code ein, der dir per E-Mail geschickt wurde.");
 
     const res = await post("/post/recoverySubmit", {
         email: mail.val(),
@@ -77,7 +77,7 @@ async function validateAccount(e) {
     const username = getElm("username");
     const redir = getElm("redir").getAttribute("redirect");
 
-    if (username.valIsEmpty() || password.valIsEmpty()) return errorNotification("Bitte fülle alle Pflichtfelder aus.");
+    if (username.valIsEmpty() || password.valIsEmpty()) return warnNotification("Bitte fülle alle Pflichtfelder aus.");
 
     const result = await post("/post/login", {
         username: username.val(),

@@ -68,6 +68,7 @@ file.on("input", async () => {
 
 submit_file.click(async () => {
     picture_overlay.toggleClass("active");
+    close_picture_overlay.toggleClass("active");
     submit_file.removeClass("flex");
     sendNewProfilePicture();
 });

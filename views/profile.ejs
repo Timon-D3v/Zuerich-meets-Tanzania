@@ -37,7 +37,7 @@
                     </div>
                     <% // .replace(/([^\.\@]{10})(?=[^\.\@])/g, "$1<wbr>") === Replaces every string without a . or @ that is 10 characters long 
                        // with a <wbr> tag that breaks the line %>
-                    <h2><%= user.name.replace(/([^\.\@]{10})(?=[^\.\@])/g, "$1<wbr>") + " " + user.family_name.replace(/([^\.\@]{10})(?=[^\.\@])/g, "$1<wbr>") %></h2>
+                    <h2><%- user.name.replace(/([^\.\@]{10})(?=[^\.\@])/g, "$1<wbr>") + " " + user.family_name.replace(/([^\.\@]{10})(?=[^\.\@])/g, "$1<wbr>") %></h2>
                     <p>
                         <%- user.email.replace(/([^\.\@]{10})(?=[^\.\@])/g, "$1<wbr>").replace(/([\.\@])/g, "<wbr>$1") %><%
                         if (user.type === "admin" || user.type === "member") {
@@ -61,7 +61,7 @@
                         <label for="password">Passwort</label>
                         <div class="profile-settings-input">
                             <img alt="Ein Schloss" src="/img/svg/lock.svg">
-                            <input type="password" autocomplete="current-password" id="password" value="<%= user.password %>" placeholder="<%= user.password %>">
+                            <input type="password" autocomplete="current-password" id="password" value="Nicht sichtbar" placeholder="**********">
                             <img alt="Ein Auge (Zu oder offen)" src="/img/svg/eye.svg" id="show_password">
                         </div>
                         <label for="name">Vorname</label>

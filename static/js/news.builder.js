@@ -132,7 +132,7 @@ on(document, "DOMContentLoaded", () => {
 
             const response = await post(isNew ? "/post/news" : "/post/news/update", json);
 
-            if (response.ok) return alert("Das hat geklappt, der Blog ist jetzt online und du kannst den Builder verlassen.");
+            if (response.ok) return alert("Das hat geklappt, die News sind jetzt online und du kannst den Builder verlassen.");
 
             getElm("done").disabled = false;
 
