@@ -42,7 +42,7 @@ getElm("submit_recovery").click(async (e) => {
         code: code.val(),
     });
 
-    if (res.status === 200) return (window.location = ORIGIN + "/login?js=neutralNotification(`Passwort erfolgreich zurückgesetzt.`);nofunction");
+    if (res.status === 200) return (window.location = ORIGIN + "/login?exec=passwordSuccessfulReset");
 
     if (res.status === 501) return errorNotification(res.message);
 

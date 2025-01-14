@@ -48,7 +48,7 @@ submit_changes.click(async () => {
         address: address.valIsEmpty() ? address.placeholder : address.val(),
     });
 
-    const redir = ORIGIN + window.location.pathname + "?js=successNotification(`Daten erfolgreich aktualisiert`);nofunction";
+    const redir = ORIGIN + window.location.pathname + "?exec=dataSuccessfulUpdated";
 
     if (result.res === "No Error") window.location.href = redir;
     else errorNotification("Beim Senden ist ein Fehler aufgetreten.");
@@ -74,7 +74,7 @@ submit_file.click(async () => {
 
 if (JSON.stringify(get_member) !== "{}") {
     get_member.click(async () => {
-        window.location.href = ORIGIN + "/spenden?js=donate_toggleForms";
+        window.location.href = ORIGIN + "/spenden?exec=toggleDonateForm";
     });
 } else {
     getMyBills();
@@ -176,7 +176,7 @@ function cancelNewsletter() {
 }
 
 function newsletter_noGender() {
-    alert("Du musst eine Anrede wählen.");
+    warnNotification("Du musst eine Anrede wählen.");
     console.warn("Du musst eine Anrede wählen.");
     newsletterBtn.checked = false;
 }
@@ -186,10 +186,6 @@ function handleNewsletterCalling() {
     else cancelNewsletter();
 }
 
-function profile_toSection(num) {
-    profile_dashboard_buttons[num - 1].click();
-}
-
-function profile_toMembership() {
-    profile_toSection(3);
+function goToMembership() {
+    getQuery(".dynamic .membership").get(0).click();
 }

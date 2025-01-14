@@ -41,16 +41,4 @@
         </div>
     </div>
     <p class="f-copyright">Copyright &copy; 2024 zurich - meets - tanzania | Alle Rechte vorbehalten</p>
-    <%
-            if (js) {
-                js = js.replaceAll("\"", "`");
-            %>
-    <script id="query_script" defer>
-        ready(() => {
-            <%= js %>();
-            getElm("query_script").remove();
-        });
-    </script>
-    <%
-            }; %>
 </footer>

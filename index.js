@@ -204,7 +204,7 @@ async function buyMembership(user, key, url) {
         return session.url;
     } catch (err) {
         timon.log(err.message);
-        return `/spenden?js=errorField`;
+        return `/spenden?exec=error&message=${err.message}`;
     }
 }
 
@@ -484,7 +484,6 @@ app.get("/", async (req, res) => {
         desc: "Wir sind ein Team von medizinischen Fachleuten aus den verschiedensten Berufsgruppen und Lehren. Eine bunt zusammengemischte Truppe engagierter, hilfsbereiter Leute. Erfahre auf dieser Seite mehr über unser Team, unsere Freunde in Mbalizi und unsere Partner.",
         sitetype: "home",
         user: req.session.user,
-        js: req.query.js,
         last4blogs: blogs,
         news: news,
         member_list: ABOUT_US.TEAM,
@@ -494,9 +493,9 @@ app.get("/", async (req, res) => {
     });
 });
 
-app.get("/signup", (req, res) => res.status(301).redirect("/login?js=toggleForms"));
-app.get("/signUp", (req, res) => res.status(301).redirect("/login?js=toggleForms"));
-app.get("/registrieren", (req, res) => res.status(301).redirect("/login?js=toggleForms"));
+app.get("/signup", (req, res) => res.status(301).redirect("/login?exec=toggleLoginForm"));
+app.get("/signUp", (req, res) => res.status(301).redirect("/login?exec=toggleLoginForm"));
+app.get("/registrieren", (req, res) => res.status(301).redirect("/login?exec=toggleLoginForm"));
 app.get("/einloggen", (req, res) => res.status(301).redirect("/login"));
 app.get("/login", async (req, res) => {
     if (req.session.user?.valid) return res.redirect("/profile");
@@ -511,7 +510,6 @@ app.get("/login", async (req, res) => {
         desc: "Hier können sich Mitglieder und Verwalter einloggen oder neu registrieren.",
         sitetype: "login",
         user: null,
-        js: req.query.js,
         redir: redir,
     });
 });
@@ -527,7 +525,6 @@ app.get("/shop", async (req, res) => {
         desc: "Auf dieser Seite können Sie direkt zum Unikat Höngg weiter um die einzigartigen Unikate zu kaufen, die beim Kauf den Verein unterstützen.",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
     });
 });
 
@@ -546,7 +543,6 @@ app.get("/profile", async (req, res) => {
         desc: "Dein Profil und alle Einstellungen auf einer Seite.",
         sitetype: "profile",
         user: req.session.user,
-        js: req.query.js,
     });
 });
 
@@ -563,7 +559,6 @@ app.get("/contact", (req, res) => {
         desc: "Über diese Seite kannst du uns ganz einfach kontaktieren, indem du uns eine E-Mail schreibst. Wir geben unser Bestes, so schnell wie möglich zu antworten.",
         sitetype: "contact",
         user: req.session.user,
-        js: req.query.js,
     });
 });
 
@@ -578,7 +573,6 @@ app.get("/zurich-meets-tanzania", (req, res) => {
         desc: ZMT.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         zmt: ZMT,
         toRealDate,
     });
@@ -595,7 +589,6 @@ app.get("/tanzania-meets-zurich", (req, res) => {
         desc: TMZ.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         tmz: TMZ,
         toRealDate,
     });
@@ -613,7 +606,6 @@ app.get("/vorstand", (req, res) => {
         desc: VORSTAND.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         member_list: ABOUT_US.TEAM,
         vorstand: VORSTAND,
         toRealDate,
@@ -631,7 +623,6 @@ app.get("/team", async (req, res) => {
         desc: "Hier findest du alle Informationen über das aktuelle Team von zurich meets tanzania.",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         team: TEAM,
         toRealDate,
     });
@@ -651,7 +642,6 @@ app.get("/vision", (req, res) => {
         desc: VISION.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         toRealDate,
         text: VISION.text,
         bild: VISION.bild,
@@ -684,7 +674,6 @@ app.get("/Wie%20alles%20begann", (req, res) => {
         desc: BEGINNING.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         toRealDate,
         text: BEGINNING,
     });
@@ -700,7 +689,6 @@ app.get("/tanzania", (req, res) => {
         desc: TANZANIA.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         toRealDate,
         tanzania: TANZANIA,
     });
@@ -717,7 +705,6 @@ app.get("/projects/chirurgie", (req, res) => {
         desc: CHIRURGIE.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         toRealDate,
         chirurgie: CHIRURGIE,
     });
@@ -734,7 +721,6 @@ app.get("/projects/bajaji", (req, res) => {
         desc: BAJAJI.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         toRealDate,
         bajaji: BAJAJI,
     });
@@ -751,7 +737,6 @@ app.get("/projects/kardiologie", (req, res) => {
         desc: KARDIOLOGIE.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         toRealDate,
         kardiologie: KARDIOLOGIE,
     });
@@ -767,7 +752,6 @@ app.get("/finanzen", (req, res) => {
         desc: FINANZEN.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         toRealDate,
         finanzen: FINANZEN,
     });
@@ -784,7 +768,6 @@ app.get("/statuten", (req, res) => {
         desc: "Die Stauten des Vereins",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         statuten: STATUTEN.data,
         toRealDate,
     });
@@ -801,7 +784,6 @@ app.get("/impressum", (req, res) => {
         desc: "Hier findest du alle Quellenangaben zu den Bildern auf dieser Webseite.",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         toRealDate,
     });
 });
@@ -817,7 +799,6 @@ app.get("/erfolgsrechnung", (req, res) => {
         desc: "Die Erfolgsrechnung und Bilanz des Vereins",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
     });
 });
 
@@ -835,7 +816,6 @@ app.get("/projects/meducation", (req, res) => {
         desc: MEDUCATION.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         meducation: MEDUCATION,
         toRealDate,
     });
@@ -852,7 +832,6 @@ app.get("/projects/mbuzi", (req, res) => {
         desc: MBUZI.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         mbuzi: MBUZI,
         toRealDate,
     });
@@ -869,7 +848,6 @@ app.get("/generalversammlung", (req, res) => {
         desc: GV.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         gv: GV,
         toRealDate,
     });
@@ -894,7 +872,6 @@ app.get("/projects/gyn%C3%A4kologie", (req, res) => {
         desc: GYNO.beschreibung,
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         gyno: GYNO,
         toRealDate,
     });
@@ -912,7 +889,6 @@ app.get("/spenden", (req, res) => {
         desc: "Wir freuen uns sehr, wenn Sie uns etwas spenden wollen. Deshalb gibt es diese Seite. So können Sie uns ganz unkompliziert unterstützen. Vielen Dank!",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         donate: DONATE,
     });
 });
@@ -930,7 +906,7 @@ app.get("/pay", async (req, res) => {
 
     if (q.t === "membership") {
         if (!req.session?.user?.valid) return res.redirect("/login?redir=/spenden");
-        if (req.session.user.type === "member" || req.session.user.type === "admin") return res.redirect("/?js=infoField(`Du bist schon ein Mitglied`);nofunction");
+        if (req.session.user.type === "member" || req.session.user.type === "admin") return res.redirect("/?exec=alreadyMember");
         link = await buyMembership(req.session.user, q.key, req.protocol + "://" + req.get("host"));
     }
 
@@ -972,14 +948,14 @@ app.get("/return", async (req, res) => {
             }
             await db.createMember(user.id, subscription_id, result.customer_id, result.status, result.period_start, result.period_end, result.start_date, admin);
             await db.updateMemberStatus(subscription_id, "paid");
-            return res.redirect(`/profile?js=successField(\`Die Zahlung war erfolgreich. Danke, dass du ein Mitglied von Zurich meets Tanzania bist!\`);nofunction`);
+            return res.redirect("/profile?exec=paymentMember");
         } else if (session.status === "open") {
             throw new Error("Die Zahlung steht noch offen. Bitte beende deine Zahlung ordnungsgemäss.");
         } else if (session.status === "expired") {
             throw new Error("Die Zahlung hat zu lange gedauert, bitte versuche es erneut...");
         }
     } catch (err) {
-        return res.redirect(`/spenden?js=errorField(\`${err.message}\`);nofunction`);
+        return res.redirect(`/spenden?exec=error&message=${err.message}`);
     }
     res.redirect("/");
 });
@@ -994,7 +970,6 @@ app.get("/newsletter/abmelden", (req, res) => {
         desc: "Hier kannst du dich von unserem Newsletter abmelden.",
         sitetype: "newsletter",
         user: req.session.user,
-        js: undefined,
     });
 });
 
@@ -1020,7 +995,6 @@ app.get("/galerie/:id", async (req, res) => {
               desc: result.subtitle + " | Uploaded by " + result.author,
               sitetype: "gallery",
               user: req.session.user,
-              js: req.query.js,
               img: result.img,
               subtitle: result.subtitle,
               toRealDate,
@@ -1041,7 +1015,6 @@ app.get("/blog/:id", async (req, res) => {
             desc: blog.data.hero.subtitle,
             sitetype: "blog",
             user: req.session.user,
-            js: req.query.js,
             blog: JSON.stringify(blog.data),
         });
     } catch (error) {
@@ -1066,7 +1039,6 @@ app.get("/private/blog/:id", async (req, res) => {
             desc: blog.data.hero.subtitle,
             sitetype: "private",
             user: req.session.user,
-            js: req.query.js,
             blog: JSON.stringify(blog.data),
         });
     } catch (error) {
@@ -1099,7 +1071,6 @@ app.get("/private/:id", async (req, res) => {
                 desc: "Hier können die Mitglieder des Vereins Statistiken erfassen und alle Adminfunktionen benutzen.",
                 sitetype: "private",
                 user: req.session.user,
-                js: req.query.js,
                 all_users: users,
                 all_newsletter: newsletter,
                 passwords: passwords,
@@ -1115,7 +1086,6 @@ app.get("/private/:id", async (req, res) => {
                 desc: "Hier können die Mitglieder des Vereins Blogposts erstellen.",
                 sitetype: "private",
                 user: req.session.user,
-                js: req.query.js,
             });
             break;
         case "createBlog":
@@ -1128,7 +1098,6 @@ app.get("/private/:id", async (req, res) => {
                 desc: "Hier können die Mitglieder des Vereins Blogposts erstellen.",
                 sitetype: "private",
                 user: req.session.user,
-                js: req.query.js,
             });
             break;
         case "createNews":
@@ -1141,7 +1110,6 @@ app.get("/private/:id", async (req, res) => {
                 desc: "Hier können die Mitglieder des Vereins News erstellen.",
                 sitetype: "private",
                 user: req.session.user,
-                js: req.query.js,
                 news: TEMPLATE.NEWS,
             });
             break;
@@ -1156,7 +1124,6 @@ app.get("/private/:id", async (req, res) => {
                 desc: "Hier können die Mitglieder des Vereins News bearbeiten.",
                 sitetype: "private",
                 user: req.session.user,
-                js: req.query.js,
                 news,
             });
             break;
@@ -1194,7 +1161,6 @@ app.get("/archiv", async (req, res) => {
         desc: "Hier findest du alle Newsartikel, die auf dieser Webseite veröffentlicht wurden.",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         news,
         toRealDate,
         count,
@@ -1211,7 +1177,6 @@ app.get("/datenschutz", (req, res) => {
         desc: "Datenschutz",
         sitetype: "static",
         user: req.session.user,
-        js: req.query.js,
         toRealDate,
     });
 });

@@ -1,11 +1,6 @@
 <nav>
-            <div class="w750 w1000" id="nav_tab"><%
-                let link_mitglied;
-                if (typeof user !== "undefined" && user !== null) {
-                    user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/spenden?js=membership_click#scrollToDonate";
-                } else {
-                    link_mitglied = "/spenden?js=membership_click#scrollToDonate";
-                }; %>
+            <div class="w750 w1000" id="nav_tab">
+                <% let link_mitglied; if (typeof user !== "undefined" && user !== null) { user?.valid ? link_mitglied = "/profile?exec=profileMembership" : link_mitglied = "/spenden?exec=toggleDonateForm#scrollToDonate"; } else { link_mitglied = "/login"; }; %>
                 <ul class="n-t">
                     <li>
                         <div class="n-t-details">
@@ -95,7 +90,7 @@
                                     <a href="/login">Einloggen</a>
                                 </li>
                                 <li>
-                                    <a href="/login?js=toggleForms">Registrieren</a>
+                                    <a href="/login?exec=toggleLoginForm">Registrieren</a>
                                 </li><% }
                                 else { %>
                                 <li>
@@ -224,7 +219,7 @@
                                     <a href="/login">Einloggen</a>
                                 </li>
                                 <li>
-                                    <a href="/login?js=toggleForms">Registrieren</a>
+                                    <a href="/login?exec=toggleLoginForm">Registrieren</a>
                                 </li><% }
                                 else { %>
                                 <li>
@@ -343,7 +338,7 @@
                             <a href="/login">Einloggen</a>
                         </li>
                         <li>
-                            <a href="/login?js=toggleForms">Registrieren</a>
+                            <a href="/login?exec=toggleLoginForm">Registrieren</a>
                         </li><% }
                         else { %>
                         <li>

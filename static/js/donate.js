@@ -72,7 +72,3 @@ function donate_getAmount() {
     value = Number(value);
     return value;
 }
-
-function membership_click() {
-    donate_switch_member.click();
-}

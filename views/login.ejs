@@ -105,13 +105,6 @@
             </form>
             <p class="error"><img alt="Achtung" src="/img/svg/alert.svg" /> Ein Fehler ist aufgetreten: <span id="error">Keiner</span></p>
         </main>
-        <img class="bg" alt="Hintergrund: Jungelpflanzen" src="/img/stock/jungle.jpg" /><% if (js) { %>
-        <script id="query_script" defer>
-            ready(() => {
-                <!= js !>();
-                getElm("query_script").remove();
-            });
-        </script>
-        <% }; %>
+        <img class="bg" alt="Hintergrund: Jungelpflanzen" src="/img/stock/jungle.jpg" />
     </body>
 </html>

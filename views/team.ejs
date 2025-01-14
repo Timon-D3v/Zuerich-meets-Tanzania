@@ -31,7 +31,7 @@
         <%
         let link_mitglied;
         if (typeof user !== "undefined" && user !== null) {
-            user?.valid ? link_mitglied = "/profile?js=profile_toMembership" : link_mitglied = "/login";
+            user?.valid ? link_mitglied = "/profile?exec=profileMembership" : link_mitglied = "/login";
         } else {
             link_mitglied = "/login";
         }; %>
@@ -58,8 +58,7 @@
             <p class="date">Zuletzt aktualisiert am <%= toRealDate(date) %></p>
         </main>
         <%- include("./snippets/footer.ejs", {
-            origin_url: origin_url,
-            js: js
+            origin_url: origin_url
         }) %>
     </body>
 </html>
