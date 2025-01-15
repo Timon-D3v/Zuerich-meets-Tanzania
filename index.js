@@ -1921,5 +1921,5 @@ app.post("/post/deleteEvent", async (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-    console.log("Server listens on localhost:8080");
+    console.log("Server listens on localhost:" + process.env.PORT);
 });
