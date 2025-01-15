@@ -36,17 +36,13 @@ import ZMT from "./backend/constants/zmt.js";
 import TMZ from "./backend/constants/tmz.js";
 import GV from "./backend/constants/gv.js";
 
-const LOAD_LEVEL = "dev"; // Possible Values: "dev" or "prod"
+dotenv.config();
 
-const app = express(); /*
-const https_options = {
-    key: fs.readFileSync("./cert/private.key.pem"),
-    cert: fs.readFileSync("./cert/domain.cert.pem"),
-    ca: fs.readFileSync("./cert/intermediate.cert.pem"),
-};*/
+const LOAD_LEVEL = process.env.ENV; // Possible Values: "dev" or "prod"
+
+const app = express();
 
 app.set("view engine", "ejs");
-dotenv.config();
 
 const imagekit = new ImageKit({
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
@@ -1924,6 +1920,6 @@ app.post("/post/deleteEvent", async (req, res) => {
     res.json(result);
 });
 
-app.listen(8080, () => {
+app.listen(process.env.PORT, () => {
     console.log("Server listens on localhost:8080");
 });
