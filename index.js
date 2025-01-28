@@ -14,7 +14,7 @@ import fs from "fs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { toRealDate } from "./components/toRealDate.js";
-import { sendContactMail, sendMailCode, sendNewsletterEmail, sendRecoveryCode, sendRecoveryPassword } from "./components/emailMethods.js";
+import { sendContactMail, sendCriticalErrorMail, sendMailCode, sendNewsletterEmail, sendRecoveryCode, sendRecoveryPassword } from "./components/emailMethods.js";
 import { stripe_c_s_created, stripe_c_s_updated, stripe_c_s_deleted, stripe_i_p_success } from "./components/stripeWebhookActions.js";
 import { initSignUpNewsletter, validateSignUpNewsletter } from "./components/initSignUpNewsletter.js";
 import * as db from "./backend/db/db.zmt.js";
@@ -624,7 +624,14 @@ app.get("/pay", async (req, res) => {
 
     if (q.t === "membership") {
         if (!req.session?.user?.valid) return res.redirect("/login?redir=/spenden");
-        if (req.session.user.type === "member" || req.session.user.type === "admin") return res.redirect("/?exec=alreadyMember");
+        if (req.session.user.type === "member") return res.redirect("/?exec=alreadyMember");
+        if (req.session.user.type === "admin") {
+            let member = await db.getMemberWithUserId(req.session.user.id)
+
+            if (member?.status !== "paid") member = null;
+
+            if (member !== null) return res.redirect("/?exec=alreadyMember");
+        }
         link = await buyMembership(req.session.user, q.key, req.protocol + "://" + req.get("host"));
     }
 
@@ -1411,40 +1418,46 @@ app.post("/post/stripe/webhook", bodyParser.raw({ type: "application/json" }), a
     }
 
     // Handle event
-    switch (event.type) {
-        case "customer.subscription.created":
-            const subscription_id = event.data.object.id;
-            const period_start = event.data.object.current_period_start;
-            const period_end = event.data.object.current_period_end;
-            const customer_id = event.data.object.customer;
-            const start_date = event.data.object.start_date;
-            const status = event.data.object.status;
+    try {
+        switch (event.type) {
+            case "customer.subscription.created":
+                const subscription_id = event.data.object.id;
+                const period_start = event.data.object.current_period_start;
+                const period_end = event.data.object.current_period_end;
+                const customer_id = event.data.object.customer;
+                const start_date = event.data.object.start_date;
+                const status = event.data.object.status;
 
-            await stripe_c_s_created(subscription_id, period_start, period_end, customer_id, start_date, status);
-            break;
-        case "customer.subscription.updated":
-            const _subscription_id = event.data.object.id;
-            const _period_start = event.data.previous_attributes.current_period_start;
-            const _period_end = event.data.previous_attributes.current_period_end;
-            const _status = event.data.previous_attributes.status;
+                await stripe_c_s_created(subscription_id, period_start, period_end, customer_id, start_date, status);
+                break;
+            case "customer.subscription.updated":
+                const _subscription_id = event.data.object.id;
+                const _period_start = event.data.previous_attributes.current_period_start;
+                const _period_end = event.data.previous_attributes.current_period_end;
+                const _status = event.data.previous_attributes.status;
 
-            await stripe_c_s_updated(_subscription_id, _period_start, _period_end, _status);
-            break;
-        case "customer.subscription.deleted":
-            const __subscription_id = event.data.object.id;
+                await stripe_c_s_updated(_subscription_id, _period_start, _period_end, _status);
+                break;
+            case "customer.subscription.deleted":
+                const __subscription_id = event.data.object.id;
 
-            await stripe_c_s_deleted(__subscription_id);
-            break;
-        case "invoice.payment_succeeded":
-            const _customer_id = event.data.object.customer;
-            const pdf = event.data.object.invoice_pdf;
-            const url = event.data.object.hosted_invoice_url;
+                await stripe_c_s_deleted(__subscription_id);
+                break;
+            case "invoice.payment_succeeded":
+                const _customer_id = event.data.object.customer;
+                const pdf = event.data.object.invoice_pdf;
+                const url = event.data.object.hosted_invoice_url;
 
-            await stripe_i_p_success(_customer_id, pdf, url);
-            break;
-        default:
-            console.warn(`Unhandled event type ${event.type}`);
-            break;
+                await stripe_i_p_success(_customer_id, pdf, url);
+                break;
+            default:
+                console.warn(`Unhandled event type ${event.type}`);
+                break;
+        }
+    } catch (error) {
+        console.error(error);
+        sendCriticalErrorMail(error.message, "Stripe Webhook Error:");
+        return res.status(400).send(`Webhook Error: ${error.message}`);
     }
 
     res.status(200).json({ received: true });

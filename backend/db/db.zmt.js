@@ -356,7 +356,7 @@ export async function getSubscriptionIdWithCustomerId(customer_id) {
 }
 
 export async function getMemberWithCustomerId(customer_id) {
-    let query = "SELECT * FROM `zmt`.`members` WHERE `cusomer_id` = ?;";
+    let query = "SELECT * FROM `zmt`.`members` WHERE `customer_id` = ?;";
     let [result] = await pool.query(query, customer_id);
     return result[0];
 }
@@ -375,11 +375,11 @@ export async function addInvoiceToDatabase(subscription_id, pdf, url) {
 export async function getTempPaymentWithSubscriptionId(subscription_id) {
     let query = "SELECT * FROM `zmt`.`temp_sub` WHERE `sub_id` = ?;";
     let [result] = await pool.query(query, [subscription_id]);
-    return result[0];
+    return result.length > 0 ? result[0] : null;
 }
 
 export async function createMember(user_id, subscription_id, customer_id, status, period_start, period_end, start_date, is_admin) {
-    let query = "INSERT INTO `zmt`.`members` (`user_id`, `subscription_id`, `cusomer_id`, `status`, `period_start`, `period_end`, `start_date`, `is_admin`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+    let query = "INSERT INTO `zmt`.`members` (`user_id`, `subscription_id`, `customer_id`, `status`, `period_start`, `period_end`, `start_date`, `is_admin`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     await pool.query(query, [user_id, subscription_id, customer_id, status, period_start, period_end, start_date, is_admin]);
 }
 

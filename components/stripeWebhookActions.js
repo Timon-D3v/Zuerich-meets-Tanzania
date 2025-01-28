@@ -1,5 +1,5 @@
 import { errorLog } from "timonjs";
-import { addInvoiceToDatabase, createTempPayment, deleteMemberWithSubscriptionId, getMemberWithCustomerId, getMemberWithSubscriptionId, getSubscriptionIdWithCustomerId, removeMemberWithUserId, updateMemberPeriodEnd, updateMemberPeriodStart, updateMemberStatus, updateTempSubscriptionPeriodEnd, updateTempSubscriptionPeriodStart, updateTempSubscriptionStatus } from "../backend/db/db.zmt.js";
+import { addInvoiceToDatabase, createTempPayment, deleteMemberWithSubscriptionId, getAccountWithId, getMemberWithCustomerId, getMemberWithSubscriptionId, getSubscriptionIdWithCustomerId, removeMemberWithUserId, updateMemberPeriodEnd, updateMemberPeriodStart, updateMemberStatus, updateTempSubscriptionPeriodEnd, updateTempSubscriptionPeriodStart, updateTempSubscriptionStatus } from "../backend/db/db.zmt.js";
 import { sendCriticalErrorMail } from "./emailMethods.js";
 
 export async function stripe_c_s_created(subscription_id, period_start, period_end, customer_id, start_date, status) {
@@ -47,7 +47,11 @@ export async function stripe_c_s_deleted(subscription_id) {
         const [member] = await getMemberWithSubscriptionId(subscription_id);
         const user_id = member.user_id;
         await deleteMemberWithSubscriptionId(subscription_id);
-        await removeMemberWithUserId(user_id);
+        const user = await getAccountWithId(user_id);
+
+        if (user.length > 0 && user[0].type) {
+            await removeMemberWithUserId(user_id);
+        }
     } catch (err) {
         const message = "Beim Löschen eines Abos eines Benutzers ist ein kritischer Fehler aufgetreten. Bitte sofort überprüfen (lassen).<br><br>Weitere Informationen:";
         errorLog(err.message);
