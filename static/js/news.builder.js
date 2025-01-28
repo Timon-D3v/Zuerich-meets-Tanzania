@@ -76,7 +76,130 @@ on(document, "DOMContentLoaded", () => {
 
                 getQuery(".news > img").forEach((e) => e.remove());
                 getQuery(".news > iframe").forEach((e) => e.remove());
+                getQuery(".news element").forEach((e) => e.remove());
                 getQuery(".news").get(0).append(element);
+            });
+
+            input.click();
+        });
+
+        getElm("add-multiple-pictures").click(() => {
+            const input = createElm("input");
+            input.type = "file";
+            input.accept = "image/*";
+            input.multiple = true;
+            input.on("change", async (e) => {
+                const fileArray = [];
+
+                for (let i = 0; i < input.files.length; i++) {
+                    const file = input.files[i];
+
+                    fileArray.push({
+                        base64: await toBase64Max(file, 2e5),
+                        name: file.name,
+                        id: `auto_${randomString(37)}`,
+                    });
+                }
+
+                const wrapper = createElm("element");
+                const wrapperId = `auto_${randomString(32)}`;
+                wrapper.addClass("blog_carousel", wrapperId);
+
+                const style = createElm("link");
+                style.rel = "stylesheet";
+                style.href = "/css/blog.css";
+
+                const mainDiv = createElm("div");
+                const mainDivId = `auto_${randomString(33)}`;
+                mainDiv.addClass("blog_c-main", mainDivId);
+
+                const nextBtn = createElm("button");
+                const nextBtnId = `auto_${randomString(34)}`;
+                nextBtn.type = "button";
+                nextBtn.id = nextBtnId;
+                nextBtn.addClass("blog_carousel_next");
+
+                const prevBtn = createElm("button");
+                const prevBtnId = `auto_${randomString(35)}`;
+                prevBtn.type = "button";
+                prevBtn.id = prevBtnId;
+                prevBtn.addClass("blog_carousel_prev");
+
+                const ruler = createElm("div");
+                const rulerId = `auto_${randomString(36)}`;
+                ruler.addClass("blog_c-ruler", rulerId);
+
+                for (let i = 0; i < fileArray.length; i++) {
+                    const file = fileArray[i];
+
+                    const img = createElm("img");
+                    const preview = createElm("img");
+                    img.alt = file.name;
+                    preview.alt = file.name;
+                    img.src = file.base64;
+                    preview.src = file.base64;
+                    img.addClass(file.id);
+                    preview.addClass(file.id);
+
+                    mainDiv.append(img);
+                    ruler.append(preview);
+                }
+
+                const script = createElm("script");
+                script.type = "text/javascript";
+
+                const imgArrayName = `imgArray_${randomString(16)}`;
+                const currentImgName = `currentImg_${randomString(16)}`;
+                const funcNextName = `next_${randomString(16)}`;
+                const funcPrevName = `prev_${randomString(16)}`;
+                const funcToName = `to_${randomString(16)}`;
+
+                let scriptContent = `const ${imgArrayName} = [`;
+
+                for (let i = 0; i < fileArray.length; i++) {
+                    scriptContent += `getQuery(".${fileArray[i].id}"),`;
+                }
+
+                scriptContent += `];
+        let ${currentImgName} = 1;
+        ${imgArrayName}[${currentImgName} - 1].toggleClass("active");
+        function ${funcNextName}() {
+            ${currentImgName} + 1 > ${imgArrayName}.length ?
+            ${currentImgName} = 1 :
+            ${currentImgName}++;
+            ${currentImgName} === 1 ?
+            ${imgArrayName}[${imgArrayName}.length - 1].toggleClass("active") :
+            ${imgArrayName}[${currentImgName} - 2].toggleClass("active");
+            ${imgArrayName}[${currentImgName} - 1].toggleClass("active");
+        }
+        function ${funcPrevName}() {
+            ${currentImgName} - 1 === 0 ?
+            ${currentImgName} = ${imgArrayName}.length :
+            ${currentImgName}--;
+            ${currentImgName} === ${imgArrayName}.length ?
+            ${imgArrayName}[0].toggleClass("active") :
+            ${imgArrayName}[${currentImgName}].toggleClass("active");
+            ${imgArrayName}[${currentImgName} - 1].toggleClass("active");
+        }
+        function ${funcToName}(i) {
+            ${imgArrayName}[${currentImgName} - 1].toggleClass("active");
+            ${imgArrayName}[i - 1].toggleClass("active");
+            ${currentImgName} = i;
+        }
+        getElm("${nextBtnId}").click(${funcNextName});
+        getElm("${prevBtnId}").click(${funcPrevName});
+        for (let i = 0; i < ${imgArrayName}.length; i++) {
+            ${imgArrayName}[i].get(1).click(() => ${funcToName}(i + 1));
+        };`;
+
+                script.innerHTML = scriptContent;
+
+                wrapper.append(mainDiv, nextBtn, prevBtn, ruler, script, style);
+
+                getQuery(".news > img").forEach((e) => e.remove());
+                getQuery(".news > iframe").forEach((e) => e.remove());
+                getQuery(".news element").forEach((e) => e.remove());
+                content.append(wrapper);
             });
 
             input.click();
@@ -89,6 +212,7 @@ on(document, "DOMContentLoaded", () => {
 
             getQuery(".news > img").forEach((e) => e.remove());
             getQuery(".news > iframe").forEach((e) => e.remove());
+            getQuery(".news element").forEach((e) => e.remove());
             getQuery(".news").get(0).append(iframe);
         });
 
@@ -108,7 +232,7 @@ on(document, "DOMContentLoaded", () => {
 
             json.newsletter = await confirm("Sollte dieser Beitrag als Newsletter verschickt werden? (OK = Ja, Abbrechen = Nein. Wenn du den Beitrag nur bearbeitest, wird sowieso keine E-Mail verschickt.)");
 
-            json.src = getQuery(".news > *:is(img, iframe)").get(0).src;
+            json.src = getQuery(".news *:is(img, iframe)").get(0).src;
 
             json.type = null;
             json.isBase64 = false;
@@ -121,6 +245,8 @@ on(document, "DOMContentLoaded", () => {
             }
 
             getElm("done").disabled = true;
+
+            getQuery(".blog_carousel img").forEach((e) => e.removeClass("active"));
 
             getQuery(".news-div *").forEach((element) => {
                 if (element.contentEditable === "true") element.contentEditable = false;

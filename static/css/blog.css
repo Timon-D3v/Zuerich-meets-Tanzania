@@ -33,6 +33,14 @@
     position: relative;
 }
 
+element.blog_carousel {
+    display: block;
+}
+
+.news-img {
+    display: none;
+}
+
 .blog_c-main {
     position: absolute;
     top: 0;
