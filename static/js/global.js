@@ -160,25 +160,11 @@ function validateNewsletterForm() {
 function newsletterSignUp(e) {
     e.preventDefault();
 
-    const errField = getElm("newsletter-form-error");
-    const data = validateNewsletterForm();
+    const response = validateNewsletterForm();
 
-    switch (data.err) {
-        case 1:
-            errField.html("Du musst deinen Vornamen angeben.");
-            errField.show();
-            break;
-        case 2:
-            errField.html("Du musst deinen Nachnamen angeben.");
-            errField.show();
-            break;
-        case 3:
-            errField.html("Du musst deine E-Mail angeben.");
-            errField.show();
-            break;
-        default:
-            sendNewsletter(data.data);
-    }
+    if (response.err === 0) return sendNewsletter(response.data);
+
+    errorNotification(["Du musst deinen Vornamen angeben.", "Du musst deinen Nachnamen angeben.", "Du musst deine E-Mail angeben."][response.err - 1]);
 }
 
 function toBase64Max1MB(file) {
@@ -217,15 +203,13 @@ function toRealDate(date) {
 function nofunction() {}
 
 async function sendNewsletter(data) {
-    const result = await post("/post/newsletter/signUp", data).catch(() => {
-        const errField = getElm("newsletter-form-error");
-        errField.html("Es ist ein unerwarteter Fehler aufgetreten, bitte versuche es in einigen Sekunden erneut...");
-        errField.show();
-    });
+    const result = await post("/post/newsletter/signUp", data).catch(() => errorNotification("Es ist ein unerwarteter Fehler aufgetreten, bitte versuche es in einigen Sekunden erneut..."));
+
+    if (result.status === "Du bist schon angemeldet.") return infoNotification(result.status);
 
     if (result.status !== "Alles in Ordnung") return errorNotification(result.status);
 
-    successNotification("Du hast dich erfolgreich für den Newsletter angemeldet.");
+    successNotification("Du hast dich erfolgreich für den Newsletter angemeldet. Bitte bestätige deine Anmeldung in deinem E-Mail Postfach.");
 }
 
 function initTheme() {

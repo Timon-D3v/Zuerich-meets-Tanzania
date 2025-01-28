@@ -53,10 +53,8 @@ export async function getBlogWhereTitle(title) {
 }
 
 export async function newsletterSignUp(data) {
-    let status = "Alles in Ordnung",
-        query = "INSERT INTO `zmt`.`newsletter` (`gender`, `vorname`, `nachname`, `email`) VALUES (?, ?, ?, ?);";
-    await pool.query(query, [data.gender, data.vorname, data.nachname, data.email]).catch((error) => (status = error));
-    return status;
+    let query = "INSERT INTO `zmt`.`newsletter` (`gender`, `vorname`, `nachname`, `email`) VALUES (?, ?, ?, ?);";
+    await pool.query(query, [data.gender, data.vorname, data.nachname, data.email]);
 }
 
 export async function newsletterSignOff(email) {

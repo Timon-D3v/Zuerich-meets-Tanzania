@@ -13,6 +13,10 @@ import path from "path";
 import fs from "fs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { toRealDate } from "./components/toRealDate.js";
+import { sendContactMail, sendMailCode, sendNewsletterEmail, sendRecoveryCode, sendRecoveryPassword } from "./components/emailMethods.js";
+import { stripe_c_s_created, stripe_c_s_updated, stripe_c_s_deleted, stripe_i_p_success } from "./components/stripeWebhookActions.js";
+import { initSignUpNewsletter, validateSignUpNewsletter } from "./components/initSignUpNewsletter.js";
 import * as db from "./backend/db/db.zmt.js";
 import KARDIOLOGIE from "./backend/constants/kardiologie.js";
 import MEDUCATION from "./backend/constants/meducation.js";
@@ -79,108 +83,6 @@ async function imagekitUpload(base64, name, folder) {
     };
 }
 
-function toRealDate(date) {
-    return timon.toDateString(new Date(date));
-}
-
-function createMailSubject(obj) {
-    return obj.author_name + " schreibt über Webseitenformular";
-}
-
-function createMailText(obj) {
-    let date = toRealDate(Date());
-    let divider = "----------------------------------------------";
-    let address = `${obj.author_name} ${obj.author_family_name} hat diese E-Mail hinterlegt: ${obj.author_email}`;
-    let footer1 = "Dies ist eine automatisch verschickte E-Mail über eine API von postmail.invotes.com\nProgrammiert und aufgesetzt von Timon Fiedler.";
-    let footer2 = "Timon Fiedler ist nicht verantwortlich für eventuellen Spam oder andere Fehler, die durch den Endnutzer entstehen.";
-    let part2 = `${divider}\n\n${obj.message}\n\n${divider}\n${address}\n${divider}\n\n${footer1}\n${footer2}`;
-    return `${obj.author_name} ${obj.author_family_name} schreibt am ${date}: \n${part2}`;
-}
-
-async function stripe_c_s_created(subscription_id, period_start, period_end, customer_id, start_date, status) {
-    try {
-        await db.createTempPayment(subscription_id, period_start, period_end, customer_id, start_date, status);
-    } catch (err) {
-        const message = "Beim Bezahlen eines Benutzers ist ein kritischer Fehler aufgetreten. Bitte sofort überprüfen (lassen).<br><br>Weitere Informationen:";
-        timon.errorLog(err.message);
-        sendMail("info@zurich-meets-tanzania.com", {
-            Subject: "Kritischer Fehler",
-            TextPart: "Ein kritischer Fehler ist aufgetreten\n\n" + message.replace("<br>", "\n") + err.message,
-            HTMLPart: "<h1>Ein kritischer Fehler ist aufgetreten</h1><br><br><p>" + message + err.message + "</p>",
-            CustomID: timon.randomString(32),
-        });
-    }
-}
-
-async function stripe_c_s_updated(subscription_id, period_start, period_end, status) {
-    try {
-        const member = await db.getMemberWithSubscriptionId(subscription_id);
-        const data = [period_start, period_end, status];
-
-        if (member.length > 0) {
-            member = member[0];
-            const update = [db.updateMemberPeriodStart, db.updateMemberPeriodEnd, db.updateMemberStatus];
-
-            data.forEach(async (set, i) => {
-                if (typeof set !== "undefined") await update[i](subscription_id, set);
-            });
-        } else {
-            const update = [db.updateTempSubscriptionPeriodStart, db.updateTempSubscriptionPeriodEnd, db.updateTempSubscriptionStatus];
-
-            data.forEach(async (set, i) => {
-                try {
-                    if (typeof set !== "undefined") await update[i](subscription_id, set);
-                } catch (err) {
-                    console.error("Error:", err);
-                }
-            });
-        }
-    } catch (err) {
-        const message = "Beim Erneuern des Abos eines Benutzers ist ein kritischer Fehler aufgetreten. Bitte sofort überprüfen (lassen).<br><br>Weitere Informationen:";
-        timon.errorLog(err.message);
-        sendMail("info@zurich-meets-tanzania.com", {
-            Subject: "Kritischer Fehler",
-            TextPart: "Ein kritischer Fehler ist aufgetreten\n\n" + message.replace("<br>", "\n") + err.message,
-            HTMLPart: "<h1>Ein kritischer Fehler ist aufgetreten</h1><br><br><p>" + message + err.message + "</p>",
-            CustomID: timon.randomString(32),
-        });
-    }
-}
-
-async function stripe_c_s_deleted(subscription_id) {
-    try {
-        const [member] = await db.getMemberWithSubscriptionId(subscription_id);
-        const user_id = member.user_id;
-        await db.deleteMemberWithSubscriptionId(subscription_id);
-        await db.removeMemberWithUserId(user_id);
-    } catch (err) {
-        const message = "Beim Löschen eines Abos eines Benutzers ist ein kritischer Fehler aufgetreten. Bitte sofort überprüfen (lassen).<br><br>Weitere Informationen:";
-        timon.errorLog(err.message);
-        sendMail("info@zurich-meets-tanzania.com", {
-            Subject: "Kritischer Fehler",
-            TextPart: "Ein kritischer Fehler ist aufgetreten\n\n" + message.replace("<br>", "\n") + err.message,
-            HTMLPart: "<h1>Ein kritischer Fehler ist aufgetreten</h1><br><br><p>" + message + err.message + "</p>",
-            CustomID: timon.randomString(32),
-        });
-    }
-}
-
-async function stripe_i_p_success(customer_id, pdf, url) {
-    try {
-        const session = await db.getSubscriptionIdWithCustomerId(customer_id);
-        let subscription_id;
-        if (typeof session === "undefined") {
-            subscription_id = await db.getMemberWithCustomerId(customer_id);
-            subscription_id = subscription_id.subscription_id;
-        } else {
-            subscription_id = session.sub_id;
-        }
-        await db.addInvoiceToDatabase(subscription_id, pdf, url);
-    } catch (err) {
-        timon.errorLog(err);
-    }
-}
-
 async function buyMembership(user, key, url) {
     try {
         const session = await stripe.checkout.sessions.create({
@@ -236,187 +138,7 @@ async function downloadFileAsBase64(fileUrl) {
     });
 }
 
-async function sendMail(email, data, files = [], test = false) {
-    try {
-        const { Subject, TextPart, HTMLPart, CustomID } = data;
-        const req = await mailjet.post("send", { version: "v3.1" }).request({
-            Messages: [
-                {
-                    From: {
-                        Email: EMAILS.sender_email,
-                        Name: EMAILS.sender_name,
-                    },
-                    To: [
-                        {
-                            Email: email,
-                        },
-                    ],
-                    Subject,
-                    TextPart,
-                    HTMLPart,
-                    CustomID,
-                    Attachments: files,
-                },
-            ],
-            SandboxMode: test,
-        });
-        return req;
-    } catch (err) {
-        console.error(err.message);
-        return err;
-    }
-}
 
-function sendNewsletterEmail(recipients, subject, text, files = []) {
-    recipients.forEach((recipient) => {
-        let { anschrift, anschrift_html } = EMAILS;
-        const { header, newsletter, grüsse_html, footer } = EMAILS;
-
-        if (recipient.gender === "Herr") {
-            anschrift = anschrift.replace("___ANREDE___", "Lieber");
-            anschrift_html = anschrift_html.replace("___ANREDE___", "Lieber");
-
-            anschrift = anschrift.replace("___GENDER___", recipient.gender);
-            anschrift_html = anschrift_html.replace("___GENDER___", recipient.gender);
-        } else if (recipient.gender === "Frau") {
-            anschrift = anschrift.replace("___ANREDE___", "Liebe");
-            anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe");
-
-            anschrift = anschrift.replace("___GENDER___", recipient.gender);
-            anschrift_html = anschrift_html.replace("___GENDER___", recipient.gender);
-        } else {
-            anschrift = anschrift.replace("___ANREDE___", "Liebe(r)");
-            anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe(r)");
-
-            anschrift = anschrift.replace("___GENDER___", recipient.vorname);
-            anschrift_html = anschrift_html.replace("___GENDER___", recipient.vorname);
-        }
-
-        anschrift = anschrift.replace("___NACHNAME___", recipient.nachname);
-        anschrift_html = anschrift_html.replace("___NACHNAME___", recipient.nachname);
-
-        const data = {
-            Subject: subject,
-            TextPart: anschrift + text + EMAILS.grüsse,
-            HTMLPart: header + anschrift_html + newsletter + text + "</p>" + grüsse_html + footer,
-            CustomID: "Newsletter",
-        };
-        sendMail(recipient.email, data, files);
-    });
-}
-
-function sendMailCode(email, user) {
-    let { anschrift, anschrift_html } = EMAILS;
-    const { header, newsletter, grüsse_html, footer } = EMAILS;
-
-    if (user.gender === "Herr") {
-        anschrift = anschrift.replace("___ANREDE___", "Lieber");
-        anschrift_html = anschrift_html.replace("___ANREDE___", "Lieber");
-
-        anschrift = anschrift.replace("___GENDER___", user.gender);
-        anschrift_html = anschrift_html.replace("___GENDER___", user.gender);
-    } else if (user.gender === "Frau") {
-        anschrift = anschrift.replace("___ANREDE___", "Liebe");
-        anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe");
-
-        anschrift = anschrift.replace("___GENDER___", user.gender);
-        anschrift_html = anschrift_html.replace("___GENDER___", user.gender);
-    } else {
-        anschrift = anschrift.replace("___ANREDE___", "Liebe(r)");
-        anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe(r)");
-
-        anschrift = anschrift.replace("___GENDER___", user.vorname);
-        anschrift_html = anschrift_html.replace("___GENDER___", user.vorname);
-    }
-
-    anschrift = anschrift.replace("___NACHNAME___", user.nachname);
-    anschrift_html = anschrift_html.replace("___NACHNAME___", user.nachname);
-
-    const code = timon.randomString(16);
-    const text = "Dein Code lautet: " + code;
-
-    const data = {
-        Subject: "Newsletter Abmeldung",
-        TextPart: anschrift + text + EMAILS.grüsse,
-        HTMLPart: header + anschrift_html + newsletter.substring(0, 304) + text + "</p>" + grüsse_html + footer,
-        CustomID: "Newsletter Abmeldung",
-    };
-    sendMail(email, data);
-
-    return code;
-}
-
-function sendRecoveryCode(email, user) {
-    let { anschrift, anschrift_html } = EMAILS;
-    const { header, newsletter, grüsse_html, footer } = EMAILS;
-
-    anschrift = anschrift.replace("___ANREDE___", "Liebe(r)");
-    anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe(r)");
-
-    anschrift = anschrift.replace("___GENDER___", user.name);
-    anschrift_html = anschrift_html.replace("___GENDER___", user.name);
-
-    anschrift = anschrift.replace("___NACHNAME___", user.family_name);
-    anschrift_html = anschrift_html.replace("___NACHNAME___", user.family_name);
-
-    const code = timon.randomString(16);
-    const text = "Dein Code lautet: " + code;
-
-    const data = {
-        Subject: "Passwort zurücksetzen",
-        TextPart: anschrift + text + EMAILS.grüsse,
-        HTMLPart: header + anschrift_html + newsletter.substring(0, 304) + text + "</p>" + grüsse_html + footer,
-        CustomID: "Passwort zurücksetzen",
-    };
-    sendMail(email, data);
-
-    return code;
-}
-
-async function sendRecoveryPassword(email) {
-    let { anschrift, anschrift_html } = EMAILS;
-    const { header, newsletter, grüsse_html, footer } = EMAILS;
-
-    const [user] = await db.getAccount(email);
-
-    const { id, name, family_name, phone, address } = user;
-
-    anschrift = anschrift.replace("___ANREDE___", "Liebe(r)");
-    anschrift_html = anschrift_html.replace("___ANREDE___", "Liebe(r)");
-
-    anschrift = anschrift.replace("___GENDER___", user.name);
-    anschrift_html = anschrift_html.replace("___GENDER___", user.name);
-
-    anschrift = anschrift.replace("___NACHNAME___", user.family_name);
-    anschrift_html = anschrift_html.replace("___NACHNAME___", user.family_name);
-
-    const code = timon.randomString(32);
-    const text = "Dein neues Passwort lautet: " + code;
-
-    const hash = await bcrypt.hash(code, 10);
-
-    db.updateProfile(id, email, hash, name, family_name, email, phone, address);
-
-    const data = {
-        Subject: "Neues Passwort",
-        TextPart: anschrift + text + EMAILS.grüsse,
-        HTMLPart: header + anschrift_html + newsletter.substring(0, 304) + text + "</p>" + grüsse_html + footer,
-        CustomID: "Neues Passwort",
-    };
-    sendMail(email, data);
-}
-
-async function sendContactMail(body) {
-    const { header, footer } = EMAILS;
-    const data = {
-        Subject: createMailSubject(body),
-        TextPart: createMailText(body),
-        HTMLPart: header + "<p>" + createMailText(body).replaceAll("\n", "<br>") + "</p>" + footer,
-        CustomID: "Contact Form",
-    };
-    const result = await sendMail("info@zurich-meets-tanzania.com", data);
-    return result.response.status;
-}
 
 app.use(express.static("./static"));
 app.use(
@@ -1179,6 +901,26 @@ app.get("/datenschutz", (req, res) => {
     });
 });
 
+app.get("/newsletter/signUp", async (req, res) => {
+    try {
+        const valid = validateSignUpNewsletter(req.query?.id, req.query?.email, req.query?.name, req.query?.family_name, req.query?.gender);
+
+        if (!valid) return res.redirect("/?exec=error&message=Dieser Link ist nicht (mehr) gültig. Bitte versuche es erneut.");
+
+        await db.newsletterSignUp({
+            gender: req.query.gender,
+            vorname: req.query.name,
+            nachname: req.query.family_name,
+            email: req.query.email,
+        });
+
+        res.redirect("/?exec=dataSuccessfulUpdated");
+    } catch (error) {
+        console.error("An Error occurred:", error);
+        res.redirect("/?exec=error&message=Ein unerwarteter Fehler ist aufgetreten.");
+    }
+});
+
 app.get("/*", (req, res) => {
     let url = req.protocol + "://" + req.get("host");
     res.status(404).render("errors/error404.ejs", {
@@ -1210,23 +952,37 @@ app.post("/post/login", async (req, res) => {
 
 app.post("/post/signUp", async (req, res) => {
     let data = req.body;
-    let users = await db.getAccount(data.username);
-    if (users.length > 0) return res.json({ message: "Dieser Benutzername ist schon vergeben." });
+
+    if (typeof data?.address !== "string" || typeof data?.email !== "string" || typeof data?.family_name !== "string" || typeof data?.name !== "string" || typeof data?.password !== "string" || typeof data?.picture !== "string") return res.json({ valid: false, message: "Bad Request" });
+    if (data.address.length < 5 || data.email.length < 5 || data.family_name.length < 2 || data.name.length < 1 || data.password.length < 1) return res.json({ valid: false, message: "Bitte gib gültige Daten ein um ein Konto zu erstellen." });
+
+    let users = await db.getAccount(data?.email);
+
+    if (users.length > 0) return res.json({ valid: false, message: "Diese E-Mail-Adresse wird schon verwendet." });
+
     if (data.picture !== "/img/svg/personal.svg") {
-        data.picture = await imagekitUpload(data.picture, data.username + "_" + timon.randomString(32), "/users/");
+        data.picture = await imagekitUpload(data.picture, data.email + "_" + timon.randomString(32), "/users/");
         data.picture = data.picture.path;
     }
+
     const hash = await bcrypt.hash(data.password, 10);
+
     // The project started with the login being a username. This changed all the way in in September 2024
     /* Since the username was used like the users ID on the webpage, it would be to time consuming to change everything to the email and 
        therefore we decided to just automatically set the username to the same value as the email. */
-    let result = await db.createAccount(data.email /* This was the username */, hash, data.name, data.family_name, data.email, data.picture, data.phone, data.address).catch((err) => res.json({ valid: false, message: err }));
-    if (result.username) {
+    let result = await db.createAccount(data.email /* This was the username */, hash, data.name, data.family_name, data.email, data.picture, data.phone, data.address).catch(err => {
+        console.error(err);
+        res.json({ valid: false, message: "Ein unerwartetes Problem ist aufgetreten. Bitte versuche es erneut." })
+    });
+
+    if (result?.username) {
         req.session.user = result;
         req.session.user.valid = true;
         req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
-        res.json({ valid: true });
+        return res.json({ valid: true, message: "Du hast dich erfolgreich registriert." });
     }
+
+    res.json({ valid: false, message: "Ein unerwartetes Problem ist aufgetreten. Bitte versuche es erneut." });
 });
 
 app.post("/logout", (req, res) => {
@@ -1238,31 +994,44 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/post/newsletter/signUp", async (req, res) => {
-    const emails = await db.getAllNewsletterEmails();
-    if (emails.includes(req.body.email)) {
-        return res.json({ status: "Du bist schon angemeldet." });
-    }
-    let result = await db.newsletterSignUp(req.body).catch((error) => {
+    try {
+        if (typeof req.body?.gender !== "string" || typeof req.body?.firstName !== "string" || typeof req.body?.lastName !== "string" || typeof req.body?.email !== "string") return res.json({ status: "Bad Request" });
+
+        const emails = await db.getAllNewsletterEmails();
+
+        if (emails.includes(req.body.email)) return res.json({ status: "Du bist schon angemeldet." });
+
+        const valid = await initSignUpNewsletter(req.body);
+
+        if (valid === "ALREADY_REQUESTED") return res.json({ status: "Du hast schon eine Anfrage gesendet." });
+
+        if (!valid) return res.json({ status: "Es gab ein Problem beim Versenden der E-Mail. Bitte versuche es später nochmal." });
+
+        res.json({ status: "Alles in Ordnung" });
+    } catch (error) {
         console.error("An Error occurred:", error);
-        return "No connection to database";
-    });
-    res.json({ status: result });
+        res.json({ status: "Es gibt ein Problem mit unserer Datenbank, bitte versuche es später erneut." });
+    }
 });
 
 app.post("/post/newsletter/signUp/logedIn", async (req, res) => {
     if (!req.session?.user?.valid) return res.json({ error: "501: Forbidden" });
-    let result = await db
-        .newsletterSignUp({
+
+    try {
+        if (typeof req.body?.gender !== "string") return res.json({ status: "Bad Request" });
+
+        await db.newsletterSignUp({
             gender: req.body.gender,
             vorname: req.session.user.name,
             nachname: req.session.user.family_name,
             email: req.session.user.email,
-        })
-        .catch((error) => {
-            console.error("An Error occurred:", error);
-            return "No connection to database";
         });
-    res.json({ status: result });
+
+        res.json({ status: "Alles in Ordnung" });
+    } catch (error) {
+        console.error("An Error occurred:", error);
+        res.json({ status: "Es gibt ein Problem mit unserer Datenbank, bitte versuche es später erneut." });
+    }
 });
 
 app.post("/post/newsletter/signOff", async (req, res) => {

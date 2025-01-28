@@ -2537,3 +2537,9 @@ nav .mit-bild a {
         display: block;
     }
 }
+
+@media print {
+    nav {
+        display: none;
+    }
+}
