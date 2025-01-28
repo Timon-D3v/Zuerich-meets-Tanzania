@@ -1,6 +1,5 @@
 import { toRealDate } from "./toRealDate.js";
 
-
 export function createMailSubject(obj) {
     return obj.author_name + " schreibt über Webseitenformular";
 }

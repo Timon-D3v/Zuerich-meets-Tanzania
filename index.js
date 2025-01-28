@@ -138,8 +138,6 @@ async function downloadFileAsBase64(fileUrl) {
     });
 }
 
-
-
 app.use(express.static("./static"));
 app.use(
     express.urlencoded({
@@ -970,9 +968,9 @@ app.post("/post/signUp", async (req, res) => {
     // The project started with the login being a username. This changed all the way in in September 2024
     /* Since the username was used like the users ID on the webpage, it would be to time consuming to change everything to the email and 
        therefore we decided to just automatically set the username to the same value as the email. */
-    let result = await db.createAccount(data.email /* This was the username */, hash, data.name, data.family_name, data.email, data.picture, data.phone, data.address).catch(err => {
+    let result = await db.createAccount(data.email /* This was the username */, hash, data.name, data.family_name, data.email, data.picture, data.phone, data.address).catch((err) => {
         console.error(err);
-        res.json({ valid: false, message: "Ein unerwartetes Problem ist aufgetreten. Bitte versuche es erneut." })
+        res.json({ valid: false, message: "Ein unerwartetes Problem ist aufgetreten. Bitte versuche es erneut." });
     });
 
     if (result?.username) {
@@ -1201,7 +1199,6 @@ app.post("/post/updateProfile", async (req, res) => {
 
     if (b.password.trim() === "Nicht sichtbar" || b.password.trim() === "" || b.password.trim() === "**********") b.password = req.session.user.password;
     else b.password = await bcrypt.hash(b.password, 10);
-
 
     let result = await db.updateProfile(req.session.user.id, b.email, b.password, b.given_name, b.family_name, b.email, b.phone, b.address).catch(() => {
         return "No connection to database";

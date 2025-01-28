@@ -8,15 +8,12 @@ import EMAILS from "../backend/constants/emails.js";
 import { getAccount, updateProfile } from "../backend/db/db.zmt.js";
 import { createMailSubject, createMailText } from "./createMailMethods.js";
 
-
 dotenv.config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../.env") });
-
 
 const mailjet = new Mailjet({
     apiKey: process.env.MAILJET_PUBLIC_KEY,
     apiSecret: process.env.MAILJET_PRIVAT_KEY,
 });
-
 
 export async function sendMail(email, data, files = [], test = false) {
     try {
@@ -212,7 +209,6 @@ export function sendCriticalErrorMail(errorMessage, message) {
 export async function sendNewsletterSignUpConfirmation(email, id, name, family_name, gender) {
     let { anschrift, anschrift_html } = EMAILS;
     const { header, newsletter, grüsse_html, footer } = EMAILS;
-
 
     if (gender === "Herr") {
         anschrift = anschrift.replace("___ANREDE___", "Lieber");

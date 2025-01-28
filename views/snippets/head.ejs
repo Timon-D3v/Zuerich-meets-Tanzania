@@ -44,7 +44,8 @@
 </script>
 <script type="text/javascript" src="/js/customNotification.js" defer></script>
 <script type="text/javascript" src="/js/executables.js" defer></script>
-<script type="text/javascript" src="/js/cookieConsent.js"></script><% if (env === "prod") { %>
+<script type="text/javascript" src="/js/cookieConsent.js"></script>
+<% if (env === "prod") { %>
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -65,4 +66,5 @@
         gtag("consent", "update", JSON.parse(localStorage.getItem("cookie_consent_mode")));
     });
 </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-74MV698XJC"></script><% }; %>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-74MV698XJC"></script>
+<% }; %>

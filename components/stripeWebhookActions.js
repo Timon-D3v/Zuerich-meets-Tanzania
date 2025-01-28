@@ -2,7 +2,6 @@ import { errorLog } from "timonjs";
 import { addInvoiceToDatabase, createTempPayment, deleteMemberWithSubscriptionId, getMemberWithCustomerId, getMemberWithSubscriptionId, getSubscriptionIdWithCustomerId, removeMemberWithUserId, updateMemberPeriodEnd, updateMemberPeriodStart, updateMemberStatus, updateTempSubscriptionPeriodEnd, updateTempSubscriptionPeriodStart, updateTempSubscriptionStatus } from "../backend/db/db.zmt.js";
 import { sendCriticalErrorMail } from "./emailMethods.js";
 
-
 export async function stripe_c_s_created(subscription_id, period_start, period_end, customer_id, start_date, status) {
     try {
         await createTempPayment(subscription_id, period_start, period_end, customer_id, start_date, status);
