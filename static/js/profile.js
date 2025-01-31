@@ -163,7 +163,7 @@ async function getMyBills() {
         stripe.href = bill.url;
         id.innerHTML = bill.id;
         abo.innerHTML = "Mitgliedschaft";
-        price.innerHTML = "40 CHF";
+        price.innerHTML = "50 CHF";
         status.innerHTML = "Bezahlt";
         link.append(stripe);
         file.append(pdf);

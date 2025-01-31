@@ -114,7 +114,7 @@ export async function validateAccount(username, password) {
     let [account] = await getAccount(username).catch(() => {
         throw new Error("Keine Verbindung möglich...");
     });
-    if (!account) throw new Error("Dieser Benutzername existiert nicht.");
+    if (!account) throw new Error("Diese E-Mail-Adresse ist noch nicht registriert.");
     if (await bcrypt.compare(password, account.password)) account.valid = true;
     else account.valid = false;
     return account;
