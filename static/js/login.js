@@ -75,7 +75,7 @@ async function validateAccount(e) {
     e.preventDefault();
 
     const username = getElm("username");
-    const redir = getElm("redir").getAttribute("redirect");
+    const redir = getElm("redir").getAttribute("redirect").replaceAll("PAY_AND", "&").replaceAll("PAY_QUESTION_MARK", "?");
 
     if (username.valIsEmpty() || password.valIsEmpty()) return warnNotification("Bitte fülle alle Pflichtfelder aus.");
 

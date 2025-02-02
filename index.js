@@ -623,7 +623,7 @@ app.get("/pay", async (req, res) => {
     else if (amount === 120) link = links[3];
 
     if (q.t === "membership") {
-        if (!req.session?.user?.valid) return res.redirect("/login?redir=" + req.originalUrl);
+        if (!req.session?.user?.valid) return res.redirect("/login?redir=" + req.originalUrl.replace(/&/g, "PAY_AND").replace(/\?/g, "PAY_QUESTION_MARK"));
         if (req.session.user.type === "member") return res.redirect("/?exec=alreadyMember");
         if (req.session.user.type === "admin") {
             let member = await db.getMemberWithUserId(req.session.user.id)

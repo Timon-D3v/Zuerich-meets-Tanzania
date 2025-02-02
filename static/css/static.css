@@ -169,12 +169,11 @@
     display: block;
 }
 
-.error,
 .no-error {
     position: fixed;
     bottom: 5vh;
     left: 50%;
-    background-color: var(--error);
+    background-color: var(--green);
     margin: 0 15%;
     padding: 20px;
     box-sizing: border-box;
@@ -185,17 +184,12 @@
     z-index: 50;
 }
 
-.error > img,
 .no-error > img {
     height: 1lh;
     aspect-ratio: 1/1;
     object-fit: contain;
     object-position: center;
     transform: translateY(20%);
-}
-
-.no-error {
-    background-color: var(--green);
 }
 
 .profile-settings-input {
