@@ -217,6 +217,22 @@ main {
     color: var(--text-800);
 }
 
+.signup-split-field {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+}
+
+.signup-split-field-item {
+    flex: 1;
+    min-width: -webkit-fill-available;
+    min-width: fit-content;
+}
+
+.signup-split-field label {
+    display: block;
+}
+
 @media screen and (min-width: 575px) and (max-width: 749px) {
     .blog_c-main,
     .blog_carousel {

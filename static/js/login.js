@@ -104,9 +104,11 @@ async function addAccount(e) {
     const email = getElm("email");
     const phone = getElm("phone");
     const location = getElm("address");
+    const post_code = getElm("post_code");
+    const city = getElm("city");
     const redir = getElm("redir").getAttribute("redirect");
 
-    const empty = [username, name, family_name, email, new_password, location].filter((e) => e.valIsEmpty());
+    const empty = [username, name, family_name, email, new_password, location, post_code, city].filter((e) => e.valIsEmpty());
 
     if (empty.length > 0) {
         new_submit.disabled = false;
@@ -129,7 +131,7 @@ async function addAccount(e) {
         name: name.val(),
         family_name: family_name.val(),
         email: email.val(),
-        address: location.val(),
+        address: location.val() + ", " + post_code.val() + " " + city.val(),
         picture: base64,
         phone: phone.valIsEmpty() ? "Keine Nummer" : phone.val(),
     }).catch((err) => {
