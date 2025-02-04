@@ -951,8 +951,8 @@ app.post("/post/login", async (req, res) => {
     if (result.valid) {
         req.session.user = result;
         req.session.user.darkmode = await db.getDarkmode(req.session.user.username);
-        res.json({ valid: true });
-    } else res.json({ valid: false, message: error || "Dein Passwort ist falsch." });
+        res.json({ valid: true, type: req.session.user.type, message: "Erfolgreich eingeloggt." });
+    } else res.json({ valid: false, type: "undefined", message: error || "Dein Passwort ist falsch." });
 });
 
 app.post("/post/signUp", async (req, res) => {
@@ -1041,7 +1041,7 @@ app.post("/post/newsletter/signUp/logedIn", async (req, res) => {
 
 app.post("/post/newsletter/signOff", async (req, res) => {
     if (!req.session?.user?.valid) return res.json({ error: "501: Forbidden" });
-    db.newsletterSignOff(req.session.user.email);
+    await db.newsletterSignOff(req.session.user.email);
     res.end();
 });
 

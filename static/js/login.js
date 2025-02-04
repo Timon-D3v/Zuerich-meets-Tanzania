@@ -75,7 +75,7 @@ async function validateAccount(e) {
     e.preventDefault();
 
     const username = getElm("username");
-    const redir = getElm("redir").getAttribute("redirect").replaceAll("PAY_AND", "&").replaceAll("PAY_QUESTION_MARK", "?");
+    let redir = getElm("redir").getAttribute("redirect").replaceAll("PAY_AND", "&").replaceAll("PAY_QUESTION_MARK", "?");
 
     if (username.valIsEmpty() || password.valIsEmpty()) return warnNotification("Bitte fülle alle Pflichtfelder aus.");
 
@@ -88,7 +88,10 @@ async function validateAccount(e) {
         return { valid: false };
     });
 
-    if (result?.valid) return (window.location.href = redir);
+    if (result?.valid) {
+        window.location.href = result.type === "user" && !redir.includes("?") ? redir + "?exec=informUserIsNotMember" : redir;
+        return;
+    }
 
     errorNotification(result.message);
 }
