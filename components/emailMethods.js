@@ -77,7 +77,7 @@ export function sendNewsletterEmail(recipients, subject, text, files = []) {
         const data = {
             Subject: subject,
             TextPart: anschrift + text + EMAILS.grüsse,
-            HTMLPart: header + anschrift_html + newsletter + text + "</p>" + grüsse_html + footer,
+            HTMLPart: header + anschrift_html + newsletter + text.replaceAll("\n", "<br>") + "</p>" + grüsse_html + footer,
             CustomID: "Newsletter",
         };
         sendMail(recipient.email, data, files);

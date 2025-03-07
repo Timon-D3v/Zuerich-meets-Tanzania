@@ -118,7 +118,7 @@
                     });
                     if (res.status !== 200) return errorNotification("Etwas hat nicht geklappt: " + res.message);
                     successNotification("Das hat geklappt! Du wirst jetzt nicht mehr Benachrichtigt. (Sie werden automatisch weitergeleitet)");
-                    setTimeout(() => window.location.href = window.location.origin, 5000);
+                    setTimeout(() => {window.location.href = window.location.origin}, 5000);
                 });
             </script>
         </main>

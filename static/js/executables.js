@@ -7,7 +7,7 @@ addEventListener("DOMContentLoaded", () => {
         profileMembership: () => getElm("profile_dashboard_btn3").click(),
         toggleDonateForm: () => donate_toggleForms(),
         toggleLoginForm: () => toggleForms(),
-        informUserIsNotMember: () => infoNotification("Du bist kein Mitglied. Um Mitglied zu werden gehe bitte auf die Seite \"Mitglied werden\""),
+        informUserIsNotMember: () => infoNotification('Du bist kein Mitglied. Um Mitglied zu werden gehe bitte auf die Seite "Mitglied werden"'),
         error: () => {
             const param = new URLSearchParams(window.location.search);
 
@@ -25,7 +25,7 @@ addEventListener("DOMContentLoaded", () => {
             } else {
                 successNotification("Das hat geklappt!");
             }
-        }
+        },
     };
 
     const executablesURLParams = new URLSearchParams(window.location.search);

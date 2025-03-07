@@ -626,7 +626,7 @@ app.get("/pay", async (req, res) => {
         if (!req.session?.user?.valid) return res.redirect("/login?redir=" + req.originalUrl.replace(/&/g, "PAY_AND").replace(/\?/g, "PAY_QUESTION_MARK"));
         if (req.session.user.type === "member") return res.redirect("/?exec=alreadyMember");
         if (req.session.user.type === "admin") {
-            let member = await db.getMemberWithUserId(req.session.user.id)
+            let member = await db.getMemberWithUserId(req.session.user.id);
 
             if (member?.status !== "paid") member = null;
 
@@ -1287,17 +1287,33 @@ app.post("/post/news", async (req, res) => {
 
             let text = "";
 
-            html.children.forEach((element) => {
-                if (element.tagName === "P") text += element.children[0]?.content + " ";
-            });
-
-            if (text === "") {
-                html.children.forEach((element) => {
-                    if (element.tagName === "H2") text += element.children[0]?.content + " ";
+            const addText = (element) => {
+                element.children.forEach((child) => {
+                    switch (child.tagName) {
+                        case "___text___":
+                            text += child.content + " \n";
+                            break;
+                        case "BR":
+                            text += "\n";
+                            break;
+                        case "DIV":
+                            addText(child);
+                            break;
+                        case "H2":
+                            addText(child);
+                            break;
+                        case "P":
+                            addText(child);
+                            break;
+                    }
                 });
-            }
+            };
 
-            if (text.length > 100) text = text.slice(0, 150) + "...";
+            html.children.forEach(addText);
+
+            if (text === "") text = "--- Vorschau konnte nicht geladen werden. ---";
+
+            if (text.length > 1000) text = text.slice(0, 1500) + "...";
 
             sendNewsletterEmail(recipients, EMAILS.newsletterSubject, text);
         }
