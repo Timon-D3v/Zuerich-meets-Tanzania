@@ -289,3 +289,30 @@ export async function increaseDonationMeter(title: string, amount: number): Prom
         };
     }
 }
+
+export async function getAllDonors(): Promise<DatabaseResult> {
+    try {
+        const [result, _fields]: [RowDataPacket[], FieldPacket[]] = await connection.query(
+            `SELECT \`email\`, SUM(\`amount\`) as \`totalAmount\`, \`firstName\`, \`lastName\` FROM \`zmt\`.\`donationRequests\` WHERE \`validated\` = TRUE GROUP BY \`email\`, \`firstName\`, \`lastName\`;`,
+        );
+
+        return {
+            data: result,
+            error: null,
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+
+            return {
+                data: null,
+                error: error.message,
+            };
+        }
+
+        return {
+            data: null,
+            error: PUBLIC_CONFIG.ERROR.NO_CONNECTION_TO_DATABASE,
+        };
+    }
+}

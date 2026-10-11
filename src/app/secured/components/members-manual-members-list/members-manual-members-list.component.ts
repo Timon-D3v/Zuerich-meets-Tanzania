@@ -746,21 +746,21 @@ export class MembersManualMembersListComponent implements OnInit {
             case "CSV":
                 this.spreadsheetsService.exportDataToCSV(
                     this.originalMembers.filter((member) => member.type === "member" || member.type === "admin"),
-                    "users",
+                    "legacyMembers",
                 );
                 break;
             case "Excel":
                 this.spreadsheetsService.exportDataToExcel(
                     this.originalMembers.filter((member) => member.type === "member" || member.type === "admin"),
-                    "users",
-                    "Benutzer",
+                    "legacyMembers",
+                    "Manuelle Mitglieder",
                 );
                 break;
             case "OpenDocument":
                 this.spreadsheetsService.exportDataToOpenDocumentSpreadsheet(
                     this.originalMembers.filter((member) => member.type === "member" || member.type === "admin"),
-                    "users",
-                    "Benutzer",
+                    "legacyMembers",
+                    "Manuelle Mitglieder",
                 );
                 break;
             default:

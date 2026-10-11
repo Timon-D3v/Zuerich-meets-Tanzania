@@ -1,1 +1,43 @@
-<p>donations-all-time-donations-list works!</p>
+<h2>Spendenliste</h2>
+@defer (when donors().length > 0; prefetch on immediate) {
+    <div class="table-wrapper">
+        <table>
+            <tbody>
+                <tr>
+                    <th>Vorname</th>
+                    <th>Nachname</th>
+                    <th>E-Mail</th>
+                    <th>Gesamtbetrag</th>
+                </tr>
+                @for (donor of donors(); track $index) {
+                    <tr>
+                        <td>{{ donor.firstName }}</td>
+                        <td>
+                            {{ donor.lastName }}
+                        </td>
+                        <td>
+                            {{ donor.email }}
+                        </td>
+                        <td>{{ formatNumber(donor.totalAmount) }} chf</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <button type="button" (click)="initiateDownload()" class="download">Herunterladen</button>
+} @placeholder {
+    <app-loading></app-loading>
+}
+
+@if (fileTypeSelectionOpen()) {
+    <app-popup-selection-input
+        [selectionOptions]="['CSV', 'Excel', 'OpenDocument']"
+        (resultOutput)="download($event)"
+        (closeOutput)="download('')"
+        [title]="'Dateityp auswählen'"
+        [description]="'Bitte wähle den Dateityp aus, in dem die Benutzerdaten heruntergeladen werden sollen.'"
+        [label]="'Dateityp'"
+        [placeholder]="'Dateityp suchen'"
+    ></app-popup-selection-input>
+}

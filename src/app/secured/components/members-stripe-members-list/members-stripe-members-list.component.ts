@@ -746,21 +746,21 @@ export class MembersStripeMembersListComponent implements OnInit {
             case "CSV":
                 this.spreadsheetsService.exportDataToCSV(
                     this.originalMembers.filter((member) => member.type === "member" || member.type === "admin"),
-                    "users",
+                    "stripeMembers",
                 );
                 break;
             case "Excel":
                 this.spreadsheetsService.exportDataToExcel(
                     this.originalMembers.filter((member) => member.type === "member" || member.type === "admin"),
-                    "users",
-                    "Benutzer",
+                    "stripeMembers",
+                    "Stripe Mitglieder",
                 );
                 break;
             case "OpenDocument":
                 this.spreadsheetsService.exportDataToOpenDocumentSpreadsheet(
                     this.originalMembers.filter((member) => member.type === "member" || member.type === "admin"),
-                    "users",
-                    "Benutzer",
+                    "stripeMembers",
+                    "Stripe Mitglieder",
                 );
                 break;
             default:

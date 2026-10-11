@@ -457,6 +457,10 @@ export interface GetDonationHistoryApiEndpointResponse extends ApiEndpointRespon
     data: Donation[];
 }
 
+export interface GetAllDonorsApiEndpointResponse extends ApiEndpointResponse {
+    data: Donor[];
+}
+
 export interface PublicUser {
     email: string;
     firstName: string;
@@ -1103,4 +1107,8 @@ export type Donation = {
     createdAt: string;
     reviewed: boolean;
     validated: boolean;
+};
+
+export type Donor = Omit<Donation, "id" | "usageType" | "createdAt" | "reviewed" | "validated" | "amount"> & {
+    totalAmount: number;
 };

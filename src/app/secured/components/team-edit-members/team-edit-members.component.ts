@@ -6,7 +6,6 @@ import {
     EditUserCommand,
     GetAllMembersOfAllTeamsApiEndpointResponse,
     TeamMemberUser,
-    UpdateExpandedUserInformationApiEndpointResponse,
     UpdateTeamMemberWithIdApiEndpointResponse,
     UpdateUserProfilePictureWithIdApiEndpointResponse,
     UpdateUserWithIdApiEndpointResponse,
@@ -1012,24 +1011,13 @@ export class TeamEditMembersComponent implements OnInit {
 
         switch (result) {
             case "CSV":
-                this.spreadsheetsService.exportDataToCSV(
-                    this.originalUsers.filter((user) => user.type === "member" || user.type === "admin"),
-                    "users",
-                );
+                this.spreadsheetsService.exportDataToCSV(this.originalUsers, "teamMembers");
                 break;
             case "Excel":
-                this.spreadsheetsService.exportDataToExcel(
-                    this.originalUsers.filter((user) => user.type === "member" || user.type === "admin"),
-                    "users",
-                    "Benutzer",
-                );
+                this.spreadsheetsService.exportDataToExcel(this.originalUsers, "teamMembers", "Team Mitglieder");
                 break;
             case "OpenDocument":
-                this.spreadsheetsService.exportDataToOpenDocumentSpreadsheet(
-                    this.originalUsers.filter((user) => user.type === "member" || user.type === "admin"),
-                    "users",
-                    "Benutzer",
-                );
+                this.spreadsheetsService.exportDataToOpenDocumentSpreadsheet(this.originalUsers, "teamMembers", "Team Mitglieder");
                 break;
             default:
                 console.info("No file type selected for export.");

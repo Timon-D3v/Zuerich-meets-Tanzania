@@ -15,12 +15,6 @@ export const PASSWORDS: LoginInformation[] = [
         password: CONFIG.PASSWORD_GOOGLE_ACCOUNT,
     },
     {
-        websiteLabel: "Google Analytics",
-        websiteUrl: "https://analytics.google.com/",
-        username: CONFIG.EMAIL_GOOGLE_ACCOUNT,
-        password: CONFIG.PASSWORD_GOOGLE_ACCOUNT,
-    },
-    {
         websiteLabel: "Infomaniak Account",
         websiteUrl: "https://manager.infomaniak.com/",
         username: CONFIG.EMAIL_INFOMANIAK_ACCOUNT,
@@ -47,7 +41,13 @@ export const PASSWORDS: LoginInformation[] = [
         twoFactorSecret: CONFIG.TWO_FACTOR_AUTHENTICATION_SECRET_STRIPE_READONLY_ACCOUNT,
     },
     {
-        websiteLabel: "Mailjet Account",
+        websiteLabel: "Google Analytics (Unbenutzt)",
+        websiteUrl: "https://analytics.google.com/",
+        username: CONFIG.EMAIL_GOOGLE_ACCOUNT,
+        password: CONFIG.PASSWORD_GOOGLE_ACCOUNT,
+    },
+    {
+        websiteLabel: "Mailjet Account (Unbenutzt)",
         websiteUrl: "https://dashboard.mailjet.com/",
         username: CONFIG.EMAIL_MAILJET_ACCOUNT,
         password: CONFIG.PASSWORD_MAILJET_ACCOUNT,

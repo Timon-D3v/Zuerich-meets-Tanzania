@@ -1,0 +1,26 @@
+@use "../../../../styles/index" as *;
+
+.table-wrapper {
+    @include default-table;
+}
+
+h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    padding: 0 10vw;
+}
+
+td {
+    position: relative;
+    min-width: 100px;
+}
+
+.download {
+    @include primary-button($margin: 3vh auto 5vh auto);
+}
+
+::ng-deep :root[data-theme="dark"] app-stats-user-list {
+    & .table-wrapper {
+        @include default-table-darkmode;
+    }
+}

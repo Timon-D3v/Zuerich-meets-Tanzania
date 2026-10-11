@@ -10,8 +10,9 @@ import {
     getAllDonationMeters,
     increaseDonationMeter,
     getOpenDonationRequests,
+    getAllDonors,
 } from "../shared/donation.database";
-import { ApiEndpointResponse, GetDonationHistoryApiEndpointResponse, Donation } from "..";
+import { ApiEndpointResponse, GetDonationHistoryApiEndpointResponse, Donation, Donor, GetAllDonorsApiEndpointResponse } from "..";
 
 // Router Serves under /api/secured/admin/donation
 const router = Router();
@@ -287,6 +288,40 @@ router.post("/verifyDonationRequest", async (req: Request, res: Response): Promi
             error: true,
             message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
         } as ApiEndpointResponse);
+    }
+});
+
+router.get("/getDonorList", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const result = await getAllDonors();
+
+        if (result.error) {
+            throw new Error(result.error);
+        }
+
+        res.json({
+            error: false,
+            message: "Success",
+            data: result.data as Donor[],
+        } as GetAllDonorsApiEndpointResponse);
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof Error) {
+            res.json({
+                error: true,
+                message: error.message,
+                data: [],
+            } as GetAllDonorsApiEndpointResponse);
+
+            return;
+        }
+
+        res.status(501).json({
+            error: true,
+            message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
+            data: [],
+        } as GetAllDonorsApiEndpointResponse);
     }
 });
 
