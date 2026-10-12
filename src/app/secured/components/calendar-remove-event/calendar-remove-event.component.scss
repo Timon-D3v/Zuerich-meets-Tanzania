@@ -1,0 +1,25 @@
+@use "../../../../styles/index" as *;
+
+.wrapper {
+    padding: 2vh 5vw;
+    box-sizing: border-box;
+}
+
+h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    padding: 0 10vw;
+}
+
+p {
+    font-size: medium;
+    margin: 1vh 5%;
+    padding: 0;
+    width: 90%;
+    text-align: center;
+    text-wrap: pretty;
+}
+
+button {
+    @include primary-button($margin: 3vh auto 0 auto);
+}

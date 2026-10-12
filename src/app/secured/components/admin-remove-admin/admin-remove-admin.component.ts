@@ -1,43 +1,55 @@
-import { Component, inject, PLATFORM_ID, signal } from "@angular/core";
-import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Component, inject, PLATFORM_ID, signal, OnInit } from "@angular/core";
 import { PUBLIC_CONFIG } from "../../../../publicConfig";
 import { NotificationService } from "../../../services/notification.service";
-import { ApiEndpointResponse } from "../../../..";
+import { ApiEndpointResponse, GetAllUsersApiEndpointResponse, PrivateUser } from "../../../..";
 import { isPlatformBrowser } from "@angular/common";
+import { PopupSelectionInputComponent } from "../../../components/popup-selection-input/popup-selection-input.component";
+import { AnalyticsService } from "../../../services/analytics.service";
 import { AdminManagementService } from "../../../services/admin-management.service";
 
 @Component({
+    imports: [PopupSelectionInputComponent],
     selector: "app-admin-remove-admin",
-    imports: [ReactiveFormsModule],
     templateUrl: "./admin-remove-admin.component.html",
     styleUrl: "./admin-remove-admin.component.scss",
 })
-export class AdminRemoveAdminComponent {
-    submitButtonText = signal("Entfernen");
-    submitButtonDisabled = signal(false);
+export class AdminRemoveAdminComponent implements OnInit {
+    users = signal<PrivateUser[]>([]);
+    selectionOpen = signal<boolean>(true);
 
-    removeAdminForm = new FormGroup({
-        emailControl: new FormControl(""),
-    });
-
-    private adminManagementService = inject(AdminManagementService);
+    private analyticsService = inject(AnalyticsService);
     private notificationService = inject(NotificationService);
+    private adminManagementService = inject(AdminManagementService);
 
     private platformId = inject(PLATFORM_ID);
 
-    onSubmit(event: Event): void {
-        event.preventDefault();
+    ngOnInit(): void {
+        this.getAllUsers();
+    }
 
-        this.submitButtonDisabled.set(true);
-        this.submitButtonText.set("Verarbeiten...");
+    getAllUsers(): void {
+        const request = this.analyticsService.getAllUsers();
 
-        const email = this.removeAdminForm.value.emailControl;
+        request.subscribe({
+            next: (response: GetAllUsersApiEndpointResponse) => {
+                if (response.error) {
+                    console.error(response.message);
+                    this.notificationService.error("Fehler:", "Beim Abrufen der E-Mail-Adressen ist ein Fehler aufgetreten: " + response.message);
+                    return;
+                }
 
+                this.users.set(response.data);
+            },
+            error: (error) => {
+                console.error("Error while fetching users:", error);
+                this.notificationService.error("Fehler:", "Beim Abrufen der E-Mail-Adressen ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.");
+            },
+        });
+    }
+
+    removeAdmin(email: string): void {
         if (typeof email !== "string" || email.trim() === "" || !PUBLIC_CONFIG.REGEX.MATCH_VALID_EMAIL.test(email)) {
             this.notificationService.error("Eingabefehler:", "Bitte gib eine gültige E-Mail-Adresse ein.");
-
-            this.submitButtonDisabled.set(false);
-            this.submitButtonText.set("Entfernen");
 
             return;
         }
@@ -45,39 +57,37 @@ export class AdminRemoveAdminComponent {
         if (!isPlatformBrowser(this.platformId)) {
             console.error("Cannot send post request if not in browser context.");
 
-            this.submitButtonDisabled.set(false);
-            this.submitButtonText.set("Entfernen");
-
             return;
         }
+
+        this.closeSelection();
 
         const request = this.adminManagementService.removeAdmin(email);
 
         request.subscribe({
             next: (response: ApiEndpointResponse): void => {
                 if (response.error) {
-                    this.notificationService.error("Fehler:", response.message);
-
-                    this.submitButtonDisabled.set(false);
-                    this.submitButtonText.set("Entfernen");
+                    this.notificationService.error("Fehler:", "Beim Entfernen der Admin-Rechte ist ein Fehler aufgetreten: " + response.message);
 
                     return;
                 }
 
                 this.notificationService.success("Erfolg:", `Die Admin-Rechte des Benutzers mit der E-Mail "${email}" wurden erfolgreich entzogen.`);
 
-                this.removeAdminForm.reset();
-
-                this.submitButtonDisabled.set(false);
-                this.submitButtonText.set("Entfernen");
+                this.getAllUsers();
             },
             error: (error: unknown): void => {
                 console.error("Error while removing admin rights for user with email " + email + ":", error);
                 this.notificationService.error("Fehler", "Beim Entfernen der Admin-Rechte ist ein Fehler aufgetreten. Bitte versuche es erneut.");
-
-                this.submitButtonDisabled.set(false);
-                this.submitButtonText.set("Entfernen");
             },
         });
+    }
+
+    openSelection(): void {
+        this.selectionOpen.set(true);
+    }
+
+    closeSelection(): void {
+        this.selectionOpen.set(false);
     }
 }

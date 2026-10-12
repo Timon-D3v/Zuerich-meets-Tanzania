@@ -173,7 +173,7 @@
                             href: '#Blog-löschen',
                             label: 'Blog löschen',
                             clickable: true,
-                            onClick: generateSelectBlogToDeleteFunction(),
+                            onClick: generateActivateFunction('blog-delete-blog'),
                         },
                     ]"
                 ></app-admin-nav-element>
@@ -207,7 +207,7 @@
                             href: '#Event-löschen',
                             label: 'Event löschen',
                             clickable: true,
-                            onClick: generateSelectEventToDeleteFunction(),
+                            onClick: generateActivateFunction('calendar-remove-event'),
                         },
                     ]"
                 ></app-admin-nav-element>
@@ -620,15 +620,15 @@
         } @else if (currentActiveSection() === "blog-edit-blog") {
             <app-edit-static-site [site]="blogs.existingBlogs[currentActiveBlogEdit()]()" (moveOutput)="handleMove($event)" (editOutput)="handleEdit($event)" (deleteOutput)="handleDelete($event)"></app-edit-static-site>
         } @else if (currentActiveSection() === "blog-delete-blog") {
-            <app-loading></app-loading>
+            <app-blog-delete-blog></app-blog-delete-blog>
         } @else if (currentActiveSection() === "news-create-news") {
             <app-news-edit-news [newsTitle]="'Aktuell:'" [news]="news.newNews()" (moveOutput)="handleNewsMove($event)" (editOutput)="handleNewsEdit($event)" (deleteOutput)="handleNewsDelete($event)"></app-news-edit-news>
         } @else if (currentActiveSection() === "news-edit-news") {
             <app-news-edit-news [news]="news.existingNews[currentActiveNewsEdit()]()" (moveOutput)="handleNewsMove($event)" (editOutput)="handleNewsEdit($event)" (deleteOutput)="handleNewsDelete($event)"></app-news-edit-news>
         } @else if (currentActiveSection() === "calendar-create-event") {
             <app-calendar-create-event></app-calendar-create-event>
-        } @else if (currentActiveSection() === "calendar-delete-event") {
-            <app-loading></app-loading>
+        } @else if (currentActiveSection() === "calendar-remove-event") {
+            <app-calendar-remove-event></app-calendar-remove-event>
         } @else if (currentActiveSection() === "team-create-team") {
             <app-team-create-team></app-team-create-team>
         } @else if (currentActiveSection() === "team-edit-team") {

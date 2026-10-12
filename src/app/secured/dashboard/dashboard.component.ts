@@ -5,7 +5,6 @@ import { Subject, take } from "rxjs";
 import {
     ApiEndpointResponse,
     BlogContent,
-    CalendarEvent,
     CustomImageWithTextElement,
     DashboardEditTypes,
     DashboardNavigationOptions,
@@ -14,7 +13,6 @@ import {
     GetAllNewsApiEndpointResponse,
     GetAllStaticSitesApiEndpointResponse,
     GetBlogApiEndpointResponse,
-    GetCalendarEventsApiEndpointResponse,
     GetStaticSiteApiEndpointResponse,
     GetTeamApiEndpointResponse,
     News,
@@ -59,6 +57,7 @@ import { TeamRemoveMemberComponent } from "../components/team-remove-member/team
 import { TeamAddMemberComponent } from "../components/team-add-member/team-add-member.component";
 import { TeamCreateTeamComponent } from "../components/team-create-team/team-create-team.component";
 import { CalendarCreateEventComponent } from "../components/calendar-create-event/calendar-create-event.component";
+import { CalendarRemoveEventComponent } from "../components/calendar-remove-event/calendar-remove-event.component";
 import { NewsEditNewsComponent } from "../components/news-edit-news/news-edit-news.component";
 import { PopupTitleInputComponent } from "../../components/popup-title-input/popup-title-input.component";
 import { PopupTextInputComponent } from "../../components/popup-text-input/popup-text-input.component";
@@ -70,8 +69,6 @@ import { PopupAlertComponent } from "../../components/popup-alert/popup-alert.co
 import { LoadingComponent } from "../../components/loading/loading.component";
 import { NewsService } from "../../services/news.service";
 import { PopupFileInputComponent } from "../../components/popup-file-input/popup-file-input.component";
-import { CalendarService } from "../../services/calendar.service";
-import { formatDateRangeString } from "../../../shared/utils";
 import { AdminFileExplorerComponent } from "../components/admin-file-explorer/admin-file-explorer.component";
 import { PopupTableInputComponent } from "../../components/popup-table-input/popup-table-input.component";
 import { PopupMultipleButtonsInputComponent } from "../../components/popup-multiple-buttons-input/popup-multiple-buttons-input.component";
@@ -80,6 +77,7 @@ import { AdminEditBoardComponent } from "../components/admin-edit-board/admin-ed
 import { GalleryEditDetailsComponent } from "../components/gallery-edit-details/gallery-edit-details.component";
 import { TeamEditTeamComponent } from "../components/team-edit-team/team-edit-team.component";
 import { TeamEditMembersComponent } from "../components/team-edit-members/team-edit-members.component";
+import { BlogDeleteBlogComponent } from "../components/blog-delete-blog/blog-delete-blog.component";
 
 @Component({
     selector: "app-dashboard",
@@ -96,6 +94,7 @@ import { TeamEditMembersComponent } from "../components/team-edit-members/team-e
         MembersManualMembersListComponent,
         MembersStripeMembersListComponent,
         AdminCreateAccountComponent,
+        BlogDeleteBlogComponent,
         StatsWebsiteAnalyticsComponent,
         StatsUserListComponent,
         DonationsAllTimeDonationsListComponent,
@@ -115,6 +114,7 @@ import { TeamEditMembersComponent } from "../components/team-edit-members/team-e
         TeamAddMemberComponent,
         TeamEditMembersComponent,
         CalendarCreateEventComponent,
+        CalendarRemoveEventComponent,
         NewsEditNewsComponent,
         PopupTitleInputComponent,
         PopupTextInputComponent,
@@ -151,7 +151,6 @@ export class DashboardComponent implements OnInit {
 
     allEditableBlogs: string[] = [];
     allEditableNews: string[] = [];
-    allEditableEvents: string[] = [];
 
     /*
      * ===============================================================
@@ -371,14 +370,6 @@ export class DashboardComponent implements OnInit {
 
     /*
      * ===============================================================
-     *                       CALENDAR CACHE
-     * ===============================================================
-     */
-
-    calendarEvents: CalendarEvent[] = [];
-
-    /*
-     * ===============================================================
      *                          SERVICES
      * ===============================================================
      */
@@ -387,7 +378,6 @@ export class DashboardComponent implements OnInit {
     private blogService = inject(BlogService);
     private newsService = inject(NewsService);
     private editService = inject(EditService);
-    private calendarService = inject(CalendarService);
     private subpagesService = inject(SubpagesService);
     private notificationService = inject(NotificationService);
 
@@ -455,14 +445,9 @@ export class DashboardComponent implements OnInit {
 
         // Get all news for editing
         this.getAllNews();
-
-        // Get all events for deleting
-        this.getAllEvents();
     }
 
     getAllBlogTitles(): void {
-        this.allEditableBlogs = [];
-
         const blogTitlesRequest = this.blogService.getAllBlogLinks();
 
         blogTitlesRequest.subscribe({
@@ -473,9 +458,7 @@ export class DashboardComponent implements OnInit {
                     return;
                 }
 
-                for (const blog of response.data.data) {
-                    this.allEditableBlogs.push(blog["title"]);
-                }
+                this.allEditableBlogs = (response.data.data as { title: string }[]).map((blog) => blog.title);
             },
             error: (error) => {
                 console.error("Error while fetching blog titles:", error);
@@ -521,31 +504,6 @@ export class DashboardComponent implements OnInit {
             error: (error) => {
                 console.error("Error while fetching news:", error);
                 this.notificationService.error("Fehler beim Laden der News", "Die News konnten nicht geladen werden. Bitte versuche es später erneut.");
-            },
-        });
-    }
-
-    getAllEvents(): void {
-        this.allEditableEvents = [];
-
-        const calendarRequest = this.calendarService.getAllEvents();
-
-        calendarRequest.subscribe({
-            next: (response: GetCalendarEventsApiEndpointResponse) => {
-                if (response.error || response.data === null || !Array.isArray(response.data)) {
-                    this.notificationService.error("Fehler beim Laden der Events", "Die Events konnten nicht geladen werden: " + response.message);
-
-                    return;
-                }
-
-                for (const event of response.data) {
-                    this.calendarEvents.push(event);
-                    this.allEditableEvents.push(`${formatDateRangeString(new Date(event.startDate), new Date(event.endDate))} - ${event.title}`);
-                }
-            },
-            error: (error) => {
-                console.error("Error while fetching calendar events:", error);
-                this.notificationService.error("Fehler beim Laden der Events", "Die Events konnten nicht geladen werden. Bitte versuche es später erneut.");
             },
         });
     }
@@ -704,27 +662,6 @@ export class DashboardComponent implements OnInit {
         this.selectionInputOptions.set(this.allEditableBlogs);
     }
 
-    generateSelectBlogToDeleteFunction(): Function {
-        const _this = this;
-
-        const activationFunction = () => {
-            _this.selectBlogToDelete();
-            _this.generateActivateFunction("blog-delete-blog")();
-        };
-
-        return activationFunction;
-    }
-
-    selectBlogToDelete(): void {
-        this.selectionInputOpen.set(true);
-
-        this.selectionInputTitle.set("Blog löschen");
-        this.selectionInputDescription.set("Bitte gib den Titel des Blogs ein, den du löschen möchtest.");
-        this.selectionInputLabel.set("Titel:");
-        this.selectionInputPlaceholder.set("Titel suchen");
-        this.selectionInputOptions.set(this.allEditableBlogs);
-    }
-
     generateSelectNewsToEditFunction(): Function {
         const _this = this;
 
@@ -744,27 +681,6 @@ export class DashboardComponent implements OnInit {
         this.selectionInputLabel.set("Datum:");
         this.selectionInputPlaceholder.set("Datum suchen");
         this.selectionInputOptions.set(this.allEditableNews);
-    }
-
-    generateSelectEventToDeleteFunction(): Function {
-        const _this = this;
-
-        const activationFunction = () => {
-            _this.selectEventToDelete();
-            _this.generateActivateFunction("calendar-delete-event")();
-        };
-
-        return activationFunction;
-    }
-
-    selectEventToDelete(): void {
-        this.selectionInputOpen.set(true);
-
-        this.selectionInputTitle.set("Event löschen");
-        this.selectionInputDescription.set("Bitte gib den Titel des Events ein, das du löschen möchtest.");
-        this.selectionInputLabel.set("Titel:");
-        this.selectionInputPlaceholder.set("Titel suchen");
-        this.selectionInputOptions.set(this.allEditableEvents);
     }
 
     /*
@@ -1786,18 +1702,12 @@ export class DashboardComponent implements OnInit {
             case "blog-edit-blog":
                 this.currentActiveBlogEdit.set(selectedOption);
                 break;
-            case "blog-delete-blog":
-                this.deleteBlog(selectedOption);
-                break;
             case "news-edit-news":
                 if (this.allEditableNews.includes(selectedOption)) {
                     this.currentActiveNewsEdit.set(selectedOption);
                 } else {
                     this.selectionInputObservable.next(selectedOption);
                 }
-                break;
-            case "calendar-delete-event":
-                this.deleteEvent(selectedOption);
                 break;
             default:
                 this.selectionInputObservable.next(selectedOption);
@@ -2789,124 +2699,6 @@ export class DashboardComponent implements OnInit {
                 ...siteOrBlog,
                 data: [...siteOrBlog.data],
             };
-        });
-    }
-
-    /*
-     * ===============================================================
-     *                    INSTANT USE FUNCTIONS
-     * ===============================================================
-     */
-
-    async deleteBlog(blogName: string): Promise<void> {
-        const confirm = await this.awaitConfirmation("Löschen bestätigen", `Möchtest du den Blog mit Titel '${blogName}' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.`, "Löschen", "Abbrechen");
-
-        if (!confirm) {
-            this.setCurrentActiveNavigation("main");
-            this.currentActiveSection.set("stats-website-analytics");
-
-            return;
-        }
-
-        const request = this.blogService.deleteBlog(blogName);
-
-        request.subscribe({
-            next: (response: ApiEndpointResponse) => {
-                if (response.error) {
-                    this.notificationService.error("Fehler beim Löschen", "Der Blog konnte nicht gelöscht werden: " + response.message);
-
-                    this.setCurrentActiveNavigation("main");
-                    this.currentActiveSection.set("stats-website-analytics");
-
-                    return;
-                }
-
-                this.notificationService.success("Blog gelöscht", response.message);
-
-                // Refresh the blog titles
-                this.getAllBlogTitles();
-
-                // Reset the current active blog edit if it was the deleted blog
-                if (this.currentActiveBlogEdit() === blogName) {
-                    this.currentActiveBlogEdit.set("awaitSelection");
-                }
-
-                this.setCurrentActiveNavigation("main");
-                this.currentActiveSection.set("stats-website-analytics");
-            },
-            error: (error: unknown) => {
-                console.error("Error while deleting blog:", error);
-
-                this.notificationService.error("Fehler beim Löschen", "Der Blog konnte nicht gelöscht werden. Bitte versuche es später erneut.");
-
-                this.setCurrentActiveNavigation("main");
-                this.currentActiveSection.set("stats-website-analytics");
-            },
-        });
-    }
-
-    async deleteEvent(formattedEvent: string): Promise<void> {
-        const confirm = await this.awaitConfirmation("Löschen bestätigen", `Möchtest du den Event '${formattedEvent}' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.`, "Löschen", "Abbrechen");
-
-        if (!confirm) {
-            this.setCurrentActiveNavigation("main");
-            this.currentActiveSection.set("stats-website-analytics");
-
-            return;
-        }
-
-        // Since we only have the formatted event, we have to find the corresponding event ID first
-
-        const getEventId = (formattedEvent: string): number => {
-            for (const event of this.calendarEvents) {
-                if (`${formatDateRangeString(new Date(event.startDate), new Date(event.endDate))} - ${event.title}` === formattedEvent) {
-                    return event.id;
-                }
-            }
-
-            return -1; // Return -1 if no matching event is found
-        };
-
-        const eventId = getEventId(formattedEvent);
-
-        if (eventId === -1) {
-            this.notificationService.error("Event nicht gefunden", "Der Event konnte nicht gefunden werden. Bitte aktualisiere die Seite und versuche es erneut.");
-
-            this.setCurrentActiveNavigation("main");
-            this.currentActiveSection.set("stats-website-analytics");
-
-            return;
-        }
-
-        const request = this.calendarService.deleteEvent(eventId);
-
-        request.subscribe({
-            next: (response: ApiEndpointResponse) => {
-                if (response.error) {
-                    this.notificationService.error("Fehler beim Löschen", "Das Event konnte nicht gelöscht werden: " + response.message);
-
-                    this.setCurrentActiveNavigation("main");
-                    this.currentActiveSection.set("stats-website-analytics");
-
-                    return;
-                }
-
-                this.notificationService.success("Event gelöscht", "Das Event wurde erfolgreich gelöscht.");
-
-                // Refresh the events
-                this.getAllEvents();
-
-                this.setCurrentActiveNavigation("main");
-                this.currentActiveSection.set("stats-website-analytics");
-            },
-            error: (error: unknown) => {
-                console.error("Error while deleting event:", error);
-
-                this.notificationService.error("Fehler beim Löschen", "Das Event konnte nicht gelöscht werden. Bitte versuche es später erneut.");
-
-                this.setCurrentActiveNavigation("main");
-                this.currentActiveSection.set("stats-website-analytics");
-            },
         });
     }
 }

@@ -1,43 +1,55 @@
-import { Component, inject, PLATFORM_ID, signal } from "@angular/core";
-import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Component, inject, PLATFORM_ID, signal, OnInit } from "@angular/core";
 import { PUBLIC_CONFIG } from "../../../../publicConfig";
 import { NotificationService } from "../../../services/notification.service";
-import { ApiEndpointResponse } from "../../../..";
+import { ApiEndpointResponse, GetAllUsersApiEndpointResponse, PrivateUser } from "../../../..";
 import { isPlatformBrowser } from "@angular/common";
+import { PopupSelectionInputComponent } from "../../../components/popup-selection-input/popup-selection-input.component";
 import { AdminManagementService } from "../../../services/admin-management.service";
+import { AnalyticsService } from "../../../services/analytics.service";
 
 @Component({
+    imports: [PopupSelectionInputComponent],
     selector: "app-admin-add-admin",
-    imports: [ReactiveFormsModule],
     templateUrl: "./admin-add-admin.component.html",
     styleUrl: "./admin-add-admin.component.scss",
 })
-export class AdminAddAdminComponent {
-    submitButtonText = signal("Hinzufügen");
-    submitButtonDisabled = signal(false);
+export class AdminAddAdminComponent implements OnInit {
+    users = signal<PrivateUser[]>([]);
+    selectionOpen = signal<boolean>(true);
 
-    addAdminForm = new FormGroup({
-        emailControl: new FormControl(""),
-    });
-
-    private adminManagementService = inject(AdminManagementService);
+    private analyticsService = inject(AnalyticsService);
     private notificationService = inject(NotificationService);
+    private adminManagementService = inject(AdminManagementService);
 
     private platformId = inject(PLATFORM_ID);
 
-    onSubmit(event: Event): void {
-        event.preventDefault();
+    ngOnInit(): void {
+        this.getAllUsers();
+    }
 
-        this.submitButtonDisabled.set(true);
-        this.submitButtonText.set("Verarbeiten...");
+    getAllUsers(): void {
+        const request = this.analyticsService.getAllUsers();
 
-        const email = this.addAdminForm.value.emailControl;
+        request.subscribe({
+            next: (response: GetAllUsersApiEndpointResponse) => {
+                if (response.error) {
+                    console.error(response.message);
+                    this.notificationService.error("Fehler:", "Beim Abrufen der E-Mail-Adressen ist ein Fehler aufgetreten: " + response.message);
+                    return;
+                }
 
+                this.users.set(response.data);
+            },
+            error: (error) => {
+                console.error("Error while fetching users:", error);
+                this.notificationService.error("Fehler:", "Beim Abrufen der E-Mail-Adressen ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.");
+            },
+        });
+    }
+
+    addAdmin(email: string): void {
         if (typeof email !== "string" || email.trim() === "" || !PUBLIC_CONFIG.REGEX.MATCH_VALID_EMAIL.test(email)) {
             this.notificationService.error("Eingabefehler:", "Bitte gib eine gültige E-Mail-Adresse ein.");
-
-            this.submitButtonDisabled.set(false);
-            this.submitButtonText.set("Hinzufügen");
 
             return;
         }
@@ -45,11 +57,10 @@ export class AdminAddAdminComponent {
         if (!isPlatformBrowser(this.platformId)) {
             console.error("Cannot send post request if not in browser context.");
 
-            this.submitButtonDisabled.set(false);
-            this.submitButtonText.set("Hinzufügen");
-
             return;
         }
+
+        this.closeSelection();
 
         const request = this.adminManagementService.addAdmin(email);
 
@@ -58,33 +69,29 @@ export class AdminAddAdminComponent {
                 if (response.error && response.message === "Der Benutzer ist bereits ein Admin.") {
                     this.notificationService.info("Info:", response.message);
 
-                    this.submitButtonDisabled.set(false);
-                    this.submitButtonText.set("Hinzufügen");
-
                     return;
                 } else if (response.error) {
-                    this.notificationService.error("Fehler:", response.message);
-
-                    this.submitButtonDisabled.set(false);
-                    this.submitButtonText.set("Hinzufügen");
+                    this.notificationService.error("Fehler:", "Beim Hinzufügen des Admins ist ein Fehler aufgetreten: " + response.message);
 
                     return;
                 }
 
                 this.notificationService.success("Erfolg:", `Der Benutzer mit der E-Mail "${email}" wurde erfolgreich zum Admin ernannt.`);
 
-                this.addAdminForm.reset();
-
-                this.submitButtonDisabled.set(false);
-                this.submitButtonText.set("Hinzufügen");
+                this.getAllUsers();
             },
             error: (error: unknown): void => {
                 console.error("Error while adding admin:", error);
                 this.notificationService.error("Fehler", "Beim Hinzufügen des Admins ist ein Fehler aufgetreten. Bitte versuche es erneut.");
-
-                this.submitButtonDisabled.set(false);
-                this.submitButtonText.set("Hinzufügen");
             },
         });
+    }
+
+    openSelection(): void {
+        this.selectionOpen.set(true);
+    }
+
+    closeSelection(): void {
+        this.selectionOpen.set(false);
     }
 }

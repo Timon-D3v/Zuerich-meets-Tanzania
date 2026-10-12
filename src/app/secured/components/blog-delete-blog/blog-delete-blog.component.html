@@ -1,0 +1,31 @@
+<div class="wrapper">
+    <h2>Blog löschen</h2>
+
+    <p>Gib den Titel eines Blogs ein, um ihn zu entfernen.</p>
+
+    <button type="button" (click)="openSelection()">Entfernen</button>
+</div>
+
+@if (selectionOpen()) {
+    <app-popup-selection-input
+        title="Blog löschen"
+        description="Gib den Titel eines Blogs ein, um ihn zu entfernen."
+        label="Blog-Titel"
+        placeholder="Blog-Titel eingeben"
+        submitButtonText="Löschen"
+        [selectionOptions]="blogTitles()"
+        (closeOutput)="closeSelection()"
+        (resultOutput)="deleteBlog($event)"
+    ></app-popup-selection-input>
+}
+
+@if (confirmationOpen()) {
+    <app-popup-confirm
+        title="Löschen bestätigen"
+        [description]="'Möchtest du den Blog mit Titel ' + (selectedBlogTitle() ?? '\<Kein Titel ausgewählt\>') + ' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.'"
+        confirmButtonText="Löschen"
+        cancelButtonText="Abbrechen"
+        (closeOutput)="closeConfirmation()"
+        (resultOutput)="confirmDeletion($event)"
+    ></app-popup-confirm>
+}

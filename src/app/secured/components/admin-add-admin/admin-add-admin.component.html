@@ -1,10 +1,26 @@
-<form [formGroup]="addAdminForm" (submit)="onSubmit($event)">
+<div class="wrapper">
     <h2>Admin hinzufügen</h2>
     <p>
-        Gib eine E-Mail-Adresse ein um ihn zum Admin zu ernennen. Sobald jemand Admin-Rechte erhält, kann er auf alle administrativen Funktionen zugreifen. Das heisst unter anderem, dass er Zugriff auf die Verwaltungsseite hat, auf der du dich gerade
-        befindest.
+        Gib eine E-Mail-Adresse ein um einen Benutzer zum Admin zu ernennen. Sobald jemand Admin-Rechte erhält, kann er auf alle administrativen Funktionen zugreifen. Das heisst unter anderem, dass er Zugriff auf die Verwaltungsseite hat, auf der du
+        dich gerade befindest.
     </p>
-    <label for="email">E-Mail</label>
-    <input type="email" id="email" placeholder="E-Mail-Adresse eingeben" required formControlName="emailControl" />
-    <button type="submit" [disabled]="submitButtonDisabled()">{{ submitButtonText() }}</button>
-</form>
+
+    <button type="button" (click)="openSelection()">Hinzufügen</button>
+</div>
+
+@if (selectionOpen()) {
+    <app-popup-selection-input
+        title="Admin hinzufügen"
+        description="Gib eine E-Mail-Adresse ein um einen Benutzer zum Admin zu ernennen. Sobald jemand Admin-Rechte erhält, kann er auf alle administrativen Funktionen zugreifen. Das heisst unter anderem, dass er Zugriff auf die Verwaltungsseite hat, auf der du dich gerade befindest."
+        label="E-Mail"
+        placeholder="E-Mail-Adresse eingeben"
+        submitButtonText="Hinzufügen"
+        [selectionOptions]="
+            users()
+                .filter((user) => user.type !== 'admin')
+                .map((user) => user.email)
+        "
+        (closeOutput)="closeSelection()"
+        (resultOutput)="addAdmin($event)"
+    ></app-popup-selection-input>
+}

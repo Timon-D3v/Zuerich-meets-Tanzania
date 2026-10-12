@@ -1,0 +1,20 @@
+<div class="wrapper">
+    <h2>Event löschen</h2>
+
+    <p>Gib den Titel eines Events ein, um es aus dem Kalender zu entfernen.</p>
+
+    <button type="button" (click)="openSelection()">Entfernen</button>
+</div>
+
+@if (selectionOpen()) {
+    <app-popup-selection-input
+        title="Event löschen"
+        description="Gib den Titel eines Events ein, um es aus dem Kalender zu entfernen."
+        label="Event-Titel"
+        placeholder="Event-Titel eingeben"
+        submitButtonText="Entfernen"
+        [selectionOptions]="getEventTitle(events())"
+        (closeOutput)="closeSelection()"
+        (resultOutput)="deleteEvent($event)"
+    ></app-popup-selection-input>
+}
