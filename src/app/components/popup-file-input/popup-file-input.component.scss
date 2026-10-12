@@ -39,6 +39,7 @@ input[type="file"] {
 
 label {
     @include admin-label;
+    cursor: pointer;
 
     & + input {
         padding: 0.5em 1em;

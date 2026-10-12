@@ -1,9 +1,10 @@
 <h2>Datei Explorer</h2>
-<div class="wrapper">
-    @for (file of files(); track $index) {
-        <app-file-preview [file]="file"></app-file-preview>
-    } @empty {
-        <app-loading></app-loading>
-        <button (click)="getAllFiles()">Reload</button>
-    }
-</div>
+@defer (when files().length > 0; prefetch on immediate) {
+    <div class="wrapper">
+        @for (file of files(); track $index) {
+            <app-file-preview [file]="file"></app-file-preview>
+        }
+    </div>
+} @placeholder (minimum 100ms) {
+    <app-loading></app-loading>
+}

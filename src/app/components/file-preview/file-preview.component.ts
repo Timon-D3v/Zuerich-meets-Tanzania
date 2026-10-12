@@ -1,23 +1,37 @@
-import { Component, inject, input, PLATFORM_ID, signal } from "@angular/core";
+import { Component, inject, input, PLATFORM_ID, signal, effect } from "@angular/core";
 import { DelivApiFile } from "../../..";
 import { isPlatformBrowser } from "@angular/common";
 import { NotificationService } from "../../services/notification.service";
+import { PopupFileInputComponent } from "../popup-file-input/popup-file-input.component";
+import { FileService } from "../../services/file.service";
+import { PUBLIC_CONFIG } from "../../../publicConfig";
 
 @Component({
     selector: "app-file-preview",
-    imports: [],
+    imports: [PopupFileInputComponent],
     templateUrl: "./file-preview.component.html",
     styleUrl: "./file-preview.component.scss",
 })
 export class FilePreviewComponent {
     file = input.required<DelivApiFile>();
+    filePreviewUrl = signal<string>("/svg/template.svg");
+    filePreviewAlt = signal<string>("Unbekannter Dateityp");
 
     contextMenuOpen = signal<boolean>(false);
     contextMenuPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
 
+    fileInputOpen = signal<boolean>(false);
+
+    readonly DEVELOPER_EMAIL = PUBLIC_CONFIG.PERSONAS["DEVELOPER"].email;
+
     private platformId = inject(PLATFORM_ID);
 
+    private fileService = inject(FileService);
     private notificationService = inject(NotificationService);
+
+    private _updateFilePreviewEffect = effect(() => {
+        this.getFilePreview(this.file());
+    })
 
     rightClick(event: MouseEvent): void {
         event.preventDefault();
@@ -52,31 +66,47 @@ export class FilePreviewComponent {
         event.stopPropagation();
     }
 
-    getFilePreviewUrl(file: DelivApiFile): string {
+    getFilePreview(file: DelivApiFile): void {
         if (file.mimetype.startsWith("image/")) {
-            return file.url;
-        } else if (file.mimetype.startsWith("video/")) {
-            return "/svg/video.svg";
-        } else if (file.mimetype.startsWith("audio/")) {
-            return "/svg/audio.svg";
-        } else if (file.mimetype === "application/pdf") {
-            return "/svg/pdf.svg";
-        } else {
-            return "/svg/template.svg";
-        }
-    }
+            this.filePreviewUrl.set(file.url);
+            this.filePreviewAlt.set(file.uuid);
 
-    getFilePreviewAlt(file: DelivApiFile): string {
-        if (file.mimetype.startsWith("image/")) {
-            return file.uuid;
-        } else if (file.mimetype.startsWith("video/")) {
-            return "Video";
+        } else if (file.mimetype.startsWith("video/") || file.mimetype === "audio/mp4" || file.mimetype === "audio/mpeg") {
+            this.filePreviewUrl.set("/svg/video.svg");
+            this.filePreviewAlt.set("Video");
+
         } else if (file.mimetype.startsWith("audio/")) {
-            return "Audio";
+            this.filePreviewUrl.set("/svg/audio.svg");
+            this.filePreviewAlt.set("Audio");
+
         } else if (file.mimetype === "application/pdf") {
-            return "PDF";
+            this.filePreviewUrl.set("/svg/pdf.svg");
+            this.filePreviewAlt.set("PDF");
+
+        } else if (file.mimetype === "application/json") {
+            const request = this.fileService.getMimeType(file.url);
+
+            request.subscribe({
+                next: (response) => {
+                    const contentType = response?.headers?.get("Content-Type");
+
+                    if (contentType === "application/json") {
+                        this.filePreviewUrl.set("/svg/template.svg");
+                        this.filePreviewAlt.set("JSON");
+
+                        return;
+                    }
+
+                    this.getFilePreview({ ...file, mimetype: contentType ?? "application/octet-stream" });
+                },
+                error: (error) => {
+                    console.error("Error fetching MIME type:", error);
+                    this.filePreviewUrl.set("/svg/template.svg");
+                }
+            });
         } else {
-            return "Unbekannter Dateityp";
+            this.filePreviewUrl.set("/svg/template.svg");
+            this.filePreviewAlt.set("Unbekannter Dateityp");
         }
     }
 
@@ -189,8 +219,38 @@ export class FilePreviewComponent {
         }
     }
 
-    replaceFile(): void {
+    replaceFile(file: File | null): void {
+        this.closeFileInput();
+
+        if (file === null) {
+            this.notificationService.error("Fehler:", "Es wurde keine Datei ausgewählt.");
+
+            return;
+        }
+
+        const request = this.fileService.replaceFile(this.file().uuid, file);
+
+        request.subscribe({
+            next: response => {
+                if (response.error) {
+                    this.notificationService.error("Fehler:", "Die Datei konnte nicht ersetzt werden: " + response.message);
+
+                    return;
+                }
+
+                this.notificationService.success("Erfolg:", "Die Datei wurde erfolgreich ersetzt und wird nun verwendet.");
+            }
+        })
+    }
+
+    openFileInput(): void {
         console.log("Ersetze Datei: " + this.file().uuid);
+        this.fileInputOpen.set(true);
+        this.contextMenuOpen.set(false);
+    }
+
+    closeFileInput(): void {
+        this.fileInputOpen.set(false);
     }
 
     deleteFile(): void {

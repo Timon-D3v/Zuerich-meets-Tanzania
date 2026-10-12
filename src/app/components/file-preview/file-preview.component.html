@@ -1,5 +1,5 @@
 <a class="wrapper" target="_blank" [href]="file().url" [title]="file().uuid" [id]="'file-preview-' + file().uuid" (contextmenu)="rightClick($event)">
-    <img [src]="getFilePreviewUrl(file())" [alt]="getFilePreviewAlt(file())" loading="lazy" />
+    <img [src]="filePreviewUrl()" [alt]="filePreviewAlt()" loading="lazy" />
     <h3>{{ file().uuid }}</h3>
     @if (contextMenuOpen()) {
         <ul [style.left.px]="contextMenuPosition().x" [style.top.px]="contextMenuPosition().y" class="context-menu" (click)="doNotCloseContextMenu($event)">
@@ -23,7 +23,7 @@
                 <img src="/svg/share.svg" alt="Teilen" />
                 <h4>Teilen</h4>
             </li>
-            <li title="Datei Ersetzten" (click)="replaceFile()">
+            <li title="Datei Ersetzten" (click)="openFileInput()">
                 <img src="/svg/refresh.svg" alt="Ersetzen" />
                 <h4>Ersetzen</h4>
             </li>
@@ -34,3 +34,13 @@
         </ul>
     }
 </a>
+
+@if (fileInputOpen()) {
+    <app-popup-file-input
+        title="Datei ersetzen"
+        description="Bitte wähle eine Datei aus, um die aktuelle Version zu ersetzen. (Bitte beachte, dass die Datei auf dem Server zwischengespeichert wurde. Es ist deshalb möglich, dass die Datei noch einige Tage angezeigt wird, bevor sie endgültig gelöscht wird. Wenn die Datei sofort entfernt werden soll, kontaktiere bitte den Entwickler unter {{ DEVELOPER_EMAIL }}.)"
+        submitButtonText="Ersetzen"
+        (resultOutput)="replaceFile($event)"
+        (closeOutput)="closeFileInput()"
+    ></app-popup-file-input>
+}
