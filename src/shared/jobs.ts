@@ -4,6 +4,7 @@
 
 import { PUBLIC_CONFIG } from "../publicConfig";
 import { waitForDatabase } from "./connection.database";
+import { updateLocalFilesMetadataDatabase } from "./files.job";
 import { sendCriticalJobFailureNotification } from "./jobs.email";
 import { setUserTypeToMemberForAllVerifiedLegacyMembers, resetUserTypeForAllUnverifiedOrRejectedLegacyMembers } from "./member.database";
 import { resetLegacyMemberStatusIfPeriodHasEnded } from "./member.jobs";
@@ -59,6 +60,8 @@ async function runAllJobs() {
     await databaseJobsWrapper(setUserTypeToMemberForAllVerifiedLegacyMembers, "setUserTypeToMemberForAllVerifiedLegacyMembers");
 
     await databaseJobsWrapper(resetUserTypeForAllUnverifiedOrRejectedLegacyMembers, "resetUserTypeForAllUnverifiedOrRejectedLegacyMembers");
+
+    await updateLocalFilesMetadataDatabase(MAX_RETRIES);
 
     console.info("All jobs completed.");
 }

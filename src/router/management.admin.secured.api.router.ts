@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { PUBLIC_CONFIG } from "../publicConfig";
-import { ApiEndpointResponse, DelivApiFile, GetAllFileInformationApiEndpointResponse, GetPasswordsApiEndpointResponse, PrivateUser, GetAllUserEmailsApiEndpointResponse } from "..";
+import { ApiEndpointResponse, GetPasswordsApiEndpointResponse, PrivateUser, GetAllUserEmailsApiEndpointResponse } from "..";
 import { PASSWORDS } from "../shared/passwords";
 import { createUser, getAllUserEmails, getUserWithEmail, setUserType } from "../shared/user.database";
 import { getMemberWithUserId } from "../shared/member.database";
@@ -9,7 +9,6 @@ import { createDarkmodeEntry } from "../shared/darkmode.database";
 import { sendPasswordFromAdmin } from "../shared/auth.email";
 import multerInstance from "../shared/instance.multer";
 import { delivApiUpdateFile } from "delivapi-client";
-import { CONFIG } from "../config";
 import { getSecureHexString } from "../shared/secure.utils";
 import { addBoardMember, getBoardDatabase, removeBoardMember } from "../shared/board.database";
 import { createTeamMemberEntry, getTeamMemberEntry } from "../shared/team.database";

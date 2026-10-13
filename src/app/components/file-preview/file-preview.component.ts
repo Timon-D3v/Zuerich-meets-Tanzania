@@ -1,5 +1,5 @@
-import { Component, inject, input, PLATFORM_ID, signal, effect } from "@angular/core";
-import { ApiEndpointResponse, DelivApiFile } from "../../..";
+import { Component, inject, input, PLATFORM_ID, signal } from "@angular/core";
+import { ApiEndpointResponse, LocalFile } from "../../..";
 import { isPlatformBrowser } from "@angular/common";
 import { NotificationService } from "../../services/notification.service";
 import { PopupFileInputComponent } from "../popup-file-input/popup-file-input.component";
@@ -14,9 +14,9 @@ import { PopupConfirmComponent } from "../popup-confirm/popup-confirm.component"
     styleUrl: "./file-preview.component.scss",
 })
 export class FilePreviewComponent {
-    file = input.required<DelivApiFile>();
-    filePreviewUrl = signal<string>("/svg/template.svg");
-    filePreviewAlt = signal<string>("Unbekannter Dateityp");
+    file = input.required<LocalFile>();
+    delivApiUrl = input.required<string>();
+    delivApiUser = input.required<string>();
 
     contextMenuOpen = signal<boolean>(false);
     contextMenuPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -25,6 +25,7 @@ export class FilePreviewComponent {
     confirmInputOpen = signal<boolean>(false);
 
     hideFilePreview = signal<boolean>(false);
+    fileTimestamp = signal<number>(0);
 
     readonly DEVELOPER_EMAIL = PUBLIC_CONFIG.PERSONAS["DEVELOPER"].email;
 
@@ -32,10 +33,6 @@ export class FilePreviewComponent {
 
     private fileService = inject(FileService);
     private notificationService = inject(NotificationService);
-
-    private _updateFilePreviewEffect = effect(() => {
-        this.getFilePreview(this.file());
-    });
 
     rightClick(event: MouseEvent): void {
         event.preventDefault();
@@ -70,44 +67,40 @@ export class FilePreviewComponent {
         event.stopPropagation();
     }
 
-    getFilePreview(file: DelivApiFile): void {
-        if (file.mimetype.startsWith("image/")) {
-            this.filePreviewUrl.set(file.url);
-            this.filePreviewAlt.set(file.uuid);
-        } else if (file.mimetype.startsWith("video/") || file.mimetype === "audio/mp4" || file.mimetype === "audio/mpeg") {
-            this.filePreviewUrl.set("/svg/video.svg");
-            this.filePreviewAlt.set("Video");
-        } else if (file.mimetype.startsWith("audio/")) {
-            this.filePreviewUrl.set("/svg/audio.svg");
-            this.filePreviewAlt.set("Audio");
-        } else if (file.mimetype === "application/pdf") {
-            this.filePreviewUrl.set("/svg/pdf.svg");
-            this.filePreviewAlt.set("PDF");
-        } else if (file.mimetype === "application/json") {
-            const request = this.fileService.getMimeType(file.url);
+    getFilePreview(file: LocalFile, transform: boolean = false, timestamp: number = 0): { url: string; alt: string } {
+        if (file.mimeType.startsWith("image/")) {
+            const width = 200;
+            const height = (width / 10) * 5.5;
 
-            request.subscribe({
-                next: (response) => {
-                    const contentType = response?.headers?.get("Content-Type");
-
-                    if (contentType === "application/json") {
-                        this.filePreviewUrl.set("/svg/template.svg");
-                        this.filePreviewAlt.set("JSON");
-
-                        return;
-                    }
-
-                    this.getFilePreview({ ...file, mimetype: contentType ?? "application/octet-stream" });
-                },
-                error: (error) => {
-                    console.error("Error fetching MIME type:", error);
-                    this.filePreviewUrl.set("/svg/template.svg");
-                },
-            });
+            return {
+                url: this.getFileUrl(file) + (transform ? `?width=${width}&height=${height}&fit=inside&position=centre&format=webp&quality=80&timestamp=${timestamp}` : ""),
+                alt: file.uuid,
+            };
+        } else if (file.mimeType.startsWith("video/") || file.mimeType === "audio/mp4" || file.mimeType === "audio/mpeg") {
+            return {
+                url: "/svg/video.svg",
+                alt: "Video",
+            };
+        } else if (file.mimeType.startsWith("audio/")) {
+            return {
+                url: "/svg/audio.svg",
+                alt: "Audio",
+            };
+        } else if (file.mimeType === "application/pdf") {
+            return {
+                url: "/svg/pdf.svg",
+                alt: "PDF",
+            };
         } else {
-            this.filePreviewUrl.set("/svg/template.svg");
-            this.filePreviewAlt.set("Unbekannter Dateityp");
+            return {
+                url: "/svg/template.svg",
+                alt: "Unbekannter Dateityp",
+            };
         }
+    }
+
+    getFileUrl(file: LocalFile): string {
+        return `${this.delivApiUrl()}/cdn/${this.delivApiUser()}/${file.uuid}`;
     }
 
     openFile(): void {
@@ -134,7 +127,7 @@ export class FilePreviewComponent {
                 this.contextMenuOpen.set(false);
                 this.notificationService.info("Download gestartet", "Der Download der Datei '" + this.file().uuid + "' wurde gestartet.");
 
-                const request = await fetch(this.file().url);
+                const request = await fetch(this.getFileUrl(this.file()));
 
                 if (!request.ok) {
                     this.notificationService.error("Download fehlgeschlagen", "Die Datei konnte nicht heruntergeladen werden. Der Server antwortete mit einem Staus von: " + request.status);
@@ -173,7 +166,7 @@ export class FilePreviewComponent {
                 this.contextMenuOpen.set(false);
                 this.notificationService.info("Download gestartet", "Der Download der Datei '" + this.file().uuid + "' wurde gestartet.");
 
-                const request = await fetch(this.file().url);
+                const request = await fetch(this.getFileUrl(this.file()));
 
                 if (!request.ok) {
                     this.notificationService.error("Download fehlgeschlagen", "Die Datei konnte nicht in die Zwischenablage kopiert werden, da die Datei nicht heruntergeladen werden konnte.");
@@ -205,9 +198,9 @@ export class FilePreviewComponent {
                 this.contextMenuOpen.set(false);
 
                 navigator.clipboard
-                    .writeText(this.file().url)
+                    .writeText(this.getFileUrl(this.file()))
                     .then((): void => {
-                        this.notificationService.success("Erfolg:", "Der direkte Link zur Datei wurde in die Zwischenablage kopiert. (" + this.file().url + ")");
+                        this.notificationService.success("Erfolg:", "Der direkte Link zur Datei wurde in die Zwischenablage kopiert. (" + this.getFileUrl(this.file()) + ")");
                     })
                     .catch((error: Error): void => {
                         console.error(error);
@@ -239,6 +232,8 @@ export class FilePreviewComponent {
                 }
 
                 this.notificationService.success("Erfolg:", "Die Datei wurde erfolgreich ersetzt und wird nun verwendet.");
+
+                this.fileTimestamp.set(Date.now());
             },
             error: (error: Error) => {
                 console.error("Failed to replace file", error);

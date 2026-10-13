@@ -422,7 +422,7 @@ export interface GetCalendarEventsApiEndpointResponse extends ApiEndpointRespons
 }
 
 export interface GetAllFileInformationApiEndpointResponse extends ApiEndpointResponse {
-    data: DelivApiFile[] | null;
+    data: LocalFile[] | null;
 }
 
 export interface GetDonationUsageTypesApiEndpointResponse extends ApiEndpointResponse {
@@ -1111,4 +1111,18 @@ export type Donation = {
 
 export type Donor = Omit<Donation, "id" | "usageType" | "createdAt" | "reviewed" | "validated" | "amount"> & {
     totalAmount: number;
+};
+
+export type LocalFile = {
+    id: number;
+    uuid: string;
+    mimeType: string;
+    filename: string | null;
+    folderId: number | null;
+};
+
+export type LocalFolder = {
+    id: number;
+    foldername: string;
+    folderId: number | null;
 };

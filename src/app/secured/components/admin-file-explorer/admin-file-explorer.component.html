@@ -2,7 +2,7 @@
 @defer (when files().length > 0; prefetch on immediate) {
     <div class="wrapper">
         @for (file of files(); track $index) {
-            <app-file-preview [file]="file"></app-file-preview>
+            <app-file-preview [file]="file" [delivApiUrl]="delivApiUrl()" [delivApiUser]="delivApiUser()"></app-file-preview>
         }
     </div>
 } @placeholder (minimum 100ms) {

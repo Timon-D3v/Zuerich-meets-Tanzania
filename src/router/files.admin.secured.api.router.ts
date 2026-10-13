@@ -1,35 +1,25 @@
 import { Request, Response, Router } from "express";
 import { PUBLIC_CONFIG } from "../publicConfig";
-import { ApiEndpointResponse, DelivApiFile, GetAllFileInformationApiEndpointResponse } from "..";
-import { CONFIG } from "../config";
+import { ApiEndpointResponse, DelivApiFile, GetAllFileInformationApiEndpointResponse, LocalFile } from "..";
 import multerInstance from "../shared/instance.multer";
 import { delivApiUpdateFile, delivApiDeleteFile } from "delivapi-client";
+import { getAllLocalFiles } from "../shared/files.database";
 
 // Router Serves under /api/secured/admin/files
 const router = Router();
 
 router.get("/getAllFiles", async (req: Request, res: Response): Promise<void> => {
     try {
-        const request = await fetch(CONFIG.DELIVAPI_URL + "/api/getFilesMetadata", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                user: CONFIG.DELIVAPI_USER,
-            }),
-        });
+        const result = await getAllLocalFiles();
 
-        const response = await request.json();
-
-        if (response.error || !response.metadata || !Array.isArray(response.metadata)) {
-            throw new Error("Die Datei Informationen konnten nicht abgerufen werden. Bitte versuche es später erneut. Weitere Informationen: " + response.message);
+        if (result.error || result.data === null) {
+            throw new Error("Die Dateien konnten nicht abgerufen werden. Bitte versuche es später erneut. Weitere Informationen: " + result.error);
         }
 
         res.json({
             error: false,
             message: "Die Dateien wurden erfolgreich abgerufen.",
-            data: response.metadata as DelivApiFile[],
+            data: result.data as LocalFile[],
         } as GetAllFileInformationApiEndpointResponse);
     } catch (error) {
         console.error(error);

@@ -1,5 +1,5 @@
-<a [class]="hideFilePreview() ? 'host-hidden' : 'wrapper'" target="_blank" [href]="file().url" [title]="file().uuid" [id]="'file-preview-' + file().uuid" (contextmenu)="rightClick($event)">
-    <img [src]="filePreviewUrl()" [alt]="filePreviewAlt()" loading="lazy" />
+<a [class]="hideFilePreview() ? 'host-hidden' : 'wrapper'" target="_blank" [href]="getFileUrl(file())" [title]="file().uuid" [id]="'file-preview-' + file().uuid" (contextmenu)="rightClick($event)">
+    <img [src]="getFilePreview(file(), true, fileTimestamp()).url" [alt]="getFilePreview(file()).alt" loading="lazy" />
     <h3>{{ file().uuid }}</h3>
     @if (contextMenuOpen()) {
         <ul [style.left.px]="contextMenuPosition().x" [style.top.px]="contextMenuPosition().y" class="context-menu" (click)="doNotCloseContextMenu($event)">

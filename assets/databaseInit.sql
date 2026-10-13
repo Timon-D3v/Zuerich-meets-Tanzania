@@ -244,7 +244,7 @@ COMMENT = 'This table holds the extras information of the users that are also pa
 
 
 
-CREATE TABLE `zmt`.`donationMeter` (
+CREATE TABLE IF NOT EXISTS `zmt`.`donationMeter` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `currentValue` INT NOT NULL,
     `maxValue` INT NOT NULL,
@@ -256,3 +256,28 @@ CREATE TABLE `zmt`.`donationMeter` (
     UNIQUE INDEX `id_donationMeter_UNIQUE` (`id` ASC) VISIBLE
 )
 COMMENT = 'This table holds the data of the donationMeter.';
+
+
+
+CREATE TABLE IF NOT EXISTS `zmt`.`files` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `uuid` VARCHAR(36) NOT NULL,
+    `mimeType` VARCHAR(64) NOT NULL,
+    `filename` VARCHAR(256) NULL,
+    `folderId` INT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `id_files_UNIQUE` (`id` ASC) VISIBLE,
+    UNIQUE INDEX `uuid_files_UNIQUE` (`uuid` ASC) VISIBLE
+)
+COMMENT = 'This table holds metadata for the files uploaded to delivapi.';
+
+
+
+CREATE TABLE IF NOT EXISTS `zmt`.`folders` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `foldername` VARCHAR(256) NOT NULL,
+    `folderId` INT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `id_folders_UNIQUE` (`id` ASC) VISIBLE
+)
+COMMENT = 'This table holds metadata for the folders in the file system.';
