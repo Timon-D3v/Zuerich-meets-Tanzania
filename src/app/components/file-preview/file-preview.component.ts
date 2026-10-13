@@ -1,14 +1,15 @@
 import { Component, inject, input, PLATFORM_ID, signal, effect } from "@angular/core";
-import { DelivApiFile } from "../../..";
+import { ApiEndpointResponse, DelivApiFile } from "../../..";
 import { isPlatformBrowser } from "@angular/common";
 import { NotificationService } from "../../services/notification.service";
 import { PopupFileInputComponent } from "../popup-file-input/popup-file-input.component";
 import { FileService } from "../../services/file.service";
 import { PUBLIC_CONFIG } from "../../../publicConfig";
+import { PopupConfirmComponent } from "../popup-confirm/popup-confirm.component";
 
 @Component({
     selector: "app-file-preview",
-    imports: [PopupFileInputComponent],
+    imports: [PopupFileInputComponent, PopupConfirmComponent],
     templateUrl: "./file-preview.component.html",
     styleUrl: "./file-preview.component.scss",
 })
@@ -21,6 +22,9 @@ export class FilePreviewComponent {
     contextMenuPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
 
     fileInputOpen = signal<boolean>(false);
+    confirmInputOpen = signal<boolean>(false);
+
+    hideFilePreview = signal<boolean>(false);
 
     readonly DEVELOPER_EMAIL = PUBLIC_CONFIG.PERSONAS["DEVELOPER"].email;
 
@@ -31,7 +35,7 @@ export class FilePreviewComponent {
 
     private _updateFilePreviewEffect = effect(() => {
         this.getFilePreview(this.file());
-    })
+    });
 
     rightClick(event: MouseEvent): void {
         event.preventDefault();
@@ -70,19 +74,15 @@ export class FilePreviewComponent {
         if (file.mimetype.startsWith("image/")) {
             this.filePreviewUrl.set(file.url);
             this.filePreviewAlt.set(file.uuid);
-
         } else if (file.mimetype.startsWith("video/") || file.mimetype === "audio/mp4" || file.mimetype === "audio/mpeg") {
             this.filePreviewUrl.set("/svg/video.svg");
             this.filePreviewAlt.set("Video");
-
         } else if (file.mimetype.startsWith("audio/")) {
             this.filePreviewUrl.set("/svg/audio.svg");
             this.filePreviewAlt.set("Audio");
-
         } else if (file.mimetype === "application/pdf") {
             this.filePreviewUrl.set("/svg/pdf.svg");
             this.filePreviewAlt.set("PDF");
-
         } else if (file.mimetype === "application/json") {
             const request = this.fileService.getMimeType(file.url);
 
@@ -102,7 +102,7 @@ export class FilePreviewComponent {
                 error: (error) => {
                     console.error("Error fetching MIME type:", error);
                     this.filePreviewUrl.set("/svg/template.svg");
-                }
+                },
             });
         } else {
             this.filePreviewUrl.set("/svg/template.svg");
@@ -231,7 +231,7 @@ export class FilePreviewComponent {
         const request = this.fileService.replaceFile(this.file().uuid, file);
 
         request.subscribe({
-            next: response => {
+            next: (response: ApiEndpointResponse) => {
                 if (response.error) {
                     this.notificationService.error("Fehler:", "Die Datei konnte nicht ersetzt werden: " + response.message);
 
@@ -239,8 +239,12 @@ export class FilePreviewComponent {
                 }
 
                 this.notificationService.success("Erfolg:", "Die Datei wurde erfolgreich ersetzt und wird nun verwendet.");
-            }
-        })
+            },
+            error: (error: Error) => {
+                console.error("Failed to replace file", error);
+                this.notificationService.error("Fehler:", "Die Datei konnte nicht ersetzt werden. Bitte versuche es später noch einmal.");
+            },
+        });
     }
 
     openFileInput(): void {
@@ -253,7 +257,42 @@ export class FilePreviewComponent {
         this.fileInputOpen.set(false);
     }
 
-    deleteFile(): void {
+    deleteFile(confirmation: boolean): void {
+        this.closeConfirmInput();
+
+        if (!confirmation) {
+            this.notificationService.info("Abgebrochen:", "Die Datei wurde nicht gelöscht.");
+
+            return;
+        }
+
+        const request = this.fileService.deleteFile(this.file().uuid);
+
+        request.subscribe({
+            next: (response: ApiEndpointResponse) => {
+                if (response.error) {
+                    this.notificationService.error("Fehler:", "Die Datei konnte nicht gelöscht werden: " + response.message);
+
+                    return;
+                }
+
+                this.notificationService.success("Erfolg:", "Die Datei wurde erfolgreich gelöscht.");
+                this.hideFilePreview.set(true);
+            },
+            error: (error) => {
+                console.error("Failed to delete file", error);
+                this.notificationService.error("Fehler:", "Die Datei konnte nicht gelöscht werden. Bitte versuche es später noch einmal.");
+            },
+        });
+    }
+
+    openConfirmInput(): void {
         console.log("Lösche Datei: " + this.file().uuid);
+        this.confirmInputOpen.set(true);
+        this.contextMenuOpen.set(false);
+    }
+
+    closeConfirmInput(): void {
+        this.confirmInputOpen.set(false);
     }
 }

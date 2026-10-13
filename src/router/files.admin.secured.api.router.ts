@@ -3,7 +3,7 @@ import { PUBLIC_CONFIG } from "../publicConfig";
 import { ApiEndpointResponse, DelivApiFile, GetAllFileInformationApiEndpointResponse } from "..";
 import { CONFIG } from "../config";
 import multerInstance from "../shared/instance.multer";
-import { delivApiUpdateFile } from "delivapi-client";
+import { delivApiUpdateFile, delivApiDeleteFile } from "delivapi-client";
 
 // Router Serves under /api/secured/admin/files
 const router = Router();
@@ -74,6 +74,43 @@ router.post("/replaceFile", multerInstance.single("file"), async (req: Request, 
         res.json({
             error: false,
             message: "Die Datei wurde erfolgreich ersetzt.",
+        } as ApiEndpointResponse);
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof Error) {
+            res.json({
+                error: true,
+                message: error.message,
+            } as ApiEndpointResponse);
+
+            return;
+        }
+
+        res.status(501).json({
+            error: true,
+            message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
+        } as ApiEndpointResponse);
+    }
+});
+
+router.post("/deleteFile", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const uuid = req.body?.uuid;
+
+        if (typeof uuid !== "string" || uuid.trim() === "") {
+            throw new Error("Die UUID der Datei ist ungültig.");
+        }
+
+        const response = await delivApiDeleteFile(uuid);
+
+        if (response.error) {
+            throw new Error("Die Datei konnte nicht gelöscht werden. Bitte versuche es später erneut. Weitere Informationen: " + response.message);
+        }
+
+        res.json({
+            error: false,
+            message: "Die Datei wurde erfolgreich gelöscht.",
         } as ApiEndpointResponse);
     } catch (error) {
         console.error(error);

@@ -1,5 +1,9 @@
 @use "../../../styles/index" as *;
 
+:host:has(.host-hidden) {
+    display: none;
+}
+
 .wrapper {
     width: 100%;
     height: 100%;

@@ -1,4 +1,4 @@
-<a class="wrapper" target="_blank" [href]="file().url" [title]="file().uuid" [id]="'file-preview-' + file().uuid" (contextmenu)="rightClick($event)">
+<a [class]="hideFilePreview() ? 'host-hidden' : 'wrapper'" target="_blank" [href]="file().url" [title]="file().uuid" [id]="'file-preview-' + file().uuid" (contextmenu)="rightClick($event)">
     <img [src]="filePreviewUrl()" [alt]="filePreviewAlt()" loading="lazy" />
     <h3>{{ file().uuid }}</h3>
     @if (contextMenuOpen()) {
@@ -27,7 +27,7 @@
                 <img src="/svg/refresh.svg" alt="Ersetzen" />
                 <h4>Ersetzen</h4>
             </li>
-            <li title="Datei Löschen" (click)="deleteFile()">
+            <li title="Datei Löschen" (click)="openConfirmInput()">
                 <img src="/svg/delete.svg" alt="Löschen" />
                 <h4>Löschen</h4>
             </li>
@@ -38,9 +38,21 @@
 @if (fileInputOpen()) {
     <app-popup-file-input
         title="Datei ersetzen"
-        description="Bitte wähle eine Datei aus, um die aktuelle Version zu ersetzen. (Bitte beachte, dass die Datei auf dem Server zwischengespeichert wurde. Es ist deshalb möglich, dass die Datei noch einige Tage angezeigt wird, bevor sie endgültig gelöscht wird. Wenn die Datei sofort entfernt werden soll, kontaktiere bitte den Entwickler unter {{ DEVELOPER_EMAIL }}.)"
+        description="Bitte wähle eine Datei aus, um die aktuelle Version zu ersetzen. (Bitte beachte, dass die Datei auf dem Server zwischengespeichert wurde. Es ist deshalb möglich, dass die Datei noch einige Tage angezeigt wird, bevor sie endgültig gelöscht wird. Wenn die Datei sofort entfernt werden soll, kontaktiere bitte den Entwickler unter {{
+            DEVELOPER_EMAIL
+        }}.)"
         submitButtonText="Ersetzen"
         (resultOutput)="replaceFile($event)"
         (closeOutput)="closeFileInput()"
     ></app-popup-file-input>
+}
+
+@if (confirmInputOpen()) {
+    <app-popup-confirm
+        title="Datei löschen"
+        [description]="'Bist du sicher, dass du die Datei mit dem Namen ' + file().uuid + ' löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'"
+        submitButtonText="Löschen"
+        (resultOutput)="deleteFile($event)"
+        (closeOutput)="closeConfirmInput()"
+    ></app-popup-confirm>
 }

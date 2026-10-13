@@ -26,11 +26,17 @@ export class FileService {
         return request;
     }
 
+    deleteFile(uuid: string): Observable<ApiEndpointResponse> {
+        const request = this.http.post<ApiEndpointResponse>(`/api/secured/admin/files/deleteFile`, { uuid });
+
+        return request;
+    }
+
     getMimeType(url: string): Observable<any> {
         const request = this.http.head(url, {
-      observe: 'response',
-      responseType: 'text'
-    });
+            observe: "response",
+            responseType: "text",
+        });
 
         return request;
     }
