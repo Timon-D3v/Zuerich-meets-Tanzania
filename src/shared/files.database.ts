@@ -53,6 +53,31 @@ export async function getAllLocalFilenames(): Promise<DatabaseResult> {
     }
 }
 
+export async function getLocalFileByName(name: string): Promise<DatabaseResult> {
+    try {
+        const [result, _fields]: [RowDataPacket[], FieldPacket[]] = await connection.query(`SELECT * FROM \`zmt\`.\`files\` WHERE \`filename\` = ?`, [name]);
+
+        return {
+            data: result,
+            error: null,
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+
+            return {
+                data: null,
+                error: error.message,
+            };
+        }
+
+        return {
+            data: null,
+            error: PUBLIC_CONFIG.ERROR.NO_CONNECTION_TO_DATABASE,
+        };
+    }
+}
+
 export async function addLocalFile(uuid: string, mimeType: string): Promise<DatabaseResult> {
     try {
         const [result, _fields]: [RowDataPacket[], FieldPacket[]] = await connection.query(`INSERT INTO \`zmt\`.\`files\` (\`uuid\`, \`mimeType\`) VALUES (?, ?)`, [uuid, mimeType]);

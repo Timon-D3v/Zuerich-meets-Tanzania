@@ -267,7 +267,8 @@ CREATE TABLE IF NOT EXISTS `zmt`.`files` (
     `folderId` INT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_files_UNIQUE` (`id` ASC) VISIBLE,
-    UNIQUE INDEX `uuid_files_UNIQUE` (`uuid` ASC) VISIBLE
+    UNIQUE INDEX `uuid_files_UNIQUE` (`uuid` ASC) VISIBLE,
+    UNIQUE INDEX `filename_files_UNIQUE` (`filename` ASC) VISIBLE
 )
 COMMENT = 'This table holds metadata for the files uploaded to delivapi.';
 

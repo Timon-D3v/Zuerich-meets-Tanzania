@@ -7,6 +7,7 @@ import { FileService } from "../../services/file.service";
 import { PUBLIC_CONFIG } from "../../../publicConfig";
 import { PopupConfirmComponent } from "../popup-confirm/popup-confirm.component";
 import { PopupTitleInputComponent } from "../popup-title-input/popup-title-input.component";
+import { PublicEnvService } from "../../services/public-env.service";
 
 @Component({
     selector: "app-file-preview",
@@ -39,6 +40,7 @@ export class FilePreviewComponent {
     private platformId = inject(PLATFORM_ID);
 
     private fileService = inject(FileService);
+    private publicEnvService = inject(PublicEnvService);
     private notificationService = inject(NotificationService);
 
     rightClick(event: MouseEvent): void {
@@ -254,6 +256,31 @@ export class FilePreviewComponent {
                     });
             } catch (error) {
                 this.notificationService.error("Fehler", "Der direkte Link zur Datei konnte nicht in die Zwischenablage kopiert werden. Es ist ein Fehler aufgetreten: " + (error instanceof Error ? error.message : String(error)));
+            }
+        }
+    }
+
+    async sharePrettyFile(): Promise<void> {
+        console.log("Teile schönen Link zurDatei: " + this.file().uuid);
+
+        if (isPlatformBrowser(this.platformId)) {
+            try {
+                this.contextMenuOpen.set(false);
+
+                const ORIGIN = await this.publicEnvService.getOrigin();
+                const prettyUrl = `${ORIGIN}/redirects/${this.filename()}`;
+
+                navigator.clipboard
+                    .writeText(prettyUrl)
+                    .then((): void => {
+                        this.notificationService.success("Erfolg:", "Der schöne Link zur Datei wurde in die Zwischenablage kopiert. Beachte allerdings, dass dieser Link nur solange funktioniert, bis diese Datei umbenannt wird. (" + prettyUrl + ")");
+                    })
+                    .catch((error: Error): void => {
+                        console.error(error);
+                        this.notificationService.error("Fehler:", "Der schöne Link zur Datei konnte nicht in die Zwischenablage kopiert werden.");
+                    });
+            } catch (error) {
+                this.notificationService.error("Fehler", "Der schöne Link zur Datei konnte nicht in die Zwischenablage kopiert werden. Es ist ein Fehler aufgetreten: " + (error instanceof Error ? error.message : String(error)));
             }
         }
     }

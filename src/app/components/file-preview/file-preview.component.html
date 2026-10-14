@@ -23,6 +23,12 @@
                 <img src="/svg/share.svg" alt="Teilen" />
                 <h4>Teilen</h4>
             </li>
+            @if (file().filename) {
+                <li title="Schöneren Link zur Datei teilen" (click)="sharePrettyFile()">
+                    <img src="/svg/share.svg" alt="Teilen" />
+                    <h4>Teilen (Pretty)</h4>
+                </li>
+            }
             <li title="Datei Ersetzten" (click)="openFileInput()">
                 <img src="/svg/refresh.svg" alt="Ersetzen" />
                 <h4>Ersetzen</h4>
