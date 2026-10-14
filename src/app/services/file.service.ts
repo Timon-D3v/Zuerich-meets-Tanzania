@@ -32,6 +32,12 @@ export class FileService {
         return request;
     }
 
+    renameFile(uuid: string, newName: string): Observable<ApiEndpointResponse> {
+        const request = this.http.post<ApiEndpointResponse>(`/api/secured/admin/files/renameFile`, { uuid, newName });
+
+        return request;
+    }
+
     getMimeType(url: string): Observable<any> {
         const request = this.http.head(url, {
             observe: "response",

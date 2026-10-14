@@ -1,13 +1,13 @@
 <a [class]="hideFilePreview() ? 'host-hidden' : 'wrapper'" target="_blank" [href]="getFileUrl(file())" [title]="file().uuid" [id]="'file-preview-' + file().uuid" (contextmenu)="rightClick($event)">
     <img [src]="getFilePreview(file(), true, fileTimestamp()).url" [alt]="getFilePreview(file()).alt" loading="lazy" />
-    <h3>{{ file().uuid }}</h3>
+    <h3>{{ filename() }}</h3>
     @if (contextMenuOpen()) {
         <ul [style.left.px]="contextMenuPosition().x" [style.top.px]="contextMenuPosition().y" class="context-menu" (click)="doNotCloseContextMenu($event)">
             <li title="Datei in neuem Fenster öffnen" (click)="openFile()">
                 <img src="/svg/open.svg" alt="Öffnen" />
                 <h4>Öffnen</h4>
             </li>
-            <li title="Datei umbenennen" (click)="renameFile()">
+            <li title="Datei umbenennen" (click)="openTitleInput()">
                 <img src="/svg/rename.svg" alt="Umbenennen" />
                 <h4>Umbenennen</h4>
             </li>
@@ -51,8 +51,21 @@
     <app-popup-confirm
         title="Datei löschen"
         [description]="'Bist du sicher, dass du die Datei mit dem Namen ' + file().uuid + ' löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'"
-        submitButtonText="Löschen"
+        confirmButtonText="Löschen"
         (resultOutput)="deleteFile($event)"
         (closeOutput)="closeConfirmInput()"
     ></app-popup-confirm>
+}
+
+@if (titleInputOpen()) {
+    <app-popup-title-input
+        title="Datei umbenennen"
+        description="Bitte gib einen neuen Namen für die Datei ein. (Bitte beachte, dass der Name der Datei nur aus Buchstaben, Zahlen, Bindestrichen und Unterstrichen bestehen darf. Leerzeichen und Sonderzeichen sind nicht erlaubt.)"
+        submitButtonText="Umbenennen"
+        label="Neuer Name:"
+        placeholder="Neuen Namen eingeben"
+        [value]="file().filename ?? file().uuid"
+        (resultOutput)="renameFile($event)"
+        (closeOutput)="closeTitleInput()"
+    ></app-popup-title-input>
 }

@@ -1,4 +1,4 @@
-import { Component, inject, input, PLATFORM_ID, signal } from "@angular/core";
+import { Component, inject, input, PLATFORM_ID, signal, effect } from "@angular/core";
 import { ApiEndpointResponse, LocalFile } from "../../..";
 import { isPlatformBrowser } from "@angular/common";
 import { NotificationService } from "../../services/notification.service";
@@ -6,10 +6,11 @@ import { PopupFileInputComponent } from "../popup-file-input/popup-file-input.co
 import { FileService } from "../../services/file.service";
 import { PUBLIC_CONFIG } from "../../../publicConfig";
 import { PopupConfirmComponent } from "../popup-confirm/popup-confirm.component";
+import { PopupTitleInputComponent } from "../popup-title-input/popup-title-input.component";
 
 @Component({
     selector: "app-file-preview",
-    imports: [PopupFileInputComponent, PopupConfirmComponent],
+    imports: [PopupFileInputComponent, PopupConfirmComponent, PopupTitleInputComponent],
     templateUrl: "./file-preview.component.html",
     styleUrl: "./file-preview.component.scss",
 })
@@ -23,9 +24,15 @@ export class FilePreviewComponent {
 
     fileInputOpen = signal<boolean>(false);
     confirmInputOpen = signal<boolean>(false);
+    titleInputOpen = signal<boolean>(false);
 
     hideFilePreview = signal<boolean>(false);
     fileTimestamp = signal<number>(0);
+    filename = signal<string>("");
+
+    private _updateFileNameEffect = effect(() => {
+        this.filename.set(this.file().filename ?? this.file().uuid);
+    });
 
     readonly DEVELOPER_EMAIL = PUBLIC_CONFIG.PERSONAS["DEVELOPER"].email;
 
@@ -72,6 +79,10 @@ export class FilePreviewComponent {
             const width = 200;
             const height = (width / 10) * 5.5;
 
+            if (this.file().mimeType === "image/svg+xml") {
+                transform = false; // Do not transform SVG files, as they are vector graphics and do not need resizing
+            }
+
             return {
                 url: this.getFileUrl(file) + (transform ? `?width=${width}&height=${height}&fit=inside&position=centre&format=webp&quality=80&timestamp=${timestamp}` : ""),
                 alt: file.uuid,
@@ -111,8 +122,43 @@ export class FilePreviewComponent {
         this.contextMenuOpen.set(false);
     }
 
-    renameFile(): void {
+    renameFile(newName: string): void {
+        this.closeTitleInput();
+
+        if (typeof newName !== "string" || newName.trim() === "" || !PUBLIC_CONFIG.REGEX.MATCH_VALID_FILENAME.test(newName)) {
+            this.notificationService.error("Fehler:", "Bitte gib einen gültigen Dateinamen ein. Der Name darf nur aus Buchstaben, Zahlen, Bindestrichen und Unterstrichen bestehen. Leerzeichen und Sonderzeichen sind nicht erlaubt.");
+
+            return;
+        }
+
+        const request = this.fileService.renameFile(this.file().uuid, newName);
+
+        request.subscribe({
+            next: (response: ApiEndpointResponse) => {
+                if (response.error) {
+                    this.notificationService.error("Fehler:", "Die Datei konnte nicht umbenannt werden: " + response.message);
+
+                    return;
+                }
+
+                this.notificationService.success("Erfolg:", "Die Datei wurde erfolgreich umbenannt.");
+                this.filename.set(newName);
+            },
+            error: (error: Error) => {
+                console.error("Failed to rename file", error);
+                this.notificationService.error("Fehler:", "Die Datei konnte nicht umbenannt werden. Bitte versuche es später noch einmal.");
+            },
+        });
+    }
+
+    openTitleInput(): void {
         console.log("Benenne Datei um: " + this.file().uuid);
+        this.titleInputOpen.set(true);
+        this.contextMenuOpen.set(false);
+    }
+
+    closeTitleInput(): void {
+        this.titleInputOpen.set(false);
     }
 
     async downloadFile(): Promise<void> {

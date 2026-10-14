@@ -19,6 +19,7 @@ export const PUBLIC_CONFIG: PublicConfig = {
         MATCH_VALID_EMAIL: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,10}$/,
         MATCH_VALID_PHONE: /^\+?[0-9\s\-()]{6,20}$/,
         MATCH_VALID_POSTAL_CODE: /^(?:[A-Z]{2}-\d{3,6}|\d{3,6})$/,
+        MATCH_VALID_FILENAME: /^[a-zA-Z0-9_-]{1,255}$/,
     },
 
     STATIC_SITES: {

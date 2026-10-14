@@ -99,6 +99,7 @@ export type PublicConfig = {
         MATCH_VALID_EMAIL: RegExp;
         MATCH_VALID_PHONE: RegExp;
         MATCH_VALID_POSTAL_CODE: RegExp;
+        MATCH_VALID_FILENAME: RegExp;
     };
 
     STATIC_SITES: {
