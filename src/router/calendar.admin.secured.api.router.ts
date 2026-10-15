@@ -107,7 +107,7 @@ router.get("/getAllEvents", async (req: Request, res: Response): Promise<void> =
             res.json({
                 error: true,
                 message: error.message,
-                data: null,
+                data: [],
             } as GetCalendarEventsApiEndpointResponse);
 
             return;
@@ -116,7 +116,7 @@ router.get("/getAllEvents", async (req: Request, res: Response): Promise<void> =
         res.status(501).json({
             error: true,
             message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
-            data: null,
+            data: [],
         } as GetCalendarEventsApiEndpointResponse);
     }
 });

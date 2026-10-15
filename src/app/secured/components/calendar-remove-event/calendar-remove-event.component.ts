@@ -29,7 +29,7 @@ export class CalendarRemoveEventComponent implements OnInit {
 
         calendarRequest.subscribe({
             next: (response: GetCalendarEventsApiEndpointResponse) => {
-                if (response.error || response.data === null || !Array.isArray(response.data)) {
+                if (response.error) {
                     this.notificationService.error("Fehler beim Laden der Events", "Die Events konnten nicht geladen werden: " + response.message);
 
                     return;

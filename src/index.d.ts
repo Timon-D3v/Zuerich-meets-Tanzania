@@ -419,11 +419,11 @@ export interface GetNewsletterUnsubscribeRequestVerificationTokenApiEndpointResp
 }
 
 export interface GetCalendarEventsApiEndpointResponse extends ApiEndpointResponse {
-    data: CalendarEvent[] | null;
+    data: CalendarEvent[];
 }
 
 export interface GetAllFileInformationApiEndpointResponse extends ApiEndpointResponse {
-    data: LocalFile[] | null;
+    data: LocalFile[];
 }
 
 export interface GetAllLocalFoldersApiEndpointResponse extends ApiEndpointResponse {

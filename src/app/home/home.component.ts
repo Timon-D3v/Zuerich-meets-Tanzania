@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
 
         request.subscribe({
             next: (response: GetCalendarEventsApiEndpointResponse) => {
-                if (response.error || !response.data) {
+                if (response.error) {
                     this.notificationService.error("Fehler:", "Die Kalenderdaten konnten nicht geladen werden. Bitte versuchen Sie es später erneut.");
 
                     this.events.set([

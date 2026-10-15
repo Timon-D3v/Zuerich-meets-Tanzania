@@ -55,7 +55,7 @@ export class AdminFileExplorerComponent implements OnInit {
 
         request.subscribe({
             next: (response: GetAllFileInformationApiEndpointResponse) => {
-                if (response.error || !response.data) {
+                if (response.error) {
                     this.notificationService.error("Fehler", "Die Datei Informationen konnten nicht abgerufen werden: " + response.message);
 
                     return;

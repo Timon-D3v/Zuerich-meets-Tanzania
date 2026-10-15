@@ -1,6 +1,6 @@
 import { PUBLIC_CONFIG } from "../publicConfig";
-import { addLocalFile, getAllLocalFiles, updateLocalFileMimeType } from "./files.database";
-import { getActualMimeType, getAllDelivApiFiles, getMimeType } from "./files.utils";
+import { addLocalFile, getAllLocalFiles, updateLocalFileMimeType, deleteLocalFile } from "./files.database";
+import { getActualMimeType, getAllDelivApiFiles } from "./files.utils";
 import { sendCriticalJobFailureNotification } from "./jobs.email";
 import { sleep } from "./utils";
 import { LocalFile } from "../.";
@@ -51,6 +51,7 @@ export async function updateLocalFilesMetadataDatabase(maxRetries: number = 5, r
 
     let addedFilesErrors = 0;
 
+    // Check for additions and updates
     for (let i = 0; i < remoteResult.metadata.length; i++) {
         const remoteFile = remoteResult.metadata[i];
 
@@ -95,6 +96,24 @@ export async function updateLocalFilesMetadataDatabase(maxRetries: number = 5, r
 
             if (updateResult.error) {
                 console.warn(`Failed to update mimetype for file in local database: ${remoteFile.uuid}. Error: ${updateResult.error}. This will not be retried, since the admins can manually rerun this job if needed.`);
+            }
+        }
+    }
+
+    // Check for deletions
+    for (let i = 0; i < localData.length; i++) {
+        const localFile = localData[i];
+
+        const remoteFile = remoteResult.metadata.find((file) => file.uuid === localFile.uuid);
+
+        if (!remoteFile) {
+            // The file is not in the remote database, so we need to delete it from the local database
+            console.info(`Deleting file from local database: ${localFile.uuid}`);
+
+            const deleteResult = await deleteLocalFile(localFile.uuid);
+
+            if (deleteResult.error) {
+                console.warn(`Failed to delete file from local database: ${localFile.uuid}. Error: ${deleteResult.error}. This will not be retried, since the admins can manually rerun this job if needed.`);
             }
         }
     }
