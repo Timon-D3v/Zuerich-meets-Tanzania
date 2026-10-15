@@ -1,6 +1,6 @@
-<div class="wrapper" [title]="folder().foldername" [id]="'folder-preview-' + folder().id" (contextmenu)="rightClick($event)">
+<div [class]="hideFolderPreview() ? 'hidden' : 'wrapper'" [title]="folder().foldername" [id]="'folder-preview-' + folder().id" (contextmenu)="rightClick($event)">
     <img src="/svg/folder.svg" alt="Ordner" />
-    <h3>{{ folder().foldername }}</h3>
+    <h3>{{ foldername() }}</h3>
     @if (contextMenuOpen()) {
         <ul [style.left.px]="contextMenuPosition().x" [style.top.px]="contextMenuPosition().y" class="context-menu" (click)="doNotCloseContextMenu($event)">
             <li title="Ordner umbenennen" (click)="openTitleInput()">

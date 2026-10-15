@@ -1,9 +1,10 @@
 import { Request, Response, Router } from "express";
 import { PUBLIC_CONFIG } from "../publicConfig";
-import { ApiEndpointResponse, DelivApiFile, GetAllFileInformationApiEndpointResponse, GetAllLocalFoldersApiEndpointResponse, LocalFile, LocalFolder } from "..";
+import { ApiEndpointResponse, GetAllFileInformationApiEndpointResponse, GetAllLocalFoldersApiEndpointResponse, LocalFile, LocalFolder } from "..";
 import multerInstance from "../shared/instance.multer";
 import { delivApiUpdateFile, delivApiDeleteFile } from "delivapi-client";
-import { deleteLocalFile, getAllLocalFilenames, getAllLocalFiles, updateLocalFilename, getAllLocalFolders, createLocalFolder } from "../shared/files.database";
+import { deleteLocalFile, getAllLocalFilenames, getAllLocalFiles, updateLocalFilename, getAllLocalFolders, createLocalFolder, updateLocalFoldername, deleteLocalFolder } from "../shared/files.database";
+import { updateLocalFilesMetadataDatabase } from "../shared/files.job";
 
 // Router Serves under /api/secured/admin/files
 const router = Router();
@@ -236,6 +237,137 @@ router.post("/createFolder", async (req: Request, res: Response): Promise<void> 
         res.json({
             error: false,
             message: "Der Ordner wurde erfolgreich erstellt.",
+        } as ApiEndpointResponse);
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof Error) {
+            res.json({
+                error: true,
+                message: error.message,
+            } as ApiEndpointResponse);
+
+            return;
+        }
+
+        res.status(501).json({
+            error: true,
+            message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
+        } as ApiEndpointResponse);
+    }
+});
+
+router.post("/renameFolder", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = req.body?.id;
+        const newName = req.body?.newName;
+
+        if (typeof id !== "number" || id <= 0) {
+            throw new Error("Die ID des Ordners ist ungültig.");
+        }
+
+        if (typeof newName !== "string" || newName.trim() === "" || newName.length > 255) {
+            throw new Error("Der neue Name des Ordners ist ungültig.");
+        }
+
+        const response = await updateLocalFoldername(id, newName);
+
+        if (response.error) {
+            throw new Error(response.error);
+        }
+
+        res.json({
+            error: false,
+            message: "Der Ordner wurde erfolgreich umbenannt.",
+        } as ApiEndpointResponse);
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof Error) {
+            res.json({
+                error: true,
+                message: error.message,
+            } as ApiEndpointResponse);
+
+            return;
+        }
+
+        res.status(501).json({
+            error: true,
+            message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
+        } as ApiEndpointResponse);
+    }
+});
+
+router.post("/deleteFolder", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = req.body?.id;
+
+        if (typeof id !== "number" || id <= 0) {
+            throw new Error("Die ID des Ordners ist ungültig.");
+        }
+
+        // Check if folder is empty
+
+        // check folders first since this is probably less expensive than checking files
+        const folderResult = await getAllLocalFolders();
+
+        if (folderResult.error || folderResult.data === null) {
+            throw new Error(folderResult.error);
+        }
+
+        if (folderResult.data.some((folder: LocalFolder) => folder.folderId === id)) {
+            throw new Error("Der Ordner ist nicht leer. Bitte lösche zuerst alle Unterordner und Dateien.");
+        }
+
+        const filesResult = await getAllLocalFiles();
+
+        if (filesResult.error || filesResult.data === null) {
+            throw new Error(filesResult.error);
+        }
+
+        if (filesResult.data.some((file: LocalFile) => file.folderId === id)) {
+            throw new Error("Der Ordner ist nicht leer. Bitte lösche zuerst alle Dateien.");
+        }
+
+        // Folder is empty => continue
+
+        const response = await deleteLocalFolder(id);
+
+        if (response.error) {
+            throw new Error(response.error);
+        }
+
+        res.json({
+            error: false,
+            message: "Der Ordner wurde erfolgreich gelöscht.",
+        } as ApiEndpointResponse);
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof Error) {
+            res.json({
+                error: true,
+                message: error.message,
+            } as ApiEndpointResponse);
+
+            return;
+        }
+
+        res.status(501).json({
+            error: true,
+            message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
+        } as ApiEndpointResponse);
+    }
+});
+
+router.get("/rerunUpdateLocalFilesMetadataDatabaseJob", async (req: Request, res: Response): Promise<void> => {
+    try {
+        await updateLocalFilesMetadataDatabase();
+
+        res.json({
+            error: false,
+            message: "Das Update der lokalen Datei-Metadaten-Datenbank wurde ausgeführt. (Falls Fehler auftreten, werden die Admins per E-Mail benachrichtigt.)",
         } as ApiEndpointResponse);
     } catch (error) {
         console.error(error);

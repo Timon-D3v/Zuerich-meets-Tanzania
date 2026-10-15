@@ -1,6 +1,5 @@
-import { Component, inject, input, PLATFORM_ID, signal, effect } from "@angular/core";
+import { Component, inject, input, signal, effect } from "@angular/core";
 import { ApiEndpointResponse, LocalFolder } from "../../..";
-import { isPlatformBrowser } from "@angular/common";
 import { NotificationService } from "../../services/notification.service";
 import { FileService } from "../../services/file.service";
 import { PopupConfirmComponent } from "../popup-confirm/popup-confirm.component";
@@ -14,17 +13,22 @@ import { PopupTitleInputComponent } from "../popup-title-input/popup-title-input
 })
 export class FolderPreviewComponent {
     folder = input.required<LocalFolder>();
+    foldername = signal<string>("");
 
     contextMenuOpen = signal<boolean>(false);
     contextMenuPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
 
+    hideFolderPreview = signal<boolean>(false);
+
     confirmInputOpen = signal<boolean>(false);
     titleInputOpen = signal<boolean>(false);
 
-    private platformId = inject(PLATFORM_ID);
-
     private fileService = inject(FileService);
     private notificationService = inject(NotificationService);
+
+    private _updateFoldernameEffect = effect(() => {
+        this.foldername.set(this.folder().foldername);
+    });
 
     rightClick(event: MouseEvent): void {
         event.preventDefault();
@@ -60,26 +64,29 @@ export class FolderPreviewComponent {
     }
 
     renameFolder(newName: string): void {
-        // this.closeTitleInput();
-        // if (typeof newName !== "string" || newName.trim() === "" || !PUBLIC_CONFIG.REGEX.MATCH_VALID_FILENAME.test(newName)) {
-        //     this.notificationService.error("Fehler:", "Bitte gib einen gültigen Dateinamen ein. Der Name darf nur aus Buchstaben, Zahlen, Bindestrichen und Unterstrichen bestehen. Leerzeichen und Sonderzeichen sind nicht erlaubt.");
-        //     return;
-        // }
-        // const request = this.fileService.renameFile(this.file().uuid, newName);
-        // request.subscribe({
-        //     next: (response: ApiEndpointResponse) => {
-        //         if (response.error) {
-        //             this.notificationService.error("Fehler:", "Die Datei konnte nicht umbenannt werden: " + response.message);
-        //             return;
-        //         }
-        //         this.notificationService.success("Erfolg:", "Die Datei wurde erfolgreich umbenannt.");
-        //         this.filename.set(newName);
-        //     },
-        //     error: (error: Error) => {
-        //         console.error("Failed to rename file", error);
-        //         this.notificationService.error("Fehler:", "Die Datei konnte nicht umbenannt werden. Bitte versuche es später noch einmal.");
-        //     },
-        // });
+        this.closeTitleInput();
+
+        if (typeof newName !== "string" || newName.trim() === "" || newName.length > 255) {
+            this.notificationService.error("Fehler:", "Bitte gib einen gültigen Ordnernamen ein. Der Name darf nicht leer sein und darf nicht länger als 255 Zeichen sein.");
+            return;
+        }
+
+        const request = this.fileService.renameFolder(this.folder().id, newName);
+
+        request.subscribe({
+            next: (response: ApiEndpointResponse) => {
+                if (response.error) {
+                    this.notificationService.error("Fehler:", "Der Ordner konnte nicht umbenannt werden: " + response.message);
+                    return;
+                }
+                this.notificationService.success("Erfolg:", "Der Ordner wurde erfolgreich umbenannt.");
+                this.foldername.set(newName);
+            },
+            error: (error: Error) => {
+                console.error("Failed to rename folder", error);
+                this.notificationService.error("Fehler:", "Der Ordner konnte nicht umbenannt werden. Bitte versuche es später noch einmal.");
+            },
+        });
     }
 
     openTitleInput(): void {
@@ -93,30 +100,33 @@ export class FolderPreviewComponent {
     }
 
     deleteFolder(confirmation: boolean): void {
-        // this.closeConfirmInput();
-        // if (!confirmation) {
-        //     this.notificationService.info("Abgebrochen:", "Die Datei wurde nicht gelöscht.");
-        //     return;
-        // }
-        // const request = this.fileService.deleteFile(this.file().uuid);
-        // request.subscribe({
-        //     next: (response: ApiEndpointResponse) => {
-        //         if (response.error) {
-        //             this.notificationService.error("Fehler:", "Die Datei konnte nicht gelöscht werden: " + response.message);
-        //             return;
-        //         }
-        //         this.notificationService.success("Erfolg:", "Die Datei wurde erfolgreich gelöscht.");
-        //         this.hideFolderPreview.set(true);
-        //     },
-        //     error: (error) => {
-        //         console.error("Failed to delete file", error);
-        //         this.notificationService.error("Fehler:", "Die Datei konnte nicht gelöscht werden. Bitte versuche es später noch einmal.");
-        //     },
-        // });
+        this.closeConfirmInput();
+
+        if (!confirmation) {
+            this.notificationService.info("Abgebrochen:", "Der Ordner wurde nicht gelöscht.");
+            return;
+        }
+
+        const request = this.fileService.deleteFolder(this.folder().id);
+
+        request.subscribe({
+            next: (response: ApiEndpointResponse) => {
+                if (response.error) {
+                    this.notificationService.error("Fehler:", "Der Ordner konnte nicht gelöscht werden: " + response.message);
+                    return;
+                }
+                this.notificationService.success("Erfolg:", "Der Ordner wurde erfolgreich gelöscht.");
+                this.hideFolderPreview.set(true);
+            },
+            error: (error) => {
+                console.error("Failed to delete folder", error);
+                this.notificationService.error("Fehler:", "Der Ordner konnte nicht gelöscht werden. Bitte versuche es später noch einmal.");
+            },
+        });
     }
 
     openConfirmInput(): void {
-        console.log("Lösche Datei: " + this.folder().id);
+        console.log("Lösche Ordner: " + this.folder().id);
         this.confirmInputOpen.set(true);
         this.contextMenuOpen.set(false);
     }

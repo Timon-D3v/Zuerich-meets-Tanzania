@@ -38,6 +38,18 @@ export class FileService {
         return request;
     }
 
+    deleteFolder(id: number): Observable<ApiEndpointResponse> {
+        const request = this.http.post<ApiEndpointResponse>(`/api/secured/admin/files/deleteFolder`, { id });
+
+        return request;
+    }
+
+    renameFolder(id: number, newName: string): Observable<ApiEndpointResponse> {
+        const request = this.http.post<ApiEndpointResponse>(`/api/secured/admin/files/renameFolder`, { id, newName });
+
+        return request;
+    }
+
     createFolder(foldername: string, parentFolderId: number | null): Observable<ApiEndpointResponse> {
         const request = this.http.post<ApiEndpointResponse>(`/api/secured/admin/files/createFolder`, { foldername, parentFolderId });
 
@@ -46,6 +58,12 @@ export class FileService {
 
     getAllFolders(): Observable<GetAllLocalFoldersApiEndpointResponse> {
         const request = this.http.get<GetAllLocalFoldersApiEndpointResponse>(`/api/secured/admin/files/getAllFolders`);
+
+        return request;
+    }
+
+    rerunUpdateLocalFilesMetadataDatabaseJob(): Observable<ApiEndpointResponse> {
+        const request = this.http.get<ApiEndpointResponse>(`/api/secured/admin/files/rerunUpdateLocalFilesMetadataDatabaseJob`);
 
         return request;
     }

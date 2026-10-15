@@ -25,6 +25,7 @@ export class AdminFileExplorerComponent implements OnInit {
     delivApiUser = signal<string>("");
 
     titleInputOpen = signal<boolean>(false);
+    jobRunning = signal<boolean>(false);
 
     private fileService = inject(FileService);
     private publicEnvService = inject(PublicEnvService);
@@ -127,6 +128,38 @@ export class AdminFileExplorerComponent implements OnInit {
             error: (error: unknown) => {
                 console.error("Error while creating folder:", error);
                 this.notificationService.error("Fehler", "Der Ordner konnte nicht erstellt werden. Bitte versuche es erneut.");
+            },
+        });
+    }
+
+    rerunUpdateLocalFilesMetadataDatabaseJob(): void {
+        if (this.jobRunning()) {
+            this.notificationService.info("Info", "Das Update der lokalen Datei-Metadaten-Datenbank läuft bereits. Bitte warte, bis es abgeschlossen ist.");
+            return;
+        }
+
+        this.jobRunning.set(true);
+
+        const request = this.fileService.rerunUpdateLocalFilesMetadataDatabaseJob();
+
+        request.subscribe({
+            next: (response: ApiEndpointResponse) => {
+                if (response.error) {
+                    this.notificationService.error("Fehler", "Das Update der lokalen Datei-Metadaten-Datenbank konnte nicht ausgeführt werden: " + response.message);
+
+                    return;
+                }
+
+                this.notificationService.info("Erfolg", "Das Update der lokalen Datei-Metadaten-Datenbank wurde ausgeführt. (Falls Fehler auftreten, werden die Admins per E-Mail benachrichtigt.)");
+
+                this.getAllFolders();
+                this.getAllFiles();
+
+                this.jobRunning.set(false);
+            },
+            error: (error: unknown) => {
+                console.error("Error while rerunning update local files metadata database job:", error);
+                this.notificationService.error("Fehler", "Das Update der lokalen Datei-Metadaten-Datenbank konnte nicht ausgeführt werden. Bitte versuche es erneut.");
             },
         });
     }
