@@ -1,0 +1,100 @@
+@use "../../../styles/index" as *;
+
+:host:has(.host-hidden) {
+    display: none;
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--secondary-500);
+    border-radius: calc(var(--width, 200px) / 15);
+    padding: calc(var(--width, 200px) / 10);
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+
+    & > img {
+        height: calc(var(--width, 200px) / 10 * 5.5);
+        max-width: 100%;
+        margin-bottom: calc(var(--width, 200px) / 10);
+        object-fit: cover;
+        object-position: center;
+
+        &[alt$=".svg"] {
+            background-color: var(--background-50);
+        }
+    }
+
+    & > h3 {
+        width: 100%;
+        margin: 0;
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-align: center;
+        font-size: calc(var(--width, 200px) / 10);
+        height: calc(var(--width, 200px) / 10 * 1.5);
+    }
+}
+
+ul {
+    display: block;
+    list-style: none;
+    padding: calc(var(--header-height) / 7.5);
+    margin: 0;
+    box-sizing: border-box;
+    background-color: var(--background-50);
+    box-shadow: 0 0 10px 2px var(--secondary-500);
+    border-radius: calc(var(--header-height) / 10);
+    position: fixed;
+    z-index: 1500;
+    cursor: default;
+
+    & li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        height: 1.5rem;
+        padding: 0.5rem;
+        border-bottom: 1px solid var(--secondary-500);
+        cursor: pointer;
+        transition: all 0.25s ease;
+
+        &:hover {
+            background-color: var(--secondary-500);
+        }
+
+        &:first-child {
+            border-top-right-radius: calc(var(--header-height) / 20);
+            border-top-left-radius: calc(var(--header-height) / 20);
+        }
+
+        &:last-child {
+            border-bottom: none;
+            border-bottom-right-radius: calc(var(--header-height) / 20);
+            border-bottom-left-radius: calc(var(--header-height) / 20);
+
+            &:hover {
+                background-color: var(--error);
+            }
+        }
+    }
+
+    & img {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+
+    & h4 {
+        font-size: 1.1rem;
+        margin: 0;
+        line-height: 1;
+        vertical-align: middle;
+    }
+}

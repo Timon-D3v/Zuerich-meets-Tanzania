@@ -1,0 +1,39 @@
+<div class="wrapper" [title]="folder().foldername" [id]="'folder-preview-' + folder().id" (contextmenu)="rightClick($event)">
+    <img src="/svg/folder.svg" alt="Ordner" />
+    <h3>{{ folder().foldername }}</h3>
+    @if (contextMenuOpen()) {
+        <ul [style.left.px]="contextMenuPosition().x" [style.top.px]="contextMenuPosition().y" class="context-menu" (click)="doNotCloseContextMenu($event)">
+            <li title="Ordner umbenennen" (click)="openTitleInput()">
+                <img src="/svg/rename.svg" alt="Umbenennen" />
+                <h4>Umbenennen</h4>
+            </li>
+            <li title="Ordner Löschen" (click)="openConfirmInput()">
+                <img src="/svg/delete.svg" alt="Löschen" />
+                <h4>Löschen</h4>
+            </li>
+        </ul>
+    }
+</div>
+
+@if (confirmInputOpen()) {
+    <app-popup-confirm
+        title="Ordner löschen"
+        [description]="'Bist du sicher, dass du den Ordner mit dem Namen ' + folder().foldername + ' löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'"
+        confirmButtonText="Löschen"
+        (resultOutput)="deleteFolder($event)"
+        (closeOutput)="closeConfirmInput()"
+    ></app-popup-confirm>
+}
+
+@if (titleInputOpen()) {
+    <app-popup-title-input
+        title="Ordner umbenennen"
+        description="Bitte gib einen neuen Namen für den Ordner ein. (Bitte beachte, dass der Name des Ordners nur aus Buchstaben, Zahlen, Bindestrichen und Unterstrichen bestehen darf. Leerzeichen und Sonderzeichen sind nicht erlaubt.)"
+        submitButtonText="Umbenennen"
+        label="Neuer Name:"
+        placeholder="Neuen Namen eingeben"
+        [value]="folder().foldername"
+        (resultOutput)="renameFolder($event)"
+        (closeOutput)="closeTitleInput()"
+    ></app-popup-title-input>
+}

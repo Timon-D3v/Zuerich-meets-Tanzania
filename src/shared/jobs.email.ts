@@ -3,6 +3,11 @@ import { PUBLIC_CONFIG } from "../publicConfig";
 import { sendMail } from "./send.email";
 
 export async function sendCriticalJobFailureNotification(fullName: string, email: string, errorMessage: string): Promise<boolean> {
+    if (CONFIG.ENV === "dev") {
+        console.info("Development environment detected. Skipping sending critical job failure notification email.");
+        return true;
+    }
+
     const text = [
         PUBLIC_CONFIG.EMAIL.GREETINGS(fullName, "", "Divers"),
         "Es gab einen kritischen Fehler bei der Ausführung eines Jobs. Bitte überprüfe die Logs für weitere Details:",

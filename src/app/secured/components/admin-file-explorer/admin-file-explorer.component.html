@@ -1,10 +1,43 @@
 <h2>Datei Explorer</h2>
+<div class="topbar">
+    <div class="breadcrumbs">
+        <app-breadcrumb [folder]="currentFolder()" [parentFolder]="getParentFolder(currentFolder())" (folderChange)="changeFolder($event)"></app-breadcrumb>
+    </div>
+    <div class="actions">
+        <button>
+            <img src="/svg/new_folder.svg" alt="Neuer Ordner" title="Neuen Ordner erstellen" (click)="openTitleInput()" />
+        </button>
+        <button>
+            <img src="/svg/refresh.svg" alt="Aktualisieren" title="Dateien aktualisieren" />
+        </button>
+    </div>
+</div>
 @defer (when files().length > 0; prefetch on immediate) {
     <div class="wrapper">
+        @for (folder of folders(); track $index) {
+            <p class="hidden">{{ folder.id }} {{ currentFolder() === null ? "null" : currentFolder()?.id }} {{ folder.folderId === null ? "null" : folder.folderId }}</p>
+            @if ((folder.folderId === null && currentFolder() === null) || folder.folderId === currentFolder()?.id) {
+                <app-folder-preview [folder]="folder" (click)="changeFolder(folder.id)"></app-folder-preview>
+            }
+        }
         @for (file of files(); track $index) {
-            <app-file-preview [file]="file" [delivApiUrl]="delivApiUrl()" [delivApiUser]="delivApiUser()"></app-file-preview>
+            @if ((file.folderId === null && currentFolder() === null) || file.folderId === currentFolder()?.id) {
+                <app-file-preview [file]="file" [delivApiUrl]="delivApiUrl()" [delivApiUser]="delivApiUser()"></app-file-preview>
+            }
         }
     </div>
 } @placeholder (minimum 100ms) {
     <app-loading></app-loading>
+}
+
+@if (titleInputOpen()) {
+    <app-popup-title-input
+        title="Neuen Ordner erstellen"
+        description="Bitte geben Sie einen Namen für den neuen Ordner ein."
+        label="Namen:"
+        placeholder="Namen eingeben"
+        submitButtonText="Erstellen"
+        (resultOutput)="createFolder($event)"
+        (closeOutput)="closeTitleInput()"
+    ></app-popup-title-input>
 }

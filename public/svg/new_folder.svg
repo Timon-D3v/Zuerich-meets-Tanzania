@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="timonicon">
+  <!-- 
+  This icon was created by Timon Fiedler (Timon.dev)
+  Contact: https://www.timondev.com/contact
+  This is a mix of two icons from https://ionic.io/ionicons
+  Base SVG: folder-outline.svg
+  Added SVG: add-circle-outline.svg
+  The added svg was modified to fit the theme of zurich-meets-tanzania
+  Visit: https://www.zurich-meets-tanzania.com
+  This is for personal use only. If you want to copy it all right go to:
+  ionic open source 
+  Released under MIT License
+  Copyright @ 2026
+  https://ionic.io/ionicons
+  -->
+  <path 
+    d="M440 432H72a40 40 0 0 1-40-40V120a40 40 0 0 1 40-40h75.89a40 40 0 0 1 22.19 6.72l27.84 18.56a40 40 0 0 0 22.19 6.72H440a40 40 0 0 1 40 40v240a40 40 0 0 1-40 40M32 192h448" 
+    fill="none" 
+    stroke="#000000ff" 
+    stroke-linecap="round" 
+    stroke-linejoin="round" 
+    stroke-width="32px"
+  />
+  <path
+     d="m 387.19275,248.00791 v 185.48986 m 92.74493,-92.74493 H 294.44783"
+     fill="none"
+     stroke="#f6a709ff"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     stroke-width="65px"
+    />
+</svg>

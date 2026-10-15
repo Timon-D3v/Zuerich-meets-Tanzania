@@ -1,3 +1,14 @@
+:host {
+    --topbar-height: 50px;
+    --header-height-with-nav: var(--header-height);
+    --nav-width: min(220px, 30%);
+
+    @media screen and (max-width: 600px) {
+        --header-height-with-nav: calc(var(--header-height) * 1.5);
+        --nav-width: 0px;
+    }
+}
+
 .wrapper {
     --width: 200px;
     width: 100%;
@@ -11,7 +22,8 @@
     padding-top: 0;
     box-sizing: border-box;
 
-    & > app-file-preview {
+    & > app-file-preview,
+    & > app-folder-preview {
         width: 100%;
         height: var(--width);
         border-color: var(--secondary-500);
@@ -22,4 +34,61 @@ h2 {
     font-size: 2.5rem;
     text-align: center;
     padding: 0 10vw;
+    padding-top: var(--topbar-height);
+}
+
+.topbar {
+    position: fixed;
+    top: var(--header-height-with-nav);
+    left: var(--nav-width);
+    width: calc(100% - var(--nav-width));
+    height: var(--topbar-height);
+    background-color: var(--background-50);
+    box-shadow: 0px 1px 1px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem calc(0.5rem + 2vw);
+    box-sizing: border-box;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+.breadcrumbs {
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: clip;
+}
+
+.actions {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: min(fit-content, 100%);
+    gap: 0.5rem;
+
+    & > button {
+        background-color: var(--background-50);
+        outline: none;
+        border: 1px solid var(--secondary-500);
+        font-size: calc(var(--topbar-height, 50px) / 2.5);
+        border-radius: calc(var(--topbar-height, 50px) / 2.5);
+        padding: 0;
+        height: 100%;
+        width: auto;
+        aspect-ratio: 1 / 1;
+
+        & > img {
+            height: 100%;
+            width: auto;
+            aspect-ratio: 1 / 1;
+            object-fit: contain;
+            object-position: center;
+            padding: 15%;
+            box-sizing: border-box;
+        }
+    }
 }

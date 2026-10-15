@@ -1,9 +1,9 @@
 import { Request, Response, Router } from "express";
 import { PUBLIC_CONFIG } from "../publicConfig";
-import { ApiEndpointResponse, DelivApiFile, GetAllFileInformationApiEndpointResponse, LocalFile } from "..";
+import { ApiEndpointResponse, DelivApiFile, GetAllFileInformationApiEndpointResponse, GetAllLocalFoldersApiEndpointResponse, LocalFile, LocalFolder } from "..";
 import multerInstance from "../shared/instance.multer";
 import { delivApiUpdateFile, delivApiDeleteFile } from "delivapi-client";
-import { deleteLocalFile, getAllLocalFilenames, getAllLocalFiles, updateLocalFilename } from "../shared/files.database";
+import { deleteLocalFile, getAllLocalFilenames, getAllLocalFiles, updateLocalFilename, getAllLocalFolders, createLocalFolder } from "../shared/files.database";
 
 // Router Serves under /api/secured/admin/files
 const router = Router();
@@ -159,6 +159,83 @@ router.post("/renameFile", async (req: Request, res: Response): Promise<void> =>
         res.json({
             error: false,
             message: "Die Datei wurde erfolgreich umbenannt.",
+        } as ApiEndpointResponse);
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof Error) {
+            res.json({
+                error: true,
+                message: error.message,
+            } as ApiEndpointResponse);
+
+            return;
+        }
+
+        res.status(501).json({
+            error: true,
+            message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
+        } as ApiEndpointResponse);
+    }
+});
+
+router.get("/getAllFolders", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const result = await getAllLocalFolders();
+
+        if (result.error || result.data === null) {
+            throw new Error(result.error);
+        }
+
+        res.json({
+            error: false,
+            message: "Die Ordner wurden erfolgreich abgerufen.",
+            data: result.data as LocalFolder[],
+        } as GetAllLocalFoldersApiEndpointResponse);
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof Error) {
+            res.json({
+                error: true,
+                message: error.message,
+                data: [],
+            } as GetAllLocalFoldersApiEndpointResponse);
+
+            return;
+        }
+
+        res.status(501).json({
+            error: true,
+            message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
+            data: [],
+        } as GetAllLocalFoldersApiEndpointResponse);
+    }
+});
+
+router.post("/createFolder", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const foldername = req.body?.foldername;
+        const parentFolderId = req.body?.parentFolderId;
+
+        if (typeof foldername !== "string" || foldername.trim() === "" || foldername.length > 255) {
+            // The name can be anything and also does not have to be unique.
+            throw new Error("Der Name des Ordners ist ungültig. Bitte gib einen gültigen Namen ein (1-255 Zeichen).");
+        }
+
+        if (parentFolderId !== null && typeof parentFolderId !== "number") {
+            throw new Error("Die ID des übergeordneten Ordners ist ungültig.");
+        }
+
+        const result = await createLocalFolder(foldername, parentFolderId);
+
+        if (result.error || result.data === null) {
+            throw new Error(result.error);
+        }
+
+        res.json({
+            error: false,
+            message: "Der Ordner wurde erfolgreich erstellt.",
         } as ApiEndpointResponse);
     } catch (error) {
         console.error(error);

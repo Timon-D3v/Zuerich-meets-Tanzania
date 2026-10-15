@@ -1,0 +1,24 @@
+<img src="/svg/home.svg" alt="Home" title="Zum Hauptorder" class="clickable" (click)="changeFolder(-1)" />
+
+@if (parentFolder() === null && folder() !== null) {
+    <!-- There is no parent folder => Depth = 1 -->
+    <img src="/svg/arrow_down.svg" class="arrow" alt="Arrow Right" />
+
+    <h4>{{ folder()?.foldername }}</h4>
+} @else if (folder() !== null) {
+    <!-- There is a parent folder => Depth = 2+ -->
+    <img src="/svg/arrow_down.svg" class="arrow" alt="Arrow Right" />
+
+    @if (parentFolder()?.folderId !== null) {
+        <!-- There is a parent folder, but it is not the root folder => Depth = 2+ -->
+        <h4>...</h4>
+
+        <img src="/svg/arrow_down.svg" class="arrow" alt="Arrow Right" />
+    }
+
+    <h4 (click)="changeFolder(parentFolder()?.id ?? -1)" class="clickable">{{ parentFolder()?.foldername ?? "???" }}</h4>
+
+    <img src="/svg/arrow_down.svg" class="arrow" alt="Arrow Right" />
+
+    <h4>{{ folder()?.foldername }}</h4>
+}

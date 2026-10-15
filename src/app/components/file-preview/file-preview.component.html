@@ -56,7 +56,7 @@
 @if (confirmInputOpen()) {
     <app-popup-confirm
         title="Datei löschen"
-        [description]="'Bist du sicher, dass du die Datei mit dem Namen ' + file().uuid + ' löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'"
+        [description]="'Bist du sicher, dass du die Datei mit dem Namen ' + (file().filename ?? file().uuid) + ' löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'"
         confirmButtonText="Löschen"
         (resultOutput)="deleteFile($event)"
         (closeOutput)="closeConfirmInput()"

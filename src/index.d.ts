@@ -426,6 +426,10 @@ export interface GetAllFileInformationApiEndpointResponse extends ApiEndpointRes
     data: LocalFile[] | null;
 }
 
+export interface GetAllLocalFoldersApiEndpointResponse extends ApiEndpointResponse {
+    data: LocalFolder[];
+}
+
 export interface GetDonationUsageTypesApiEndpointResponse extends ApiEndpointResponse {
     data: string[];
 }

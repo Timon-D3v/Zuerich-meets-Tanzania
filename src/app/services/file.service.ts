@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { GetAllFileInformationApiEndpointResponse, ApiEndpointResponse } from "../..";
+import { GetAllFileInformationApiEndpointResponse, ApiEndpointResponse, GetAllLocalFoldersApiEndpointResponse } from "../..";
 
 @Injectable({
     providedIn: "root",
@@ -34,6 +34,18 @@ export class FileService {
 
     renameFile(uuid: string, newName: string): Observable<ApiEndpointResponse> {
         const request = this.http.post<ApiEndpointResponse>(`/api/secured/admin/files/renameFile`, { uuid, newName });
+
+        return request;
+    }
+
+    createFolder(foldername: string, parentFolderId: number | null): Observable<ApiEndpointResponse> {
+        const request = this.http.post<ApiEndpointResponse>(`/api/secured/admin/files/createFolder`, { foldername, parentFolderId });
+
+        return request;
+    }
+
+    getAllFolders(): Observable<GetAllLocalFoldersApiEndpointResponse> {
+        const request = this.http.get<GetAllLocalFoldersApiEndpointResponse>(`/api/secured/admin/files/getAllFolders`);
 
         return request;
     }
