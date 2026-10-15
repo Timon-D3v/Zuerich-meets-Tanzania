@@ -1,4 +1,12 @@
-<a [class]="hideFilePreview() ? 'host-hidden' : 'wrapper'" target="_blank" [href]="getFileUrl(file())" [title]="file().uuid" [id]="'file-preview-' + file().uuid" (contextmenu)="rightClick($event)">
+<a
+    class="{{ hideFilePreview() ? 'host-hidden' : 'wrapper' }} {{ selected() ? 'selected' : '' }}"
+    target="_blank"
+    [href]="getFileUrl(file())"
+    [title]="file().uuid"
+    [id]="'file-preview-' + file().uuid"
+    (contextmenu)="rightClick($event)"
+    (click)="checkForSelection($event)"
+>
     <img [src]="getFilePreview(file(), true, fileTimestamp()).url" [alt]="getFilePreview(file()).alt" loading="lazy" />
     <h3>{{ filename() }}</h3>
     @if (contextMenuOpen()) {

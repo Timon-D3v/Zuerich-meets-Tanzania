@@ -81,6 +81,22 @@ h2 {
         width: auto;
         aspect-ratio: 1 / 1;
 
+        &.cancel {
+            border-color: var(--error);
+
+            & > img {
+                filter: invert(21%) sepia(65%) saturate(3999%) hue-rotate(340deg) brightness(85%) contrast(99%);
+            }
+        }
+
+        &.submit {
+            border-color: var(--success);
+
+            & > img {
+                filter: invert(58%) sepia(29%) saturate(912%) hue-rotate(80deg) brightness(98%) contrast(92%);
+            }
+        }
+
         & > img {
             height: 100%;
             width: auto;

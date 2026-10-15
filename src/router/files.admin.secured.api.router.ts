@@ -3,7 +3,7 @@ import { PUBLIC_CONFIG } from "../publicConfig";
 import { ApiEndpointResponse, GetAllFileInformationApiEndpointResponse, GetAllLocalFoldersApiEndpointResponse, LocalFile, LocalFolder } from "..";
 import multerInstance from "../shared/instance.multer";
 import { delivApiUpdateFile, delivApiDeleteFile } from "delivapi-client";
-import { deleteLocalFile, getAllLocalFilenames, getAllLocalFiles, updateLocalFilename, getAllLocalFolders, createLocalFolder, updateLocalFoldername, deleteLocalFolder } from "../shared/files.database";
+import { deleteLocalFile, getAllLocalFilenames, getAllLocalFiles, updateLocalFilename, getAllLocalFolders, createLocalFolder, updateLocalFoldername, deleteLocalFolder, moveFilesToFolder, moveFoldersToFolder } from "../shared/files.database";
 import { updateLocalFilesMetadataDatabase } from "../shared/files.job";
 
 // Router Serves under /api/secured/admin/files
@@ -368,6 +368,90 @@ router.get("/rerunUpdateLocalFilesMetadataDatabaseJob", async (req: Request, res
         res.json({
             error: false,
             message: "Das Update der lokalen Datei-Metadaten-Datenbank wurde ausgeführt. (Falls Fehler auftreten, werden die Admins per E-Mail benachrichtigt.)",
+        } as ApiEndpointResponse);
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof Error) {
+            res.json({
+                error: true,
+                message: error.message,
+            } as ApiEndpointResponse);
+
+            return;
+        }
+
+        res.status(501).json({
+            error: true,
+            message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
+        } as ApiEndpointResponse);
+    }
+});
+
+router.post("/moveFilesToFolder", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const fileUuids = req.body?.fileUuids;
+        const targetFolderId = req.body?.targetFolderId;
+
+        if (targetFolderId !== null && typeof targetFolderId !== "number") {
+            throw new Error("Die ID des Ziel-Ordners ist ungültig.");
+        }
+
+        if (!Array.isArray(fileUuids) || fileUuids.some((uuid: any) => typeof uuid !== "string" || uuid.trim() === "")) {
+            throw new Error("Die UUIDs der Dateien sind ungültig.");
+        }
+
+        const result = await moveFilesToFolder(fileUuids, targetFolderId);
+
+        if (result.error || result.data === null) {
+            throw new Error(result.error);
+        }
+
+        res.json({
+            error: false,
+            message: "Die Dateien wurden erfolgreich verschoben.",
+        } as ApiEndpointResponse);
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof Error) {
+            res.json({
+                error: true,
+                message: error.message,
+            } as ApiEndpointResponse);
+
+            return;
+        }
+
+        res.status(501).json({
+            error: true,
+            message: PUBLIC_CONFIG.ERROR.INTERNAL_ERROR,
+        } as ApiEndpointResponse);
+    }
+});
+
+router.post("/moveFoldersToFolder", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const folderIds = req.body?.folderIds;
+        const targetFolderId = req.body?.targetFolderId;
+
+        if (targetFolderId !== null && typeof targetFolderId !== "number") {
+            throw new Error("Die ID des Ziel-Ordners ist ungültig.");
+        }
+
+        if (!Array.isArray(folderIds) || folderIds.some((id: any) => typeof id !== "number" || id < 0 || isNaN(id) || id === targetFolderId)) {
+            throw new Error("Die IDs der Ordner sind ungültig.");
+        }
+
+        const result = await moveFoldersToFolder(folderIds, targetFolderId);
+
+        if (result.error || result.data === null) {
+            throw new Error(result.error);
+        }
+
+        res.json({
+            error: false,
+            message: "Die Ordner wurden erfolgreich verschoben.",
         } as ApiEndpointResponse);
     } catch (error) {
         console.error(error);

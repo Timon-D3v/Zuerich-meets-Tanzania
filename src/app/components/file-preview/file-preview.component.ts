@@ -19,6 +19,8 @@ export class FilePreviewComponent {
     file = input.required<LocalFile>();
     delivApiUrl = input.required<string>();
     delivApiUser = input.required<string>();
+    selectionActive = input<boolean>();
+    selected = input<boolean>(false);
 
     contextMenuOpen = signal<boolean>(false);
     contextMenuPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -43,8 +45,19 @@ export class FilePreviewComponent {
     private publicEnvService = inject(PublicEnvService);
     private notificationService = inject(NotificationService);
 
+    checkForSelection(event: MouseEvent): void {
+        if (this.selectionActive()) {
+            event.preventDefault(); // Prevent the default action of opening the file in a new tab
+        }
+    }
+
     rightClick(event: MouseEvent): void {
         event.preventDefault();
+
+        if (this.selectionActive()) {
+            console.log("Selection active, not opening context menu.");
+            return;
+        }
 
         this.contextMenuOpen.set(true);
         this.contextMenuPosition.set({ x: event?.clientX || 100, y: event?.clientY || 100 });

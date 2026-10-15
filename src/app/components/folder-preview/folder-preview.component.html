@@ -1,8 +1,12 @@
-<div [class]="hideFolderPreview() ? 'hidden' : 'wrapper'" [title]="folder().foldername" [id]="'folder-preview-' + folder().id" (contextmenu)="rightClick($event)">
+<div class="{{ hideFolderPreview() ? 'hidden' : 'wrapper' }} {{ selectionActive() ? 'selection-active ' + selectionStatus() : '' }}" [title]="folder().foldername" [id]="'folder-preview-' + folder().id" (contextmenu)="rightClick($event)">
     <img src="/svg/folder.svg" alt="Ordner" />
     <h3>{{ foldername() }}</h3>
     @if (contextMenuOpen()) {
         <ul [style.left.px]="contextMenuPosition().x" [style.top.px]="contextMenuPosition().y" class="context-menu" (click)="doNotCloseContextMenu($event)">
+            <li title="Dateien hinzufügen" (click)="moveFilesSelectionStart()">
+                <img src="/svg/plus.svg" alt="Dateien hinzufügen" />
+                <h4>Dateien hinzufügen</h4>
+            </li>
             <li title="Ordner umbenennen" (click)="openTitleInput()">
                 <img src="/svg/rename.svg" alt="Umbenennen" />
                 <h4>Umbenennen</h4>

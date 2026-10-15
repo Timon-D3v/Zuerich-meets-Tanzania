@@ -277,3 +277,53 @@ export async function createLocalFolder(foldername: string, folderId: number | n
         };
     }
 }
+
+export async function moveFilesToFolder(fileUuids: string[], targetFolderId: number | null): Promise<DatabaseResult> {
+    try {
+        const [result, _fields]: [RowDataPacket[], FieldPacket[]] = await connection.query(`UPDATE \`zmt\`.\`files\` SET \`folderId\` = ? WHERE \`uuid\` IN (${fileUuids.map(() => "?").join(", ")})`, [targetFolderId, ...fileUuids]);
+
+        return {
+            data: result,
+            error: null,
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+
+            return {
+                data: null,
+                error: error.message,
+            };
+        }
+
+        return {
+            data: null,
+            error: PUBLIC_CONFIG.ERROR.NO_CONNECTION_TO_DATABASE,
+        };
+    }
+}
+
+export async function moveFoldersToFolder(folderIds: number[], targetFolderId: number | null): Promise<DatabaseResult> {
+    try {
+        const [result, _fields]: [RowDataPacket[], FieldPacket[]] = await connection.query(`UPDATE \`zmt\`.\`folders\` SET \`folderId\` = ? WHERE \`id\` IN (${folderIds.map(() => "?").join(", ")})`, [targetFolderId, ...folderIds]);
+
+        return {
+            data: result,
+            error: null,
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+
+            return {
+                data: null,
+                error: error.message,
+            };
+        }
+
+        return {
+            data: null,
+            error: PUBLIC_CONFIG.ERROR.NO_CONNECTION_TO_DATABASE,
+        };
+    }
+}

@@ -68,6 +68,18 @@ export class FileService {
         return request;
     }
 
+    moveFilesToFolder(fileUuids: string[], targetFolderId: number | null): Observable<ApiEndpointResponse> {
+        const request = this.http.post<ApiEndpointResponse>(`/api/secured/admin/files/moveFilesToFolder`, { fileUuids, targetFolderId });
+
+        return request;
+    }
+
+    moveFoldersToFolder(folderIds: number[], targetFolderId: number | null): Observable<ApiEndpointResponse> {
+        const request = this.http.post<ApiEndpointResponse>(`/api/secured/admin/files/moveFoldersToFolder`, { folderIds, targetFolderId });
+
+        return request;
+    }
+
     getMimeType(url: string): Observable<any> {
         const request = this.http.head(url, {
             observe: "response",

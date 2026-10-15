@@ -26,6 +26,10 @@ export class AdminFileExplorerComponent implements OnInit {
 
     titleInputOpen = signal<boolean>(false);
     jobRunning = signal<boolean>(false);
+    fileSelectionActive = signal<boolean>(false);
+    fileSelectionFolderId = signal<number>(-1);
+    selectedFolderIds = signal<number[]>([]);
+    selectedFileUuids = signal<string[]>([]);
 
     private fileService = inject(FileService);
     private publicEnvService = inject(PublicEnvService);
@@ -87,6 +91,10 @@ export class AdminFileExplorerComponent implements OnInit {
     }
 
     changeFolder(folderId: number): void {
+        if (this.fileSelectionActive()) {
+            return this.selectFolder(folderId);
+        }
+
         console.log("Change folder to: " + folderId);
         if (folderId === -1) {
             this.currentFolder.set(null);
@@ -170,5 +178,122 @@ export class AdminFileExplorerComponent implements OnInit {
 
     closeTitleInput(): void {
         this.titleInputOpen.set(false);
+    }
+
+    startFileSelection(folderId: number): void {
+        console.log("Start file selection for folder: " + folderId);
+
+        this.fileSelectionActive.set(true);
+        this.fileSelectionFolderId.set(folderId); // -1 Corresponds to the root folder
+    }
+
+    cancelFileSelection(): void {
+        console.log("Cancel file selection");
+
+        this.fileSelectionActive.set(false);
+        this.fileSelectionFolderId.set(-1);
+
+        this.selectedFolderIds.set([]);
+        this.selectedFileUuids.set([]);
+    }
+
+    submitFileSelection(): void {
+        console.log("Submit file selection for folder: " + this.fileSelectionFolderId());
+
+        // Here you would implement the logic to move the selected files to the folder with ID this.fileSelectionFolderId()
+        // For now, we just reset the selection state
+        const targetFolderId = this.fileSelectionFolderId() == -1 ? null : this.fileSelectionFolderId();
+        const folderIds = this.selectedFolderIds();
+        const fileUuids = this.selectedFileUuids();
+
+        console.log("Selected folder IDs:", folderIds);
+        console.log("Selected file UUIDs:", fileUuids);
+
+        // Reset selection state
+        this.fileSelectionActive.set(false);
+        this.fileSelectionFolderId.set(-1);
+        this.selectedFolderIds.set([]);
+        this.selectedFileUuids.set([]);
+
+        this.moveFilesToFolder(fileUuids, targetFolderId);
+        this.moveFoldersToFolder(folderIds, targetFolderId);
+    }
+
+    moveFilesToFolder(fileUuids: string[], targetFolderId: number | null): void {
+        if (fileUuids.length === 0) {
+            this.notificationService.info("Info", "Es wurden keine Dateien ausgewählt.");
+            return;
+        }
+
+        const filesRequest = this.fileService.moveFilesToFolder(fileUuids, targetFolderId);
+
+        filesRequest.subscribe({
+            next: (response: ApiEndpointResponse) => {
+                if (response.error) {
+                    this.notificationService.error("Fehler", "Die ausgewählten Dateien konnten nicht verschoben werden: " + response.message);
+                    return;
+                }
+
+                this.notificationService.success("Erfolg", "Die ausgewählten Dateien wurden erfolgreich verschoben.");
+                this.getAllFiles();
+            },
+            error: (error: unknown) => {
+                console.error("Error while moving files:", error);
+                this.notificationService.error("Fehler", "Die ausgewählten Dateien konnten nicht verschoben werden. Bitte versuche es erneut.");
+            },
+        });
+    }
+
+    moveFoldersToFolder(folderIds: number[], targetFolderId: number | null): void {
+        if (folderIds.length === 0) {
+            this.notificationService.info("Info", "Es wurden keine Ordner ausgewählt.");
+            return;
+        }
+
+        const foldersRequest = this.fileService.moveFoldersToFolder(folderIds, targetFolderId);
+
+        foldersRequest.subscribe({
+            next: (response: ApiEndpointResponse) => {
+                if (response.error) {
+                    this.notificationService.error("Fehler", "Die ausgewählten Ordner konnten nicht verschoben werden: " + response.message);
+                    return;
+                }
+
+                this.notificationService.success("Erfolg", "Die ausgewählten Ordner wurden erfolgreich verschoben.");
+                this.getAllFolders();
+            },
+            error: (error: unknown) => {
+                console.error("Error while moving folders:", error);
+                this.notificationService.error("Fehler", "Die ausgewählten Ordner konnten nicht verschoben werden. Bitte versuche es erneut.");
+            },
+        });
+    }
+
+    selectFolder(folderId: number): void {
+        if (folderId === -1 || folderId === this.fileSelectionFolderId() || folderId === null) {
+            return;
+        }
+
+        this.selectedFolderIds.update((ids) => {
+            if (ids.includes(folderId)) {
+                return ids.filter((id) => id !== folderId);
+            } else {
+                return [...ids, folderId];
+            }
+        });
+    }
+
+    toggleFileSelection(fileUuid: string): void {
+        if (!this.fileSelectionActive()) {
+            return;
+        }
+
+        this.selectedFileUuids.update((uuids) => {
+            if (uuids.includes(fileUuid)) {
+                return uuids.filter((uuid) => uuid !== fileUuid);
+            } else {
+                return [...uuids, fileUuid];
+            }
+        });
     }
 }

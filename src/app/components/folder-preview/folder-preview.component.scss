@@ -18,6 +18,18 @@
     cursor: pointer;
     text-decoration: none;
 
+    &.selection-active {
+        &.selected {
+            border: 1px solid var(--accent-500);
+            background-color: #4ab5a340; // var(--accent-50) with 25% opacity
+        }
+
+        &.disabled {
+            border: 1px solid grey;
+            background-color: #80808040;
+        }
+    }
+
     & > img {
         height: calc(var(--width, 200px) / 10 * 5.5);
         max-width: 100%;

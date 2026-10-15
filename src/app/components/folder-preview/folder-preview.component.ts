@@ -1,4 +1,4 @@
-import { Component, inject, input, signal, effect } from "@angular/core";
+import { Component, inject, input, signal, effect, output } from "@angular/core";
 import { ApiEndpointResponse, LocalFolder } from "../../..";
 import { NotificationService } from "../../services/notification.service";
 import { FileService } from "../../services/file.service";
@@ -13,6 +13,8 @@ import { PopupTitleInputComponent } from "../popup-title-input/popup-title-input
 })
 export class FolderPreviewComponent {
     folder = input.required<LocalFolder>();
+    selectionActive = input<boolean>();
+    selectionStatus = input<"disabled" | "selected" | "unselected">("unselected");
     foldername = signal<string>("");
 
     contextMenuOpen = signal<boolean>(false);
@@ -23,6 +25,8 @@ export class FolderPreviewComponent {
     confirmInputOpen = signal<boolean>(false);
     titleInputOpen = signal<boolean>(false);
 
+    moveFileStart = output<number>();
+
     private fileService = inject(FileService);
     private notificationService = inject(NotificationService);
 
@@ -32,6 +36,11 @@ export class FolderPreviewComponent {
 
     rightClick(event: MouseEvent): void {
         event.preventDefault();
+
+        if (this.selectionActive()) {
+            console.log("Selection active, not opening context menu.");
+            return;
+        }
 
         this.contextMenuOpen.set(true);
         this.contextMenuPosition.set({ x: event?.clientX || 100, y: event?.clientY || 100 });
@@ -61,6 +70,12 @@ export class FolderPreviewComponent {
     doNotCloseContextMenu(event: MouseEvent): void {
         event.preventDefault();
         event.stopPropagation();
+    }
+
+    moveFilesSelectionStart(): void {
+        this.contextMenuOpen.set(false);
+
+        this.moveFileStart.emit(this.folder().id);
     }
 
     renameFolder(newName: string): void {

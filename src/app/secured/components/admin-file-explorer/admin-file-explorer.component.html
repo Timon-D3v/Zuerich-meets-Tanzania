@@ -1,28 +1,66 @@
-<h2>Datei Explorer</h2>
 <div class="topbar">
     <div class="breadcrumbs">
         <app-breadcrumb [folder]="currentFolder()" [parentFolder]="getParentFolder(currentFolder())" (folderChange)="changeFolder($event)"></app-breadcrumb>
     </div>
     <div class="actions">
-        <button>
-            <img src="/svg/new_folder.svg" alt="Neuer Ordner" title="Neuen Ordner erstellen" (click)="openTitleInput()" />
-        </button>
-        <button>
-            <img src="/svg/refresh.svg" alt="Aktualisieren" title="Dateien aktualisieren" (click)="rerunUpdateLocalFilesMetadataDatabaseJob()" />
-        </button>
+        @if (fileSelectionActive()) {
+            <button class="cancel">
+                <img src="/svg/close.svg" alt="Abbrechen" title="Verschieben abbrechen" (click)="cancelFileSelection()" />
+            </button>
+            <button class="submit">
+                <img src="/svg/checkmark.svg" alt="Akzeptieren" title="Dateien verschieben" (click)="submitFileSelection()" />
+            </button>
+        } @else {
+            <button>
+                <img src="/svg/new_folder.svg" alt="Neuer Ordner" title="Neuen Ordner erstellen" (click)="openTitleInput()" />
+            </button>
+            <button>
+                <img src="/svg/refresh.svg" alt="Aktualisieren" title="Dateien aktualisieren" (click)="rerunUpdateLocalFilesMetadataDatabaseJob()" />
+            </button>
+        }
     </div>
 </div>
+
+<h2>Datei Explorer</h2>
+
 @defer (when files().length > 0; prefetch on immediate) {
     <div class="wrapper">
+        @if (currentFolder() !== null && currentFolder()?.folderId !== undefined) {
+            <!-- Parent Folder (To navigate and move files to) -->
+            <app-folder-preview
+                [folder]="{
+                    id: currentFolder()?.folderId === null ? -1 : (currentFolder()?.folderId ?? -1),
+                    foldername: '../' + (currentFolder()?.folderId === null ? '. (Root)' : (getParentFolder(currentFolder())?.foldername ?? 'Unbekannt')),
+                    folderId: getParentFolder(currentFolder())?.folderId ?? null,
+                }"
+                [selectionActive]="fileSelectionActive()"
+                selectionStatus="disabled"
+                (click)="changeFolder(currentFolder()?.folderId ?? -1)"
+                (moveFileStart)="startFileSelection($event)"
+            ></app-folder-preview>
+        }
         @for (folder of folders(); track $index) {
             <p class="hidden">{{ folder.id }} {{ currentFolder() === null ? "null" : currentFolder()?.id }} {{ folder.folderId === null ? "null" : folder.folderId }}</p>
             @if ((folder.folderId === null && currentFolder() === null) || folder.folderId === currentFolder()?.id) {
-                <app-folder-preview [folder]="folder" (click)="changeFolder(folder.id)"></app-folder-preview>
+                <app-folder-preview
+                    [folder]="folder"
+                    [selectionActive]="fileSelectionActive()"
+                    [selectionStatus]="folder.id === fileSelectionFolderId() ? 'disabled' : selectedFolderIds().includes(folder.id) ? 'selected' : 'unselected'"
+                    (click)="changeFolder(folder.id)"
+                    (moveFileStart)="startFileSelection($event)"
+                ></app-folder-preview>
             }
         }
         @for (file of files(); track $index) {
             @if ((file.folderId === null && currentFolder() === null) || file.folderId === currentFolder()?.id) {
-                <app-file-preview [file]="file" [delivApiUrl]="delivApiUrl()" [delivApiUser]="delivApiUser()"></app-file-preview>
+                <app-file-preview
+                    [file]="file"
+                    [delivApiUrl]="delivApiUrl()"
+                    [delivApiUser]="delivApiUser()"
+                    [selectionActive]="fileSelectionActive()"
+                    [selected]="selectedFileUuids().includes(file.uuid)"
+                    (click)="toggleFileSelection(file.uuid)"
+                ></app-file-preview>
             }
         }
     </div>
