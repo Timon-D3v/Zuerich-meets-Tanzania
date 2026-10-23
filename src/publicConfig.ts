@@ -108,11 +108,11 @@ export const PUBLIC_CONFIG: PublicConfig = {
                     data: [
                         {
                             type: "title",
-                            content: "Fehler beim Laden der Seite",
+                            content: "Fehler beim Laden des Blogs",
                         },
                         {
                             type: "paragraph",
-                            content: `Beim Laden der Seite ist ein Fehler aufgetreten: ${message}\nBitte versuchen Sie es später erneut oder kontaktieren Sie den Administrator.`,
+                            content: `Beim Laden des Blogs ist ein Fehler aufgetreten: ${message}\nBitte versuchen Sie es später erneut oder kontaktieren Sie den Administrator.`,
                         },
                     ],
                 },
@@ -160,11 +160,11 @@ export const PUBLIC_CONFIG: PublicConfig = {
                     content: [
                         {
                             type: "title",
-                            content: "Fehler beim Laden der Seite",
+                            content: "Fehler beim Laden der News",
                         },
                         {
                             type: "paragraph",
-                            content: `Beim Laden der Seite ist ein Fehler aufgetreten: ${message}\nBitte versuchen Sie es später erneut oder kontaktieren Sie den Administrator.`,
+                            content: `Beim Laden der News ist ein Fehler aufgetreten: ${message}\nBitte versuchen Sie es später erneut oder kontaktieren Sie den Administrator.`,
                         },
                     ],
                 },

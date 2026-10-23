@@ -24,6 +24,8 @@ export class CurrentTeamComponent implements OnInit {
         date: "",
     });
 
+    failedFetching = signal<boolean>(false);
+
     private teamService = inject(TeamService);
     private notificationService = inject(NotificationService);
 
@@ -32,6 +34,8 @@ export class CurrentTeamComponent implements OnInit {
     ngOnInit(): void {
         if (!isPlatformBrowser(this.platformId)) {
             console.error("Cannot fetch when not in browser context.");
+
+            this.failedFetching.set(true);
 
             this.team.set({
                 id: -2,
@@ -45,6 +49,10 @@ export class CurrentTeamComponent implements OnInit {
             return;
         }
 
+        this.loadCurrentTeam();
+    }
+
+    loadCurrentTeam(): void {
         const request = this.teamService.getCurrentTeam();
 
         request.subscribe({
@@ -61,10 +69,14 @@ export class CurrentTeamComponent implements OnInit {
                         date: "",
                     });
 
+                    this.failedFetching.set(true);
+
                     return;
                 }
 
                 this.team.set(response.data);
+
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while loading current team:", error);
@@ -78,6 +90,8 @@ export class CurrentTeamComponent implements OnInit {
                     members: [],
                     date: "",
                 });
+
+                this.failedFetching.set(true);
             },
         });
     }

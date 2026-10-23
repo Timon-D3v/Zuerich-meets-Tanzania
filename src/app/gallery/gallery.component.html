@@ -13,6 +13,9 @@
     <p class="date">Zuletzt aktualisiert: {{ formatDate(gallery().date) }}</p>
 } @placeholder (minimum 100ms) {
     <app-loading></app-loading>
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="getGallery()">Erneut versuchen</button>
+    }
 }
 
 @if (currentOpenIndex() >= 0) {

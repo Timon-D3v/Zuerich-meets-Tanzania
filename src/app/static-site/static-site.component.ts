@@ -53,6 +53,8 @@ export class StaticSiteComponent {
     site = signal<StaticSite>(PUBLIC_CONFIG.STATIC_SITES.LOADING(this.siteName, PUBLIC_CONFIG.FALLBACK_IMAGE_URL));
     date = signal<string>("");
 
+    failedFetching = signal<boolean>(false);
+
     private subpagesService = inject(SubpagesService);
     private notificationService = inject(NotificationService);
 
@@ -68,9 +70,15 @@ export class StaticSiteComponent {
 
             this.site.set(PUBLIC_CONFIG.STATIC_SITES.ERROR(this.siteName, PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Cannot fetch when not in browser context."));
 
+            this.failedFetching.set(true);
+
             return;
         }
 
+        this.loadSite();
+    }
+
+    loadSite(): void {
         const request = this.subpagesService.getStaticSite(this.siteName);
 
         request.subscribe({
@@ -80,6 +88,8 @@ export class StaticSiteComponent {
 
                     // Set a Warning as the sites content
                     this.site.set(PUBLIC_CONFIG.STATIC_SITES.ERROR(this.siteName, PUBLIC_CONFIG.FALLBACK_IMAGE_URL, response.message));
+
+                    this.failedFetching.set(true);
 
                     return;
                 }
@@ -95,6 +105,8 @@ export class StaticSiteComponent {
                         minute: "2-digit",
                     }),
                 );
+
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while fetching static site:", error);
@@ -102,6 +114,8 @@ export class StaticSiteComponent {
 
                 // Set a Warning as the sites content
                 this.site.set(PUBLIC_CONFIG.STATIC_SITES.ERROR(this.siteName, PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Fehler beim Laden der Seite. Bitte versuche es später erneut."));
+
+                this.failedFetching.set(true);
             },
         });
     }

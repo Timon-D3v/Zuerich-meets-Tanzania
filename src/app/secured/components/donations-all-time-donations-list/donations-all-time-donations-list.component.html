@@ -28,6 +28,9 @@
     <button type="button" (click)="initiateDownload()" class="download">Herunterladen</button>
 } @placeholder {
     <app-loading></app-loading>
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="loadAllDonors()">Erneut versuchen</button>
+    }
 }
 
 @if (fileTypeSelectionOpen()) {

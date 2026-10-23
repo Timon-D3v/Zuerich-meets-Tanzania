@@ -33,7 +33,13 @@
             <app-custom-multiple-lists [lists]="element.lists"></app-custom-multiple-lists>
         }
     }
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="loadSite()">Erneut versuchen</button>
+    }
     <p class="date">Zuletzt aktualisiert: {{ date() }}</p>
 } @placeholder (minimum 100ms) {
     <app-loading></app-loading>
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="loadSite()">Erneut versuchen</button>
+    }
 }

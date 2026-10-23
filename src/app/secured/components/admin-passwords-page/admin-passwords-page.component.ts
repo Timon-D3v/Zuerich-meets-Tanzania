@@ -12,7 +12,6 @@ import { LoadingComponent } from "../../../components/loading/loading.component"
     styleUrl: "./admin-passwords-page.component.scss",
 })
 export class AdminPasswordsPageComponent implements OnInit {
-    doneFetching = signal<boolean>(false);
     failedFetching = signal<boolean>(false);
 
     passwords = signal<LoginInformation[]>([]);
@@ -49,7 +48,7 @@ export class AdminPasswordsPageComponent implements OnInit {
                 }
 
                 this.passwords.set(response.data);
-                this.doneFetching.set(true);
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while fetching passwords:", error);

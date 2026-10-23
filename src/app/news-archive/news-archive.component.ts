@@ -16,25 +16,36 @@ export class NewsArchiveComponent implements OnInit {
 
     newsIds = signal<number[]>([]);
 
+    failedFetching = signal<boolean>(false);
+
     private newsService = inject(NewsService);
     private notificationService = inject(NotificationService);
 
     ngOnInit(): void {
-        const initialRequest = this.newsService.getLastXNews(this.loaded());
+        this.loadLastXNews(true);
+    }
 
-        initialRequest.subscribe({
+    loadLastXNews(initial: boolean = false): void {
+        const request = this.newsService.getLastXNews(this.loaded());
+
+        request.subscribe({
             next: (response: GetLastXNewsIdsApiEndpointResponse) => {
                 if (response.error) {
-                    this.notificationService.error("Fehler", "Das News-Archiv konnte nicht geladen werden: " + response.message);
+                    this.notificationService.error("Fehler", (initial ? "Das News-Archiv konnte nicht geladen werden: " : "Es konnten keine älteren News mehr geladen werden: ") + response.message);
+
+                    this.failedFetching.set(true);
 
                     return;
                 }
 
                 this.newsIds.set(response.data);
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while loading news archive:", error);
                 this.notificationService.error("Fehler", "Das News-Archiv konnte nicht geladen werden. Bitte versuche es erneut.");
+
+                this.failedFetching.set(true);
             },
         });
     }
@@ -44,22 +55,6 @@ export class NewsArchiveComponent implements OnInit {
 
         this.loaded.update((value) => value + 5);
 
-        const request = this.newsService.getLastXNews(this.loaded());
-
-        request.subscribe({
-            next: (response: GetLastXNewsIdsApiEndpointResponse) => {
-                if (response.error) {
-                    this.notificationService.error("Fehler", "Es konnten keine älteren News mehr geladen werden: " + response.message);
-
-                    return;
-                }
-
-                this.newsIds.set(response.data);
-            },
-            error: (error: unknown) => {
-                console.error("Error while loading news archive:", error);
-                this.notificationService.error("Fehler", "Das News-Archiv konnte nicht geladen werden. Bitte versuche es erneut.");
-            },
-        });
+        this.loadLastXNews();
     }
 }

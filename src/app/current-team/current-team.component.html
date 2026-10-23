@@ -7,7 +7,14 @@
         <p class="text">{{ team().text }}</p>
     }
 
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="loadCurrentTeam()">Erneut versuchen</button>
+    }
+
     <app-team [team]="team().members"></app-team>
 } @placeholder (minimum 100ms) {
     <app-loading></app-loading>
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="loadCurrentTeam()">Erneut versuchen</button>
+    }
 }

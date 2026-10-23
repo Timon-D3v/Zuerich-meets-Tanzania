@@ -66,6 +66,9 @@
     </div>
 } @placeholder (minimum 100ms) {
     <app-loading></app-loading>
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="reloadEverything()">Erneut versuchen</button>
+    }
 }
 
 @if (titleInputOpen()) {

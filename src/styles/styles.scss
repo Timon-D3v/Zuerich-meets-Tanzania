@@ -93,6 +93,10 @@ img::selection {
     padding: 0;
 }
 
+button.global-fetch-failed-button {
+    @include primary-button($margin: 2rem auto);
+}
+
 @media screen and (max-width: 260px) {
     /* 
     This is very small. 

@@ -21,6 +21,9 @@
                     <app-team-from-id [id]="element.teamId"></app-team-from-id>
                 }
             }
+            @if (failedFetching()) {
+                <button class="global-fetch-failed-button" (click)="loadNews(id())">Erneut versuchen</button>
+            }
         </div>
         @if (news().data.type === "image" && news().data.imageUrl && news().data.imageAlt) {
             <img class="news-img {{ news().data.imagePosition === 'left' ? 'left' : news().data.imagePosition === 'center' ? 'center' : 'right' }}" [src]="news().data.imageUrl" [alt]="news().data.imageAlt" />
@@ -30,4 +33,7 @@
     </div>
 } @placeholder (minimum 100ms) {
     <app-loading></app-loading>
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="loadNews(id())">Erneut versuchen</button>
+    }
 }

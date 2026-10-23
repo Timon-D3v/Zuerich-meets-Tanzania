@@ -1,6 +1,4 @@
-@if (visitorCounts().length === 0) {
-    <app-loading></app-loading>
-} @else {
+@defer (when visitorCounts().length > 0; prefetch on immediate) {
     <div class="wrapper">
         <h2>Anzahl Seitenaufrufe</h2>
         <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="`-5 0 ${svgWidth() + 10} ${svgHeight()}`">
@@ -184,4 +182,9 @@
         </svg>
         <a href="#" (click)="loadMoreDataPoints($event)">Mehr laden</a>
     </div>
+} @placeholder {
+    <app-loading></app-loading>
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="getVisitorCounts(7)">Erneut versuchen</button>
+    }
 }

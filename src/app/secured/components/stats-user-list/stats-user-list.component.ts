@@ -29,6 +29,7 @@ export class StatsUserListComponent implements OnInit {
     confirmInputOpen = signal<boolean>(false);
     alertInputOpen = signal<boolean>(false);
     fileTypeSelectionOpen = signal<boolean>(false);
+    failedFetching = signal<boolean>(false);
 
     popups = {
         title: {
@@ -82,23 +83,25 @@ export class StatsUserListComponent implements OnInit {
                 if (response.error) {
                     this.notificationService.error("Fehler", "Die Benutzer konnten nicht geladen werden: " + response.error);
 
+                    this.failedFetching.set(true);
+
                     return;
                 }
 
                 this.users.set(response.data);
 
-                const deepCopiedUsers = response.data.map((user) => ({
-                    ...user,
-                }));
-
                 // Deep copy the user list to be able to revert changes later if needed
                 this.originalUsers = response.data.map((user) => ({
                     ...user,
                 }));
+
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while loading all users:", error);
                 this.notificationService.error("Fehler:", "Die Benutzer konnten nicht geladen werden. Bitte versuchen Sie es erneut.");
+
+                this.failedFetching.set(true);
             },
         });
     }

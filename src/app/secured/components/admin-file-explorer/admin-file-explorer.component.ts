@@ -31,6 +31,8 @@ export class AdminFileExplorerComponent implements OnInit {
     selectedFolderIds = signal<number[]>([]);
     selectedFileUuids = signal<string[]>([]);
 
+    failedFetching = signal<boolean>(false);
+
     private fileService = inject(FileService);
     private publicEnvService = inject(PublicEnvService);
     private notificationService = inject(NotificationService);
@@ -50,6 +52,11 @@ export class AdminFileExplorerComponent implements OnInit {
         this.delivApiUser.set(await this.publicEnvService.getDelivApiUser());
     }
 
+    reloadEverything(): void {
+        this.getAllFiles();
+        this.getAllFolders();
+    }
+
     getAllFiles(): void {
         const request = this.fileService.getAllFiles();
 
@@ -58,14 +65,19 @@ export class AdminFileExplorerComponent implements OnInit {
                 if (response.error) {
                     this.notificationService.error("Fehler", "Die Datei Informationen konnten nicht abgerufen werden: " + response.message);
 
+                    this.failedFetching.set(true);
+
                     return;
                 }
 
                 this.files.set(response.data);
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while fetching files:", error);
                 this.notificationService.error("Fehler", "Die Datei Informationen konnten nicht abgerufen werden. Bitte versuche es erneut.");
+
+                this.failedFetching.set(true);
             },
         });
     }
@@ -78,14 +90,17 @@ export class AdminFileExplorerComponent implements OnInit {
                 if (response.error || !response.data) {
                     this.notificationService.error("Fehler", "Die Ordner Informationen konnten nicht abgerufen werden: " + response.message);
 
+                    this.failedFetching.set(true);
                     return;
                 }
 
                 this.folders.set(response.data);
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while fetching folders:", error);
                 this.notificationService.error("Fehler", "Die Ordner Informationen konnten nicht abgerufen werden. Bitte versuche es erneut.");
+                this.failedFetching.set(true);
             },
         });
     }

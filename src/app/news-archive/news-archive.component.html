@@ -8,4 +8,7 @@
     }
 } @placeholder (minimum 100ms) {
     <app-loading></app-loading>
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="loadLastXNews(true)">Erneut versuchen</button>
+    }
 }

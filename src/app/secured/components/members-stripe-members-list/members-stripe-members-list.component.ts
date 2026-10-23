@@ -31,6 +31,7 @@ export class MembersStripeMembersListComponent implements OnInit {
     confirmInputOpen = signal<boolean>(false);
     alertInputOpen = signal<boolean>(false);
     fileTypeSelectionOpen = signal<boolean>(false);
+    failedFetching = signal<boolean>(false);
 
     popups = {
         title: {
@@ -85,23 +86,25 @@ export class MembersStripeMembersListComponent implements OnInit {
                 if (response.error) {
                     this.notificationService.error("Fehler", "Die Benutzer konnten nicht geladen werden: " + response.error);
 
+                    this.failedFetching.set(true);
+
                     return;
                 }
 
                 this.members.set(response.data);
 
-                const deepCopiedUsers = response.data.map((user) => ({
-                    ...user,
-                }));
-
                 // Deep copy the user list to be able to revert changes later if needed
                 this.originalMembers = response.data.map((user) => ({
                     ...user,
                 }));
+
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while loading all users:", error);
                 this.notificationService.error("Fehler", "Die Benutzer konnten nicht geladen werden. Bitte versuche es erneut.");
+
+                this.failedFetching.set(true);
             },
         });
     }

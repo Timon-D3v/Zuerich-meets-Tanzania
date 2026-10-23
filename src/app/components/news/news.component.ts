@@ -28,6 +28,8 @@ export class NewsComponent {
 
     news = signal<News>(PUBLIC_CONFIG.NEWS.LOADING(PUBLIC_CONFIG.FALLBACK_IMAGE_URL));
 
+    failedFetching = signal<boolean>(false);
+
     private newsService = inject(NewsService);
     private sanitizerService = inject(SanitizerService);
     private notificationService = inject(NotificationService);
@@ -39,37 +41,7 @@ export class NewsComponent {
     pdfUrl = signal<SafeResourceUrl>(this.sanitizer.bypassSecurityTrustResourceUrl("about:blank"));
 
     private _updateContent = effect(() => {
-        const id = this.id();
-
-        if (!isPlatformBrowser(this.platformId)) {
-            console.error("Cannot fetch when not in browser context.");
-
-            this.news.set(PUBLIC_CONFIG.NEWS.ERROR(PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Cannot fetch when not in browser context."));
-
-            return;
-        }
-
-        const request = id === -1 ? this.newsService.getLatestNews() : this.newsService.getNews(id);
-
-        request.subscribe({
-            next: (response: GetNewsApiEndpointResponse) => {
-                if (response.error || response.data === null) {
-                    this.notificationService.error("Fehler:", "Die News konnte nicht geladen werden: " + response.message);
-
-                    this.news.set(PUBLIC_CONFIG.NEWS.ERROR(PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Die News konnte nicht geladen werden: " + response.message));
-
-                    return;
-                }
-
-                this.news.set(response.data);
-            },
-            error: (error) => {
-                console.error("Error while fetching news:", error);
-                this.notificationService.error("Fehler:", "Die News konnte nicht geladen werden. Bitte versuche es erneut.");
-
-                this.news.set(PUBLIC_CONFIG.NEWS.ERROR(PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Die News konnte nicht geladen werden. Bitte versuche es erneut."));
-            },
-        });
+        this.loadNews(this.id());
     });
 
     private _updatePdfUrl = effect(async () => {
@@ -81,12 +53,16 @@ export class NewsComponent {
     });
 
     ngOnInit(): void {
-        const id = this.id();
+        this.loadNews(this.id());
+    }
 
+    loadNews(id: number): void {
         if (!isPlatformBrowser(this.platformId)) {
             console.error("Cannot fetch when not in browser context.");
 
             this.news.set(PUBLIC_CONFIG.NEWS.ERROR(PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Cannot fetch when not in browser context."));
+
+            this.failedFetching.set(true);
 
             return;
         }
@@ -96,20 +72,26 @@ export class NewsComponent {
         request.subscribe({
             next: (response: GetNewsApiEndpointResponse) => {
                 if (response.error || response.data === null) {
-                    this.notificationService.error("Fehler:", "Die News konnte nicht geladen werden: " + response.message);
+                    this.notificationService.error("Fehler:", "Die News konnten nicht geladen werden: " + response.message);
 
-                    this.news.set(PUBLIC_CONFIG.NEWS.ERROR(PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Die News konnte nicht geladen werden: " + response.message));
+                    this.news.set(PUBLIC_CONFIG.NEWS.ERROR(PUBLIC_CONFIG.FALLBACK_IMAGE_URL, response.message));
+
+                    this.failedFetching.set(true);
 
                     return;
                 }
 
                 this.news.set(response.data);
+
+                this.failedFetching.set(false);
             },
             error: (error) => {
                 console.error("Error while fetching news:", error);
-                this.notificationService.error("Fehler:", "Die News konnte nicht geladen werden. Bitte versuche es erneut.");
+                this.notificationService.error("Fehler:", "Die News konnten nicht geladen werden. Bitte versuche es erneut.");
 
-                this.news.set(PUBLIC_CONFIG.NEWS.ERROR(PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Die News konnte nicht geladen werden. Bitte versuche es erneut."));
+                this.news.set(PUBLIC_CONFIG.NEWS.ERROR(PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Unbekannter Fehler. Bitte versuche es erneut."));
+
+                this.failedFetching.set(true);
             },
         });
     }

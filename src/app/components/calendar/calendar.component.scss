@@ -4,4 +4,34 @@ div {
     padding: 0;
     margin: var(--basic-margin);
     border-top: 2px solid var(--text-950);
+
+    &:has(> p) {
+        border-top: none;
+        margin: 0;
+    }
+
+    & > p {
+        display: block;
+        width: 100%;
+        text-align: center;
+        font-size: 1.3rem;
+        padding: 0 5vw;
+        box-sizing: border-box;
+        color: var(--text-950);
+    }
+}
+
+a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    color: var(--text-950);
+    margin-top: 5vh;
+    position: relative;
+    top: -5vh;
+
+    &:hover {
+        color: var(--primary-500);
+    }
 }

@@ -16,6 +16,7 @@ export class DonationsAllTimeDonationsListComponent implements OnInit {
     donors = signal<Donor[]>([]);
 
     fileTypeSelectionOpen = signal<boolean>(false);
+    failedFetching = signal<boolean>(false);
 
     private donationService = inject(DonationService);
     private spreadsheetsService = inject(SpreadsheetsService);
@@ -33,14 +34,19 @@ export class DonationsAllTimeDonationsListComponent implements OnInit {
                 if (response.error) {
                     this.notificationService.error("Fehler", "Die Spenderliste konnte nicht geladen werden: " + response.error);
 
+                    this.failedFetching.set(true);
+
                     return;
                 }
 
                 this.donors.set(response.data);
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while loading all donors:", error);
                 this.notificationService.error("Fehler:", "Die Spenderliste konnte nicht geladen werden. Bitte versuchen Sie es erneut.");
+
+                this.failedFetching.set(true);
             },
         });
     }

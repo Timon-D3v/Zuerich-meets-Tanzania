@@ -17,6 +17,8 @@ export class ViewAccountMembershipDetailsComponent implements OnInit {
 
     invoices = signal<Invoice[]>([]);
 
+    failedFetching = signal<boolean>(false);
+
     private accountService = inject(AccountService);
     private notificationService = inject(NotificationService);
 
@@ -39,14 +41,20 @@ export class ViewAccountMembershipDetailsComponent implements OnInit {
                 if (response.error) {
                     this.notificationService.error("Fehler beim Laden:", "Deine Rechnungen konnten nicht geladen werden. Bitte versuche es später erneut.");
 
+                    this.failedFetching.set(true);
+
                     return;
                 }
 
                 this.invoices.set(response.data || []);
+
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while fetching invoices:", error);
                 this.notificationService.error("Fehler beim Laden:", "Deine Rechnungen konnten nicht geladen werden. Bitte versuche es später erneut.");
+
+                this.failedFetching.set(true);
             },
         });
     }
@@ -59,16 +67,27 @@ export class ViewAccountMembershipDetailsComponent implements OnInit {
                 if (response.error) {
                     this.notificationService.error("Fehler beim Laden:", "Dein Mitgliedschaftsstatus konnte nicht geladen werden. Bitte versuche es später erneut.");
 
+                    this.failedFetching.set(true);
+
                     return;
                 }
 
                 this.isLegacyMember.set(response.message === "true" ? "true" : "false");
+
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while checking legacy member status:", error);
                 this.notificationService.error("Fehler beim Laden:", "Dein Mitgliedschaftsstatus konnte nicht geladen werden. Bitte versuche es später erneut.");
+
+                this.failedFetching.set(true);
             },
         });
+    }
+
+    reload(): void {
+        this.isLegacyMemberCheck();
+        this.getInvoices();
     }
 
     formatDate(dateInput: string | number): string {

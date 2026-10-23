@@ -31,6 +31,8 @@ export class StatsWebsiteAnalyticsComponent implements OnInit, OnDestroy {
     uniqueViewsDataSteps = signal<number[]>([]);
     totalTimeDataSteps = signal<number[]>([]);
 
+    failedFetching = signal<boolean>(false);
+
     private platformId = inject(PLATFORM_ID);
 
     private analyticsService = inject(AnalyticsService);
@@ -105,14 +107,20 @@ export class StatsWebsiteAnalyticsComponent implements OnInit, OnDestroy {
                 if (response.error) {
                     this.notificationService.error("Fehler", "Die Besucherzahlen konnten nicht geladen werden: " + response.message);
 
+                    this.failedFetching.set(true);
+
                     return;
                 }
 
                 this.visitorCounts.set(response.data);
+
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while fetching visitor counts:", error);
                 this.notificationService.error("Fehler", "Die Besucherzahlen konnten nicht geladen werden. Bitte versuche es später erneut.");
+
+                this.failedFetching.set(true);
             },
         });
     }

@@ -102,6 +102,9 @@
     <button type="button" (click)="initiateDownload()" class="download">Herunterladen</button>
 } @placeholder {
     <app-loading></app-loading>
+    @if (failedFetching()) {
+        <button class="global-fetch-failed-button" (click)="loadAllUsers()">Erneut versuchen</button>
+    }
 }
 
 @if (titleInputOpen()) {

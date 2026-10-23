@@ -52,6 +52,8 @@ export class BlogComponent implements OnInit {
 
     blog = signal<Blog>(PUBLIC_CONFIG.BLOGS.LOADING(this.name(), PUBLIC_CONFIG.FALLBACK_IMAGE_URL));
 
+    failedFetching = signal<boolean>(false);
+
     private blogService = inject(BlogService);
     private notificationService = inject(NotificationService);
 
@@ -61,37 +63,7 @@ export class BlogComponent implements OnInit {
     private platformId = inject(PLATFORM_ID);
 
     private _updateContent = effect(() => {
-        const name = this.name();
-
-        if (!isPlatformBrowser(this.platformId)) {
-            console.error("Cannot fetch when not in browser context.");
-
-            this.blog.set(PUBLIC_CONFIG.BLOGS.ERROR(this.name(), PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Cannot fetch when not in browser context."));
-
-            return;
-        }
-
-        const request = this.blogService.getBlog(name);
-
-        request.subscribe({
-            next: (response: GetBlogApiEndpointResponse) => {
-                if (response.error || response.data === null) {
-                    this.notificationService.error("Fehler:", "Der Blog konnte nicht geladen werden: " + response.message);
-
-                    this.router.navigate(["/"]);
-
-                    return;
-                }
-
-                this.blog.set(response.data);
-            },
-            error: (error: unknown) => {
-                console.error("Error while fetching blog:", error);
-                this.notificationService.error("Fehler", "Der Blog konnte nicht geladen werden. Bitte versuche es erneut.");
-
-                this.router.navigate(["/"]);
-            },
-        });
+        this.getBlog(this.name());
     });
 
     ngOnInit(): void {
@@ -124,6 +96,45 @@ export class BlogComponent implements OnInit {
                 this.notificationService.error("Fehler", "Es konnte kein Blog geladen werden. Bitte versuche es erneut.");
 
                 this.router.navigate(["/"]);
+            },
+        });
+
+        this.getBlog(this.name());
+    }
+
+    getBlog(name: string): void {
+        if (!isPlatformBrowser(this.platformId)) {
+            console.error("Cannot fetch when not in browser context.");
+
+            this.blog.set(PUBLIC_CONFIG.BLOGS.ERROR(this.name().replaceAll("%20", " "), PUBLIC_CONFIG.FALLBACK_IMAGE_URL, "Cannot fetch when not in browser context."));
+
+            this.failedFetching.set(true);
+
+            return;
+        }
+
+        const request = this.blogService.getBlog(name);
+
+        request.subscribe({
+            next: (response: GetBlogApiEndpointResponse) => {
+                if (response.error || response.data === null) {
+                    this.notificationService.error("Fehler:", "Der Blog konnte nicht geladen werden: " + response.message);
+
+                    this.router.navigate(["/"]);
+                    this.failedFetching.set(true);
+
+                    return;
+                }
+
+                this.blog.set(response.data);
+                this.failedFetching.set(false);
+            },
+            error: (error: unknown) => {
+                console.error("Error while fetching blog:", error);
+                this.notificationService.error("Fehler", "Der Blog konnte nicht geladen werden. Bitte versuche es erneut.");
+
+                this.router.navigate(["/"]);
+                this.failedFetching.set(true);
             },
         });
     }

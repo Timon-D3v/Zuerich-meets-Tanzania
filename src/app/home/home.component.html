@@ -27,10 +27,7 @@
 <a [routerLink]="'/archive'">Mehr anzeigen</a>
 
 <h1 class="title">Terminkalender</h1>
-<app-calendar [events]="events()"></app-calendar>
-@if (numberOfEvents() <= events().length) {
-    <a href="#" (click)="loadMoreEvents($event)">Mehr anzeigen</a>
-}
+<app-calendar></app-calendar>
 
 <h1 class="title">Blogbeiträge</h1>
 <app-blog-preview [numberOfItems]="4"></app-blog-preview>

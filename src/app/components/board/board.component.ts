@@ -15,6 +15,8 @@ import { LoadingComponent } from "../loading/loading.component";
 export class BoardComponent implements OnInit {
     board = signal<BoardUser[]>([]);
 
+    failedFetching = signal<boolean>(false);
+
     private teamService = inject(TeamService);
     private notificationService = inject(NotificationService);
 
@@ -23,6 +25,9 @@ export class BoardComponent implements OnInit {
     ngOnInit(): void {
         if (!isPlatformBrowser(this.platformId)) {
             console.error("Cannot make API calls on the server side. Calendar events will not be loaded.");
+
+            this.failedFetching.set(true);
+
             return;
         }
 
@@ -37,14 +42,20 @@ export class BoardComponent implements OnInit {
                 if (response.error || !response.data) {
                     this.notificationService.error("Fehler:", "Der Vorstand konnte nicht geladen werden. Bitte versuchen Sie es später erneut.");
 
+                    this.failedFetching.set(true);
+
                     return;
                 }
 
                 this.board.set(response.data);
+
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while fetching board:", error);
                 this.notificationService.error("Fehler:", "Der Vorstand konnte nicht geladen werden. Bitte versuchen Sie es später erneut.");
+
+                this.failedFetching.set(true);
             },
         });
     }

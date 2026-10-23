@@ -1,9 +1,21 @@
 @defer (when events().length > 0; prefetch on immediate) {
     <div>
         @for (event of events(); track $index) {
-            <app-calendar-item [event]="event"></app-calendar-item>
+            @if (events().length === 1 && event.id === -1) {
+                <p>Beim Abrufen der Kalenderdaten ist ein Fehler aufgetreten.</p>
+                <button class="global-fetch-failed-button" (click)="getEvents()">Erneut versuchen</button>
+            } @else {
+                <app-calendar-item [event]="event"></app-calendar-item>
+            }
+        } @empty {
+            <p>Keine Events in der nächsten Zeit...</p>
         }
     </div>
+
+    @if (numberOfEvents() <= events().length) {
+        <a href="#" (click)="loadMoreEvents($event)">Mehr anzeigen</a>
+    }
 } @placeholder (minimum 100ms) {
     <app-loading></app-loading>
+    <!-- Don't need a reload button here, since it is handled by the defer block -->
 }

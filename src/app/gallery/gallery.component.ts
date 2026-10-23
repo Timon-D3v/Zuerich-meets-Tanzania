@@ -34,6 +34,8 @@ export class GalleryComponent implements OnInit {
 
     currentOpenIndex = signal<number>(-1);
 
+    failedFetching = signal<boolean>(false);
+
     private galleryService = inject(GalleryService);
     private notificationService = inject(NotificationService);
 
@@ -64,16 +66,22 @@ export class GalleryComponent implements OnInit {
                 if (response.error || response.data === null) {
                     this.notificationService.error("Fehler:", "Diese Galerie konnte nicht geladen werden: " + response.message);
 
+                    this.failedFetching.set(true);
+
                     this.router.navigate(["/"]);
 
                     return;
                 }
 
                 this.gallery.set(response.data || this.gallery());
+
+                this.failedFetching.set(false);
             },
             error: (error: unknown) => {
                 console.error("Error while loading gallery:", error);
                 this.notificationService.error("Fehler:", "Diese Galerie konnte nicht geladen werden. Bitte versuche es erneut.");
+
+                this.failedFetching.set(true);
 
                 this.router.navigate(["/"]);
             },
