@@ -1,6 +1,6 @@
 import { NewsContent, NewsletterUser } from "..";
 import { CONFIG } from "../config";
-import { PUBLIC_CONFIG } from "../publicConfig";
+import { EMAIL_CONFIG } from "./email.config";
 import { getAllNewsletterUsers } from "./newsletter.database";
 import { sendMail } from "./send.email";
 import { markdownToHtml } from "./utils";
@@ -8,19 +8,19 @@ import { markdownToHtml } from "./utils";
 export async function sendNewsletterSignUpConfirmation(email: string, id: string, firstName: string, lastName: string, gender: "Herr" | "Frau" | "Divers", timestamp: number): Promise<boolean> {
     const link = CONFIG.ORIGIN + `/newsletter/confirm?id=${id}&email=${email}&firstName=${firstName}&lastName=${lastName}&gender=${gender}&timestamp=${timestamp}`;
 
-    const text = [PUBLIC_CONFIG.EMAIL.GREETINGS(firstName, lastName, gender), `Bitte bestätige deine Anmeldung für den Newsletter über diesen Link:\n${link}`, "(Der Link ist etwa 60 Minuten gültig.)", PUBLIC_CONFIG.EMAIL.REGARDS].join("\n\n");
+    const text = [EMAIL_CONFIG.GREETINGS(firstName, lastName, gender), `Bitte bestätige deine Anmeldung für den Newsletter über diesen Link:\n${link}`, "(Der Link ist etwa 60 Minuten gültig.)", EMAIL_CONFIG.REGARDS].join("\n\n");
 
     const html =
-        PUBLIC_CONFIG.EMAIL.HEADER +
+        EMAIL_CONFIG.HEADER +
         [
-            PUBLIC_CONFIG.EMAIL.GREETINGS_HTML(PUBLIC_CONFIG.EMAIL.GREETINGS(firstName, lastName, gender)),
+            EMAIL_CONFIG.GREETINGS_HTML(EMAIL_CONFIG.GREETINGS(firstName, lastName, gender)),
             `Bitte bestätige deine Anmeldung für den Newsletter über diesen <a href="${link}" target="_blank">Link</a>.`,
             "(Der Link ist etwa 60 Minuten gültig.)",
-            PUBLIC_CONFIG.EMAIL.REGARDS_HTML,
+            EMAIL_CONFIG.REGARDS_HTML,
         ].join("<br><br>") +
-        PUBLIC_CONFIG.EMAIL.FOOTER;
+        EMAIL_CONFIG.FOOTER;
 
-    const request = await sendMail(email, "Anmeldebestätigung Newsletter", text, html, "Newsletter Anmeldung");
+    const request = await sendMail(email, "Anmeldebestätigung Newsletter", text, html, "Newsletter Anmeldung", await EMAIL_CONFIG.ATTACHMENTS());
 
     if (request === null) {
         console.error(`Failed to send email to ${email}:`, "Request returned null");
@@ -38,20 +38,16 @@ export async function sendNewsletterSignUpConfirmation(email: string, id: string
 }
 
 export async function sendNewsletterSignOutConfirmation(email: string, code: string, firstName: string, lastName: string, gender: "Herr" | "Frau" | "Divers"): Promise<boolean> {
-    const text = [PUBLIC_CONFIG.EMAIL.GREETINGS(firstName, lastName, gender), "Dein Bestätigungscode zum Abmelden von unserem Newsletter lautet:", code, "(Der Code ist etwa 60 Minuten gültig.)", PUBLIC_CONFIG.EMAIL.REGARDS].join("\n\n");
+    const text = [EMAIL_CONFIG.GREETINGS(firstName, lastName, gender), "Dein Bestätigungscode zum Abmelden von unserem Newsletter lautet:", code, "(Der Code ist etwa 60 Minuten gültig.)", EMAIL_CONFIG.REGARDS].join("\n\n");
 
     const html =
-        PUBLIC_CONFIG.EMAIL.HEADER +
-        [
-            PUBLIC_CONFIG.EMAIL.GREETINGS_HTML(PUBLIC_CONFIG.EMAIL.GREETINGS(firstName, lastName, gender)),
-            "BDein Bestätigungscode zum Abmelden von unserem Newsletter lautet:",
-            code,
-            "(Der Code ist etwa 60 Minuten gültig.)",
-            PUBLIC_CONFIG.EMAIL.REGARDS_HTML,
-        ].join("<br><br>") +
-        PUBLIC_CONFIG.EMAIL.FOOTER;
+        EMAIL_CONFIG.HEADER +
+        [EMAIL_CONFIG.GREETINGS_HTML(EMAIL_CONFIG.GREETINGS(firstName, lastName, gender)), "BDein Bestätigungscode zum Abmelden von unserem Newsletter lautet:", code, "(Der Code ist etwa 60 Minuten gültig.)", EMAIL_CONFIG.REGARDS_HTML].join(
+            "<br><br>",
+        ) +
+        EMAIL_CONFIG.FOOTER;
 
-    const request = await sendMail(email, "Vom Newsletter Abmelden", text, html, "Newsletter Abmeldung");
+    const request = await sendMail(email, "Vom Newsletter Abmelden", text, html, "Newsletter Abmeldung", await EMAIL_CONFIG.ATTACHMENTS());
 
     if (request === null) {
         console.error(`Failed to send newsletter to ${email}:`, "Request returned null");
@@ -96,14 +92,14 @@ export async function sendNewsletterForNews(newsContent: NewsContent): Promise<b
     }
 
     for (const recipient of recipients) {
-        const text = [PUBLIC_CONFIG.EMAIL.GREETINGS(recipient.firstName, recipient.lastName, recipient.gender), PUBLIC_CONFIG.EMAIL.NEWSLETTER_BODY(previewText), PUBLIC_CONFIG.EMAIL.REGARDS].join("\n\n");
+        const text = [EMAIL_CONFIG.GREETINGS(recipient.firstName, recipient.lastName, recipient.gender), EMAIL_CONFIG.NEWSLETTER_BODY(previewText), EMAIL_CONFIG.REGARDS].join("\n\n");
 
         const html =
-            PUBLIC_CONFIG.EMAIL.HEADER +
-            [PUBLIC_CONFIG.EMAIL.GREETINGS_HTML(PUBLIC_CONFIG.EMAIL.GREETINGS(recipient.firstName, recipient.lastName, recipient.gender)), PUBLIC_CONFIG.EMAIL.NEWSLETTER_BODY_HTML(previewHtml), PUBLIC_CONFIG.EMAIL.REGARDS_HTML].join("<br><br>") +
-            PUBLIC_CONFIG.EMAIL.FOOTER;
+            EMAIL_CONFIG.HEADER +
+            [EMAIL_CONFIG.GREETINGS_HTML(EMAIL_CONFIG.GREETINGS(recipient.firstName, recipient.lastName, recipient.gender)), EMAIL_CONFIG.NEWSLETTER_BODY_HTML(previewHtml), EMAIL_CONFIG.REGARDS_HTML].join("<br><br>") +
+            EMAIL_CONFIG.FOOTER;
 
-        const request = await sendMail(recipient.email, PUBLIC_CONFIG.EMAIL.NEWSLETTER_SUBJECT, text, html, "Newsletter");
+        const request = await sendMail(recipient.email, EMAIL_CONFIG.NEWSLETTER_SUBJECT, text, html, "Newsletter", await EMAIL_CONFIG.ATTACHMENTS());
 
         if (request === null) {
             console.error(`Failed to send newsletter to ${recipient.email}:`, "Request returned null");

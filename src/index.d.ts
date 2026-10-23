@@ -1,4 +1,5 @@
-import { RowDataPacket } from "mysql2";
+import { type RowDataPacket } from "mysql2";
+import { type MailComposerOptions } from "nodemailer";
 
 declare module "express-session" {
     interface SessionData {
@@ -148,18 +149,19 @@ export type PublicConfig = {
             [path: `/${string}`]: string[];
         };
     };
+};
 
-    EMAIL: {
-        GREETINGS: (fistName: string, lastName: string, gender: "Herr" | "Frau" | "Divers") => string;
-        GREETINGS_HTML: (greetings: string) => string;
-        REGARDS: string;
-        REGARDS_HTML: string;
-        HEADER: string;
-        FOOTER: string;
-        NEWSLETTER_BODY: (preview: string) => string;
-        NEWSLETTER_BODY_HTML: (preview: string) => string;
-        NEWSLETTER_SUBJECT: string;
-    };
+export type EmailConfig = {
+    NEWSLETTER_SUBJECT: string;
+    GREETINGS: (fistName: string, lastName: string, gender: "Herr" | "Frau" | "Divers") => string;
+    GREETINGS_HTML: (greetings: string) => string;
+    REGARDS: string;
+    REGARDS_HTML: string;
+    HEADER: string;
+    FOOTER: string;
+    NEWSLETTER_BODY: (preview: string) => string;
+    NEWSLETTER_BODY_HTML: (preview: string) => string;
+    ATTACHMENTS: (...args: Exclude<MailComposerOptions["attachments"], undefined>) => Promise<MailComposerOptions["attachments"]>;
 };
 
 export type PageDescription = {

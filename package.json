@@ -1,6 +1,6 @@
 {
   "name": "zurich-meets-tanzania-website",
-  "version": "3.33.0",
+  "version": "3.33.1",
   "description": "This is the website for the non profit organization \"zurich - meets - tanzania\".",
   "homepage": "https://www.zurich-meets-tanzania.com",
   "author": "Timon Fiedler",
@@ -18,8 +18,8 @@
     "dev": "docker compose -f ./dev/compose.yaml up -d  && ng serve --port=8080",
     "backup": "MODE=backup ng serve --port=8080",
     "stop": "docker compose -f ./dev/compose.yaml down",
-    "build": "ng build --verbose && sh dockerize.sh",
-    "watch": "ng build --watch --configuration development --verbose",
+    "build": "ng build && sh dockerize.sh",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "format": "npx prettier --write \"src/**/*.{ts,html,scss}\"",
     "fmt": "npm run format",

@@ -1,5 +1,5 @@
 import { CONFIG } from "../config";
-import { PUBLIC_CONFIG } from "../publicConfig";
+import { EMAIL_CONFIG } from "./email.config";
 import { sendMail } from "./send.email";
 
 export async function sendCriticalJobFailureNotification(fullName: string, email: string, errorMessage: string): Promise<boolean> {
@@ -9,7 +9,7 @@ export async function sendCriticalJobFailureNotification(fullName: string, email
     }
 
     const text = [
-        PUBLIC_CONFIG.EMAIL.GREETINGS(fullName, "", "Divers"),
+        EMAIL_CONFIG.GREETINGS(fullName, "", "Divers"),
         "Es gab einen kritischen Fehler bei der Ausführung eines Jobs. Bitte überprüfe die Logs für weitere Details:",
         errorMessage,
         "(Der Job wurde nach 5 Versuchen abgebrochen um " +
@@ -22,13 +22,13 @@ export async function sendCriticalJobFailureNotification(fullName: string, email
                 minute: "2-digit",
             }) +
             ".)",
-        PUBLIC_CONFIG.EMAIL.REGARDS,
+        EMAIL_CONFIG.REGARDS,
     ].join("\n\n");
 
     const html =
-        PUBLIC_CONFIG.EMAIL.HEADER +
+        EMAIL_CONFIG.HEADER +
         [
-            PUBLIC_CONFIG.EMAIL.GREETINGS_HTML(PUBLIC_CONFIG.EMAIL.GREETINGS(fullName, "", "Divers")),
+            EMAIL_CONFIG.GREETINGS_HTML(EMAIL_CONFIG.GREETINGS(fullName, "", "Divers")),
             "Es gab einen kritischen Fehler bei der Ausführung eines Jobs. Bitte überprüfe die Logs für weitere Details:",
             errorMessage,
             "(Der Job wurde nach 5 Versuchen abgebrochen um " +
@@ -41,11 +41,11 @@ export async function sendCriticalJobFailureNotification(fullName: string, email
                     minute: "2-digit",
                 }) +
                 ".)",
-            PUBLIC_CONFIG.EMAIL.REGARDS_HTML,
+            EMAIL_CONFIG.REGARDS_HTML,
         ].join("<br><br>") +
-        PUBLIC_CONFIG.EMAIL.FOOTER;
+        EMAIL_CONFIG.FOOTER;
 
-    const request = await sendMail(email, "Kritischer Fehler - Job fehlgeschlagen", text, html, "Critical Job Failure Notification");
+    const request = await sendMail(email, "Kritischer Fehler - Job fehlgeschlagen", text, html, "Critical Job Failure Notification", await EMAIL_CONFIG.ATTACHMENTS());
 
     if (request === null) {
         console.error(`Failed to send email to ${email}:`, "Request returned null");

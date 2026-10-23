@@ -1,28 +1,29 @@
 import { CONFIG } from "../config";
 import { PUBLIC_CONFIG } from "../publicConfig";
+import { EMAIL_CONFIG } from "./email.config";
 import { sendMail } from "./send.email";
 
 export async function sendContactRequestConfirmation(firstName: string, lastName: string, email: string, verificationCode: string): Promise<boolean> {
     const text = [
-        PUBLIC_CONFIG.EMAIL.GREETINGS(firstName, lastName, "Divers"),
+        EMAIL_CONFIG.GREETINGS(firstName, lastName, "Divers"),
         "Bitte bestätige deine Kontaktanfrage von unserer Webseite. Dein Bestätigungscode lautet:",
         verificationCode,
         "(Der Code ist etwa 60 Minuten gültig.)",
-        PUBLIC_CONFIG.EMAIL.REGARDS,
+        EMAIL_CONFIG.REGARDS,
     ].join("\n\n");
 
     const html =
-        PUBLIC_CONFIG.EMAIL.HEADER +
+        EMAIL_CONFIG.HEADER +
         [
-            PUBLIC_CONFIG.EMAIL.GREETINGS_HTML(PUBLIC_CONFIG.EMAIL.GREETINGS(firstName, lastName, "Divers")),
+            EMAIL_CONFIG.GREETINGS_HTML(EMAIL_CONFIG.GREETINGS(firstName, lastName, "Divers")),
             "Bitte bestätige deine Kontaktanfrage von unserer Webseite. Dein Bestätigungscode lautet:",
             verificationCode,
             "(Der Code ist etwa 60 Minuten gültig.)",
-            PUBLIC_CONFIG.EMAIL.REGARDS_HTML,
+            EMAIL_CONFIG.REGARDS_HTML,
         ].join("<br><br>") +
-        PUBLIC_CONFIG.EMAIL.FOOTER;
+        EMAIL_CONFIG.FOOTER;
 
-    const request = await sendMail(email, "Kontaktformular-Bestätigung", text, html, "Contact Confirmation Code");
+    const request = await sendMail(email, "Kontaktformular-Bestätigung", text, html, "Contact Confirmation Code", await EMAIL_CONFIG.ATTACHMENTS());
 
     if (request === null) {
         console.error(`Failed to send email to ${email}:`, "Request returned null");
@@ -63,9 +64,9 @@ export async function sendContactRequest(userEmail: string, userFirstName: strin
     ].join("\n\n");
 
     const html =
-        PUBLIC_CONFIG.EMAIL.HEADER +
+        EMAIL_CONFIG.HEADER +
         [
-            PUBLIC_CONFIG.EMAIL.GREETINGS_HTML(`${userFirstName} ${userLastName} schreibt:`),
+            EMAIL_CONFIG.GREETINGS_HTML(`${userFirstName} ${userLastName} schreibt:`),
             "----------------------------------------------",
             message,
             "----------------------------------------------",
@@ -73,9 +74,9 @@ export async function sendContactRequest(userEmail: string, userFirstName: strin
             "----------------------------------------------",
             `Dies ist eine automatisch verschickte E-Mail über eine API von mailjet.com Programmiert und aufgesetzt von ${PUBLIC_CONFIG.PERSONAS["DEVELOPER"].name}. Bitte antworte nicht direkt auf diese Nachricht.\n${PUBLIC_CONFIG.PERSONAS["DEVELOPER"].name} ist nicht verantwortlich für eventuellen Spam oder andere Fehler, die durch den Endnutzer entstehen.\nBei Fragen oder Problemen kannst du dich unter ${PUBLIC_CONFIG.PERSONAS["DEVELOPER"].email} melden.`,
         ].join("<br><br>") +
-        PUBLIC_CONFIG.EMAIL.FOOTER;
+        EMAIL_CONFIG.FOOTER;
 
-    const request = await sendMail(CONFIG.EMAIL_SENDER_ADDRESS, `${userFirstName} schreibt über Kontaktformular`, text, html, "Contact Request");
+    const request = await sendMail(CONFIG.EMAIL_SENDER_ADDRESS, `${userFirstName} schreibt über Kontaktformular`, text, html, "Contact Request", await EMAIL_CONFIG.ATTACHMENTS());
 
     if (request === null) {
         console.error(`Failed to send email to ${userEmail}:`, "Request returned null");

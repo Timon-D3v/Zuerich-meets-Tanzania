@@ -99,7 +99,7 @@ export class FilePreviewComponent {
             }
 
             return {
-                url: this.getFileUrl(file) + (transform ? `?width=${width}&height=${height}&fit=inside&position=centre&format=webp&quality=80&timestamp=${timestamp}` : ""),
+                url: this.getFileUrl(file) + (transform ? `?width=${width}&height=${height}&fit=inside&position=centre&format=webp&quality=80${timestamp === 0 ? "" : "&timestamp=" + timestamp}` : ""),
                 alt: file.uuid,
             };
         } else if (file.mimeType.startsWith("video/") || file.mimeType === "audio/mp4" || file.mimeType === "audio/mpeg") {
